@@ -1,0 +1,86 @@
+/* for tablets width = 800px */
+
+@media only screen and (max-width: 800px) {
+    
+    /* patient info form */
+
+    .patient_info_form{
+        display:grid;
+        grid-template-columns: 1fr;
+        grid-gap:20px;
+    }
+
+    .patient_form_element_one_is_to_three{
+        display:grid;
+        grid-template-columns: 1fr 3fr;
+        grid-gap:20px;
+    }
+
+    .patient_form_element{
+        display:grid;
+        grid-template-columns:1fr;
+    }
+
+
+    /* Doctor select page */
+
+
+    .patient_and_doctor_info_one_is_to_one{
+        grid-template-columns: 1fr;
+        grid-gap: 0px;
+    }
+
+
+
+    /* doctor's list */
+
+    .doctors_list{
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+}
+
+/* for mobile width = 500px */
+
+@media only screen and (max-width: 500px) {
+    
+    /* patient info form */
+
+    .patient_form_element_one_is_to_three{
+        grid-template-columns: 1fr;
+    }
+
+    .patient_form_btn{
+        width:100%;
+    }
+
+    .doctor_search_form_element{
+        grid-template-columns:1fr 80px;
+    }
+
+    .vanish_label{
+        display:none;
+    }
+
+    /* doctor's list */
+
+    .doctors_list{
+        grid-template-columns: 1fr;
+    }
+
+    .capsule{
+        display:grid;
+        grid-template-columns: 100px 1fr;
+        align-items: center;
+        text-align: start;
+    }
+
+    .round_image{
+        width:80px;
+    }
+
+    .doctor_name_dept{
+        margin-top: 0px;
+    }
+
+}

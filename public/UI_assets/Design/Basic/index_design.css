@@ -1,0 +1,48 @@
+body{
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.landing_page_container{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    width:100vw;
+    align-self: center;
+    justify-self: center;
+}
+
+.landing_page_art{
+    align-self: center;
+    justify-self: center;
+}
+
+.login_form{
+    display:grid;
+    align-self: center;
+}
+
+.text{
+    font-size: 1.2rem;
+    font-weight: bold;
+    color:#fff;
+    text-align: center;
+    position: fixed;
+    top:0px;
+    left:0px;
+    background-color: rgb(106, 63, 226);
+    padding:16px;
+    width:100%;
+}
+
+.footer{
+    font-size: .9rem;
+    font-weight: bold;
+    color:#fff;
+    text-align: center;
+    position: fixed;
+    bottom:10px;
+    left:0px;
+    background-color: rgb(106, 63, 226);
+    padding:16px;
+    width:100%;
+}

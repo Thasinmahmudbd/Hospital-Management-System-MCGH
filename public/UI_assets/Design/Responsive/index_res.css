@@ -1,0 +1,34 @@
+/* for tablets width = 800px */
+
+@media only screen and (max-width: 800px) {
+
+    body{
+        overflow-y: scroll;
+    }
+
+    .landing_page_container{
+        grid-template-columns:1fr;
+    }
+
+    .login_form{
+        margin-bottom:15vh;
+        margin-bottom:15vh;
+    }
+
+}
+
+/* for mobile width = 500px */
+
+@media only screen and (max-width: 500px) {
+
+    .text{
+        font-size: 1rem;
+        padding:10px;
+    }
+    
+    .footer{
+        font-size: .8rem;
+        padding:10px;
+    }
+
+}

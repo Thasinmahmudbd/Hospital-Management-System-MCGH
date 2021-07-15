@@ -1,0 +1,112 @@
+/* patient info form */
+
+.patient_info_form{
+    display:grid;
+    grid-template-columns: 1fr;
+    grid-gap:20px;
+}
+
+.patient_form_element_one_is_to_three{
+    display:grid;
+    grid-template-columns: 1fr 3fr;
+    grid-gap:20px;
+}
+
+.patient_form_element{
+    display:grid;
+    grid-template-columns:1fr;
+}
+
+.patient_form_btn{
+    width:200px;
+    display:grid;
+    align-self: center;
+    justify-self: end;
+}
+
+.form_btn:hover{
+    background-color: rgb(70, 44, 141);
+    transition: 300ms ease-in;
+}
+
+
+/* Doctor select page */
+
+.info{
+    display:grid;
+    grid-template-columns: 150px 10px 1fr;
+    grid-gap: 3px;
+    color:#3b3838;
+}
+
+.doctor_form{
+    display:grid;
+    grid-template-columns:1fr;
+    grid-gap:3px;
+    margin-top:3px;
+}
+
+.doctor_form_element{
+    display:grid;
+    grid-template-columns: 160px 1fr 80px;
+    grid-gap:3px;
+    text-align: start;
+}
+
+.doctor_search_form_element{
+    display:grid;
+    grid-template-columns: 160px 1fr 80px;
+    grid-gap:3px;
+    text-align: start;
+}
+
+.collected_info{
+    display:grid;
+    text-align: start;
+    align-items: center;
+}
+
+.patient_and_doctor_info_one_is_to_one{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap:16px;
+}
+
+
+
+/* doctor's list */
+
+.doctors_list{
+    display:grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-column-gap: 16px;
+}
+
+.doctor_list_item{
+    display:block;
+    width:100%;
+}
+
+.capsule{
+    display:block;
+    width:100%;
+    padding:16px;
+    border-radius: 15px;
+    margin-bottom:16px;
+    transition: 300ms ease-in;
+}
+
+.capsule:hover{
+    box-shadow: 0px 0px 10px 0px #ccc;
+    transition: 300ms ease-in;
+}
+
+.doctor_name_dept{
+    margin-top: 10px;
+}
+
+.doctor_name{
+    font-size: .9rem;
+    font-weight: bold;
+    color:#3b3838;
+}

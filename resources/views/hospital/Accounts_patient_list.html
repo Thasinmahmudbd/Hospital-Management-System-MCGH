@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+    <!--icons | font awesome-->
+    <script src="https://kit.fontawesome.com/aafecdc4bf.js" crossorigin="anonymous"></script>
+    
+    <!--font | nunito-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap" rel="stylesheet"> 
+
+    <!--global design-->
+    <link rel="stylesheet" href="Design/Global/global_design.css">
+    <link rel="stylesheet" href="Design/Global/form_design.css">
+
+    <!--basic design-->
+
+    <!--frame design-->
+    <link rel="stylesheet" href="Design/frame_design.css">
+
+    <!--responsive design-->
+    <link rel="stylesheet" href="Design/Responsive/frame_res.css">
+
+    <!--javascript-->
+    <script src="Javascript/dropdown_menu.js"></script>
+
+
+    <title>MCGH Portal</title>
+
+
+
+</head>
+
+
+<body>
+
+    <!--frame-->
+    <div class="frame">
+
+        <!--frame left side-->
+        <div class="left_side">
+
+            <div class="left_side_top">
+
+                <p class="title">MCGH Portal</p>
+                <div class="line"></div>
+                <p class="user_name_id">Mr.G (AM005)</p>
+
+            </div>
+            
+            <ul class="list">
+
+<!-----------------------link---------------------->
+
+                <li class="link_item">
+                    <a href="Accounts_doctor_log.html" class="link">
+                        <i class="link_icons fas fa-clipboard-list"></i>
+                        <span class="link_name"> Doctors Activity Log </span>
+                    </a>
+                </li>
+
+                <li class="link_item">
+                    <a href="Accounts_patient_list.html" class="link">
+                        <i class=" link_icons fas fa-th-list"></i>
+                        <span class="link_name"> Patients List </span>
+                    </a>
+                </li>
+
+<!--------------------link end---------------------->
+
+            </ul>
+
+        </div>
+
+        <!--frame right side-->
+        <div class="right_side">
+
+            <!--frame right side top-->
+            <div class="right_side_top">
+
+                <a href="javascript:void(0);" onclick="myFunction()">
+                    <i class="menu_btn fas fa-bars"></i>
+                </a>
+                <p class="page_type">Reception (Patients List)</p>
+                <a href="#">
+                    <i class="log_out_btn fas fa-power-off"></i>
+                </a>
+
+            </div>
+
+            <!--frame right side mobile menu links-->
+            <div id="myLinks" class="mobile_links">
+                <a class="mobile_link" href="Accounts_doctor_log.html">Doctors Activity Log</a>
+                <a class="mobile_link" href="Accounts_patient_list.html">Patients List</a>
+            </div>
+
+            <!--frame right side middle-->
+            <div class="right_side_middle">
+
+<!-----------------------content---------------------->
+
+                <table class="frame_table">
+                    
+                    <tr class="frame_header">
+                        <th width="15%" class="frame_header_item">P-ID</th>
+                        <th width="20%" class="frame_header_item">Patient Name</th>
+                        <th width="15%" class="frame_header_item">Cell</th>
+                        <th width="20%" class="frame_header_item">NID</th>
+                        <th width="10%" class="frame_header_item">Type</th>
+                        <th width="10%" class="frame_header_item">Fee</th>
+                        <th width="10%" class="frame_header_item">Status</th>
+                    </tr>
+
+                    <tr class="frame_rows">
+                        <td class="frame_data" data-label="P-ID">M2962021001</td>
+                        <td class="frame_data" data-label="Patient Name">Mr.B</td>
+                        <td class="frame_data" data-label="Cell">01985423614</td>
+                        <td class="frame_data" data-label="NID">46151851811815</td>
+                        <td class="frame_data" data-label="Type">Guardian</td>
+                        <td class="frame_data" data-label="Fee">760</td>
+                        <td class="frame_data" data-label="Status">Unpaid</td>
+                    </tr>
+
+                </table>
+
+<!--------------------content end---------------------->
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!--removable link-->
+    <p class="removable_link_text">This links are temporary, used to travel through the site: 
+        <a href="index.html" class="removable_link">Log in</a>.
+    </p>
+    <!--removable link end-->
+
+</body>
+</html>

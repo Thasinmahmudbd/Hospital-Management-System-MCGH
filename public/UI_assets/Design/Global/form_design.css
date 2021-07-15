@@ -1,0 +1,90 @@
+/* login form */
+
+.login_form{
+    display:grid;
+    grid-template-columns: 1fr;
+    background-color: #eeefff;
+    padding:30px;
+    border-radius: 100%;
+    grid-gap:30px;
+    height: 250px;
+    width:250px;
+    align-self: center;
+    justify-self: center;
+    align-items: center;
+    justify-items: center;
+    box-shadow: 0px 0px 10px 5px #ddd;
+}
+
+.login_btn_round{
+    background-color: #358ffc;
+    width:70px;
+    height:70px;
+    color:#fff;
+    font-weight: bold;
+    border-radius: 100%;
+    align-self: center;
+    justify-self: center;
+    border:5px solid #fff;
+    transition: 300ms ease-in;
+}
+
+.login_btn_round:hover{
+    width:70px;
+    height:70px;
+    border:0px solid #fff;
+    transition: 300ms ease-in;
+}
+
+/* normal form*/
+
+.form_element{
+    display:grid;
+    grid-template-columns: 1fr;
+    padding:10px 0px;
+    grid-gap:3px;
+    align-self: center;
+    justify-self: center;
+}
+
+.form_element_one_is_to_one{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    padding:10px 0px;
+    grid-gap:16px;
+    align-self: center;
+    justify-self: center;
+}
+
+.form_element_single_line{
+    display:grid;
+    grid-template-columns: 60px 1fr;
+    align-self: center;
+    align-items: center;
+}
+
+.label{
+    font-weight: bold;
+    color:#3b3838;
+    text-align: center;
+    font-size: .9rem;;
+}
+
+.input{
+    border:2px solid #ddd;
+    padding:4px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.form_btn{
+    background-color: rgb(106, 63, 226);
+    padding:4px;
+    border-radius: 50px;
+    color:#fff;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: 300ms ease-in;
+}
+
+
