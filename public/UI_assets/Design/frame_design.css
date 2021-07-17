@@ -282,3 +282,19 @@
     cursor: default;
     pointer-events: none;        
 }
+
+
+
+
+
+/* laravel popups and stuff */
+
+.warning_msg{
+    background-color:rgba(233, 53, 53, 0.76);
+    color:#fff;
+    padding:8px;
+    margin-top:30px;
+    font-weight: bold;
+    border-radius: 10px;
+    transition: 200ms ease-in;
+}

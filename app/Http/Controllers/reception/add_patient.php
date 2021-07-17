@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 
 class add_patient extends Controller
 {
+
+
     function submit_basic_patient_info(Request $request)
     {
 
@@ -74,12 +76,70 @@ class add_patient extends Controller
         );
 
         DB::table('patients')->insert($data);
-
-        $P_data['result']=DB::table('patients')->where('P_ID',$P_ID)->get();
         
-        echo $P_data['result'];
+        session(['PATIENT_P_ID' => $P_ID]);
+        session(['PATIENT_NAME' => $request->input('patient_name')]);
+        session(['PATIENT_GENDER' => $request->input('patient_gender')]);
+        session(['PATIENT_CELL' => $request->input('cell_number')]);
 
-        return view('hospital/reception/doctor_selection',$P_data);
+        return redirect('/reception/doctor_selection');
 
     }
+
+    /*$value = Session::get('variableSetOnPageA');*/
+
+    
+    
+    
+    
+    function show_available_doctor()
+    {
+
+        $available_doctor_data['result']=DB::table('doctors')->orderBy('Dr_Name','asc')->get();
+        
+        return view('hospital/reception/doctor_selection',$available_doctor_data);
+
+    }
+
+
+
+
+
+
+    function submit_doctor_selection(Request $request)
+    {
+
+        $request->validate([
+
+            'd_id'=>'required',
+            'r_id'=>'required',
+            'fee'=>'required',
+            'p_id'=>'required'
+
+        ]);
+
+        $P_ID = $request->input('p_id');
+
+        $data=array(
+
+            'P_ID'=>$P_ID,
+            'D_ID'=>$request->input('d_id'),
+            'Basic_Fee'=>$request->input('fee'),
+            'R_ID'=>$request->input('r_id')
+            
+        );
+
+        DB::table('patient_logs')->insert($data);
+
+        $P_log_data=DB::table('patient_logs')->where('P_ID',$P_ID)->orderBy('AI_ID','desc')->first();
+        
+        session(['P_L_AI_ID' => $P_log_data->AI_ID]);
+        session(['D_ID' => $request->input('d_id')]);
+        session(['BASIC_FEE' => $request->input('fee')]);
+        session(['D_NAME' => $request->input('dr_name')]);
+
+        return redirect('/reception/time_selection');
+
+    }
+
 }

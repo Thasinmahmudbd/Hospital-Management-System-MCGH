@@ -51,7 +51,7 @@
 
                 <p class="title">MCGH Portal</p>
                 <div class="line"></div>
-                <p class="user_name_id">Mr.A (RM001)</p>
+                <p class="user_name_id">Mr.A ({{ Session::get('REC_SESSION_ID') }})</p>
 
             </div>
             
@@ -78,7 +78,7 @@
                     <i class="menu_btn fas fa-bars"></i>
                 </a>
                 <p class="page_type">@yield('page_type')</p>
-                <a href="#">
+                <a href="{{url('/logout')}}">
                     <i class="log_out_btn fas fa-power-off"></i>
                 </a>
 
