@@ -82,7 +82,7 @@ class add_patient extends Controller
         session(['PATIENT_GENDER' => $request->input('patient_gender')]);
         session(['PATIENT_CELL' => $request->input('cell_number')]);
 
-        return redirect('/reception/doctor_selection');
+        return redirect('/reception/doctor_selection/');
 
     }
 
@@ -92,12 +92,57 @@ class add_patient extends Controller
     
     
     
-    function show_available_doctor()
+    function show_all_doctor()
     {
 
         $available_doctor_data['result']=DB::table('doctors')->orderBy('Dr_Name','asc')->get();
+
+        $available_doctor_Specialty['specialty']=DB::table('doctors')->select('Specialty')->distinct()->orderBy('Specialty','asc')->get();
         
-        return view('hospital/reception/doctor_selection',$available_doctor_data);
+        return view('hospital/reception/doctor_selection',$available_doctor_data,$available_doctor_Specialty);
+
+    }
+
+
+
+
+
+
+    function show_doctor_by_specialty($specialty)
+    {
+
+        $available_doctor_Specialty['specialty']=DB::table('doctors')->select('Specialty')->distinct()->orderBy('Specialty','asc')->get();
+
+        $available_doctor_data['result']=DB::table('doctors')->where('Specialty',$specialty)->orderBy('Dr_Name','asc')->get();
+
+        return view('hospital/reception/doctor_selection',$available_doctor_data,$available_doctor_Specialty);
+
+
+        /*if($specialty=='show' && $flag=='all'){
+
+            Show All
+
+            $available_doctor_data['result']=DB::table('doctors')->orderBy('Dr_Name','asc')->get();
+
+            return view('hospital/reception/doctor_selection',$available_doctor_data,$available_doctor_Specialty);
+
+        }elseif($flag=='by_search'){
+
+            Search
+
+            $available_doctor_data['result']=DB::table('doctors')->where('Dr_Name','like','%'.$specialty.'%')->orWhere('D_ID',$specialty)->orderBy('Dr_Name','asc')->get();
+
+            return view('hospital/reception/doctor_selection',$available_doctor_data,$available_doctor_Specialty);
+
+        }else{
+
+            By Specialty
+
+            $available_doctor_data['result']=DB::table('doctors')->where('Specialty',$specialty)->orderBy('Dr_Name','asc')->get();
+
+            return view('hospital/reception/doctor_selection',$available_doctor_data,$available_doctor_Specialty);
+
+        }*/
 
     }
 
@@ -139,6 +184,29 @@ class add_patient extends Controller
         session(['D_NAME' => $request->input('dr_name')]);
 
         return redirect('/reception/time_selection');
+
+    }
+
+
+
+
+
+    function search_doctor(Request $request)
+    {
+
+        $request->validate([
+
+            'doctor_search_info'=>'required'
+
+        ]);
+
+        $doctor_search_info = $request->input('doctor_search_info');
+
+        $available_doctor_Specialty['specialty']=DB::table('doctors')->select('Specialty')->distinct()->orderBy('Specialty','asc')->get();
+
+        $available_doctor_data['result']=DB::table('doctors')->where('Dr_Name','like','%'.$doctor_search_info.'%')->orWhere('D_ID','like','%'.$doctor_search_info.'%')->orderBy('Dr_Name','asc')->get();
+
+        return view('hospital/reception/doctor_selection',$available_doctor_data,$available_doctor_Specialty);
 
     }
 

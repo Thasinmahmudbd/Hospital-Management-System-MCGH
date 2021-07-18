@@ -48,11 +48,15 @@ Route::group(['middleware'=>['receptionAuth']],function() {
 
     Route::post('/reception/submit_basic_patient_info','App\Http\Controllers\reception\add_patient@submit_basic_patient_info');
 
-    Route::get('/reception/doctor_selection','App\Http\Controllers\reception\add_patient@show_available_doctor');
+    Route::get('/reception/doctor_selection','App\Http\Controllers\reception\add_patient@show_all_doctor');
 
     Route::post('/reception/submit_doctor_selection','App\Http\Controllers\reception\add_patient@submit_doctor_selection');
 
     Route::view('/reception/time_selection','hospital/reception/appoint_time');
+
+    Route::get('/reception/doctor_selection/by_specialty/{specialty}','App\Http\Controllers\reception\add_patient@show_doctor_by_specialty');
+
+    Route::post('/reception/doctor_selection/by_search','App\Http\Controllers\reception\add_patient@search_doctor');
 
 });
 

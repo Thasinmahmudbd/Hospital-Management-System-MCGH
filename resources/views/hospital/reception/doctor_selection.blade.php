@@ -14,11 +14,22 @@
 @section('links')
 
 <li class="link_item">
-    <a href="#" class="link">
-        <i class="link_icons fas fa-notes-medical"></i>
-        <span class="link_name"> Accident and Emergency (A&E) </span>
+    <a href="{{url('/reception/doctor_selection')}}" class="link">
+        <i class="link_icons fas fa-th"></i>
+        <span class="link_name"> Show All </span>
     </a>
 </li>
+
+@foreach($specialty as $link)
+
+<li class="link_item">
+    <a href="{{url('/reception/doctor_selection/by_specialty/'.$link->Specialty)}}" class="link">
+        <i class="link_icons fas fa-notes-medical"></i>
+        <span class="link_name"> {{$link->Specialty}} </span>
+    </a>
+</li>
+
+@endforeach
 
 @endsection
 
@@ -34,7 +45,14 @@
 @section('mobile_links')
 
 <div id="myLinks" class="mobile_links">
-    <a class="mobile_link" href="#">Accident and Emergency (A&E)</a>
+    <a class="mobile_link" href="{{url('/reception/doctor_selection')}}">Show All</a>
+
+@foreach($specialty as $link)
+
+    <a class="mobile_link" href="{{url('/reception/doctor_selection/by_specialty/'.$link->Specialty)}}">{{$link->Specialty}}</a>
+
+@endforeach
+
 </div>
 
 @endsection
@@ -114,12 +132,13 @@
 
 
 
-                <form action="" method="get" class="content_container patient_info_form">
+                <form action="{{url('/reception/doctor_selection/by_search')}}" method="post" class="content_container patient_info_form">
+                @csrf
 
                     <div class="doctor_search_form_element">
 
                         <label for="doctor_name_search" class="collected_info vanish_label">Search Doctor</label>
-                        <input type="text" class="input" name="doctor_name_search" required>
+                        <input type="text" class="input" name="doctor_search_info" placeholder="Enter Doctor Name or ID" required>
                         <button type="submit" class="btn form_btn" name="search_doctor">Search</button>
     
                     </div>
@@ -141,7 +160,21 @@
                         <input type="hidden" name="p_id" value="{{Session::get('PATIENT_P_ID')}}">
                         <input type="hidden" name="r_id" value="{{Session::get('REC_SESSION_ID')}}">
                         <button type="submit" name="select_doctor" class="btn capsule">
-                            <img class="round_image" src="Media/Images/Template_Images/system/Profile_avatar_placeholder_large.png" alt="" width="100%">
+
+                        @if($list->Dr_Gender=='male' || $list->Dr_Gender=='Male')
+
+                            <img class="round_image" src="{{url('/UI_Assets/Media/Images/Template_Images/system/default-placeholder-doctor-half-length-portrait-vector-male.png')}}" alt="" width="100%">
+
+                        @elseif($list->Dr_Gender=='female' || $list->Dr_Gender=='Female')
+
+                            <img class="round_image" src="{{url('/UI_Assets/Media/Images/Template_Images/system/default-placeholder-doctor-half-length-portrait-vector-female.png')}}" alt="" width="100%">
+
+                        @else
+
+                            <img class="round_image" src="{{url('/UI_Assets/Media/Images/Template_Images/system/Profile_avatar_placeholder_large.png')}}" alt="" width="100%">
+
+                        @endif
+
                             <div class="doctor_name_dept">
                                 <p class="doctor_name">{{$list->Dr_Name}}</p>
                                 <p>{{$list->Specialty}}</p>
