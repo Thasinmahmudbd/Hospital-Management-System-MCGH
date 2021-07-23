@@ -44,19 +44,76 @@ Route::get('/logout', function () {
 
 Route::group(['middleware'=>['receptionAuth']],function() {
 
-    Route::view('/reception/home','hospital/reception/home');
+    /* 
+    from login page to view reception home page.
+    */
+    Route::view('/reception/home/','hospital/reception/home');
 
+    /* 
+    from reception home page to controller[add_patient](submit_basic_patient_info), 
+    from controller[add_patient](submit_basic_patient_info) to controller[add_patient](show_all_doctor).
+    */
     Route::post('/reception/submit_basic_patient_info','App\Http\Controllers\reception\add_patient@submit_basic_patient_info');
 
+    /*  
+    from controller[add_patient](show_all_doctor) to view doctor selection page.
+    */
     Route::get('/reception/doctor_selection','App\Http\Controllers\reception\add_patient@show_all_doctor');
 
+    /*  
+    from controller[add_patient](show_doctor_by_department) to view doctor selection page.
+    */
+    Route::get('/reception/doctor_selection/by_department/{department}','App\Http\Controllers\reception\add_patient@show_doctor_by_department');
+
+    /*  
+    from controller[add_patient](search_doctor) to view doctor selection page.
+    */
+    Route::post('/reception/doctor_selection/by_search','App\Http\Controllers\reception\add_patient@search_doctor');
+
+    /*  
+    from view doctor selection page to controller[add_patient](submit_doctor_selection),
+    from controller[add_patient](submit_doctor_selection) to controller[add_patient](select_time).
+    */
     Route::post('/reception/submit_doctor_selection','App\Http\Controllers\reception\add_patient@submit_doctor_selection');
 
-    Route::view('/reception/time_selection','hospital/reception/appoint_time');
+    /*  
+    from controller[add_patient](select_time) to view time selection page.
+    */
+    Route::get('/reception/time_selection','App\Http\Controllers\reception\add_patient@select_time');
 
-    Route::get('/reception/doctor_selection/by_specialty/{specialty}','App\Http\Controllers\reception\add_patient@show_doctor_by_specialty');
+    /*  
+    from view time selection page to controller[add_patient](change_doctor),
+    from controller[add_patient](change_doctor) to view doctor selection page.
+    */
+    Route::get('/reception/doctor_selection/reselection/{p_l_ai_id}','App\Http\Controllers\reception\add_patient@change_doctor');
 
-    Route::post('/reception/doctor_selection/by_search','App\Http\Controllers\reception\add_patient@search_doctor');
+    /*  
+    from view time selection page to controller[add_patient](fill_slot_...
+    ).
+    */
+    Route::get('/reception/take_spot_sat/{d_s_ai_id}','App\Http\Controllers\reception\add_patient@fill_slot_sat');
+    Route::get('/reception/take_spot_sun/{d_s_ai_id}','App\Http\Controllers\reception\add_patient@fill_slot_sun');
+    Route::get('/reception/take_spot_mon/{d_s_ai_id}','App\Http\Controllers\reception\add_patient@fill_slot_mon');
+    Route::get('/reception/take_spot_tue/{d_s_ai_id}','App\Http\Controllers\reception\add_patient@fill_slot_tue');
+    Route::get('/reception/take_spot_wed/{d_s_ai_id}','App\Http\Controllers\reception\add_patient@fill_slot_wed');
+    Route::get('/reception/take_spot_thu/{d_s_ai_id}','App\Http\Controllers\reception\add_patient@fill_slot_thu');
+    Route::get('/reception/take_spot_fri/{d_s_ai_id}','App\Http\Controllers\reception\add_patient@fill_slot_fri');
+
+    /*  
+    from controller[add_patient](fill_slot_...) to view final page.
+    */
+    Route::view('/reception/final/','hospital/reception/final');
+
+    /*  
+    from view final page to controller[add_patient](add_date_and_discount).
+    */
+    Route::post('/reception/date_and_discount','App\Http\Controllers\reception\add_patient@add_date_and_discount');
+
+    /* 
+    from controller[add_patient](add_date_and_discount) to controller[add_patient](show_list),
+    from controller[add_patient](show_list) to view patient list page.
+    */
+    Route::get('/reception/patient_list/','App\Http\Controllers\reception\add_patient@show_list');
 
 });
 

@@ -30,6 +30,11 @@
 
     <!--javascript-->
     <script src="{{ asset('UI_assets/Javascript/dropdown_menu.js') }}"></script>
+    <!--<script type="text/javascript">
+        function disableBack() { window.history.forward(); }
+        setTimeout("disableBack()", 0);
+        window.onunload = function () { null };
+    </script>-->
 
 
     <title>@yield('page_title')</title>
@@ -104,14 +109,6 @@
         </div>
 
     </div>
-
-
-    <!--removable link-->
-    <p class="removable_link_text">This links are temporary, used to travel through the site: 
-        <a href="index.html" class="removable_link">Log in</a>,
-        <a href="receptionist_doctor_selection.html" class="removable_link">Select Doctor</a>.
-    </p>
-    <!--removable link end-->
 
 
 </body>

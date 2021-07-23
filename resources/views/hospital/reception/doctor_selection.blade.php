@@ -20,12 +20,12 @@
     </a>
 </li>
 
-@foreach($specialty as $link)
+@foreach($department as $link)
 
 <li class="link_item">
-    <a href="{{url('/reception/doctor_selection/by_specialty/'.$link->Specialty)}}" class="link">
+    <a href="{{url('/reception/doctor_selection/by_department/'.$link->Department)}}" class="link">
         <i class="link_icons fas fa-notes-medical"></i>
-        <span class="link_name"> {{$link->Specialty}} </span>
+        <span class="link_name"> {{$link->Department}} </span>
     </a>
 </li>
 
@@ -47,9 +47,9 @@
 <div id="myLinks" class="mobile_links">
     <a class="mobile_link" href="{{url('/reception/doctor_selection')}}">Show All</a>
 
-@foreach($specialty as $link)
+@foreach($department as $link)
 
-    <a class="mobile_link" href="{{url('/reception/doctor_selection/by_specialty/'.$link->Specialty)}}">{{$link->Specialty}}</a>
+    <a class="mobile_link" href="{{url('/reception/doctor_selection/by_department/'.$link->Department)}}">{{$link->Department}}</a>
 
 @endforeach
 
@@ -177,7 +177,7 @@
 
                             <div class="doctor_name_dept">
                                 <p class="doctor_name">{{$list->Dr_Name}}</p>
-                                <p>{{$list->Specialty}}</p>
+                                <p>{{$list->Specialty}} in {{$list->Department}}</p>
                             </div>
                         </button>
                     </form>

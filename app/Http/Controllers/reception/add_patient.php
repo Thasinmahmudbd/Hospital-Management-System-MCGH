@@ -10,8 +10,7 @@ class add_patient extends Controller
 {
 
 
-    function submit_basic_patient_info(Request $request)
-    {
+    function submit_basic_patient_info(Request $request){
 
         $request->validate([
 
@@ -22,7 +21,7 @@ class add_patient extends Controller
             'nid_type'=>'required'
 
         ]);
- 
+
         date_default_timezone_set('Asia/Dhaka');
         $ad_date = date("Y/m/d");
 
@@ -30,15 +29,15 @@ class add_patient extends Controller
 
         $first_part = $request->input('patient_gender');
         
-        if($first_part == 'male'){
+        if($first_part == 'Male'){
             $first_part = 'M';
-        }elseif($first_part == 'female'){
+        }elseif($first_part == 'Female'){
             $first_part = 'F';
             echo $first_part;
-        }elseif($first_part == 'child'){
+        }elseif($first_part == 'Child'){
             $first_part = 'C';
             echo $first_part;
-        }elseif($first_part == 'others'){
+        }elseif($first_part == 'Others'){
             $first_part = 'O';
             echo $first_part;
         }
@@ -92,14 +91,13 @@ class add_patient extends Controller
     
     
     
-    function show_all_doctor()
-    {
+    function show_all_doctor(){
 
         $available_doctor_data['result']=DB::table('doctors')->orderBy('Dr_Name','asc')->get();
 
-        $available_doctor_Specialty['specialty']=DB::table('doctors')->select('Specialty')->distinct()->orderBy('Specialty','asc')->get();
+        $available_doctor_department['department']=DB::table('doctors')->select('Department')->distinct()->orderBy('Department','asc')->get();
         
-        return view('hospital/reception/doctor_selection',$available_doctor_data,$available_doctor_Specialty);
+        return view('hospital/reception/doctor_selection',$available_doctor_data,$available_doctor_department);
 
     }
 
@@ -108,14 +106,13 @@ class add_patient extends Controller
 
 
 
-    function show_doctor_by_specialty($specialty)
-    {
+    function show_doctor_by_department($department){
 
-        $available_doctor_Specialty['specialty']=DB::table('doctors')->select('Specialty')->distinct()->orderBy('Specialty','asc')->get();
+        $available_doctor_department['department']=DB::table('doctors')->select('Department')->distinct()->orderBy('Department','asc')->get();
 
-        $available_doctor_data['result']=DB::table('doctors')->where('Specialty',$specialty)->orderBy('Dr_Name','asc')->get();
+        $available_doctor_data['result']=DB::table('doctors')->where('Department',$department)->orderBy('Dr_Name','asc')->get();
 
-        return view('hospital/reception/doctor_selection',$available_doctor_data,$available_doctor_Specialty);
+        return view('hospital/reception/doctor_selection',$available_doctor_data,$available_doctor_department);
 
 
         /*if($specialty=='show' && $flag=='all'){
@@ -151,8 +148,36 @@ class add_patient extends Controller
 
 
 
-    function submit_doctor_selection(Request $request)
-    {
+
+
+
+    function search_doctor(Request $request){
+
+        $request->validate([
+
+            'doctor_search_info'=>'required'
+
+        ]);
+
+        $doctor_search_info = $request->input('doctor_search_info');
+
+        $available_doctor_department['department']=DB::table('doctors')->select('Department')->distinct()->orderBy('Department','asc')->get();
+
+        $available_doctor_data['result']=DB::table('doctors')->where('Dr_Name','like','%'.$doctor_search_info.'%')->orWhere('D_ID','like','%'.$doctor_search_info.'%')->orderBy('Dr_Name','asc')->get();
+
+        return view('hospital/reception/doctor_selection',$available_doctor_data,$available_doctor_department);
+
+    }
+
+
+
+
+
+
+
+
+
+    function submit_doctor_selection(Request $request){
 
         $request->validate([
 
@@ -191,23 +216,390 @@ class add_patient extends Controller
 
 
 
-    function search_doctor(Request $request)
-    {
 
-        $request->validate([
 
-            'doctor_search_info'=>'required'
+    function change_doctor(Request $request,$p_l_ai_id){
 
-        ]);
+        DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->delete();
+        
+        $available_doctor_department['department']=DB::table('doctors')->select('Department')->distinct()->orderBy('Department','asc')->get();
 
-        $doctor_search_info = $request->input('doctor_search_info');
+        $available_doctor_data['result']=DB::table('doctors')->orderBy('Dr_Name','asc')->get();
 
-        $available_doctor_Specialty['specialty']=DB::table('doctors')->select('Specialty')->distinct()->orderBy('Specialty','asc')->get();
-
-        $available_doctor_data['result']=DB::table('doctors')->where('Dr_Name','like','%'.$doctor_search_info.'%')->orWhere('D_ID','like','%'.$doctor_search_info.'%')->orderBy('Dr_Name','asc')->get();
-
-        return view('hospital/reception/doctor_selection',$available_doctor_data,$available_doctor_Specialty);
+        return view('hospital/reception/doctor_selection',$available_doctor_data,$available_doctor_department);
 
     }
 
+
+
+
+
+
+
+    function select_time(Request $request){
+
+        $id = $request->session()->get('D_ID');
+
+        $available_doctor_time['routine']=DB::table('doctor_schedules')->where('D_ID',$id)->orderBy('F','asc')->get();
+
+        return view('hospital/reception/appoint_time',$available_doctor_time);
+
+    }
+
+
+
+
+
+
+    function fill_slot_sat(Request $request,$d_s_ai_id){
+
+        $id = $d_s_ai_id;
+
+        $P_ID = $request->session()->get('PATIENT_P_ID');
+
+        $data=array(
+            
+            'sat'=>$P_ID
+        
+        );
+
+        DB::table('doctor_schedules')->where('AI_ID',$id)->update($data);
+
+        $time = DB::table('doctor_schedules')->where('AI_ID',$id)->first();
+
+        $F = $time->F;
+        $T = $time->T;
+
+        $ap_time = $F. '-' .$T;
+        
+        $data=array(
+
+            'Ap_Time'=>$ap_time
+
+        );
+
+        $p_l_ai_id = $request->session()->get('P_L_AI_ID');
+
+        DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->update($data);
+
+        session(['F' => $time->F]);
+        session(['T' => $time->T]);
+
+        return redirect('/reception/final/');
+
+    }
+
+
+
+
+
+
+    function fill_slot_sun(Request $request,$d_s_ai_id){
+
+        $id = $d_s_ai_id;
+
+        $P_ID = $request->session()->get('PATIENT_P_ID');
+
+        $data=array(
+            
+            'sun'=>$P_ID
+        
+        );
+
+        DB::table('doctor_schedules')->where('AI_ID',$id)->update($data);
+
+        $time = DB::table('doctor_schedules')->where('AI_ID',$id)->first();
+
+        $F = $time->F;
+        $T = $time->T;
+
+        $ap_time = $F. '-' .$T;
+        
+        $data=array(
+
+            'Ap_Time'=>$ap_time
+
+        );
+
+        $p_l_ai_id = $request->session()->get('P_L_AI_ID');
+
+        DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->update($data);
+
+        session(['F' => $time->F]);
+        session(['T' => $time->T]);
+
+        return redirect('/reception/final/');
+
+    }
+
+
+
+
+
+
+    function fill_slot_mon(Request $request,$d_s_ai_id){
+        
+        $id = $d_s_ai_id;
+
+        $P_ID = $request->session()->get('PATIENT_P_ID');
+
+        $data=array(
+            
+            'mon'=>$P_ID
+        
+        );
+
+        DB::table('doctor_schedules')->where('AI_ID',$id)->update($data);
+
+        $time = DB::table('doctor_schedules')->where('AI_ID',$id)->first();
+
+        $F = $time->F;
+        $T = $time->T;
+
+        $ap_time = $F. '-' .$T;
+        
+        $data=array(
+
+            'Ap_Time'=>$ap_time
+
+        );
+
+        $p_l_ai_id = $request->session()->get('P_L_AI_ID');
+
+        DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->update($data);
+
+        session(['F' => $time->F]);
+        session(['T' => $time->T]);
+
+        return redirect('/reception/final/');
+
+    }
+
+
+
+
+
+
+    function fill_slot_tue(Request $request,$d_s_ai_id){
+
+        $id = $d_s_ai_id;
+
+        $P_ID = $request->session()->get('PATIENT_P_ID');
+
+        $data=array(
+            
+            'tue'=>$P_ID
+        
+        );
+
+        DB::table('doctor_schedules')->where('AI_ID',$id)->update($data);
+
+        $time = DB::table('doctor_schedules')->where('AI_ID',$id)->first();
+
+        $F = $time->F;
+        $T = $time->T;
+
+        $ap_time = $F. '-' .$T;
+        
+        $data=array(
+
+            'Ap_Time'=>$ap_time
+
+        );
+
+        $p_l_ai_id = $request->session()->get('P_L_AI_ID');
+
+        DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->update($data);
+
+        session(['F' => $time->F]);
+        session(['T' => $time->T]);
+
+        return redirect('/reception/final/');
+
+    }
+
+
+
+
+
+    function fill_slot_wed(Request $request,$d_s_ai_id){
+
+        $id = $d_s_ai_id;
+
+        $P_ID = $request->session()->get('PATIENT_P_ID');
+
+        $data=array(
+            
+            'wed'=>$P_ID
+        
+        );
+
+        DB::table('doctor_schedules')->where('AI_ID',$id)->update($data);
+
+        $time = DB::table('doctor_schedules')->where('AI_ID',$id)->first();
+
+        $F = $time->F;
+        $T = $time->T;
+
+        $ap_time = $F. '-' .$T;
+        
+        $data=array(
+
+            'Ap_Time'=>$ap_time
+
+        );
+
+        $p_l_ai_id = $request->session()->get('P_L_AI_ID');
+
+        DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->update($data);
+
+        session(['F' => $time->F]);
+        session(['T' => $time->T]);
+
+        return redirect('/reception/final/');
+
+    }
+
+
+
+
+
+    function fill_slot_thu(Request $request,$d_s_ai_id){
+
+        $id = $d_s_ai_id;
+
+        $P_ID = $request->session()->get('PATIENT_P_ID');
+
+        $data=array(
+            
+            'thu'=>$P_ID
+        
+        );
+
+        DB::table('doctor_schedules')->where('AI_ID',$id)->update($data);
+
+        $time = DB::table('doctor_schedules')->where('AI_ID',$id)->first();
+
+        $F = $time->F;
+        $T = $time->T;
+
+        $ap_time = $F. '-' .$T;
+        
+        $data=array(
+
+            'Ap_Time'=>$ap_time
+
+        );
+
+        $p_l_ai_id = $request->session()->get('P_L_AI_ID');
+
+        DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->update($data);
+
+        session(['F' => $time->F]);
+        session(['T' => $time->T]);
+
+        return redirect('/reception/final/');
+
+    }
+
+
+
+
+
+
+    function fill_slot_fri(Request $request,$d_s_ai_id){
+
+        $id = $d_s_ai_id;
+
+        $P_ID = $request->session()->get('PATIENT_P_ID');
+
+        $data=array(
+            
+            'fri'=>$P_ID
+        
+        );
+
+        DB::table('doctor_schedules')->where('AI_ID',$id)->update($data);
+
+        $time = DB::table('doctor_schedules')->where('AI_ID',$id)->first();
+
+        $F = $time->F;
+        $T = $time->T;
+
+        $ap_time = $F. '-' .$T;
+        
+        $data=array(
+
+            'Ap_Time'=>$ap_time
+
+        );
+
+        $p_l_ai_id = $request->session()->get('P_L_AI_ID');
+
+        DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->update($data);
+
+        session(['F' => $time->F]);
+        session(['T' => $time->T]);
+
+        return redirect('/reception/final/');
+
+    }
+
+
+
+
+
+    function add_date_and_discount(Request $request){
+
+        $p_l_ai_id = $request->session()->get('P_L_AI_ID');
+        $fee = $request->session()->get('BASIC_FEE');
+
+        $discount = $request->input('discount');
+        $saving = ($discount/100)*$fee;
+        $final_fee = $fee-$saving;
+        $payment_status = 'Unpaid';
+
+        $data=array(
+            
+            'Ap_Date'=>$request->input('appoint_date'),
+            'Discount'=>$discount,
+            'Final_Fee'=>$final_fee,
+            'Payment_Status'=>$payment_status
+        
+        );
+
+        DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->update($data);
+
+        /* Deleting sessions */
+
+        $request->session()->forget('PATIENT_P_ID');
+        $request->session()->forget('PATIENT_NAME');
+        $request->session()->forget('PATIENT_GENDER');
+        $request->session()->forget('PATIENT_CELL');
+        $request->session()->forget('P_L_AI_ID');
+        $request->session()->forget('D_ID');
+        $request->session()->forget('D_NAME');
+        $request->session()->forget('BASIC_FEE');
+        $request->session()->forget('F');
+        $request->session()->forget('T');
+
+        return redirect('/reception/patient_list/');
+
+    }
+
+
+
+
+
+    function show_list(){
+
+        $data['result']=DB::table('patient_logs')
+        ->join('patients', 'patient_logs.P_ID', '=', 'patients.P_ID')
+        ->join('doctors', 'patient_logs.D_ID', '=', 'doctors.D_ID')
+        ->select('patient_logs.*', 'patients.*', 'doctors.*')
+        ->get();
+        
+        return view('hospital/reception/patient_list',$data);
+
+    }
 }

@@ -24,6 +24,13 @@
     <!--responsive design-->
     <link rel="stylesheet" href="{{ asset('UI_assets/Design/Responsive/index_res.css') }}">
 
+    <!--javascript-->
+    <script type="text/javascript">
+        function disableBack() { window.history.forward(); }
+        setTimeout("disableBack()", 0);
+        window.onunload = function () { null };
+    </script>
+
 
     <title>MCGH Portal</title>
 
@@ -88,13 +95,7 @@
     <footer class="footer">&copy; 2021 MCGH.portal.com</footer>
 
 
-    <!--removable link-->
-    <p class="removable_link_text">This links are temporary, used to travel through the site: 
-        <a href="receptionist_home.html" class="removable_link">Reception</a>, 
-        <a href="Doctor_activity_log.html" class="removable_link">Doctors</a>, 
-        <a href="Accounts_doctor_log.html" class="removable_link">Accounts</a>.
-    </p>
-    <!--removable link end-->
+    
 
 </body>
 </html>

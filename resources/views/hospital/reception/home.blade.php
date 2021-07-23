@@ -14,14 +14,14 @@
 @section('links')
 
 <li class="link_item">
-    <a href="receptionist_home.html" class="link">
+    <a href="{{url('/reception/home/')}}" class="link">
         <i class="link_icons fas fa-window-maximize"></i>
         <span class="link_name"> Patient Entry </span>
     </a>
 </li>
 
 <li class="list_item">
-    <a href="receptionist_list.html" class="link">
+    <a href="{{url('/reception/patient_list/')}}" class="link">
         <i class=" link_icons fas fa-th-list"></i>
         <span class="link_name"> Patients List </span>
     </a>
@@ -41,8 +41,8 @@
 @section('mobile_links')
 
 <div id="myLinks" class="mobile_links">
-    <a class="mobile_link" href="receptionist_home.html">Patient Entry</a>
-    <a class="mobile_link" href="receptionist_list.html">Patients List</a>
+    <a class="mobile_link" href="{{url('/reception/home/')}}">Patient Entry</a>
+    <a class="mobile_link" href="{{url('/reception/patient_list/')}}">Patients List</a>
 </div>
 
 @endsection
@@ -136,10 +136,10 @@
         
                             <label for="patient_gender" class="label">Patient's Gender</label>
                             <select name="patient_gender" id="patient_gender" class="input">
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="others">Others</option>
-                                <option value="child">Child</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Others">Others</option>
+                                <option value="Child">Child</option>
                             </select>
         
                         </div>
@@ -159,8 +159,8 @@
         
                             <label for="nid_type" class="label">NID Type</label>
                             <select name="nid_type" id="nid_type" class="input">
-                                <option value="own">Own</option>
-                                <option value="guardian">Guardian</option>
+                                <option value="Own">Own</option>
+                                <option value="Guardian">Guardian</option>
                             </select>
         
                         </div>

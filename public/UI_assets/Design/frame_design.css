@@ -165,7 +165,7 @@
     color:#fff;
 }
 
-.log_out_btn:hover::before{
+/*.log_out_btn:hover::before{
     content:"Log Out";
     font-family: 'Nunito', sans-serif;
     position:fixed;
@@ -178,7 +178,7 @@
     cursor:pointer;
     color:#fff;
     transition: 100ms ease-in;
-}
+}*/
 
 /* content */
 

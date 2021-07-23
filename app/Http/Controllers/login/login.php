@@ -23,7 +23,7 @@ class login extends Controller
                 $token = current($token_array);
 
                 if($token=='R' || $token=='r'){
-                    return redirect('/reception/home');
+                    return redirect('/reception/home/');
                 }
 
             }else{
