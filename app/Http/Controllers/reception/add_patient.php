@@ -222,11 +222,13 @@ class add_patient extends Controller
 
         DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->delete();
         
-        $available_doctor_department['department']=DB::table('doctors')->select('Department')->distinct()->orderBy('Department','asc')->get();
+        /*$available_doctor_department['department']=DB::table('doctors')->select('Department')->distinct()->orderBy('Department','asc')->get();
 
         $available_doctor_data['result']=DB::table('doctors')->orderBy('Dr_Name','asc')->get();
 
-        return view('hospital/reception/doctor_selection',$available_doctor_data,$available_doctor_department);
+        return view('hospital/reception/doctor_selection',$available_doctor_data,$available_doctor_department);*/
+
+        return redirect('/reception/doctor_selection');
 
     }
 
@@ -236,7 +238,7 @@ class add_patient extends Controller
 
 
 
-    function select_time(Request $request){
+    function show_available_time(Request $request){
 
         $id = $request->session()->get('D_ID');
 
@@ -251,19 +253,10 @@ class add_patient extends Controller
 
 
 
-    function fill_slot_sat(Request $request,$d_s_ai_id){
 
-        $id = $d_s_ai_id;
+    function set_time_in_patient_log(Request $request){
 
-        $P_ID = $request->session()->get('PATIENT_P_ID');
-
-        $data=array(
-            
-            'sat'=>$P_ID
-        
-        );
-
-        DB::table('doctor_schedules')->where('AI_ID',$id)->update($data);
+        $id = $request->session()->get('D_S_AI_ID');
 
         $time = DB::table('doctor_schedules')->where('AI_ID',$id)->first();
 
@@ -293,257 +286,201 @@ class add_patient extends Controller
 
 
 
+
+
+
+    function fill_slot_sat(Request $request,$d_s_ai_id){
+
+        $id = $d_s_ai_id;
+        $P_ID = $request->session()->get('PATIENT_P_ID');
+        $data=array('sat'=>$P_ID);
+        $day = 'sat';
+
+        DB::table('doctor_schedules')->where('AI_ID',$id)->update($data);
+
+        session(['D_S_AI_ID' => $id]);
+        session(['DAY' => $day]);
+
+        return redirect('/reception/set_time_in_patient_log/');
+
+    }
 
     function fill_slot_sun(Request $request,$d_s_ai_id){
 
         $id = $d_s_ai_id;
-
         $P_ID = $request->session()->get('PATIENT_P_ID');
-
-        $data=array(
-            
-            'sun'=>$P_ID
+        $data=array('sun'=>$P_ID);
+        $day = 'sun';
         
-        );
-
         DB::table('doctor_schedules')->where('AI_ID',$id)->update($data);
 
-        $time = DB::table('doctor_schedules')->where('AI_ID',$id)->first();
+        session(['D_S_AI_ID' => $id]);
+        session(['DAY' => $day]);
 
-        $F = $time->F;
-        $T = $time->T;
-
-        $ap_time = $F. '-' .$T;
-        
-        $data=array(
-
-            'Ap_Time'=>$ap_time
-
-        );
-
-        $p_l_ai_id = $request->session()->get('P_L_AI_ID');
-
-        DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->update($data);
-
-        session(['F' => $time->F]);
-        session(['T' => $time->T]);
-
-        return redirect('/reception/final/');
+        return redirect('/reception/set_time_in_patient_log/');
 
     }
-
-
-
-
-
 
     function fill_slot_mon(Request $request,$d_s_ai_id){
-        
+
         $id = $d_s_ai_id;
-
         $P_ID = $request->session()->get('PATIENT_P_ID');
-
-        $data=array(
-            
-            'mon'=>$P_ID
+        $data=array('mon'=>$P_ID);
+        $day = 'mon';
         
-        );
-
         DB::table('doctor_schedules')->where('AI_ID',$id)->update($data);
 
-        $time = DB::table('doctor_schedules')->where('AI_ID',$id)->first();
+        session(['D_S_AI_ID' => $id]);
+        session(['DAY' => $day]);
 
-        $F = $time->F;
-        $T = $time->T;
-
-        $ap_time = $F. '-' .$T;
-        
-        $data=array(
-
-            'Ap_Time'=>$ap_time
-
-        );
-
-        $p_l_ai_id = $request->session()->get('P_L_AI_ID');
-
-        DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->update($data);
-
-        session(['F' => $time->F]);
-        session(['T' => $time->T]);
-
-        return redirect('/reception/final/');
+        return redirect('/reception/set_time_in_patient_log/');
 
     }
-
-
-
-
-
 
     function fill_slot_tue(Request $request,$d_s_ai_id){
 
         $id = $d_s_ai_id;
-
         $P_ID = $request->session()->get('PATIENT_P_ID');
-
-        $data=array(
-            
-            'tue'=>$P_ID
+        $data=array('tue'=>$P_ID);
+        $day = 'tue';
         
-        );
-
         DB::table('doctor_schedules')->where('AI_ID',$id)->update($data);
 
-        $time = DB::table('doctor_schedules')->where('AI_ID',$id)->first();
+        session(['D_S_AI_ID' => $id]);
+        session(['DAY' => $day]);
 
-        $F = $time->F;
-        $T = $time->T;
-
-        $ap_time = $F. '-' .$T;
-        
-        $data=array(
-
-            'Ap_Time'=>$ap_time
-
-        );
-
-        $p_l_ai_id = $request->session()->get('P_L_AI_ID');
-
-        DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->update($data);
-
-        session(['F' => $time->F]);
-        session(['T' => $time->T]);
-
-        return redirect('/reception/final/');
+        return redirect('/reception/set_time_in_patient_log/');
 
     }
-
-
-
-
 
     function fill_slot_wed(Request $request,$d_s_ai_id){
 
         $id = $d_s_ai_id;
-
         $P_ID = $request->session()->get('PATIENT_P_ID');
-
-        $data=array(
-            
-            'wed'=>$P_ID
+        $data=array('wed'=>$P_ID);
+        $day = 'wed';
         
-        );
-
         DB::table('doctor_schedules')->where('AI_ID',$id)->update($data);
 
-        $time = DB::table('doctor_schedules')->where('AI_ID',$id)->first();
+        session(['D_S_AI_ID' => $id]);
+        session(['DAY' => $day]);
 
-        $F = $time->F;
-        $T = $time->T;
-
-        $ap_time = $F. '-' .$T;
-        
-        $data=array(
-
-            'Ap_Time'=>$ap_time
-
-        );
-
-        $p_l_ai_id = $request->session()->get('P_L_AI_ID');
-
-        DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->update($data);
-
-        session(['F' => $time->F]);
-        session(['T' => $time->T]);
-
-        return redirect('/reception/final/');
+        return redirect('/reception/set_time_in_patient_log/');
 
     }
-
-
-
-
 
     function fill_slot_thu(Request $request,$d_s_ai_id){
 
         $id = $d_s_ai_id;
-
         $P_ID = $request->session()->get('PATIENT_P_ID');
-
-        $data=array(
-            
-            'thu'=>$P_ID
+        $data=array('thu'=>$P_ID);
+        $day = 'thu';
         
-        );
-
         DB::table('doctor_schedules')->where('AI_ID',$id)->update($data);
 
-        $time = DB::table('doctor_schedules')->where('AI_ID',$id)->first();
+        session(['D_S_AI_ID' => $id]);
+        session(['DAY' => $day]);
 
-        $F = $time->F;
-        $T = $time->T;
-
-        $ap_time = $F. '-' .$T;
-        
-        $data=array(
-
-            'Ap_Time'=>$ap_time
-
-        );
-
-        $p_l_ai_id = $request->session()->get('P_L_AI_ID');
-
-        DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->update($data);
-
-        session(['F' => $time->F]);
-        session(['T' => $time->T]);
-
-        return redirect('/reception/final/');
+        return redirect('/reception/set_time_in_patient_log/');
 
     }
-
-
-
-
-
 
     function fill_slot_fri(Request $request,$d_s_ai_id){
 
         $id = $d_s_ai_id;
-
         $P_ID = $request->session()->get('PATIENT_P_ID');
+        $data=array('fri'=>$P_ID);
+        $day = 'fri';
+        
+        DB::table('doctor_schedules')->where('AI_ID',$id)->update($data);
+
+        session(['D_S_AI_ID' => $id]);
+        session(['DAY' => $day]);
+
+        return redirect('/reception/set_time_in_patient_log/');
+
+    }
+
+
+
+
+
+
+
+
+
+    function change_time(Request $request,$d_s_ai_id){
+
+        $id = $d_s_ai_id;
+        $day = $request->session()->get('DAY');
+        $p_l_ai_id = $request->session()->get('P_L_AI_ID');
 
         $data=array(
             
-            'fri'=>$P_ID
+            $day=>'A'
         
         );
 
         DB::table('doctor_schedules')->where('AI_ID',$id)->update($data);
 
-        $time = DB::table('doctor_schedules')->where('AI_ID',$id)->first();
-
-        $F = $time->F;
-        $T = $time->T;
-
-        $ap_time = $F. '-' .$T;
+        $data_2=array(
+            
+            'Ap_Time'=>null
         
-        $data=array(
-
-            'Ap_Time'=>$ap_time
-
         );
+        
+        DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->update($data_2);
 
-        $p_l_ai_id = $request->session()->get('P_L_AI_ID');
-
-        DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->update($data);
-
-        session(['F' => $time->F]);
-        session(['T' => $time->T]);
-
-        return redirect('/reception/final/');
+        return redirect('/reception/time_selection');
 
     }
+
+
+
+
+
+
+
+
+    function cancel_appointment(Request $request){
+
+        $p_l_ai_id = $request->session()->get('P_L_AI_ID');
+        $d_s_ai_id = $request->session()->get('D_S_AI_ID');
+
+        $day = $request->session()->get('DAY');
+
+        $data=array(
+            
+            $day=>'A'
+        
+        );
+
+        DB::table('doctor_schedules')->where('AI_ID',$d_s_ai_id)->update($data);
+
+        DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->delete();
+
+        /* Deleting sessions */
+
+        $request->session()->forget('PATIENT_P_ID');
+        $request->session()->forget('PATIENT_NAME');
+        $request->session()->forget('PATIENT_GENDER');
+        $request->session()->forget('PATIENT_CELL');
+        $request->session()->forget('P_L_AI_ID');
+        $request->session()->forget('D_ID');
+        $request->session()->forget('D_NAME');
+        $request->session()->forget('BASIC_FEE');
+        $request->session()->forget('F');
+        $request->session()->forget('T');
+        $request->session()->forget('D_S_AI_ID');
+        $request->session()->forget('DAY');
+
+        return redirect('/reception/home/');
+
+    }
+
+
+
+
 
 
 
@@ -582,10 +519,15 @@ class add_patient extends Controller
         $request->session()->forget('BASIC_FEE');
         $request->session()->forget('F');
         $request->session()->forget('T');
+        $request->session()->forget('D_S_AI_ID');
+        $request->session()->forget('DAY');
 
         return redirect('/reception/patient_list/');
 
     }
+
+
+
 
 
 
@@ -597,6 +539,7 @@ class add_patient extends Controller
         ->join('patients', 'patient_logs.P_ID', '=', 'patients.P_ID')
         ->join('doctors', 'patient_logs.D_ID', '=', 'doctors.D_ID')
         ->select('patient_logs.*', 'patients.*', 'doctors.*')
+        ->orderBy('patient_logs.AI_ID','desc')
         ->get();
         
         return view('hospital/reception/patient_list',$data);

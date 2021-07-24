@@ -14,14 +14,14 @@
 @section('links')
 
 <li class="list_item">
-    <a href="receptionist_appoint_time.html" class="link">
+    <a href="{{url('/reception/time_selection/reselection/'.Session::get('D_S_AI_ID'))}}" class="link">
         <i class="link_icons fas fa-clock"></i>
         <span class="link_name"> Reselect Time </span>
     </a>
 </li>
 
 <li class="list_item">
-    <a href="#" class="link">
+    <a href="{{url('/reception/cancel_appointment/')}}" class="link">
         <i class="link_icons far fa-window-close"></i>
         <span class="link_name"> Cancel Appointment </span>
     </a>
@@ -41,7 +41,7 @@
 @section('mobile_links')
 
 <div id="myLinks" class="mobile_links">
-    <a class="mobile_link" href="receptionist_appoint_time.html">Reselect Time</a>
+    <a class="mobile_link" href="{{url('/reception/time_selection/reselection/'.Session::get('D_S_AI_ID'))}}">Reselect Time</a>
     <a class="mobile_link" href="#">Cancel Appointment</a>
 </div>
 

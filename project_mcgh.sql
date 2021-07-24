@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 23, 2021 at 11:18 PM
+-- Generation Time: Jul 24, 2021 at 09:48 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.6
 
@@ -132,7 +132,7 @@ INSERT INTO `doctor_schedules` (`AI_ID`, `D_ID`, `F`, `T`, `sat`, `sun`, `mon`, 
 (2, 'D-M-001', '8:15', '8:30', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A', 'N/A'),
 (3, 'D-M-001', '8:30', '8:45', 'N/A', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A'),
 (4, 'D-M-001', '8:45', '9:00', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A', 'A'),
-(5, 'D-M-002', '14:00', '14:15', 'A', 'N/A', 'M-23072021-001', 'N/A', 'A', 'N/A', 'N/A'),
+(5, 'D-M-002', '14:00', '14:15', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A', 'N/A'),
 (6, 'D-M-002', '14:15', '14:30', 'A', 'N/A', 'N/A', 'A', 'N/A', 'A', 'N/A'),
 (7, 'D-M-002', '14:30', '14:45', 'A', 'N/A', 'N/A', 'A', 'N/A', 'A', 'N/A'),
 (8, 'D-M-002', '14:45', '15:00', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A', 'A'),
@@ -185,7 +185,7 @@ INSERT INTO `doctor_schedules` (`AI_ID`, `D_ID`, `F`, `T`, `sat`, `sun`, `mon`, 
 (55, 'D-F-014', '16:30', '16:45', 'N/A', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A'),
 (56, 'D-F-014', '16:45', '17:00', 'N/A', 'A', 'N/A', 'A', 'N/A', 'A', 'A'),
 (57, 'D-F-013', '17:00', '17:15', 'N/A', 'A', 'N/A', 'A', 'A', 'N/A', 'A'),
-(58, 'D-F-013', '17:15', '17:30', 'N/A', 'A', 'N/A', 'A', 'N/A', 'N/A', 'A'),
+(58, 'D-F-013', '17:15', '17:30', 'N/A', 'A', 'N/A', 'M-24072021-003', 'N/A', 'N/A', 'A'),
 (59, 'D-F-013', '17:30', '17:45', 'N/A', 'A', 'N/A', 'A', 'N/A', 'N/A', 'A'),
 (60, 'D-F-013', '17:45', '18:00', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A', 'A'),
 (61, 'D-M-015', '14:00', '14:15', 'N/A', 'A', 'N/A', 'A', 'N/A', 'A', 'A'),
@@ -239,8 +239,8 @@ INSERT INTO `doctor_schedules` (`AI_ID`, `D_ID`, `F`, `T`, `sat`, `sun`, `mon`, 
 (109, 'D-F-028', '17:00', '17:15', 'N/A', 'A', 'N/A', 'A', 'A', 'N/A', 'A'),
 (110, 'D-F-028', '17:15', '17:30', 'N/A', 'A', 'N/A', 'A', 'N/A', 'N/A', 'A'),
 (111, 'D-F-028', '17:30', '17:45', 'N/A', 'A', 'N/A', 'A', 'N/A', 'N/A', 'A'),
-(112, 'D-F-028', '17:45', '18:00', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A', 'A'),
-(113, 'D-M-026', '14:00', '14:15', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A', 'N/A'),
+(112, 'D-F-028', '17:45', '18:00', 'A', 'N/A', 'M-24072021-001', 'N/A', 'A', 'N/A', 'A'),
+(113, 'D-M-026', '14:00', '14:15', 'F-24072021-002', 'N/A', 'A', 'N/A', 'A', 'N/A', 'N/A'),
 (114, 'D-M-026', '14:15', '14:30', 'A', 'N/A', 'N/A', 'A', 'N/A', 'A', 'N/A'),
 (115, 'D-M-026', '14:30', '14:45', 'A', 'N/A', 'N/A', 'A', 'N/A', 'A', 'N/A'),
 (116, 'D-M-026', '14:45', '15:00', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A', 'A'),
@@ -297,7 +297,11 @@ CREATE TABLE `patients` (
 --
 
 INSERT INTO `patients` (`AI_ID`, `P_ID`, `Patient_Name`, `Patient_Gender`, `Cell_Number`, `NID`, `NID_Type`, `Ad_Date`) VALUES
-(106, 'M-24072021-000', 'Thasin', 'Male', '0178965321', '8488668515', 'Own', '2021-07-24');
+(106, 'M-24072021-000', 'Thasin', 'Male', '0178965321', '8488668515', 'Own', '2021-07-24'),
+(107, 'M-24072021-001', 'Jamil', 'Male', '01982635147', '8488668515', 'Own', '2021-07-24'),
+(108, 'F-24072021-002', 'Afia', 'Female', '161651658', '8488668515', 'Guardian', '2021-07-24'),
+(109, 'M-24072021-003', 'Imran', 'Male', '01536214587', '848864818181', 'Own', '2021-07-24'),
+(110, 'M-25072021-004', 'Hanif', 'Male', '01725364856', '151656548684', 'Own', '2021-07-25');
 
 -- --------------------------------------------------------
 
@@ -323,7 +327,10 @@ CREATE TABLE `patient_logs` (
 --
 
 INSERT INTO `patient_logs` (`AI_ID`, `P_ID`, `Ap_Date`, `Ap_Time`, `D_ID`, `Basic_Fee`, `Discount`, `Final_Fee`, `Payment_Status`, `R_ID`) VALUES
-(28, 'M-24072021-000', '2021-07-31', '12:45-13:00', 'D-M-010', 50, 5, 47.5, 'Unpaid', 'R-M-001');
+(28, 'M-24072021-000', '2021-07-31', '12:45-13:00', 'D-M-010', 50, 5, 47.5, 'Unpaid', 'R-M-001'),
+(30, 'M-24072021-001', '2021-07-28', '17:45-18:00', 'D-F-028', 50, 20, 40, 'Unpaid', 'R-M-001'),
+(31, 'F-24072021-002', '2021-08-25', '14:00-14:15', 'D-M-026', 150, 40, 90, 'Unpaid', 'R-M-001'),
+(32, 'M-24072021-003', '2021-07-26', '17:15-17:30', 'D-F-013', 80, 10, 72, 'Unpaid', 'R-M-001');
 
 -- --------------------------------------------------------
 
@@ -429,13 +436,13 @@ ALTER TABLE `logins`
 -- AUTO_INCREMENT for table `patients`
 --
 ALTER TABLE `patients`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
 
 --
 -- AUTO_INCREMENT for table `patient_logs`
 --
 ALTER TABLE `patient_logs`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `receiptionists`
