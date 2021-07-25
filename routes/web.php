@@ -45,27 +45,42 @@ Route::get('/logout', function () {
 Route::group(['middleware'=>['receptionAuth']],function() {
 
     /* 
-    from login page to view reception home page.
+    from view login page to controller[add_patient](set_up_home),
+    from controller[add_patient](set_up_home) to view reception home page.
     */
-    Route::view('/reception/home/','hospital/reception/home');
+    Route::get('/reception/home/','App\Http\Controllers\reception\add_patient@set_up_home');
+
+    /*
+    from view reception home page to controller[add_patient](search_old_patient_from_log),
+    from controller[add_patient](search_old_patient_from_log) to view reception home page.
+    */
+    Route::post('/reception/find_old_patient/by_search','App\Http\Controllers\reception\add_patient@search_old_patient_from_log');
+
+    /*
+    from view reception home page to controller[add_patient](register_old_patient),
+    from controller[add_patient](register_old_patient) to view time selection page.
+    */
+    Route::post('/reception/register/old_patients','App\Http\Controllers\reception\add_patient@register_old_patient');
 
     /* 
-    from reception home page to controller[add_patient](submit_basic_patient_info), 
-    from controller[add_patient](submit_basic_patient_info) to controller[add_patient](show_all_doctor).
+    from view reception home page to controller[add_patient](submit_basic_patient_info). 
     */
     Route::post('/reception/submit_basic_patient_info','App\Http\Controllers\reception\add_patient@submit_basic_patient_info');
 
-    /*  
+    /* 
+    from controller[add_patient](submit_basic_patient_info) to controller[add_patient](show_all_doctor),
     from controller[add_patient](show_all_doctor) to view doctor selection page.
     */
     Route::get('/reception/doctor_selection','App\Http\Controllers\reception\add_patient@show_all_doctor');
 
-    /*  
+    /* 
+    from view doctor selection page to controller[add_patient](show_doctor_by_department),
     from controller[add_patient](show_doctor_by_department) to view doctor selection page.
     */
     Route::get('/reception/doctor_selection/by_department/{department}','App\Http\Controllers\reception\add_patient@show_doctor_by_department');
 
-    /*  
+    /*
+    from view doctor selection page to controller[add_patient](search_doctor),
     from controller[add_patient](search_doctor) to view doctor selection page.
     */
     Route::post('/reception/doctor_selection/by_search','App\Http\Controllers\reception\add_patient@search_doctor');
@@ -104,6 +119,12 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     Route::get('/reception/set_time_in_patient_log/','App\Http\Controllers\reception\add_patient@set_time_in_patient_log');
 
     /*  
+    from view final page to controller[add_patient](cancel_appointment_from_time_selection),
+    from controller[add_patient](cancel_appointment_from_time_selection) to view reception home page.
+    */
+    Route::get('/reception/cancel_appointment_from_time_selection/','App\Http\Controllers\reception\add_patient@cancel_appointment_from_time_selection');
+
+    /*  
     from controller[add_patient](set_time_in_patient_log) to view final page.
     */
     Route::view('/reception/final/','hospital/reception/final');
@@ -120,10 +141,10 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     Route::get('/reception/time_selection/reselection/{d_s_ai_id}','App\Http\Controllers\reception\add_patient@change_time');
 
     /*  
-    from view final page to controller[add_patient](cancel_appointment),
-    from controller[add_patient](cancel_appointment) to view reception home page.
+    from view final page to controller[add_patient](cancel_appointment_from_final),
+    from controller[add_patient](cancel_appointment_from_final) to view reception home page.
     */
-    Route::get('/reception/cancel_appointment/','App\Http\Controllers\reception\add_patient@cancel_appointment');
+    Route::get('/reception/cancel_appointment_from_final/','App\Http\Controllers\reception\add_patient@cancel_appointment_from_final');
 
     /* 
     from controller[add_patient](add_date_and_discount) to controller[add_patient](show_list),

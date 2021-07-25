@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 24, 2021 at 09:48 PM
+-- Generation Time: Jul 25, 2021 at 03:01 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.6
 
@@ -50,43 +50,44 @@ CREATE TABLE `doctors` (
   `Department` varchar(50) NOT NULL,
   `Dr_Image` varchar(100) DEFAULT NULL,
   `Balance` float DEFAULT NULL,
-  `Basic_Fee` int(11) DEFAULT NULL
+  `Basic_Fee` int(11) DEFAULT NULL,
+  `Second_Visit_Discount` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `doctors`
 --
 
-INSERT INTO `doctors` (`AI_ID`, `D_ID`, `Dr_Name`, `Dr_Gender`, `Specialty`, `Department`, `Dr_Image`, `Balance`, `Basic_Fee`) VALUES
-(1, 'D-M-001', 'Brig Gen S M Mizanur Rahman', 'Male', 'Adviser Spl', 'Medicine', NULL, NULL, 250),
-(2, 'D-M-002', 'Col Mir Azimuddin Ahmed', 'Male', 'Cl Spl', 'Pathology', NULL, NULL, 240),
-(3, 'D-M-003', 'Col Kazi Askar Lateef', 'Male', 'Cl Spl', 'Anaesthesiology', NULL, NULL, 230),
-(4, 'D-M-004', 'Col A K M Asaduzzaman', 'Male', 'Cl Spl', 'Otolaryngology', NULL, NULL, 220),
-(5, 'D-M-005', 'Col Imrranul Hasan Murad', 'Male', 'Cl Spl', 'Dermatology', NULL, NULL, 210),
-(6, 'D-M-006', 'Col Abu Daud Md Shariful Islam', 'Male', 'Cl Spl', 'Surgery', NULL, NULL, 10),
-(7, 'D-F-007', 'Lt Col Julia Akter Nira', 'Female', 'Cl Spl', 'Gynae & Obs', NULL, NULL, 20),
-(8, 'D-F-008', 'Lt Col Selina Begum', 'Female', 'Cl Spl', 'Gynae & Obs', NULL, NULL, 30),
-(9, 'D-M-009', 'Lt Col Mohammad Shahnewa Hossain Khan', 'Male', 'Cl Spl', 'Orthopaedic', NULL, NULL, 40),
-(10, 'D-M-010', 'Lt Col Mohammad Sakhawat Sultan', 'Male', 'Gd Spl', 'Medicine', NULL, NULL, 50),
-(11, 'D-F-011', 'Lt Col Kaoser Jahan', 'Female', 'Cl Spl', 'Gynae & Obs', NULL, NULL, 60),
-(12, 'D-M-012', 'Lt Col Abdullah Mehedie', 'Male', 'Cl Spl', 'Surgery', NULL, NULL, 70),
-(13, 'D-F-013', 'Lt Col Shamim Ara Yeasmin', 'Female', 'Cl Spl ', 'Ophthalmology', NULL, NULL, 80),
-(14, 'D-F-014', 'Lt Col Naila Rehnuma', 'Female', 'Gd Spl', 'Paediatrics', NULL, NULL, 90),
-(15, 'D-M-015', 'Lt Col Araul Gani Sarker', 'Male', 'Cl Spl', 'Oral and Maxilofacial Surgery', NULL, NULL, 100),
-(16, 'D-M-016', 'Maj Mohammad Mamun-Ur-Rashid', 'Male', 'Cl Spl', 'Radiology', NULL, NULL, 110),
-(17, 'D-M-017', 'Maj Mohammad Nafees Islam', 'Male', 'Gd Spl', 'Anaesthesiology', NULL, NULL, 120),
-(18, 'D-F-018', 'Maj Durdana Maheen', 'Female', 'Gd Spl', 'Pathology', NULL, NULL, 130),
-(19, 'D-M-019', 'Maj F M Ashekullah', 'Male', 'Cl Spl', 'Ophthalmology', NULL, NULL, 140),
-(20, 'D-M-020', 'Dr Mohammad Sah Alom', 'Male', 'Spl', 'Medicine', NULL, NULL, 150),
-(21, 'D-F-021', 'Dr Saima Afroz Niro', 'Female', 'Spl', 'Gynae & Obs', NULL, NULL, 160),
-(22, 'D-M-022', 'Dr Zahir Uddin Md Babar', 'Male', 'Spl', 'Dermatology', NULL, NULL, 170),
-(23, 'D-M-023', 'Dr Md Jahangir Alam', 'Male', 'Spl', 'Eye', NULL, NULL, 180),
-(24, 'D-M-024', 'Dr Enamul Haque', 'Male', 'Surgeon', 'Dental', NULL, NULL, 190),
-(25, 'D-F-025', 'Dr S. Parvin Sadeque', 'Female', 'Spl', 'Gynae & Obs', NULL, NULL, 200),
-(26, 'D-M-026', 'Dr Anup Mustafa', 'Male', 'Spl', 'Orthopaedic', NULL, NULL, 150),
-(27, 'D-M-027', 'Dr Mir Iftekhar Mostafiz', 'Male', 'Spl', 'Chest & Asthma', NULL, NULL, 200),
-(28, 'D-F-028', 'Dr Farhana Parvin', 'Female', 'Spl', 'Gynae & Obs', NULL, NULL, 50),
-(29, 'D-M-029', 'Dr Moniruzzaman', 'Male', 'Spl', 'Orthopaedic', NULL, NULL, 80);
+INSERT INTO `doctors` (`AI_ID`, `D_ID`, `Dr_Name`, `Dr_Gender`, `Specialty`, `Department`, `Dr_Image`, `Balance`, `Basic_Fee`, `Second_Visit_Discount`) VALUES
+(1, 'D-M-001', 'Brig Gen S M Mizanur Rahman', 'Male', 'Adviser Spl', 'Medicine', NULL, NULL, 250, 10),
+(2, 'D-M-002', 'Col Mir Azimuddin Ahmed', 'Male', 'Cl Spl', 'Pathology', NULL, NULL, 240, 5),
+(3, 'D-M-003', 'Col Kazi Askar Lateef', 'Male', 'Cl Spl', 'Anaesthesiology', NULL, NULL, 230, 15),
+(4, 'D-M-004', 'Col A K M Asaduzzaman', 'Male', 'Cl Spl', 'Otolaryngology', NULL, NULL, 220, 3),
+(5, 'D-M-005', 'Col Imrranul Hasan Murad', 'Male', 'Cl Spl', 'Dermatology', NULL, NULL, 210, 5),
+(6, 'D-M-006', 'Col Abu Daud Md Shariful Islam', 'Male', 'Cl Spl', 'Surgery', NULL, NULL, 10, 7),
+(7, 'D-F-007', 'Lt Col Julia Akter Nira', 'Female', 'Cl Spl', 'Gynae & Obs', NULL, NULL, 20, 9),
+(8, 'D-F-008', 'Lt Col Selina Begum', 'Female', 'Cl Spl', 'Gynae & Obs', NULL, NULL, 30, 13),
+(9, 'D-M-009', 'Lt Col Mohammad Shahnewa Hossain Khan', 'Male', 'Cl Spl', 'Orthopaedic', NULL, NULL, 40, 10),
+(10, 'D-M-010', 'Lt Col Mohammad Sakhawat Sultan', 'Male', 'Gd Spl', 'Medicine', NULL, NULL, 50, 4),
+(11, 'D-F-011', 'Lt Col Kaoser Jahan', 'Female', 'Cl Spl', 'Gynae & Obs', NULL, NULL, 60, 0),
+(12, 'D-M-012', 'Lt Col Abdullah Mehedie', 'Male', 'Cl Spl', 'Surgery', NULL, NULL, 70, 0),
+(13, 'D-F-013', 'Lt Col Shamim Ara Yeasmin', 'Female', 'Cl Spl ', 'Ophthalmology', NULL, NULL, 80, 0),
+(14, 'D-F-014', 'Lt Col Naila Rehnuma', 'Female', 'Gd Spl', 'Paediatrics', NULL, NULL, 90, 0),
+(15, 'D-M-015', 'Lt Col Araul Gani Sarker', 'Male', 'Cl Spl', 'Oral and Maxilofacial Surgery', NULL, NULL, 100, 5),
+(16, 'D-M-016', 'Maj Mohammad Mamun-Ur-Rashid', 'Male', 'Cl Spl', 'Radiology', NULL, NULL, 110, 5),
+(17, 'D-M-017', 'Maj Mohammad Nafees Islam', 'Male', 'Gd Spl', 'Anaesthesiology', NULL, NULL, 120, 0),
+(18, 'D-F-018', 'Maj Durdana Maheen', 'Female', 'Gd Spl', 'Pathology', NULL, NULL, 130, 2),
+(19, 'D-M-019', 'Maj F M Ashekullah', 'Male', 'Cl Spl', 'Ophthalmology', NULL, NULL, 140, 0),
+(20, 'D-M-020', 'Dr Mohammad Sah Alom', 'Male', 'Spl', 'Medicine', NULL, NULL, 150, 0),
+(21, 'D-F-021', 'Dr Saima Afroz Niro', 'Female', 'Spl', 'Gynae & Obs', NULL, NULL, 160, 20),
+(22, 'D-M-022', 'Dr Zahir Uddin Md Babar', 'Male', 'Spl', 'Dermatology', NULL, NULL, 170, 0),
+(23, 'D-M-023', 'Dr Md Jahangir Alam', 'Male', 'Spl', 'Eye', NULL, NULL, 180, 4),
+(24, 'D-M-024', 'Dr Enamul Haque', 'Male', 'Surgeon', 'Dental', NULL, NULL, 190, 4),
+(25, 'D-F-025', 'Dr S. Parvin Sadeque', 'Female', 'Spl', 'Gynae & Obs', NULL, NULL, 200, 4),
+(26, 'D-M-026', 'Dr Anup Mustafa', 'Male', 'Spl', 'Orthopaedic', NULL, NULL, 150, 2),
+(27, 'D-M-027', 'Dr Mir Iftekhar Mostafiz', 'Male', 'Spl', 'Chest & Asthma', NULL, NULL, 200, 0),
+(28, 'D-F-028', 'Dr Farhana Parvin', 'Female', 'Spl', 'Gynae & Obs', NULL, NULL, 50, 6),
+(29, 'D-M-029', 'Dr Moniruzzaman', 'Male', 'Spl', 'Orthopaedic', NULL, NULL, 80, 0);
 
 -- --------------------------------------------------------
 
@@ -144,10 +145,10 @@ INSERT INTO `doctor_schedules` (`AI_ID`, `D_ID`, `F`, `T`, `sat`, `sun`, `mon`, 
 (14, 'D-M-004', '14:15', '14:30', 'A', 'N/A', 'N/A', 'A', 'N/A', 'A', 'N/A'),
 (15, 'D-M-004', '14:30', '14:45', 'A', 'N/A', 'N/A', 'A', 'N/A', 'A', 'N/A'),
 (16, 'D-M-004', '14:45', '15:00', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A', 'A'),
-(17, 'D-M-005', '14:00', '14:15', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A', 'N/A'),
-(18, 'D-M-005', '14:15', '14:30', 'A', 'N/A', 'N/A', 'A', 'N/A', 'A', 'N/A'),
+(17, 'D-M-005', '14:00', '14:15', 'M-25072021-007', 'N/A', 'A', 'N/A', 'A', 'N/A', 'N/A'),
+(18, 'D-M-005', '14:15', '14:30', 'M-25072021-007', 'N/A', 'N/A', 'A', 'N/A', 'A', 'N/A'),
 (19, 'D-M-005', '14:30', '14:45', 'A', 'N/A', 'N/A', 'A', 'N/A', 'A', 'N/A'),
-(20, 'D-M-005', '14:45', '15:00', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A', 'A'),
+(20, 'D-M-005', '14:45', '15:00', 'A', 'N/A', 'M-25072021-007', 'N/A', 'A', 'N/A', 'A'),
 (21, 'D-M-006', '14:00', '14:15', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A', 'N/A'),
 (22, 'D-M-006', '14:15', '14:30', 'A', 'N/A', 'N/A', 'A', 'N/A', 'A', 'N/A'),
 (23, 'D-M-006', '14:30', '14:45', 'A', 'N/A', 'N/A', 'A', 'N/A', 'A', 'N/A'),
@@ -164,11 +165,11 @@ INSERT INTO `doctor_schedules` (`AI_ID`, `D_ID`, `F`, `T`, `sat`, `sun`, `mon`, 
 (34, 'D-F-008', '16:15', '16:30', 'N/A', 'A', 'N/A', 'N/A', 'A', 'N/A', 'A'),
 (35, 'D-F-008', '16:30', '16:45', 'N/A', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A'),
 (36, 'D-F-008', '16:45', '17:00', 'N/A', 'A', 'N/A', 'A', 'N/A', 'A', 'A'),
-(37, 'D-M-009', '12:00', '12:15', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A', 'N/A'),
+(37, 'D-M-009', '12:00', '12:15', 'M-25072021-006', 'N/A', 'A', 'N/A', 'A', 'N/A', 'N/A'),
 (38, 'D-M-009', '12:15', '12:30', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A', 'N/A'),
 (39, 'D-M-010', '12:30', '12:45', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A', 'N/A'),
 (40, 'D-M-010', '12:45', '13:00', 'A', 'N/A', 'A', 'N/A', 'M-24072021-000', 'N/A', 'N/A'),
-(41, 'D-M-010', '12:00', '12:15', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A', 'N/A'),
+(41, 'D-M-010', '12:00', '12:15', 'M-24072021-000', 'N/A', 'A', 'N/A', 'A', 'N/A', 'N/A'),
 (42, 'D-M-010', '12:15', '12:30', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A', 'N/A'),
 (43, 'D-M-009', '12:30', '12:45', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A', 'N/A'),
 (44, 'D-M-009', '12:45', '13:00', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A', 'N/A'),
@@ -219,7 +220,7 @@ INSERT INTO `doctor_schedules` (`AI_ID`, `D_ID`, `F`, `T`, `sat`, `sun`, `mon`, 
 (89, 'D-F-021', '17:00', '17:15', 'N/A', 'A', 'N/A', 'A', 'A', 'N/A', 'A'),
 (90, 'D-F-021', '17:15', '17:30', 'N/A', 'A', 'N/A', 'A', 'N/A', 'N/A', 'A'),
 (91, 'D-F-021', '17:30', '17:45', 'N/A', 'A', 'N/A', 'A', 'N/A', 'N/A', 'A'),
-(92, 'D-F-021', '17:45', '18:00', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A', 'A'),
+(92, 'D-F-021', '17:45', '18:00', 'M-25072021-009', 'N/A', 'A', 'N/A', 'A', 'N/A', 'A'),
 (93, 'D-M-022', '10:00', '10:15', 'N/A', 'N/A', 'N/A', 'A', 'N/A', 'A', 'A'),
 (94, 'D-M-022', '10:15', '10:30', 'N/A', 'N/A', 'N/A', 'A', 'N/A', 'A', 'A'),
 (95, 'D-M-022', '10:30', '10:45', 'N/A', 'A', 'N/A', 'A', 'N/A', 'A', 'A'),
@@ -232,7 +233,7 @@ INSERT INTO `doctor_schedules` (`AI_ID`, `D_ID`, `F`, `T`, `sat`, `sun`, `mon`, 
 (102, 'D-M-024', '14:15', '14:30', 'A', 'N/A', 'N/A', 'A', 'N/A', 'A', 'N/A'),
 (103, 'D-M-024', '14:30', '14:45', 'A', 'N/A', 'N/A', 'A', 'N/A', 'A', 'N/A'),
 (104, 'D-M-024', '14:45', '15:00', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A', 'A'),
-(105, 'D-F-025', '16:00', '16:15', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A', 'A'),
+(105, 'D-F-025', '16:00', '16:15', 'A', 'N/A', 'F-25072021-005', 'N/A', 'A', 'N/A', 'A'),
 (106, 'D-F-025', '16:15', '16:30', 'N/A', 'A', 'N/A', 'N/A', 'A', 'N/A', 'A'),
 (107, 'D-F-025', '16:30', '16:45', 'N/A', 'A', 'N/A', 'A', 'N/A', 'A', 'N/A'),
 (108, 'D-F-025', '16:45', '17:00', 'N/A', 'A', 'N/A', 'A', 'N/A', 'A', 'A'),
@@ -301,7 +302,12 @@ INSERT INTO `patients` (`AI_ID`, `P_ID`, `Patient_Name`, `Patient_Gender`, `Cell
 (107, 'M-24072021-001', 'Jamil', 'Male', '01982635147', '8488668515', 'Own', '2021-07-24'),
 (108, 'F-24072021-002', 'Afia', 'Female', '161651658', '8488668515', 'Guardian', '2021-07-24'),
 (109, 'M-24072021-003', 'Imran', 'Male', '01536214587', '848864818181', 'Own', '2021-07-24'),
-(110, 'M-25072021-004', 'Hanif', 'Male', '01725364856', '151656548684', 'Own', '2021-07-25');
+(110, 'M-25072021-004', 'Hanif', 'Male', '01725364856', '151656548684', 'Own', '2021-07-25'),
+(111, 'F-25072021-005', 'Farjana', 'Female', '01752365148', '1516565', 'Own', '2021-07-25'),
+(112, 'M-25072021-006', 'Ibrahim', 'Male', '01936521478', '419814', 'Own', '2021-07-25'),
+(113, 'M-25072021-007', 'Daud', 'Male', '01982635147', '24414', 'Own', '2021-07-25'),
+(114, 'M-25072021-008', 'Navid', 'Male', '01982635147', '1516565', 'Own', '2021-07-25'),
+(115, 'M-25072021-009', 'Navid', 'Male', '01982635147', '8488668515', 'Own', '2021-07-25');
 
 -- --------------------------------------------------------
 
@@ -330,7 +336,13 @@ INSERT INTO `patient_logs` (`AI_ID`, `P_ID`, `Ap_Date`, `Ap_Time`, `D_ID`, `Basi
 (28, 'M-24072021-000', '2021-07-31', '12:45-13:00', 'D-M-010', 50, 5, 47.5, 'Unpaid', 'R-M-001'),
 (30, 'M-24072021-001', '2021-07-28', '17:45-18:00', 'D-F-028', 50, 20, 40, 'Unpaid', 'R-M-001'),
 (31, 'F-24072021-002', '2021-08-25', '14:00-14:15', 'D-M-026', 150, 40, 90, 'Unpaid', 'R-M-001'),
-(32, 'M-24072021-003', '2021-07-26', '17:15-17:30', 'D-F-013', 80, 10, 72, 'Unpaid', 'R-M-001');
+(32, 'M-24072021-003', '2021-07-26', '17:15-17:30', 'D-F-013', 80, 10, 72, 'Unpaid', 'R-M-001'),
+(38, 'F-25072021-005', '2021-07-29', '16:00-16:15', 'D-F-025', 200, 0, 200, 'Unpaid', 'R-M-001'),
+(39, 'M-25072021-006', '2021-07-26', '12:00-12:15', 'D-M-009', 40, 0, 40, 'Unpaid', 'R-M-001'),
+(42, 'M-25072021-007', '2021-06-20', '14:45-15:00', 'D-M-005', 210, 0, 210, 'Unpaid', 'R-M-001'),
+(43, 'M-25072021-007', '2021-07-26', '14:00-14:15', 'D-M-005', 210, 0, 210, 'Unpaid', 'R-M-001'),
+(49, 'M-25072021-009', '2021-05-20', '17:45-18:00', 'D-F-021', 160, 0, 160, 'Unpaid', 'R-M-001'),
+(50, 'M-25072021-007', '2021-07-30', '14:15-14:30', 'D-M-005', 210, 5, 199.5, 'Unpaid', 'R-M-001');
 
 -- --------------------------------------------------------
 
@@ -436,13 +448,13 @@ ALTER TABLE `logins`
 -- AUTO_INCREMENT for table `patients`
 --
 ALTER TABLE `patients`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
 
 --
 -- AUTO_INCREMENT for table `patient_logs`
 --
 ALTER TABLE `patient_logs`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `receiptionists`

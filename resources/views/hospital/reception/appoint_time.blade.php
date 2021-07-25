@@ -13,12 +13,25 @@
 
 @section('links')
 
-<li class="link_item">
-    <a href="{{url('/reception/doctor_selection/reselection/'.Session::get('P_L_AI_ID'))}}" class="link">
-        <i class="link_icons fas fa-user-md"></i>
-        <span class="link_name"> Reselect Doctor </span>
-    </a>
-</li>
+    @if(Session::get('PATIENT_TYPE') == 'new')
+
+    <li class="link_item">
+        <a href="{{url('/reception/doctor_selection/reselection/'.Session::get('P_L_AI_ID'))}}" class="link">
+            <i class="link_icons fas fa-user-md"></i>
+            <span class="link_name"> Reselect Doctor </span>
+        </a>
+    </li>
+
+    @else
+
+    <li class="link_item">
+        <a href="{{url('/reception/cancel_appointment_from_time_selection/')}}" class="link">
+            <i class="link_icons far fa-window-close"></i>
+            <span class="link_name"> Cancel Appointment </span>
+        </a>
+    </li>
+
+    @endif
 
 @endsection
 
@@ -33,9 +46,19 @@
 
 @section('mobile_links')
 
-<div id="myLinks" class="mobile_links">
-    <a class="mobile_link" href="{{url('/reception/doctor_selection/reselection/'.Session::get('P_L_AI_ID'))}}">Reselect Doctor</a>
-</div>
+    @if(Session::get('PATIENT_TYPE') == 'new')
+
+    <div id="myLinks" class="mobile_links">
+        <a class="mobile_link" href="{{url('/reception/doctor_selection/reselection/'.Session::get('P_L_AI_ID'))}}">Reselect Doctor</a>
+    </div>
+
+    @else
+
+    <div id="myLinks" class="mobile_links">
+        <a class="mobile_link" href="{{url('/reception/cancel_appointment_from_time_selection/')}}">Cancel Appointment</a>
+    </div>
+
+    @endif
 
 @endsection
 

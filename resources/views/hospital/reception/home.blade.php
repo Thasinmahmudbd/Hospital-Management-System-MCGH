@@ -61,23 +61,32 @@
 
                 <!--Search bar to search old patients-->
                 
-                <form action="" method="get" class="content_container patient_info_form">
+                <form action="{{url('/reception/find_old_patient/by_search')}}" method="post" class="content_container patient_info_form">
+                @csrf
 
                     <div class="doctor_search_form_element">
 
-                        <label for="doctor_name_search" class="collected_info vanish_label">Search Old Patients</label>
-                        <input type="text" class="input" name="doctor_name_search" placeholder="Enter Patient id or cell" required>
-                        <button type="submit" class="btn form_btn" name="search_doctor">Search</button>
+                        <label for="old_patient_search_info" class="collected_info vanish_label">Search Old Patients</label>
+                        <input type="text" class="input" name="old_patient_search_info" placeholder="Enter Patient ID, Cell or NID" required>
+                        <button type="submit" class="btn form_btn" name="search_old_patient">Search</button>
 
                     </div>
 
                 </form>
 
-
-
                 <!--results if patient is old patient-->
 
-                <table class="frame_table">
+                @if($old_patients == [])
+
+                    @if($null)
+
+                    <span class="warning_msg">No Record Found</span>
+
+                    @endif
+
+                @else
+
+                    <table class="frame_table">
                     
                     <tr class="frame_header">
                         <th width="14%" class="frame_header_item">P-ID</th>
@@ -91,23 +100,45 @@
                         <th width="5%" class="frame_header_item">Action</th>
                     </tr>
 
+                    @foreach($old_patients as $list)
+
                     <tr class="frame_rows">
-                        <td class="frame_data" data-label="P-ID">M2962021001</td>
-                        <td class="frame_data" data-label="Patient Name">Mr.B</td>
-                        <td class="frame_data" data-label="Cell">01985423614</td>
-                        <td class="frame_data" data-label="Doctor">Mrs.Z</td>
-                        <td class="frame_data" data-label="Fee">800</td>
-                        <td class="frame_data" data-label="Disc">5</td>
-                        <td class="frame_data" data-label="Total">760</td>
-                        <td class="frame_data" data-label="Appointed">Date</td>
+                        <td class="frame_data" data-label="P-ID">{{$list->P_ID}}</td>
+                        <td class="frame_data" data-label="Patient Name">{{$list->Patient_Name}}</td>
+                        <td class="frame_data" data-label="Cell">{{$list->Cell_Number}}</td>
+                        <td class="frame_data" data-label="Doctor">{{$list->Dr_Name}}</td>
+                        <td class="frame_data" data-label="Fee">{{$list->Basic_Fee}}</td>
+                        <td class="frame_data" data-label="Disc">{{$list->Discount}}</td>
+                        <td class="frame_data" data-label="Total">{{$list->Final_Fee}}</td>
+                        <td class="frame_data" data-label="Appointed">{{$list->Ap_Date}}</td>
+
                         <td class="frame_action" data-label="Action">
-                            <a href="">
-                                <p class="table_btn">OK</p>
-                            </a>
+
+                            <form action="{{url('/reception/register/old_patients')}}" method="post">
+                            @csrf
+
+                                <input type="hidden" name="p_id" value="{{$list->P_ID}}">
+                                <input type="hidden" name="p_n" value="{{$list->Patient_Name}}">
+                                <input type="hidden" name="p_g" value="{{$list->Patient_Gender}}">
+                                <input type="hidden" name="p_c" value="{{$list->Cell_Number}}">
+                                <input type="hidden" name="d_id" value="{{$list->D_ID}}">
+                                <input type="hidden" name="d_n" value="{{$list->Dr_Name}}">
+                                <input type="hidden" name="d_f" value="{{$list->Basic_Fee}}">
+                                <input type="hidden" name="d_d" value="{{$list->Second_Visit_Discount}}">
+                                <input type="hidden" name="ap_d" value="{{$list->Ap_Date}}">
+
+                                <input type="submit" value="OK" class="btn table_btn">
+
+                            </form>
+
                         </td>
                     </tr>
 
+                    @endforeach
+
                 </table>
+
+                @endif
 
                 
                 

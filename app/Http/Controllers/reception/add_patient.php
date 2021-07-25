@@ -5,9 +5,23 @@ namespace App\Http\Controllers\reception;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class add_patient extends Controller
 {
+
+    function set_up_home(Request $request){
+
+        $data['old_patients'] = null;
+        $starter['null'] = null;
+
+        return view('hospital/reception/home',$data,$starter);
+
+    }
+
+
+
+
 
 
     function submit_basic_patient_info(Request $request){
@@ -87,10 +101,111 @@ class add_patient extends Controller
 
     /*$value = Session::get('variableSetOnPageA');*/
 
-    
-    
-    
-    
+
+
+
+
+
+    function search_old_patient_from_log(Request $request){
+
+        $request->validate([
+
+            'old_patient_search_info'=>'required'
+
+        ]);
+
+        $old_patient_search_info = $request->input('old_patient_search_info');
+
+        $data['old_patients']=DB::table('patient_logs')
+        ->join('patients', 'patient_logs.P_ID', '=', 'patients.P_ID')
+        ->join('doctors', 'patient_logs.D_ID', '=', 'doctors.D_ID')
+        ->select('patient_logs.*', 'patients.*', 'doctors.*')
+        ->where('patients.P_ID','like','%'.$old_patient_search_info.'%')
+        ->orWhere('patients.Cell_Number','like','%'.$old_patient_search_info.'%')
+        ->orWhere('patients.NID','like','%'.$old_patient_search_info.'%')
+        ->orderBy('patient_logs.AI_ID','desc')
+        ->get();
+
+        return view('hospital/reception/home',$data);
+
+    }
+
+
+
+
+
+
+
+    function register_old_patient(Request $request){
+
+        $request->validate([
+
+            'p_id'=>'required',
+            'p_n'=>'required',
+            'p_g'=>'required',
+            'p_c'=>'required',
+            'd_id'=>'required',
+            'd_n'=>'required',
+            'd_f'=>'required',
+            'd_d'=>'required'
+
+        ]);
+
+        $r_id = $request->session()->get('REC_SESSION_ID');
+        $p_id = $request->input('p_id');
+
+        date_default_timezone_set('Asia/Dhaka');
+        $todays_date = date("Y-m-d");
+        $old_ap_date = $request->input('ap_d');
+        $discount_validity_limit = date('Y-m-d', strtotime($old_ap_date. ' + 30 days'));
+
+        $patient_type = 'old';
+
+        if($todays_date <= $discount_validity_limit){
+
+            $discount = $request->input('d_d');
+
+        }else{
+
+            $discount = 0;
+
+        }
+
+        $data=array(
+
+            'P_ID'=>$p_id,
+            'D_ID'=>$request->input('d_id'),
+            'Basic_Fee'=>$request->input('d_f'),
+            'Discount'=>$discount,
+            'R_ID'=>$r_id
+
+        );
+
+        DB::table('patient_logs')->insert($data);
+
+        $P_log_data=DB::table('patient_logs')->where('P_ID',$p_id)->orderBy('AI_ID','desc')->first();
+        
+        session(['P_L_AI_ID' => $P_log_data->AI_ID]);
+        session(['PATIENT_P_ID' => $request->input('p_id')]);
+        session(['PATIENT_NAME' => $request->input('p_n')]);
+        session(['PATIENT_GENDER' => $request->input('p_g')]);
+        session(['PATIENT_CELL' => $request->input('p_c')]);
+        session(['D_ID' => $request->input('d_id')]);
+        session(['BASIC_FEE' => $request->input('d_f')]);
+        session(['D_NAME' => $request->input('d_n')]);
+        session(['DISCOUNT' => $discount]);
+        session(['PATIENT_TYPE' => $patient_type]);
+
+        return redirect('/reception/time_selection');
+
+    }
+
+
+
+
+
+
+
     function show_all_doctor(){
 
         $available_doctor_data['result']=DB::table('doctors')->orderBy('Dr_Name','asc')->get();
@@ -190,12 +305,15 @@ class add_patient extends Controller
 
         $P_ID = $request->input('p_id');
 
+        $patient_type = 'new';
+
         $data=array(
 
             'P_ID'=>$P_ID,
             'D_ID'=>$request->input('d_id'),
             'Basic_Fee'=>$request->input('fee'),
-            'R_ID'=>$request->input('r_id')
+            'R_ID'=>$request->input('r_id'),
+            'Discount' => 0
             
         );
 
@@ -207,6 +325,8 @@ class add_patient extends Controller
         session(['D_ID' => $request->input('d_id')]);
         session(['BASIC_FEE' => $request->input('fee')]);
         session(['D_NAME' => $request->input('dr_name')]);
+        session(['DISCOUNT' => 0]);
+        session(['PATIENT_TYPE' => $patient_type]);
 
         return redirect('/reception/time_selection');
 
@@ -442,7 +562,7 @@ class add_patient extends Controller
 
 
 
-    function cancel_appointment(Request $request){
+    function cancel_appointment_from_final(Request $request){
 
         $p_l_ai_id = $request->session()->get('P_L_AI_ID');
         $d_s_ai_id = $request->session()->get('D_S_AI_ID');
@@ -469,10 +589,46 @@ class add_patient extends Controller
         $request->session()->forget('D_ID');
         $request->session()->forget('D_NAME');
         $request->session()->forget('BASIC_FEE');
+        $request->session()->forget('DISCOUNT');
         $request->session()->forget('F');
         $request->session()->forget('T');
         $request->session()->forget('D_S_AI_ID');
         $request->session()->forget('DAY');
+        $request->session()->forget('PATIENT_TYPE');
+
+        return redirect('/reception/home/');
+
+    }
+
+
+
+
+
+
+
+
+    function cancel_appointment_from_time_selection(Request $request){
+
+        $p_l_ai_id = $request->session()->get('P_L_AI_ID');
+
+        DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->delete();
+
+        /* Deleting sessions */
+
+        $request->session()->forget('PATIENT_P_ID');
+        $request->session()->forget('PATIENT_NAME');
+        $request->session()->forget('PATIENT_GENDER');
+        $request->session()->forget('PATIENT_CELL');
+        $request->session()->forget('P_L_AI_ID');
+        $request->session()->forget('D_ID');
+        $request->session()->forget('D_NAME');
+        $request->session()->forget('BASIC_FEE');
+        $request->session()->forget('DISCOUNT');
+        $request->session()->forget('F');
+        $request->session()->forget('T');
+        $request->session()->forget('D_S_AI_ID');
+        $request->session()->forget('DAY');
+        $request->session()->forget('PATIENT_TYPE');
 
         return redirect('/reception/home/');
 
@@ -517,10 +673,12 @@ class add_patient extends Controller
         $request->session()->forget('D_ID');
         $request->session()->forget('D_NAME');
         $request->session()->forget('BASIC_FEE');
+        $request->session()->forget('DISCOUNT');
         $request->session()->forget('F');
         $request->session()->forget('T');
         $request->session()->forget('D_S_AI_ID');
         $request->session()->forget('DAY');
+        $request->session()->forget('PATIENT_TYPE');
 
         return redirect('/reception/patient_list/');
 

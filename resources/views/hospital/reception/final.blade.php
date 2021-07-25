@@ -21,7 +21,7 @@
 </li>
 
 <li class="list_item">
-    <a href="{{url('/reception/cancel_appointment/')}}" class="link">
+    <a href="{{url('/reception/cancel_appointment_from_final/')}}" class="link">
         <i class="link_icons far fa-window-close"></i>
         <span class="link_name"> Cancel Appointment </span>
     </a>
@@ -42,7 +42,7 @@
 
 <div id="myLinks" class="mobile_links">
     <a class="mobile_link" href="{{url('/reception/time_selection/reselection/'.Session::get('D_S_AI_ID'))}}">Reselect Time</a>
-    <a class="mobile_link" href="#">Cancel Appointment</a>
+    <a class="mobile_link" href="{{url('/reception/cancel_appointment_from_final/')}}">Cancel Appointment</a>
 </div>
 
 @endsection
@@ -121,7 +121,7 @@
 
                 <div class="doctor_form_element">
                     <p class="collected_info">Discount</p>
-                    <input type="tel" class="input collected_info" name="discount" required>
+                    <input type="tel" class="input collected_info" name="discount" value="{{Session::get('DISCOUNT')}}" required>
                     <p class="collected_info">%</p>
                 </div>
 
