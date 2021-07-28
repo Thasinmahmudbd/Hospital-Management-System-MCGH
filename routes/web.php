@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
-/* log in */
+# Log in
 
 Route::view('/','hospital/login');
 
@@ -28,7 +28,7 @@ Route::post('/admin/login_users','App\Http\Controllers\login\login@login_users')
 
 
 
-/* log out */
+# Log out.
 
 Route::get('/logout', function () {
     session()->forget('REC_SESSION_ID');
@@ -40,117 +40,80 @@ Route::get('/logout', function () {
 
 
 
-/* Reception */
+# Reception [CONTROLLER::add_patient.php], [MIDDLEWARE::ReceptionistLoginAuth.php].
 
 Route::group(['middleware'=>['receptionAuth']],function() {
 
-    /* 
-    from view login page to controller[add_patient](set_up_home),
-    from controller[add_patient](set_up_home) to view reception home page.
-    */
+    # Going to home with home set-up
+    # Redirecting to [FUNCTION-NO::01]---in-controller.
     Route::get('/reception/home/','App\Http\Controllers\reception\add_patient@set_up_home');
 
-    /*
-    from view reception home page to controller[add_patient](search_old_patient_from_log),
-    from controller[add_patient](search_old_patient_from_log) to view reception home page.
-    */
-    Route::post('/reception/find_old_patient/by_search','App\Http\Controllers\reception\add_patient@search_old_patient_from_log');
+    # [VIEW-NO::01]
+    # Going to home without home set-up
+    # Returning to hospital/reception/home.blade.php---in-resources/views/.
+    Route::view('/reception/home/setup/none','hospital/reception/home');
 
-    /*
-    from view reception home page to controller[add_patient](register_old_patient),
-    from controller[add_patient](register_old_patient) to view time selection page.
-    */
-    Route::post('/reception/register/old_patients','App\Http\Controllers\reception\add_patient@register_old_patient');
-
-    /* 
-    from view reception home page to controller[add_patient](submit_basic_patient_info). 
-    */
+    # Going to doctor selection panel after collecting basic patient info.
+    # Redirecting to [FUNCTION-NO::02]---in-controller.
     Route::post('/reception/submit_basic_patient_info','App\Http\Controllers\reception\add_patient@submit_basic_patient_info');
 
-    /* 
-    from controller[add_patient](submit_basic_patient_info) to controller[add_patient](show_all_doctor),
-    from controller[add_patient](show_all_doctor) to view doctor selection page.
-    */
+    # Searching old patient.
+    # Redirecting to [FUNCTION-NO::03]---in-controller.
+    Route::post('/reception/find_old_patient/by_search','App\Http\Controllers\reception\add_patient@search_old_patient_from_log');
+
+    # Doctor selection page.
+    # Redirecting to [FUNCTION-NO::04]---in-controller.
     Route::get('/reception/doctor_selection','App\Http\Controllers\reception\add_patient@show_all_doctor');
 
-    /* 
-    from view doctor selection page to controller[add_patient](show_doctor_by_department),
-    from controller[add_patient](show_doctor_by_department) to view doctor selection page.
-    */
+    # Doctor selection page department side-bar action buttons.
+    # Redirecting to [FUNCTION-NO::05]---in-controller.
     Route::get('/reception/doctor_selection/by_department/{department}','App\Http\Controllers\reception\add_patient@show_doctor_by_department');
 
-    /*
-    from view doctor selection page to controller[add_patient](search_doctor),
-    from controller[add_patient](search_doctor) to view doctor selection page.
-    */
-    Route::post('/reception/doctor_selection/by_search','App\Http\Controllers\reception\add_patient@search_doctor');
-
-    /*  
-    from view doctor selection page to controller[add_patient](submit_doctor_selection),
-    from controller[add_patient](submit_doctor_selection) to controller[add_patient](show_available_time).
-    */
+    # Doctor selection page search-bar action button.
+    # Redirecting to [FUNCTION-NO::06]---in-controller.
+    Route::get('/reception/doctor_selection/by_department/{department}','App\Http\Controllers\reception\add_patient@show_doctor_by_department');
+    
+    # After selecting doctor.
+    # Redirecting to [FUNCTION-NO::07]---in-controller.
     Route::post('/reception/submit_doctor_selection','App\Http\Controllers\reception\add_patient@submit_doctor_selection');
 
-    /*  
-    from controller[add_patient](show_available_time) to view time selection page.
-    */
+    # Showing time table based on selected doctor.
+    # Redirecting to [FUNCTION-NO::08]---in-controller.
     Route::get('/reception/time_selection','App\Http\Controllers\reception\add_patient@show_available_time');
 
-    /*  
-    from view time selection page to controller[add_patient](change_doctor),
-    from controller[add_patient](change_doctor) to view doctor selection page.
-    */
-    Route::get('/reception/doctor_selection/reselection/{p_l_ai_id}','App\Http\Controllers\reception\add_patient@change_doctor');
+    # Selecting time.
+    # Redirecting to [FUNCTION-NO::09]---in-controller.
+    Route::get('/reception/set_time/{d_s_ai_id}','App\Http\Controllers\reception\add_patient@set_time');
 
-    /*  
-    from view time selection page to controller[add_patient](fill_slot_...).
-    */
-    Route::get('/reception/take_spot_sat/{d_s_ai_id}','App\Http\Controllers\reception\add_patient@fill_slot_sat');
-    Route::get('/reception/take_spot_sun/{d_s_ai_id}','App\Http\Controllers\reception\add_patient@fill_slot_sun');
-    Route::get('/reception/take_spot_mon/{d_s_ai_id}','App\Http\Controllers\reception\add_patient@fill_slot_mon');
-    Route::get('/reception/take_spot_tue/{d_s_ai_id}','App\Http\Controllers\reception\add_patient@fill_slot_tue');
-    Route::get('/reception/take_spot_wed/{d_s_ai_id}','App\Http\Controllers\reception\add_patient@fill_slot_wed');
-    Route::get('/reception/take_spot_thu/{d_s_ai_id}','App\Http\Controllers\reception\add_patient@fill_slot_thu');
-    Route::get('/reception/take_spot_fri/{d_s_ai_id}','App\Http\Controllers\reception\add_patient@fill_slot_fri');
+    # Changing date.
+    # Redirecting to [FUNCTION-NO::10]---in-controller.
+    Route::post('reception/change_date','App\Http\Controllers\reception\add_patient@change_date');
 
-    /*  
-    from controller[add_patient](fill_slot_...) to controller[add_patient](set_time_in_patient_log).
-    */
-    Route::get('/reception/set_time_in_patient_log/','App\Http\Controllers\reception\add_patient@set_time_in_patient_log');
+    # Cancelling appointment.
+    # Redirecting to [FUNCTION-NO::11]---in-controller.
+    Route::get('/reception/cancel_appointment','App\Http\Controllers\reception\add_patient@cancel_appointment');
 
-    /*  
-    from view final page to controller[add_patient](cancel_appointment_from_time_selection),
-    from controller[add_patient](cancel_appointment_from_time_selection) to view reception home page.
-    */
-    Route::get('/reception/cancel_appointment_from_time_selection/','App\Http\Controllers\reception\add_patient@cancel_appointment_from_time_selection');
+    # Patient data entry in table patients & patient_logs, data update in doctor_schedules table */
+    # Redirecting to [FUNCTION-NO::12]---in-controller.
+    Route::post('/reception/patient_data_entry_for_doctor_appointment','App\Http\Controllers\reception\add_patient@patient_data_entry_for_doctor_appointment');
 
-    /*  
-    from controller[add_patient](set_time_in_patient_log) to view final page.
-    */
-    Route::view('/reception/final/','hospital/reception/final');
-
-    /*  
-    from view final page to controller[add_patient](add_date_and_discount).
-    */
-    Route::post('/reception/date_and_discount','App\Http\Controllers\reception\add_patient@add_date_and_discount');
-
-    /*  
-    from view final page to controller[add_patient](change_time),
-    from controller[add_patient](change_time) to view time selection page.
-    */
-    Route::get('/reception/time_selection/reselection/{d_s_ai_id}','App\Http\Controllers\reception\add_patient@change_time');
-
-    /*  
-    from view final page to controller[add_patient](cancel_appointment_from_final),
-    from controller[add_patient](cancel_appointment_from_final) to view reception home page.
-    */
-    Route::get('/reception/cancel_appointment_from_final/','App\Http\Controllers\reception\add_patient@cancel_appointment_from_final');
-
-    /* 
-    from controller[add_patient](add_date_and_discount) to controller[add_patient](show_list),
-    from controller[add_patient](show_list) to view patient list page.
-    */
+    # Reading data in Patient list page.
+    # Redirecting to [FUNCTION-NO::13]---in-controller.
     Route::get('/reception/patient_list/','App\Http\Controllers\reception\add_patient@show_list');
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
 
 });
 

@@ -64,9 +64,17 @@ p{
 .warning_msg{
     background-color:rgba(233, 53, 53, 0.76);
     color:#fff;
-    padding:8px;
-    margin-top:30px;
     font-weight: bold;
-    border-radius: 10px;
     transition: 200ms ease-in;
+}
+
+.success_msg{
+    background-color:rgba(53, 233, 53, 0.76);
+    color:#fff;
+    font-weight: bold;
+    transition: 200ms ease-in;
+}
+
+.text_center{
+    text-align: center;
 }

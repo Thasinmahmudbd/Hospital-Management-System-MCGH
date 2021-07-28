@@ -10,19 +10,43 @@ use Illuminate\Support\Carbon;
 class add_patient extends Controller
 {
 
+
+
+
+#########################
+#### FUNCTION-NO::01 ####
+#########################
+# Sets up required items before loading reception home page.
+
     function set_up_home(Request $request){
 
-        $data['old_patients'] = null;
-        $starter['null'] = null;
+        session(['PATIENT_TYPE' => 'new']);
 
-        return view('hospital/reception/home',$data,$starter);
+        date_default_timezone_set('Asia/Dhaka');
+        $date = date("Y-m-d");
+        $request->session()->put('DATE_TODAY',$date);
+
+        # Returning to the view below.
+        return view('hospital/reception/home');
 
     }
 
+# End of function set_up_home.                              <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# This function has a chance of updating in the future.
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 
 
+#########################
+#### FUNCTION-NO::02 ####
+#########################
+# Generates unique ID for new patients;
+# Stores data in 10 sessions.
 
     function submit_basic_patient_info(Request $request){
 
@@ -32,79 +56,111 @@ class add_patient extends Controller
             'patient_gender'=>'required',
             'cell_number'=>'required',
             'nid'=>'required',
-            'nid_type'=>'required'
+            'nid_type'=>'required',
+            'appoint_date'=>'required',
+            'ap_type'=>'required',
+            'patient_type'=>'required'
 
         ]);
 
         date_default_timezone_set('Asia/Dhaka');
-        $ad_date = date("Y/m/d");
+        /*$today_date = date("Y/m/d");*/
 
-        /* Patient id generator */
+        $patient_type = $request->input('patient_type');
 
-        $first_part = $request->input('patient_gender');
-        
-        if($first_part == 'Male'){
-            $first_part = 'M';
-        }elseif($first_part == 'Female'){
-            $first_part = 'F';
-            echo $first_part;
-        }elseif($first_part == 'Child'){
-            $first_part = 'C';
-            echo $first_part;
-        }elseif($first_part == 'Others'){
-            $first_part = 'O';
-            echo $first_part;
-        }
+        ########## FOR NEW PATIENTS ##########
+        if($patient_type == 'new'){
 
-        $second_part = date("dmY");
+            /* Patient id generator */
 
-        $current_count = DB::table('patients')->select('P_ID')->orderBy('AI_ID','desc')->first();
+            $first_part = $request->input('patient_gender');
+            
+            if($first_part == 'Male'){
+                $first_part = 'M';
+            }elseif($first_part == 'Female'){
+                $first_part = 'F';
+                echo $first_part;
+            }elseif($first_part == 'Child'){
+                $first_part = 'C';
+                echo $first_part;
+            }elseif($first_part == 'Others'){
+                $first_part = 'O';
+                echo $first_part;
+            }
 
-        if($current_count==null){
-            $third_part = 0;
-        }else{
-            $current_count_array = explode('-',$current_count->P_ID);
-            $third_part = end($current_count_array);
-            if($third_part == 999){
+            $second_part = date("dmY");
+
+            $current_count = DB::table('patients')->orderBy('AI_ID','desc')->first();
+
+            if($current_count==null){
                 $third_part = 0;
             }else{
-                $third_part++;
+                $current_count_array = explode('-',$current_count->P_ID);
+                $third_part = end($current_count_array);
+                if($third_part == 999){
+                    #$third_part = 0;
+                    $third_part++;
+                }if($current_count->Ad_Date != $second_part){
+                    $third_part = 0;
+                }#else{
+                    #$third_part++;
+                #}
             }
+
+            $P_ID = "$first_part"."-"."$second_part"."-".str_pad($third_part,3,"0",STR_PAD_LEFT);
+
+            /* Patient id generator end */
+
+        }
+        
+        ########## FOR OLD PATIENTS ##########
+        else{
+
+            $P_ID = $request->session()->get('P_ID');
+
         }
 
-        $P_ID = "$first_part"."-"."$second_part"."-".str_pad($third_part,3,"0",STR_PAD_LEFT);
-
-        /* Patient id generator end */
-
-        $data=array(
-
-            'P_ID'=>$P_ID,
-            'Patient_Name'=>$request->input('patient_name'),
-            'Patient_Gender'=>$request->input('patient_gender'),
-            'Cell_Number'=>$request->input('cell_number'),
-            'NID'=>$request->input('nid'),
-            'NID_Type'=>$request->input('nid_type'),
-            'Ad_Date'=>$ad_date
-            
-        );
-
-        DB::table('patients')->insert($data);
+        $ap_type = $request->input('ap_type');
+        $ap_date = $request->input('appoint_date');
+        $timestamp = strtotime($ap_date);
+        $day = date('D', $timestamp);
         
         session(['PATIENT_P_ID' => $P_ID]);
         session(['PATIENT_NAME' => $request->input('patient_name')]);
         session(['PATIENT_GENDER' => $request->input('patient_gender')]);
         session(['PATIENT_CELL' => $request->input('cell_number')]);
+        session(['PATIENT_NID' => $request->input('nid')]);
+        session(['PATIENT_NID_TYPE' => $request->input('nid_type')]);
+        session(['PATIENT_APPOINT_DATE' => $ap_date]);
+        session(['PATIENT_APPOINT_DAY' => $day]);
+        session(['PATIENT_APPOINT_TYPE' => $ap_type]);
+        session(['PATIENT_TYPE' => $patient_type]);
 
-        return redirect('/reception/doctor_selection/');
+        if($ap_type == 'Appoint-Doctor'){
+
+            # Redirecting to [FUNCTION-NO::04].
+            return redirect('/reception/doctor_selection/');
+
+        }
 
     }
 
-    /*$value = Session::get('variableSetOnPageA');*/
+# End of function submit_basic_patient_info.                <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# This function will lead to 2 other routs in the future.
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 
 
-
+#########################
+#### FUNCTION-NO::03 ####
+#########################
+# Finds old patient data;
+# Stores data in 7 sessions.
 
     function search_old_patient_from_log(Request $request){
 
@@ -116,7 +172,38 @@ class add_patient extends Controller
 
         $old_patient_search_info = $request->input('old_patient_search_info');
 
-        $data['old_patients']=DB::table('patient_logs')
+        $old_patient_info=DB::table('patients')
+        ->where('P_ID','like',$old_patient_search_info)
+        ->orderBy('AI_ID','desc')
+        ->first();
+
+        if($old_patient_info){
+
+            session(['P_ID' => $old_patient_info->P_ID]);
+            session(['PATIENT_NAME' => $old_patient_info->Patient_Name]);
+            session(['PATIENT_GENDER' => $old_patient_info->Patient_Gender]);
+            session(['PATIENT_CELL' => $old_patient_info->Cell_Number]);
+            session(['PATIENT_NID' => $old_patient_info->NID]);
+            session(['PATIENT_NID_TYPE' => $old_patient_info->NID_Type]);
+            session(['PATIENT_TYPE' => 'old']);
+
+            # Session flash messages.
+            $request->session()->flash('msg','Patient Found.');
+
+            # Returning to [VIEW-NO::01].
+            return redirect('/reception/home/setup/none');
+
+        }else{
+
+            # Session flash messages.
+            $request->session()->flash('msg','Patient Not Found.');
+
+            # Redirecting to [FUNCTION-NO::01].
+            return redirect('/reception/home');
+
+        }
+        
+        /*$data['old_patients']=DB::table('patient_logs')
         ->join('patients', 'patient_logs.P_ID', '=', 'patients.P_ID')
         ->join('doctors', 'patient_logs.D_ID', '=', 'doctors.D_ID')
         ->select('patient_logs.*', 'patients.*', 'doctors.*')
@@ -124,102 +211,58 @@ class add_patient extends Controller
         ->orWhere('patients.Cell_Number','like','%'.$old_patient_search_info.'%')
         ->orWhere('patients.NID','like','%'.$old_patient_search_info.'%')
         ->orderBy('patient_logs.AI_ID','desc')
-        ->get();
-
-        return view('hospital/reception/home',$data);
+        ->get();*/
 
     }
 
+# End of function search_old_patient_from_log.              <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note:
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 
 
+#########################
+#### FUNCTION-NO::04 ####
+#########################
+# Shows all doctors in database;
+# Distinctively shows the list of departments;
+# Removes data from 3 sessions.
 
+    function show_all_doctor(Request $request){
 
-    function register_old_patient(Request $request){
-
-        $request->validate([
-
-            'p_id'=>'required',
-            'p_n'=>'required',
-            'p_g'=>'required',
-            'p_c'=>'required',
-            'd_id'=>'required',
-            'd_n'=>'required',
-            'd_f'=>'required',
-            'd_d'=>'required'
-
-        ]);
-
-        $r_id = $request->session()->get('REC_SESSION_ID');
-        $p_id = $request->input('p_id');
-
-        date_default_timezone_set('Asia/Dhaka');
-        $todays_date = date("Y-m-d");
-        $old_ap_date = $request->input('ap_d');
-        $discount_validity_limit = date('Y-m-d', strtotime($old_ap_date. ' + 30 days'));
-
-        $patient_type = 'old';
-
-        if($todays_date <= $discount_validity_limit){
-
-            $discount = $request->input('d_d');
-
-        }else{
-
-            $discount = 0;
-
-        }
-
-        $data=array(
-
-            'P_ID'=>$p_id,
-            'D_ID'=>$request->input('d_id'),
-            'Basic_Fee'=>$request->input('d_f'),
-            'Discount'=>$discount,
-            'R_ID'=>$r_id
-
-        );
-
-        DB::table('patient_logs')->insert($data);
-
-        $P_log_data=DB::table('patient_logs')->where('P_ID',$p_id)->orderBy('AI_ID','desc')->first();
-        
-        session(['P_L_AI_ID' => $P_log_data->AI_ID]);
-        session(['PATIENT_P_ID' => $request->input('p_id')]);
-        session(['PATIENT_NAME' => $request->input('p_n')]);
-        session(['PATIENT_GENDER' => $request->input('p_g')]);
-        session(['PATIENT_CELL' => $request->input('p_c')]);
-        session(['D_ID' => $request->input('d_id')]);
-        session(['BASIC_FEE' => $request->input('d_f')]);
-        session(['D_NAME' => $request->input('d_n')]);
-        session(['DISCOUNT' => $discount]);
-        session(['PATIENT_TYPE' => $patient_type]);
-
-        return redirect('/reception/time_selection');
-
-    }
-
-
-
-
-
-
-
-    function show_all_doctor(){
+        $request->session()->forget('FROM');
+        $request->session()->forget('TO');
+        $request->session()->forget('PATIENT_APPOINT_TIME');
+        $request->session()->forget('SESSION_FLASH_MSG');
 
         $available_doctor_data['result']=DB::table('doctors')->orderBy('Dr_Name','asc')->get();
 
         $available_doctor_department['department']=DB::table('doctors')->select('Department')->distinct()->orderBy('Department','asc')->get();
         
+        # Returning to the view below.
         return view('hospital/reception/doctor_selection',$available_doctor_data,$available_doctor_department);
 
     }
 
+# End of function show_all_doctor.                          <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note:
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 
 
+#########################
+#### FUNCTION-NO::05 ####
+#########################
+# Shows specific doctor based on department;
+# Distinctively shows the list of departments.
 
     function show_doctor_by_department($department){
 
@@ -227,44 +270,26 @@ class add_patient extends Controller
 
         $available_doctor_data['result']=DB::table('doctors')->where('Department',$department)->orderBy('Dr_Name','asc')->get();
 
+        # Returning to the view below.
         return view('hospital/reception/doctor_selection',$available_doctor_data,$available_doctor_department);
-
-
-        /*if($specialty=='show' && $flag=='all'){
-
-            Show All
-
-            $available_doctor_data['result']=DB::table('doctors')->orderBy('Dr_Name','asc')->get();
-
-            return view('hospital/reception/doctor_selection',$available_doctor_data,$available_doctor_Specialty);
-
-        }elseif($flag=='by_search'){
-
-            Search
-
-            $available_doctor_data['result']=DB::table('doctors')->where('Dr_Name','like','%'.$specialty.'%')->orWhere('D_ID',$specialty)->orderBy('Dr_Name','asc')->get();
-
-            return view('hospital/reception/doctor_selection',$available_doctor_data,$available_doctor_Specialty);
-
-        }else{
-
-            By Specialty
-
-            $available_doctor_data['result']=DB::table('doctors')->where('Specialty',$specialty)->orderBy('Dr_Name','asc')->get();
-
-            return view('hospital/reception/doctor_selection',$available_doctor_data,$available_doctor_Specialty);
-
-        }*/
 
     }
 
+# End of function show_doctor_by_department.                <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note:
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 
 
-
-
-
+#########################
+#### FUNCTION-NO::06 ####
+#########################
+# Shows specific doctor based on name and id;
+# Distinctively shows the list of departments.
 
     function search_doctor(Request $request){
 
@@ -278,85 +303,107 @@ class add_patient extends Controller
 
         $available_doctor_department['department']=DB::table('doctors')->select('Department')->distinct()->orderBy('Department','asc')->get();
 
-        $available_doctor_data['result']=DB::table('doctors')->where('Dr_Name','like','%'.$doctor_search_info.'%')->orWhere('D_ID','like','%'.$doctor_search_info.'%')->orderBy('Dr_Name','asc')->get();
+        $available_doctor_data['result']=DB::table('doctors')->where('Dr_Name','like','%'.$doctor_search_info.'%')->orWhere('D_ID','like',$doctor_search_info)->orderBy('Dr_Name','asc')->get();
 
+        # Returning to the view below.
         return view('hospital/reception/doctor_selection',$available_doctor_data,$available_doctor_department);
 
     }
 
+# End of function search_doctor.                            <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note:
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 
 
-
-
-
+#########################
+#### FUNCTION-NO::07 ####
+#########################
+# Collects doctor info;
+# Stores data in 6 sessions.
 
     function submit_doctor_selection(Request $request){
 
         $request->validate([
 
             'd_id'=>'required',
-            'r_id'=>'required',
+            'dr_name'=>'required',
             'fee'=>'required',
-            'p_id'=>'required'
+            'second_visit_discount'=>'required'
 
         ]);
 
-        $P_ID = $request->input('p_id');
-
-        $patient_type = 'new';
-
-        $data=array(
-
-            'P_ID'=>$P_ID,
-            'D_ID'=>$request->input('d_id'),
-            'Basic_Fee'=>$request->input('fee'),
-            'R_ID'=>$request->input('r_id'),
-            'Discount' => 0
-            
-        );
-
-        DB::table('patient_logs')->insert($data);
-
-        $P_log_data=DB::table('patient_logs')->where('P_ID',$P_ID)->orderBy('AI_ID','desc')->first();
+        $D_ID = $request->input('d_id');
+        $P_ID = $request->session()->get('PATIENT_P_ID');
+        $patient_type = $request->session()->get('PATIENT_TYPE');
+        session(['SECOND_VISIT_DISCOUNT' => $request->input('second_visit_discount')]);
         
-        session(['P_L_AI_ID' => $P_log_data->AI_ID]);
-        session(['D_ID' => $request->input('d_id')]);
+        # Checking if patient gets second visit discount.
+        if($patient_type == 'new'){
+
+            session(['DISCOUNT' => 0]);
+
+        }else{
+
+            $P_log_data=DB::table('patient_logs')
+            ->where('P_ID',$P_ID)
+            ->where('D_ID',$D_ID)
+            ->orderBy('AI_ID','desc')
+            ->first();
+
+            if($P_log_data){
+
+                $current_ap_date = $request->session()->get('PATIENT_APPOINT_DATE');
+                $old_ap_date = $P_log_data->Ap_Date;
+                $discount_validity_limit = date('Y-m-d', strtotime($old_ap_date. ' + 30 days'));
+
+                session(['DISCOUNT_VALIDITY' => $discount_validity_limit]);
+
+                if($current_ap_date <= $discount_validity_limit){
+
+                    session(['DISCOUNT' => $request->input('second_visit_discount')]);
+        
+                }else{
+        
+                    session(['DISCOUNT' => 0]);
+        
+                }              
+
+            }else{
+
+                session(['DISCOUNT' => 0]);
+
+            }
+
+        }
+
+        session(['D_ID' => $D_ID]);
         session(['BASIC_FEE' => $request->input('fee')]);
         session(['D_NAME' => $request->input('dr_name')]);
-        session(['DISCOUNT' => 0]);
-        session(['PATIENT_TYPE' => $patient_type]);
 
+        # Redirecting to [FUNCTION-NO::08].
         return redirect('/reception/time_selection');
 
     }
 
+# End of function submit_doctor_selection.                  <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note:
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 
 
-
-
-    function change_doctor(Request $request,$p_l_ai_id){
-
-        DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->delete();
-        
-        /*$available_doctor_department['department']=DB::table('doctors')->select('Department')->distinct()->orderBy('Department','asc')->get();
-
-        $available_doctor_data['result']=DB::table('doctors')->orderBy('Dr_Name','asc')->get();
-
-        return view('hospital/reception/doctor_selection',$available_doctor_data,$available_doctor_department);*/
-
-        return redirect('/reception/doctor_selection');
-
-    }
-
-
-
-
-
-
+#########################
+#### FUNCTION-NO::08 ####
+#########################
+# Shows available time according to selected doctor.
 
     function show_available_time(Request $request){
 
@@ -364,220 +411,141 @@ class add_patient extends Controller
 
         $available_doctor_time['routine']=DB::table('doctor_schedules')->where('D_ID',$id)->orderBy('F','asc')->get();
 
+        # Session flash messages.
+        $msg = $request->session()->get('SESSION_FLASH_MSG');
+
+        if($msg){
+
+            $request->session()->flash('msg',$msg);
+
+        }
+
+        # Returning to the view below.
         return view('hospital/reception/appoint_time',$available_doctor_time);
 
     }
 
+# End of function show_available_time.                      <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note:
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 
 
+#########################
+#### FUNCTION-NO::09 ####
+#########################
+# Selects time from list.
+# Stores data in 4 sessions.
 
+    function set_time(Request $request,$d_s_ai_id){
 
-    function set_time_in_patient_log(Request $request){
-
-        $id = $request->session()->get('D_S_AI_ID');
+        $id = $d_s_ai_id;
 
         $time = DB::table('doctor_schedules')->where('AI_ID',$id)->first();
 
-        $F = $time->F;
-        $T = $time->T;
-
-        $ap_time = $F. '-' .$T;
-        
-        $data=array(
-
-            'Ap_Time'=>$ap_time
-
-        );
-
-        $p_l_ai_id = $request->session()->get('P_L_AI_ID');
-
-        DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->update($data);
-
-        session(['F' => $time->F]);
-        session(['T' => $time->T]);
-
-        return redirect('/reception/final/');
-
-    }
-
-
-
-
-
-
-
-
-    function fill_slot_sat(Request $request,$d_s_ai_id){
-
-        $id = $d_s_ai_id;
-        $P_ID = $request->session()->get('PATIENT_P_ID');
-        $data=array('sat'=>$P_ID);
-        $day = 'sat';
-
-        DB::table('doctor_schedules')->where('AI_ID',$id)->update($data);
+        $from = $time->F;
+        $to = $time->T;
+        $ap_time = $from. '-' .$to;
 
         session(['D_S_AI_ID' => $id]);
-        session(['DAY' => $day]);
+        session(['FROM' => $from]);
+        session(['TO' => $to]);
+        session(['PATIENT_APPOINT_TIME' => $ap_time]);
 
-        return redirect('/reception/set_time_in_patient_log/');
-
-    }
-
-    function fill_slot_sun(Request $request,$d_s_ai_id){
-
-        $id = $d_s_ai_id;
-        $P_ID = $request->session()->get('PATIENT_P_ID');
-        $data=array('sun'=>$P_ID);
-        $day = 'sun';
-        
-        DB::table('doctor_schedules')->where('AI_ID',$id)->update($data);
-
-        session(['D_S_AI_ID' => $id]);
-        session(['DAY' => $day]);
-
-        return redirect('/reception/set_time_in_patient_log/');
-
-    }
-
-    function fill_slot_mon(Request $request,$d_s_ai_id){
-
-        $id = $d_s_ai_id;
-        $P_ID = $request->session()->get('PATIENT_P_ID');
-        $data=array('mon'=>$P_ID);
-        $day = 'mon';
-        
-        DB::table('doctor_schedules')->where('AI_ID',$id)->update($data);
-
-        session(['D_S_AI_ID' => $id]);
-        session(['DAY' => $day]);
-
-        return redirect('/reception/set_time_in_patient_log/');
-
-    }
-
-    function fill_slot_tue(Request $request,$d_s_ai_id){
-
-        $id = $d_s_ai_id;
-        $P_ID = $request->session()->get('PATIENT_P_ID');
-        $data=array('tue'=>$P_ID);
-        $day = 'tue';
-        
-        DB::table('doctor_schedules')->where('AI_ID',$id)->update($data);
-
-        session(['D_S_AI_ID' => $id]);
-        session(['DAY' => $day]);
-
-        return redirect('/reception/set_time_in_patient_log/');
-
-    }
-
-    function fill_slot_wed(Request $request,$d_s_ai_id){
-
-        $id = $d_s_ai_id;
-        $P_ID = $request->session()->get('PATIENT_P_ID');
-        $data=array('wed'=>$P_ID);
-        $day = 'wed';
-        
-        DB::table('doctor_schedules')->where('AI_ID',$id)->update($data);
-
-        session(['D_S_AI_ID' => $id]);
-        session(['DAY' => $day]);
-
-        return redirect('/reception/set_time_in_patient_log/');
-
-    }
-
-    function fill_slot_thu(Request $request,$d_s_ai_id){
-
-        $id = $d_s_ai_id;
-        $P_ID = $request->session()->get('PATIENT_P_ID');
-        $data=array('thu'=>$P_ID);
-        $day = 'thu';
-        
-        DB::table('doctor_schedules')->where('AI_ID',$id)->update($data);
-
-        session(['D_S_AI_ID' => $id]);
-        session(['DAY' => $day]);
-
-        return redirect('/reception/set_time_in_patient_log/');
-
-    }
-
-    function fill_slot_fri(Request $request,$d_s_ai_id){
-
-        $id = $d_s_ai_id;
-        $P_ID = $request->session()->get('PATIENT_P_ID');
-        $data=array('fri'=>$P_ID);
-        $day = 'fri';
-        
-        DB::table('doctor_schedules')->where('AI_ID',$id)->update($data);
-
-        session(['D_S_AI_ID' => $id]);
-        session(['DAY' => $day]);
-
-        return redirect('/reception/set_time_in_patient_log/');
-
-    }
-
-
-
-
-
-
-
-
-
-    function change_time(Request $request,$d_s_ai_id){
-
-        $id = $d_s_ai_id;
-        $day = $request->session()->get('DAY');
-        $p_l_ai_id = $request->session()->get('P_L_AI_ID');
-
-        $data=array(
-            
-            $day=>'A'
-        
-        );
-
-        DB::table('doctor_schedules')->where('AI_ID',$id)->update($data);
-
-        $data_2=array(
-            
-            'Ap_Time'=>null
-        
-        );
-        
-        DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->update($data_2);
-
+        # Redirecting to [FUNCTION-NO::08].
         return redirect('/reception/time_selection');
 
     }
 
+# End of function set_time.                                 <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note:
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 
 
+#########################
+#### FUNCTION-NO::10 ####
+#########################
+# Changes appointment date & day;
+# Rechecks if Discount is still valid on changed date;
+# Stores data in 3 sessions.
+# Removes data from 6 sessions.
 
+    function change_date(Request $request){
 
+        $request->session()->forget('PATIENT_APPOINT_DATE');
+        $request->session()->forget('PATIENT_APPOINT_DAY');
+        $request->session()->forget('FROM');
+        $request->session()->forget('TO');
+        $request->session()->forget('PATIENT_APPOINT_TIME');
+        $request->session()->forget('DISCOUNT');
 
-    function cancel_appointment_from_final(Request $request){
+        $request->validate([
 
-        $p_l_ai_id = $request->session()->get('P_L_AI_ID');
-        $d_s_ai_id = $request->session()->get('D_S_AI_ID');
+            'appoint_date'=>'required'
 
-        $day = $request->session()->get('DAY');
+        ]);
 
-        $data=array(
+        $ap_date = $request->input('appoint_date');
+        $timestamp = strtotime($ap_date);
+        $day = date('D', $timestamp);
+
+            #check if discount still valid
+            $patient_type = $request->session()->get('PATIENT_TYPE');
+            $discount_validity_limit = $request->session()->get('DISCOUNT_VALIDITY');
+            $second_visit_discount = $request->session()->get('SECOND_VISIT_DISCOUNT');
             
-            $day=>'A'
+            if($patient_type == 'old'){
+
+                if($ap_date <= $discount_validity_limit){
+
+                    session(['DISCOUNT' => $second_visit_discount]);
         
-        );
+                }else{
+        
+                    session(['DISCOUNT' => 0]);
+        
+                }  
 
-        DB::table('doctor_schedules')->where('AI_ID',$d_s_ai_id)->update($data);
+            }else{
 
-        DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->delete();
+                session(['DISCOUNT' => 0]);
+
+            }
+
+        session(['PATIENT_APPOINT_DATE' => $ap_date]);
+        session(['PATIENT_APPOINT_DAY' => $day]);
+
+        # Redirecting to [FUNCTION-NO::08].
+        return redirect('/reception/time_selection');
+
+    }
+
+# End of function change_date.                              <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note:
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::11 ####
+#########################
+# Cancels appointment;
+# Removes data from 21 sessions.
+
+    function cancel_appointment(Request $request){
 
         /* Deleting sessions */
 
@@ -585,111 +553,190 @@ class add_patient extends Controller
         $request->session()->forget('PATIENT_NAME');
         $request->session()->forget('PATIENT_GENDER');
         $request->session()->forget('PATIENT_CELL');
-        $request->session()->forget('P_L_AI_ID');
+        $request->session()->forget('PATIENT_NID');
+        $request->session()->forget('PATIENT_NID_TYPE');
+        $request->session()->forget('PATIENT_APPOINT_DATE');
+        $request->session()->forget('PATIENT_APPOINT_DAY');
+        $request->session()->forget('PATIENT_APPOINT_TIME');
+        $request->session()->forget('PATIENT_APPOINT_TYPE');
+        $request->session()->forget('PATIENT_TYPE');
         $request->session()->forget('D_ID');
         $request->session()->forget('D_NAME');
         $request->session()->forget('BASIC_FEE');
         $request->session()->forget('DISCOUNT');
-        $request->session()->forget('F');
-        $request->session()->forget('T');
+        $request->session()->forget('DISCOUNT_VALIDITY');
+        $request->session()->forget('SECOND_VISIT_DISCOUNT');
+        $request->session()->forget('FROM');
+        $request->session()->forget('TO');
+        $request->session()->forget('DATE_TODAY');
         $request->session()->forget('D_S_AI_ID');
-        $request->session()->forget('DAY');
-        $request->session()->forget('PATIENT_TYPE');
 
+        # Session flash messages.
+        $msg = $request->session()->get('SESSION_FLASH_MSG');
+
+        if($msg){
+
+            if($msg == 'Please assign an appointment time.'){
+
+                $request->session()->forget('SESSION_FLASH_MSG');
+                $request->session()->flash('msg','Appointment Canceled.');
+    
+            }else{
+
+                $request->session()->flash('msg',$msg);
+
+            }
+
+        }else{
+
+            $request->session()->flash('msg','Appointment Canceled.');
+
+        }
+        
+        # Redirecting to [FUNCTION-NO::01].
         return redirect('/reception/home/');
 
     }
 
+# End of function cancel_appointment.                       <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note:
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 
 
+#########################
+#### FUNCTION-NO::12 ####
+#########################
+# Completes patient data entry for doctor appointments;
+# Entry will happen on  --: TABLE :------ patients.
+# Entry will happen on  --: TABLE :------ patient_logs.
+# Update will happen on --: TABLE :------ doctor_schedules.
 
+    function patient_data_entry_for_doctor_appointment(Request $request){
 
+        # Validation of form data.
+        $request->validate([
 
-    function cancel_appointment_from_time_selection(Request $request){
+            'discount'=>'required',
+            'payment_status'=>'required'
 
-        $p_l_ai_id = $request->session()->get('P_L_AI_ID');
+        ]);
 
-        DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->delete();
+        $ap_time = $request->session()->get('PATIENT_APPOINT_TIME');
 
-        /* Deleting sessions */
+        date_default_timezone_set('Asia/Dhaka');
+        $todays_date = date("dmY");
 
-        $request->session()->forget('PATIENT_P_ID');
-        $request->session()->forget('PATIENT_NAME');
-        $request->session()->forget('PATIENT_GENDER');
-        $request->session()->forget('PATIENT_CELL');
-        $request->session()->forget('P_L_AI_ID');
-        $request->session()->forget('D_ID');
-        $request->session()->forget('D_NAME');
-        $request->session()->forget('BASIC_FEE');
-        $request->session()->forget('DISCOUNT');
-        $request->session()->forget('F');
-        $request->session()->forget('T');
-        $request->session()->forget('D_S_AI_ID');
-        $request->session()->forget('DAY');
-        $request->session()->forget('PATIENT_TYPE');
+        $patient_type = $request->session()->get('PATIENT_TYPE');
 
-        return redirect('/reception/home/');
+        if(!$ap_time){
+
+            $d_s_ai_id = $request->session()->get('D_S_AI_ID');
+
+            # Session flash message.
+            $msg = 'Please assign an appointment time.';
+            session(['SESSION_FLASH_MSG' => $msg]);
+
+            # Redirecting to [FUNCTION-NO::08].
+            return redirect('/reception/time_selection');
+
+        }else{
+
+            $request->session()->forget('SESSION_FLASH_MSG');
+
+            if($patient_type=='new'){
+
+                # Access able to only new patients.
+                # Data entry to Table:----patients.
+                
+                $patients=array(
+
+                    'P_ID'=>$request->session()->get('PATIENT_P_ID'),
+                    'Patient_Name'=>$request->session()->get('PATIENT_NAME'),
+                    'Patient_Gender'=>$request->session()->get('PATIENT_GENDER'),
+                    'Cell_Number'=>$request->session()->get('PATIENT_CELL'),
+                    'NID'=>$request->session()->get('PATIENT_NID'),
+                    'NID_Type'=>$request->session()->get('PATIENT_NID_TYPE'),
+                    'Ad_Date'=>$todays_date
+                    
+                );
+
+                DB::table('patients')->insert($patients);
+
+            }if($patient_type=='new' || $patient_type=='old'){
+
+                # Access able to new & old patients.
+                # Data entry to Table:----patient_logs.
+
+                $fee = $request->session()->get('BASIC_FEE');
+                $discount = $request->input('discount');
+                $saving = ($discount/100)*$fee;
+                $final_fee = $fee-$saving;
+                
+                $patient_logs=array(
+
+                    'P_ID'=>$request->session()->get('PATIENT_P_ID'),
+                    'Ap_Date'=>$request->session()->get('PATIENT_APPOINT_DATE'),
+                    'Ap_Time'=>$request->session()->get('PATIENT_APPOINT_TIME'),
+                    'D_ID'=>$request->session()->get('D_ID'),
+                    'Basic_Fee'=>$fee,
+                    'Discount'=>$discount,
+                    'Final_Fee'=>$final_fee,
+                    'Payment_Status'=>$request->input('payment_status'),
+                    'R_ID'=>$request->session()->get('REC_SESSION_ID')
+                    
+                );
+
+                DB::table('patient_logs')->insert($patient_logs);
+
+                # Data updated on Table:----doctor_schedules.
+
+                $d_s_ai_id = $request->session()->get('D_S_AI_ID');
+                $day = $request->session()->get('PATIENT_APPOINT_DAY');
+                
+                $data=array(
+                    
+                    $day=>$request->session()->get('PATIENT_P_ID')
+                
+                );
+
+                DB::table('doctor_schedules')->where('AI_ID',$d_s_ai_id)->update($data);
+
+            }
+
+            # Session flash message.
+            $msg = 'Patient Entry Successful.';
+            session(['SESSION_FLASH_MSG' => $msg]);
+
+            # Redirecting to [FUNCTION-NO::11].
+            return redirect('/reception/cancel_appointment');
+        }
 
     }
 
+# End of function patient_data_entry_for_doctor_appointment.<-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# This page may route to invoice generator in the future.
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 
 
-
-
-
-
-    function add_date_and_discount(Request $request){
-
-        $p_l_ai_id = $request->session()->get('P_L_AI_ID');
-        $fee = $request->session()->get('BASIC_FEE');
-
-        $discount = $request->input('discount');
-        $saving = ($discount/100)*$fee;
-        $final_fee = $fee-$saving;
-        $payment_status = 'Unpaid';
-
-        $data=array(
-            
-            'Ap_Date'=>$request->input('appoint_date'),
-            'Discount'=>$discount,
-            'Final_Fee'=>$final_fee,
-            'Payment_Status'=>$payment_status
-        
-        );
-
-        DB::table('patient_logs')->where('AI_ID',$p_l_ai_id)->update($data);
-
-        /* Deleting sessions */
-
-        $request->session()->forget('PATIENT_P_ID');
-        $request->session()->forget('PATIENT_NAME');
-        $request->session()->forget('PATIENT_GENDER');
-        $request->session()->forget('PATIENT_CELL');
-        $request->session()->forget('P_L_AI_ID');
-        $request->session()->forget('D_ID');
-        $request->session()->forget('D_NAME');
-        $request->session()->forget('BASIC_FEE');
-        $request->session()->forget('DISCOUNT');
-        $request->session()->forget('F');
-        $request->session()->forget('T');
-        $request->session()->forget('D_S_AI_ID');
-        $request->session()->forget('DAY');
-        $request->session()->forget('PATIENT_TYPE');
-
-        return redirect('/reception/patient_list/');
-
-    }
-
-
-
-
-
-
-
+#########################
+#### FUNCTION-NO::13 ####
+#########################
+# Joins table :-
+# -----: TABLE :------ patients,
+# -----: TABLE :------ patient_logs,
+# -----: TABLE :------ doctor_schedules;
+# Reads data from joined table.
 
     function show_list(){
 
@@ -700,7 +747,19 @@ class add_patient extends Controller
         ->orderBy('patient_logs.AI_ID','desc')
         ->get();
         
+        # Returning to the view below.
         return view('hospital/reception/patient_list',$data);
 
     }
+
+# End of function show_list.                                <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note:
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
 }

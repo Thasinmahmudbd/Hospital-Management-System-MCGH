@@ -69,6 +69,17 @@
 
 @section('content')
 
+                {{ Session::get('PATIENT_P_ID') }}
+                {{ Session::get('PATIENT_NAME') }}
+                {{ Session::get('PATIENT_GENDER') }}
+                {{ Session::get('PATIENT_NID') }}
+                {{ Session::get('PATIENT_NID_TYPE') }}
+                {{ Session::get('PATIENT_CELL') }}
+                {{ Session::get('PATIENT_APPOINT_DATE') }}
+                {{ Session::get('PATIENT_APPOINT_DAY') }}
+                {{ Session::get('PATIENT_APPOINT_TYPE') }}
+                {{ Session::get('PATIENT_TYPE') }}
+
                 <div class="patient_and_doctor_info_one_is_to_one">
 
                     <div class="content_container">
@@ -157,8 +168,7 @@
                         <input type="hidden" name="d_id" value="{{$list->D_ID}}">
                         <input type="hidden" name="dr_name" value="{{$list->Dr_Name}}">
                         <input type="hidden" name="fee" value="{{$list->Basic_Fee}}">
-                        <input type="hidden" name="p_id" value="{{Session::get('PATIENT_P_ID')}}">
-                        <input type="hidden" name="r_id" value="{{Session::get('REC_SESSION_ID')}}">
+                        <input type="hidden" name="second_visit_discount" value="{{$list->Second_Visit_Discount}}">
                         <button type="submit" name="select_doctor" class="btn capsule">
 
                         @if($list->Dr_Gender=='male' || $list->Dr_Gender=='Male')

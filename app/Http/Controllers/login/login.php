@@ -17,6 +17,7 @@ class login extends Controller
         if(isset($result[0]->AI_ID)){
 
             if($result[0]->status==1){
+
                 $request->session()->put('REC_SESSION_ID',$result[0]->Emp_ID);
 
                 $token_array = explode('-',$user_id);
