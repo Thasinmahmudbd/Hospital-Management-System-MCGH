@@ -1,0 +1,41 @@
+/* profile */
+
+.rounded_photo_width_is_to_rest{
+    display: grid;
+    grid-template-columns: 145px 1fr;
+    grid-gap: 20px;
+}
+
+.span_hidden_bar{
+    display: grid;
+    grid-template-columns:1fr 40px;
+    grid-gap: 10px;
+}
+
+/* edit profile */
+
+.placeholder_image{
+    width: 100px;
+    margin: auto;
+    display: grid;
+    align-self: center;
+    border-radius: 100px;
+    border: 10px solid #fff;
+    cursor: pointer;
+    object-fit: cover;
+    transition: 300ms ease-in;
+}
+
+.placeholder_image:hover{
+    width: calc(100px + 10px);
+    margin: auto;
+    border-radius: 100px;
+    border: 5px solid #fff;
+    cursor: pointer;
+    object-fit: cover;
+    transition: 300ms ease-in;
+}
+
+.img_uploader{
+    display: none;
+}

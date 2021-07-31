@@ -1,0 +1,18 @@
+/* for tablets width = 800px */
+
+@media only screen and (max-width: 800px) {
+    
+    .rounded_photo_width_is_to_rest{
+        display: grid;
+        grid-template-columns:1fr;
+    }
+    
+}
+
+/* for mobile width = 500px */
+
+@media only screen and (max-width: 500px) {
+    
+    
+
+}

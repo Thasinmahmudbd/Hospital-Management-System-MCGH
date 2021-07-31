@@ -71,7 +71,7 @@ Route::group(['middleware'=>['receptionAuth']],function() {
 
     # Doctor selection page search-bar action button.
     # Redirecting to [FUNCTION-NO::06]---in-controller.
-    Route::get('/reception/doctor_selection/by_department/{department}','App\Http\Controllers\reception\add_patient@show_doctor_by_department');
+    Route::post('/reception/doctor_selection/by_search','App\Http\Controllers\reception\add_patient@search_doctor');
     
     # After selecting doctor.
     # Redirecting to [FUNCTION-NO::07]---in-controller.
@@ -101,6 +101,13 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     # Redirecting to [FUNCTION-NO::13]---in-controller.
     Route::get('/reception/patient_list/','App\Http\Controllers\reception\add_patient@show_list');
 
+    /*Route::get('/', function () {
+        $pdf = PDF::loadView("pdf.invoices_mcgh");
+
+        return $pdf->stream('invoice.pdf');
+        return view('welcome');
+    });*/
+
 
 
 
@@ -118,3 +125,31 @@ Route::group(['middleware'=>['receptionAuth']],function() {
 });
 
 
+
+
+
+
+# Reception [CONTROLLER::], [MIDDLEWARE::DoctorLoginAuth.php].
+Route::group(['middleware'=>['doctorAuth']],function() {
+
+    # Going to home with home set-up.
+    # Redirecting to [FUNCTION-NO::01]---in-controller.
+    Route::get('/doctor/home/','App\Http\Controllers\doctor\profile@set_up_home');
+
+    # Showing the patients that the doctor has treated today.
+    # Returning to hospital/doctor/patient_list---in-resources/views/.
+    Route::get('/doctor/patients/','App\Http\Controllers\doctor\profile@show_treated_patients');
+
+    # Showing the doctors schedule.
+    # Returning to hospital/doctor/schedule---in-resources/views/.
+    Route::get('/doctor/schedule/','App\Http\Controllers\doctor\profile@show_schedule');
+
+    # Showing the doctors log.
+    # Returning to hospital/doctor/log---in-resources/views/.
+    Route::get('/doctor/log/','App\Http\Controllers\doctor\profile@show_logs');
+    
+    # Going to edit_profile view.
+    # Redirecting to hospital/doctor/edit_profile---in-resources/views/.
+    Route::view('/doctor/edit_profile/','hospital/doctor/edit_profile');
+
+});

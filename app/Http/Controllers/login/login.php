@@ -18,13 +18,25 @@ class login extends Controller
 
             if($result[0]->status==1){
 
-                $request->session()->put('REC_SESSION_ID',$result[0]->Emp_ID);
-
                 $token_array = explode('-',$user_id);
                 $token = current($token_array);
 
                 if($token=='R' || $token=='r'){
+
+                    $request->session()->forget('DOC_SESSION_ID');
+
+                    $request->session()->put('REC_SESSION_ID',$result[0]->Emp_ID);
+
                     return redirect('/reception/home/');
+                }
+
+                if($token=='D' || $token=='d'){
+
+                    $request->session()->forget('REC_SESSION_ID');
+
+                    $request->session()->put('DOC_SESSION_ID',$result[0]->Emp_ID);
+
+                    return redirect('/doctor/home/');
                 }
 
             }else{

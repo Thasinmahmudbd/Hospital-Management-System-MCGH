@@ -20,16 +20,20 @@
 
     <!--basic design-->
     <link rel="stylesheet" href="{{ asset('UI_assets/Design/Basic/reception_design.css') }}">
+    <link rel="stylesheet" href="{{ asset('UI_assets/Design/Basic/doctor_design.css') }}">
 
     <!--frame design-->
     <link rel="stylesheet" href="{{ asset('UI_assets/Design/frame_design.css') }}">
 
     <!--responsive design-->
     <link rel="stylesheet" href="{{ asset('UI_assets/Design/Responsive/reception_res.css') }}">
+    <link rel="stylesheet" href="{{ asset('UI_assets/Design/Responsive/doctor_res.css') }}">
     <link rel="stylesheet" href="{{ asset('UI_assets/Design/Responsive/frame_res.css') }}">
 
     <!--javascript-->
     <script src="{{ asset('UI_assets/Javascript/dropdown_menu.js') }}"></script>
+    <script src="{{ asset('UI_assets/Javascript/imageViewer.js') }}"></script>
+    <script src="{{ asset('UI_assets/Javascript/triggerClick.js') }}"></script>
     <!--<script type="text/javascript">
         function disableBack() { window.history.forward(); }
         setTimeout("disableBack()", 0);

@@ -87,5 +87,12 @@
     transition: 300ms ease-in;
 }
 
+.cancel_btn_style{
+    background-color: transparent;
+    border:none;
+    display:grid;
+    justify-content:start;
+    align-content:flex-start;
+}
 
 

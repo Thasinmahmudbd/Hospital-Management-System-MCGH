@@ -41,6 +41,12 @@ p{
     background-color: #fff;
 }
 
+.purple_line{
+    width:100%;
+    height: 2px;
+    background-color: rgba(106, 63, 226, 0.842);
+}
+
 .round_image{
     border-radius: 100%;
     width:100px;
@@ -53,6 +59,12 @@ p{
 
 .gap{
     margin:1rem;
+}
+
+.center_element{
+    display:grid;
+    align-content: center;
+    justify-content: center;
 }
 
 

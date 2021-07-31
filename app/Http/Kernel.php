@@ -47,6 +47,10 @@ class Kernel extends HttpKernel
         'receptionAuth' => [
             \App\Http\Middleware\ReceptionistLoginAuth::class,
         ],
+
+        'doctorAuth' => [
+            \App\Http\Middleware\DoctorLoginAuth::class,
+        ],
     ];
 
     /**

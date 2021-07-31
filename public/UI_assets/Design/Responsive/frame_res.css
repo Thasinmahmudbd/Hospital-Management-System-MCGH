@@ -76,6 +76,11 @@
         color:#3b3838;
         font-weight: bold;
     }
+
+    .color_me_on_mobile{
+        background-color: rgba(106, 63, 226, 0.842);
+        color:#fff;
+    }
     
 }
 
