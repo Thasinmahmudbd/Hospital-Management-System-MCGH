@@ -87,24 +87,35 @@
 
                 <p class="span_hidden_bar">
 
-                    <b class="content_container_bg_less_thin">Search Patient & add them as treated.</b>
+                    <b class="content_container_bg_less_thin">Search patient & add them as treated. Total appointments today :</b>
 
-                    <span class="text_center table_item_green content_container_bg_less_thin">30</span>
+                    <span class="text_center table_item_green content_container_bg_less_thin">
+
+                        {{Session::get('UNTREATED')}}
+
+                    </span>
 
                 </p>
 
 
 
 
-                <!-- patient treat search -->
-                <form action="{{url('/doctor/treated/patient')}}" method="post" class="content_container patient_info_form">
+                <!-- patient search -->
+                <form action="{{url('/doctor/search_patient/')}}" method="post" class="content_container patient_info_form">
                 @csrf
 
                     <div class="doctor_search_form_element">
 
-                        <label for="doctor_name_search" class="collected_info vanish_label">Search Patient</label>
-                        <input type="text" class="input" name="doctor_search_info" placeholder="Enter P_ID" required>
-                        <button type="submit" class="btn form_btn" name="search_doctor">Find</button>
+                        <label for="p_id" class="collected_info vanish_label">Search Patient</label>
+
+                        <div class="patient_and_doctor_info_one_is_to_one">
+
+                            <input type="text" class="input" name="p_id" placeholder="Enter P_ID" required>
+                            <input type="text" class="input" name="random_code" placeholder="Enter R-C" required>
+
+                        </div>
+
+                        <button type="submit" class="btn form_btn" name="search_patient">Find</button>
     
                     </div>
 
@@ -112,37 +123,55 @@
 
 
 
+                <!--Session message-->
+                @if(session('msg')=='Sorry, but none fits your description.')
+
+                    <div class="content_container_bg_less_thin text_center warning_msg">{{session('msg')}}</div> 
+
+                @elseif(session('msg')=='Congratulation, list has been updated.')
+
+                    <div class="content_container_bg_less_thin text_center success_msg">{{session('msg')}}</div> 
+
+                @endif
+                
 
 
+                @if(Session::get('PATIENT_SEARCH_RESULT')=='positive')
 
-            <form action="{{url('/doctor/set_patient_as_treated/')}}" class="patient_and_doctor_info_one_is_to_one" method="post">
-                @csrf
+                    @foreach($result as $list)
 
-                <div class="content_container_bg_less info">
+                    <form action="{{url('/doctor/set_patient_as_treated/')}}" class="patient_and_doctor_info_one_is_to_one" method="post">
+                    @csrf
 
-                    <p class="collected_info">Patient Name</p>
-                    <p>:</p>
-                    <p class="collected_info">{{Session::get('DOCTORS_NAME')}}</p>
+                        <div class="content_container_bg_less info">
 
-                    <p class="collected_info">Patient Gender</p>
-                    <p>:</p>
-                    <p class="collected_info">{{Session::get('DOCTORS_SPECIALTY')}}</p>
+                            <p class="collected_info">Patient Name</p>
+                            <p>:</p>
+                            <p class="collected_info">{{$list->Patient_Name}}</p>
 
-                    <p class="collected_info">Appointment Date</p>
-                    <p>:</p>
-                    <p class="collected_info">{{Session::get('DOCTORS_DEPARTMENT')}}</p>
+                            <p class="collected_info">Patient Gender</p>
+                            <p>:</p>
+                            <p class="collected_info">{{$list->Patient_Gender}}</p>
 
-                    <input type="hidden" value="" name="p_id">
+                            <p class="collected_info">Appointment Date</p>
+                            <p>:</p>
+                            <p class="collected_info">{{$list->Ap_Date}}</p>
 
-                </div>
+                            <input type="hidden" value="{{$list->P_ID}}" name="p_id">
 
-                <div class="patient_form_element">
+                        </div>
 
-                    <button type="submit" class="btn content_container_bg_less form_btn" name="select_doctor">I, {{Session::get('DOCTORS_NAME')}},<br> have treated this person on {{Session::get('DATE_TODAY')}},<br> at {{Session::get('CURRENT_TIME')}}.</button>
+                        <div class="patient_form_element">
 
-                </div>
+                            <button type="submit" class="btn content_container_bg_less form_btn" name="select_doctor">I, {{Session::get('DOCTORS_NAME')}},<br> have treated this person on {{Session::get('DATE_TODAY')}},<br> at {{Session::get('CURRENT_TIME')}}.</button>
 
-            </form>
+                        </div>
+
+                    </form>
+
+                    @endforeach
+
+                @endif
 
 
                 <div class="purple_line"></div>
@@ -153,7 +182,22 @@
 
 
 
-                <p class="content_container_bg_less_thin"><b>Patients You've Treated Today</b></p>
+
+                <p class="span_hidden_bar">
+
+                    <b class="content_container_bg_less_thin">Patients you've treated today :</b>
+
+                    <span class="text_center table_item_green content_container_bg_less_thin">
+
+                        {{Session::get('TREATED')}}
+
+                    </span>
+
+                </p>
+
+
+
+
 
                 <table class="frame_table">
                     

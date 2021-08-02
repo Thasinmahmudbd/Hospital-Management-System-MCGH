@@ -95,4 +95,15 @@
     align-content:flex-start;
 }
 
+.option_input{
+    border:2px solid #ddd;
+    padding:4px;
+    border-radius: 100px;
+    text-align: center;
+    width:100px;
+    height:100px;  
+    font-size:50px;
+    font-weight: bold;
+    color:rgb(106, 63, 226);
+}
 

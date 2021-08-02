@@ -134,7 +134,7 @@
 
         <span></span>
             
-            <p><b>Log</b></p>
+            <p><b>Logs {{Session::get('LOG_LIMIT')}}</b></p>
 
         <span></span>
 

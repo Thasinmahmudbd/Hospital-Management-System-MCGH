@@ -102,9 +102,9 @@ class add_patient extends Controller
                     $third_part++;
                 }if($current_count->Ad_Date != $second_part){
                     $third_part = 0;
-                }#else{
-                    #$third_part++;
-                #}
+                }else{
+                    $third_part++;
+                }
             }
 
             $P_ID = "$first_part"."-"."$second_part"."-".str_pad($third_part,3,"0",STR_PAD_LEFT);
@@ -618,6 +618,8 @@ class add_patient extends Controller
 
     function patient_data_entry_for_doctor_appointment(Request $request){
 
+        $p_id = $request->session()->get('PATIENT_P_ID');
+        
         # Validation of form data.
         $request->validate([
 
@@ -627,6 +629,7 @@ class add_patient extends Controller
         ]);
 
         $ap_time = $request->session()->get('PATIENT_APPOINT_TIME');
+        $ap_date = $request->session()->get('PATIENT_APPOINT_DATE');
 
         date_default_timezone_set('Asia/Dhaka');
         $todays_date = date("dmY");
@@ -655,7 +658,7 @@ class add_patient extends Controller
                 
                 $patients=array(
 
-                    'P_ID'=>$request->session()->get('PATIENT_P_ID'),
+                    'P_ID'=>$p_id,
                     'Patient_Name'=>$request->session()->get('PATIENT_NAME'),
                     'Patient_Gender'=>$request->session()->get('PATIENT_GENDER'),
                     'Cell_Number'=>$request->session()->get('PATIENT_CELL'),
@@ -676,17 +679,33 @@ class add_patient extends Controller
                 $discount = $request->input('discount');
                 $saving = ($discount/100)*$fee;
                 $final_fee = $fee-$saving;
-                
+
+                # Generate token.
+
+                $token_generator=DB::table('patient_logs')->where('Ap_Date',$ap_date)->orderBy('AI_ID','desc')->first();
+
+                if(!$token_generator){
+                    $token=1;
+                }else{
+                    $sequence = $token_generator->Token;
+                    $token=$sequence+1;
+                }
+
+                $random = rand(100000,999999);
+
                 $patient_logs=array(
 
-                    'P_ID'=>$request->session()->get('PATIENT_P_ID'),
-                    'Ap_Date'=>$request->session()->get('PATIENT_APPOINT_DATE'),
+                    'P_ID'=>$p_id,
+                    'Ap_Date'=>$ap_date,
                     'Ap_Time'=>$request->session()->get('PATIENT_APPOINT_TIME'),
                     'D_ID'=>$request->session()->get('D_ID'),
                     'Basic_Fee'=>$fee,
                     'Discount'=>$discount,
                     'Final_Fee'=>$final_fee,
                     'Payment_Status'=>$request->input('payment_status'),
+                    'Treatment_Status'=>0,
+                    'Token'=>$token,
+                    'Random_code'=>$random,
                     'R_ID'=>$request->session()->get('REC_SESSION_ID')
                     
                 );
@@ -697,10 +716,10 @@ class add_patient extends Controller
 
                 $d_s_ai_id = $request->session()->get('D_S_AI_ID');
                 $day = $request->session()->get('PATIENT_APPOINT_DAY');
-                
+
                 $data=array(
                     
-                    $day=>$request->session()->get('PATIENT_P_ID')
+                    $day=>$token
                 
                 );
 

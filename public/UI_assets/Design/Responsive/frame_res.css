@@ -25,6 +25,22 @@
         display:grid;
     }
 
+    /* content */
+
+    .options{
+        grid-template-columns: 145px;
+    }
+
+    .option_label_btn_bar{
+        grid-template-columns: 1fr;
+        grid-gap:0px;
+    }
+
+    .option_container{
+        grid-template-columns: 145px 1fr;
+        grid-gap:20px;
+    }
+
 
     /* table */
 

@@ -68,7 +68,7 @@
 .doctor_search_form_element{
     display:grid;
     grid-template-columns: 160px 1fr 80px;
-    grid-gap:3px;
+    grid-gap:16px;
     text-align: start;
 }
 

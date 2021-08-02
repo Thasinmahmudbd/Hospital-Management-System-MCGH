@@ -207,6 +207,14 @@
     margin-bottom:16px;
 }
 
+.content_container_thin{
+    padding:8px;
+    background-color: #eeefff;
+    border-radius: 15px;
+    margin-bottom:16px;
+    box-shadow: 0px 0px 10px 0px #ccc;
+}
+
 .section_title{
     font-size: 1rem;
     font-weight: bold;
@@ -225,6 +233,24 @@
 .purple_icon{
     color: rgba(106, 63, 226, 0.842);
     font-size:20px;
+}
+
+.options{
+    display:grid;
+    grid-template-columns: repeat(3, 145px);
+    grid-gap:20px;
+    
+}
+
+.option_label_btn_bar{
+    display:grid;
+    grid-template-columns: 1fr 40px;
+    grid-gap:10px;
+}
+
+.option_container{
+    display:grid;
+    grid-template-columns: 1fr;
 }
 
 /* table */

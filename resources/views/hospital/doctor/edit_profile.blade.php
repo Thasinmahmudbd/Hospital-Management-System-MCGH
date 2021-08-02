@@ -83,12 +83,18 @@
 
 @section('content')
 
-                    <form action="{{url('/doctor/save_edit')}}" method="post" enctype="multipart/form-data" class="rounded_photo_width_is_to_rest">
+                    <form action="{{url('/doctor/save_edit/')}}" method="post" enctype="multipart/form-data" class="rounded_photo_width_is_to_rest">
                     @csrf
 
                         <div class="content_container center_element">
 
-                        @if(Session::get('DOCTORS_GENDER')=='male' || Session::get('DOCTORS_GENDER')=='Male')
+                        @if(Session::get('DOCTORS_IMAGE'))
+
+                            <img src="{{asset('storage/doctor_profile_pictures/'.Session::get('DOCTORS_IMAGE'))}}" alt="Upload Photo" class="placeholder_image" width="100%" onclick="triggerClick()">
+
+			                <input class="input img_uploader" type="file" name="profile_photo" onchange="displayImage(this)" id="place_holder">
+                        
+                        @elseif(Session::get('DOCTORS_GENDER')=='male' || Session::get('DOCTORS_GENDER')=='Male')
 
                             <img src="{{url('/UI_Assets/Media/Images/Template_Images/system/default-placeholder-doctor-half-length-portrait-vector-male.png')}}" alt="Upload Photo" class="placeholder_image" width="100%" onclick="triggerClick()">
 
@@ -124,11 +130,11 @@
 
                                 <p class="collected_info">Department</p>
                                 <p class="collected_info">:</p>
-                                <input type="text" value="{{Session::get('DOCTORS_SPECIALTY')}}" name="doc_dept" class="collected_info input">
+                                <input type="text" value="{{Session::get('DOCTORS_DEPARTMENT')}}" name="doc_dept" class="collected_info input">
 
                                 <p class="collected_info">Specialty</p>
                                 <p class="collected_info">:</p>
-                                <input type="text" value="{{Session::get('DOCTORS_DEPARTMENT')}}" name="doc_specialty" class="collected_info input">
+                                <input type="text" value="{{Session::get('DOCTORS_SPECIALTY')}}" name="doc_specialty" class="collected_info input">
 
                             </div>
 
@@ -139,6 +145,10 @@
                         </div>
 
                     </form>
+
+                    @error('profile_photo')
+						<span class="content_container_bg_less_thin text_center warning_msg">{{$message}}</span>
+					@enderror
 
 
 

@@ -129,7 +129,7 @@ Route::group(['middleware'=>['receptionAuth']],function() {
 
 
 
-# Reception [CONTROLLER::], [MIDDLEWARE::DoctorLoginAuth.php].
+# Reception [CONTROLLER::profile.php], [MIDDLEWARE::DoctorLoginAuth.php].
 Route::group(['middleware'=>['doctorAuth']],function() {
 
     # Going to home with home set-up.
@@ -137,19 +137,61 @@ Route::group(['middleware'=>['doctorAuth']],function() {
     Route::get('/doctor/home/','App\Http\Controllers\doctor\profile@set_up_home');
 
     # Showing the patients that the doctor has treated today.
-    # Returning to hospital/doctor/patient_list---in-resources/views/.
+    # Redirecting to [FUNCTION-NO::02]---in-controller.
     Route::get('/doctor/patients/','App\Http\Controllers\doctor\profile@show_treated_patients');
 
+    # Search patient.
+    # Redirecting to [FUNCTION-NO::03]---in-controller.
+    Route::post('/doctor/search_patient/','App\Http\Controllers\doctor\profile@search_patient');
+
+    # Search patient.
+    # Redirecting to [FUNCTION-NO::04]---in-controller.
+    Route::post('/doctor/set_patient_as_treated/','App\Http\Controllers\doctor\profile@set_patient_as_treated');
+
     # Showing the doctors schedule.
-    # Returning to hospital/doctor/schedule---in-resources/views/.
+    # Redirecting to [FUNCTION-NO::05]---in-controller.
     Route::get('/doctor/schedule/','App\Http\Controllers\doctor\profile@show_schedule');
 
+    # Adding shifts.
+    # Redirecting to [FUNCTION-NO::06]---in-controller.
+    Route::post('/doctor/add_shift/','App\Http\Controllers\doctor\profile@add_shift');
+
+    # Change to not available.
+    # Redirecting to [FUNCTION-NO::07]---in-controller.
+    Route::get('/doctor/make_n_a/{ai_id}/{day}','App\Http\Controllers\doctor\profile@not_available');
+
+    # Change to available.
+    # Redirecting to [FUNCTION-NO::08]---in-controller.
+    Route::get('/doctor/make_a/{ai_id}/{day}','App\Http\Controllers\doctor\profile@available');
+
+    # Reschedule patent.
+    # Redirecting to [FUNCTION-NO::09]---in-controller.
+    Route::get('/doctor/reschedule/','App\Http\Controllers\doctor\profile@reschedule');
+
+    # Deleting shift.
+    # Redirecting to [FUNCTION-NO::10]---in-controller.
+    Route::get('/doctor/delete_shift/{ai_id}','App\Http\Controllers\doctor\profile@delete_shift');
+
+    # Adding patient cap.
+    # Redirecting to [FUNCTION-NO::11]---in-controller.
+    Route::post('/doctor/set_patient_cap/','App\Http\Controllers\doctor\profile@patient_cap');
+
     # Showing the doctors log.
-    # Returning to hospital/doctor/log---in-resources/views/.
+    # Redirecting to [FUNCTION-NO::12]---in-controller.
     Route::get('/doctor/log/','App\Http\Controllers\doctor\profile@show_logs');
+
+    # Searching the doctors log.
+    # Redirecting to [FUNCTION-NO::13]---in-controller.
+    Route::post('/doctor/search_based_on_date/','App\Http\Controllers\doctor\profile@search_logs');
     
     # Going to edit_profile view.
     # Redirecting to hospital/doctor/edit_profile---in-resources/views/.
     Route::view('/doctor/edit_profile/','hospital/doctor/edit_profile');
+
+    # Update profile.
+    # Redirecting to [FUNCTION-NO::14]---in-controller.
+    Route::post('/doctor/save_edit/','App\Http\Controllers\doctor\profile@edit_profile');
+
+
 
 });

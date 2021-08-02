@@ -87,7 +87,11 @@
 
                         <div class="content_container center_element">
 
-                        @if(Session::get('DOCTORS_GENDER')=='male' || Session::get('DOCTORS_GENDER')=='Male')
+                        @if(Session::get('DOCTORS_IMAGE'))
+
+                            <img class="round_image" src="{{asset('storage/doctor_profile_pictures/'.Session::get('DOCTORS_IMAGE'))}}" alt="" width="100%">
+
+                        @elseif(Session::get('DOCTORS_GENDER')=='male' || Session::get('DOCTORS_GENDER')=='Male')
 
                             <img class="round_image" src="{{url('/UI_Assets/Media/Images/Template_Images/system/default-placeholder-doctor-half-length-portrait-vector-male.png')}}" alt="" width="100%">
 
@@ -116,11 +120,11 @@
 
                                 <p class="collected_info">Department</p>
                                 <p>:</p>
-                                <p class="collected_info">{{Session::get('DOCTORS_SPECIALTY')}}</p>
+                                <p class="collected_info">{{Session::get('DOCTORS_DEPARTMENT')}}</p>
 
                                 <p class="collected_info">Specialty</p>
                                 <p>:</p>
-                                <p class="collected_info">{{Session::get('DOCTORS_DEPARTMENT')}}</p>
+                                <p class="collected_info">{{Session::get('DOCTORS_SPECIALTY')}}</p>
 
                                 <p class="collected_info"><b>My Wallet</b></p>
                                 <p>:</p>
@@ -138,7 +142,13 @@
 
 
 
+                <!--Session message-->
 
+                @if(session('msg')=='Profile updated successfully.')
+
+                    <div class="content_container_bg_less_thin text_center success_msg">{{session('msg')}}</div> 
+
+                @endif
 
 
 
@@ -284,12 +294,16 @@
                         @endif
 
                                 @if($time->Sat=='A' || $time->Sat=='a')
-                                    <a href="{{url('/reception/set_time/'.$time->AI_ID)}}" class="disable">
-                                        <p class="table_basic_btn table_item_green">{{$time->Sat}}</p>
+                                    <a href="" class="disable">
+                                        <p class="table_basic_btn table_item_green">Available</p>
                                     </a>
                                 @elseif($time->Sat=='N/A' || $time->Sat=='n/a')
                                     <a href="" class="disable">
                                         <p class="table_basic_btn">{{$time->Sat}}</p>
+                                    </a>
+                                @else
+                                    <a href="" class="disable">
+                                        <p class="table_basic_btn table_item_yellow">{{$time->Sat}}</p>
                                     </a>
                                 @endif
 
@@ -309,12 +323,16 @@
                         @endif
 
                                 @if($time->Sun=='A' || $time->Sun=='a')
-                                    <a href="{{url('/reception/set_time/'.$time->AI_ID)}}" class="disable">
-                                        <p class="table_basic_btn table_item_green">{{$time->Sun}}</p>
+                                    <a href="" class="disable">
+                                        <p class="table_basic_btn table_item_green">Available</p>
                                     </a>
                                 @elseif($time->Sun=='N/A' || $time->Sun=='n/a')
                                     <a href="" class="disable">
                                         <p class="table_basic_btn">{{$time->Sun}}</p>
+                                    </a>
+                                @else
+                                    <a href="" class="disable">
+                                        <p class="table_basic_btn table_item_yellow">{{$time->Sun}}</p>
                                     </a>
                                 @endif
 
@@ -334,12 +352,16 @@
                         @endif
 
                                 @if($time->Mon=='A' || $time->Mon=='a')
-                                    <a href="{{url('/reception/set_time/'.$time->AI_ID)}}" class="disable">
-                                        <p class="table_basic_btn table_item_green">{{$time->Mon}}</p>
+                                    <a href="" class="disable">
+                                        <p class="table_basic_btn table_item_green">Available</p>
                                     </a>
                                 @elseif($time->Mon=='N/A' || $time->Mon=='n/a')
                                     <a href="" class="disable">
                                         <p class="table_basic_btn">{{$time->Mon}}</p>
+                                    </a>
+                                @else
+                                    <a href="" class="disable">
+                                        <p class="table_basic_btn table_item_yellow">{{$time->Mon}}</p>
                                     </a>
                                 @endif
 
@@ -359,12 +381,16 @@
                         @endif
 
                                 @if($time->Tue=='A' || $time->Tue=='a')
-                                    <a href="{{url('/reception/set_time/'.$time->AI_ID)}}" class="disable">
-                                        <p class="table_basic_btn table_item_green">{{$time->Tue}}</p>
+                                    <a href="" class="disable">
+                                        <p class="table_basic_btn table_item_green">Available</p>
                                     </a>
                                 @elseif($time->Tue=='N/A' || $time->Tue=='n/a')
                                     <a href="" class="disable">
                                         <p class="table_basic_btn">{{$time->Tue}}</p>
+                                    </a>
+                                @else
+                                    <a href="" class="disable">
+                                        <p class="table_basic_btn table_item_yellow">{{$time->Tue}}</p>
                                     </a>
                                 @endif
 
@@ -384,12 +410,16 @@
                         @endif
 
                                 @if($time->Wed=='A' || $time->Wed=='a')
-                                    <a href="{{url('/reception/set_time/'.$time->AI_ID)}}" class="disable">
-                                        <p class="table_basic_btn table_item_green">{{$time->Wed}}</p>
+                                    <a href="" class="disable">
+                                        <p class="table_basic_btn table_item_green">Available</p>
                                     </a>
                                 @elseif($time->Wed=='N/A' || $time->Wed=='n/a')
                                     <a href="" class="disable">
                                         <p class="table_basic_btn">{{$time->Wed}}</p>
+                                    </a>
+                                @else
+                                    <a href="" class="disable">
+                                        <p class="table_basic_btn table_item_yellow">{{$time->Wed}}</p>
                                     </a>
                                 @endif
 
@@ -409,12 +439,16 @@
                         @endif
 
                                 @if($time->Thu=='A' || $time->Thu=='a')
-                                    <a href="{{url('/reception/set_time/'.$time->AI_ID)}}" class="disable">
-                                        <p class="table_basic_btn table_item_green">{{$time->Thu}}</p>
+                                    <a href="" class="disable">
+                                        <p class="table_basic_btn table_item_green">Available</p>
                                     </a>
                                 @elseif($time->Thu=='N/A' || $time->Thu=='n/a')
                                     <a href="" class="disable">
                                         <p class="table_basic_btn">{{$time->Thu}}</p>
+                                    </a>
+                                @else
+                                    <a href="" class="disable">
+                                        <p class="table_basic_btn table_item_yellow">{{$time->Thu}}</p>
                                     </a>
                                 @endif
 
@@ -434,12 +468,16 @@
                         @endif
 
                                 @if($time->Fri=='A' || $time->Fri=='a')
-                                    <a href="{{url('/reception/set_time/'.$time->AI_ID)}}" class="disable">
-                                        <p class="table_basic_btn table_item_green">{{$time->Fri}}</p>
+                                    <a href="" class="disable">
+                                        <p class="table_basic_btn table_item_green">Available</p>
                                     </a>
                                 @elseif($time->Fri=='N/A' || $time->Fri=='n/a')
                                     <a href="" class="disable">
                                         <p class="table_basic_btn">{{$time->Fri}}</p>
+                                    </a>
+                                @else
+                                    <a href="" class="disable">
+                                        <p class="table_basic_btn table_item_yellow">{{$time->Fri}}</p>
                                     </a>
                                 @endif
 

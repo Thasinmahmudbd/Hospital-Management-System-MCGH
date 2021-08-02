@@ -153,8 +153,8 @@
                                 <div class="doctor_form_element">
                                     <p class="collected_info">Payment</p>
                                     <select name="payment_status" id="payment_status" class="input collected_info" required>
-                                        <option value="Due">Due</option>
                                         <option value="Paid">Paid</option>
+                                        <option value="Due">Due</option>
                                     </select>
                                 </div>
 
@@ -402,7 +402,7 @@
                                         <p class="table_basic_btn">{{$time->Sat}}</p>
                                     </a>
                                 @else
-                                    <a href="" class="disable">
+                                    <a href="{{url('/reception/set_time/'.$time->AI_ID)}}" class="">
                                         <p class="table_basic_btn table_item_yellow">{{$time->Sat}}</p>
                                     </a>
                                 @endif
@@ -431,7 +431,7 @@
                                         <p class="table_basic_btn">{{$time->Sun}}</p>
                                     </a>
                                 @else
-                                    <a href="" class="disable">
+                                    <a href="{{url('/reception/set_time/'.$time->AI_ID)}}" class="">
                                         <p class="table_basic_btn table_item_yellow">{{$time->Sun}}</p>
                                     </a>
                                 @endif
@@ -460,7 +460,7 @@
                                         <p class="table_basic_btn">{{$time->Mon}}</p>
                                     </a>
                                 @else
-                                    <a href="" class="disable">
+                                    <a href="{{url('/reception/set_time/'.$time->AI_ID)}}" class="">
                                         <p class="table_basic_btn table_item_yellow">{{$time->Mon}}</p>
                                     </a>
                                 @endif
@@ -489,7 +489,7 @@
                                         <p class="table_basic_btn">{{$time->Tue}}</p>
                                     </a>
                                 @else
-                                    <a href="" class="disable">
+                                    <a href="{{url('/reception/set_time/'.$time->AI_ID)}}" class="">
                                         <p class="table_basic_btn table_item_yellow">{{$time->Tue}}</p>
                                     </a>
                                 @endif
@@ -518,7 +518,7 @@
                                         <p class="table_basic_btn">{{$time->Wed}}</p>
                                     </a>
                                 @else
-                                    <a href="" class="disable">
+                                    <a href="{{url('/reception/set_time/'.$time->AI_ID)}}" class="">
                                         <p class="table_basic_btn table_item_yellow">{{$time->Wed}}</p>
                                     </a>
                                 @endif
@@ -547,7 +547,7 @@
                                         <p class="table_basic_btn">{{$time->Thu}}</p>
                                     </a>
                                 @else
-                                    <a href="" class="disable">
+                                    <a href="{{url('/reception/set_time/'.$time->AI_ID)}}" class="">
                                         <p class="table_basic_btn table_item_yellow">{{$time->Thu}}</p>
                                     </a>
                                 @endif
@@ -576,7 +576,7 @@
                                         <p class="table_basic_btn">{{$time->Fri}}</p>
                                     </a>
                                 @else
-                                    <a href="" class="disable">
+                                    <a href="{{url('/reception/set_time/'.$time->AI_ID)}}" class="">
                                         <p class="table_basic_btn table_item_yellow">{{$time->Fri}}</p>
                                     </a>
                                 @endif
