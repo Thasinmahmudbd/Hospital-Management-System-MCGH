@@ -438,7 +438,7 @@ class add_patient extends Controller
 #########################
 #### FUNCTION-NO::09 ####
 #########################
-# Selects time from list.
+# Selects time from list;
 # Stores data in 4 sessions.
 
     function set_time(Request $request,$d_s_ai_id){
@@ -476,7 +476,7 @@ class add_patient extends Controller
 #########################
 # Changes appointment date & day;
 # Rechecks if Discount is still valid on changed date;
-# Stores data in 3 sessions.
+# Stores data in 3 sessions;
 # Removes data from 6 sessions.
 
     function change_date(Request $request){

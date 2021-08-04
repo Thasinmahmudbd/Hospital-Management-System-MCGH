@@ -41,6 +41,14 @@
     </script>-->
 
 
+<!-----------------------charts---------------------->
+
+    @section('charts')
+            @show
+
+<!--------------------charts end---------------------->
+
+
     <title>@yield('page_title')</title>
 
 

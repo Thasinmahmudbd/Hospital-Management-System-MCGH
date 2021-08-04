@@ -67,6 +67,11 @@ p{
     justify-content: center;
 }
 
+.center_self{
+    display:grid;
+    align-self: center;
+}
+
 
 
 

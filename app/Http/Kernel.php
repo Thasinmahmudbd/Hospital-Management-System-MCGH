@@ -51,6 +51,10 @@ class Kernel extends HttpKernel
         'doctorAuth' => [
             \App\Http\Middleware\DoctorLoginAuth::class,
         ],
+
+        'accountantAuth' => [
+            \App\Http\Middleware\AccountantLoginAuth::class,
+        ],
     ];
 
     /**

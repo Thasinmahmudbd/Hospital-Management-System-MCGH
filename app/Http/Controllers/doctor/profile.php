@@ -119,7 +119,10 @@ function show_treated_patients(Request $request){
 #########################
 # Searches patients;
 # Shows all the patient that are treated;
-# Stores data in 4 session.
+# Stores data in 4 session;
+# Joins table :-
+# -----: TABLE :------ patients,
+# -----: TABLE :------ patient_logs.
 
 function search_patient(Request $request){
 
@@ -207,7 +210,8 @@ function search_patient(Request $request){
 #########################
 #### FUNCTION-NO::04 ####
 #########################
-# Sets status to treated.
+# Sets status to treated;
+# Update will happen on  --: TABLE :------ patient_logs.
 
 function set_patient_as_treated(Request $request){
 
@@ -295,7 +299,8 @@ function show_schedule(Request $request){
 #########################
 #### FUNCTION-NO::06 ####
 #########################
-# Adding shift.
+# Adding shift;
+# Entry will happen on --: TABLE :------ doctor_schedules.
 
 function add_shift(Request $request){
 
@@ -350,7 +355,8 @@ function add_shift(Request $request){
 #########################
 #### FUNCTION-NO::07 ####
 #########################
-# Updating to N/A.
+# Updating to N/A;
+# Update will happen on --: TABLE :------ doctor_schedules.
 
 function not_available($ai_id, $day){
 
@@ -382,7 +388,8 @@ function not_available($ai_id, $day){
 #########################
 #### FUNCTION-NO::08 ####
 #########################
-# Updating to A.
+# Updating to A;
+# Update will happen on --: TABLE :------ doctor_schedules.
 
 function available($ai_id, $day){
 
@@ -441,7 +448,8 @@ function reschedule(Request $request){
 #########################
 #### FUNCTION-NO::10 ####
 #########################
-# Delete shift.
+# Delete shift;
+# Delete will happen on --: TABLE :------ doctor_schedules.
 
 function delete_shift(Request $request, $ai_id){
 
@@ -500,7 +508,8 @@ function delete_shift(Request $request, $ai_id){
 #########################
 #### FUNCTION-NO::11 ####
 #########################
-# Set patient capacity.
+# Set patient capacity;
+# Update will happen on --: TABLE :------ doctors.
 
 function patient_cap(Request $request){
 
@@ -543,7 +552,10 @@ function patient_cap(Request $request){
 #### FUNCTION-NO::12 ####
 #########################
 # Gets all treated patients data;
-# Stores data in 1 session.
+# Stores data in 1 session;
+# Joins table :-
+# -----: TABLE :------ patients,
+# -----: TABLE :------ patient_logs.
 
 function show_logs(Request $request){
 
@@ -580,7 +592,10 @@ function show_logs(Request $request){
 #### FUNCTION-NO::13 ####
 #########################
 # Searches doctor log;
-# Stored data in 1 session.
+# Stored data in 1 session;
+# Joins table :-
+# -----: TABLE :------ patients,
+# -----: TABLE :------ patient_logs.
 
 function search_logs(Request $request){
 
@@ -631,7 +646,8 @@ function search_logs(Request $request){
 #########################
 #### FUNCTION-NO::14 ####
 #########################
-# Edit doctor profile.
+# Edit doctor profile;
+# Update will happen on --: TABLE :------ doctors.
 
 function edit_profile(Request $request){
 

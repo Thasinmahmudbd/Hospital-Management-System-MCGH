@@ -40,9 +40,21 @@ Route::get('/logout', function () {
 
 
 
-# Reception [CONTROLLER::add_patient.php], [MIDDLEWARE::ReceptionistLoginAuth.php].
+
+
+
+
+
+
+
+
+# Reception [CONTROLLER::add_patient.php, invoice.php], [MIDDLEWARE::ReceptionistLoginAuth.php].
 
 Route::group(['middleware'=>['receptionAuth']],function() {
+
+    ##############################################################################################################################################
+    # Patient Registration.  [C::add_patient.php]
+    ##############################################################################################################################################
 
     # Going to home with home set-up
     # Redirecting to [FUNCTION-NO::01]---in-controller.
@@ -97,16 +109,41 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     # Redirecting to [FUNCTION-NO::12]---in-controller.
     Route::post('/reception/patient_data_entry_for_doctor_appointment','App\Http\Controllers\reception\add_patient@patient_data_entry_for_doctor_appointment');
 
+    ##############################################################################################################################################
+    # All Patients List.  [C::add_patient.php]
+    ##############################################################################################################################################
+
     # Reading data in Patient list page.
     # Redirecting to [FUNCTION-NO::13]---in-controller.
     Route::get('/reception/patient_list/','App\Http\Controllers\reception\add_patient@show_list');
 
-    /*Route::get('/', function () {
-        $pdf = PDF::loadView("pdf.invoices_mcgh");
+    ##############################################################################################################################################
+    # Invoice.  [C::invoice.php]
+    ##############################################################################################################################################
 
-        return $pdf->stream('invoice.pdf');
-        return view('welcome');
-    });*/
+    # Reading data in Invoice generator [appointment] page.
+    # Redirecting to [FUNCTION-NO::]---in-controller.
+    Route::get('/reception/invoice_list/appointment/','App\Http\Controllers\generate\invoice@invoice_list_appointment');
+
+    # searching data in Invoice generator [appointment] page.
+    # Redirecting to [FUNCTION-NO::]---in-controller.
+    Route::post('/reception/find_patient/by_search/invoice/appointment/','App\Http\Controllers\generate\invoice@invoice_search_appointment');
+
+    # Generate invoice. [appointment]
+    # Redirecting to [FUNCTION-NO::]---in-controller.
+    Route::get('/reception/collect/appointment/invoice/data/{p_l_ai_id}', 'App\Http\Controllers\generate\invoice@collect_appointment_invoice_data');
+
+    Route::get('/reception/generate/appointment/invoice/',function(){
+        
+        $pdf = PDF::loadView('hospital.invoice.appointment');
+
+        $file_name = 'ID'.Session::get('pId').'.pdf';
+
+        return $pdf->stream($file_name);
+
+        return view('hospital/invoice/appointment');
+
+    });
 
 
 
@@ -119,7 +156,7 @@ Route::group(['middleware'=>['receptionAuth']],function() {
 
 
 
-    
+
 
 
 });
@@ -132,9 +169,17 @@ Route::group(['middleware'=>['receptionAuth']],function() {
 # Reception [CONTROLLER::profile.php], [MIDDLEWARE::DoctorLoginAuth.php].
 Route::group(['middleware'=>['doctorAuth']],function() {
 
+    ##############################################################################################################################################
+    # Doctor Profile.  [C::profile.php]
+    ##############################################################################################################################################
+
     # Going to home with home set-up.
     # Redirecting to [FUNCTION-NO::01]---in-controller.
     Route::get('/doctor/home/','App\Http\Controllers\doctor\profile@set_up_home');
+
+    ##############################################################################################################################################
+    # Patient Status Check and Update [treated/untreated].  [C::profile.php]
+    ##############################################################################################################################################
 
     # Showing the patients that the doctor has treated today.
     # Redirecting to [FUNCTION-NO::02]---in-controller.
@@ -147,6 +192,10 @@ Route::group(['middleware'=>['doctorAuth']],function() {
     # Search patient.
     # Redirecting to [FUNCTION-NO::04]---in-controller.
     Route::post('/doctor/set_patient_as_treated/','App\Http\Controllers\doctor\profile@set_patient_as_treated');
+
+    ##############################################################################################################################################
+    # Doctor Schedule.  [C::profile.php]
+    ##############################################################################################################################################
 
     # Showing the doctors schedule.
     # Redirecting to [FUNCTION-NO::05]---in-controller.
@@ -176,6 +225,10 @@ Route::group(['middleware'=>['doctorAuth']],function() {
     # Redirecting to [FUNCTION-NO::11]---in-controller.
     Route::post('/doctor/set_patient_cap/','App\Http\Controllers\doctor\profile@patient_cap');
 
+    ##############################################################################################################################################
+    # Doctor Log.  [C::profile.php]
+    ##############################################################################################################################################
+
     # Showing the doctors log.
     # Redirecting to [FUNCTION-NO::12]---in-controller.
     Route::get('/doctor/log/','App\Http\Controllers\doctor\profile@show_logs');
@@ -183,6 +236,10 @@ Route::group(['middleware'=>['doctorAuth']],function() {
     # Searching the doctors log.
     # Redirecting to [FUNCTION-NO::13]---in-controller.
     Route::post('/doctor/search_based_on_date/','App\Http\Controllers\doctor\profile@search_logs');
+
+    ##############################################################################################################################################
+    # Doctor Edit Profile.  [C::profile.php]
+    ##############################################################################################################################################
     
     # Going to edit_profile view.
     # Redirecting to hospital/doctor/edit_profile---in-resources/views/.
@@ -191,6 +248,44 @@ Route::group(['middleware'=>['doctorAuth']],function() {
     # Update profile.
     # Redirecting to [FUNCTION-NO::14]---in-controller.
     Route::post('/doctor/save_edit/','App\Http\Controllers\doctor\profile@edit_profile');
+
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+# Reception [CONTROLLER::accounts.php], [MIDDLEWARE::AccountantLoginAuth.php].
+Route::group(['middleware'=>['accountantAuth']],function() {
+
+    ##############################################################################################################################################
+    # Accountants Profile.  [C::accounts.php]
+    ##############################################################################################################################################
+
+    # Going to home with home set-up.
+    # Redirecting to [FUNCTION-NO::01]---in-controller.
+    Route::get('/accounts/home/','App\Http\Controllers\accountant\accounts@set_up_home');
+
+    ##############################################################################################################################################
+    # Doctors income.  [C::accounts.php]
+    ##############################################################################################################################################
+
+    # Going to doctors income page.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::get('/accounts/doctor/income/','App\Http\Controllers\accountant\accounts@show_all_doctors');
+
+    # disposable.
+    Route::view('/accounts/doctor/income/select/','hospital/accounts/doctor_income_details');
+    Route::view('/accounts/pay/salary/','hospital/accounts/pay_salary');
+    Route::view('/accounts/log/','hospital/accounts/logs');
 
 
 

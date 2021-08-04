@@ -115,19 +115,19 @@
                             <div class="info content_container_bg_less">
 
                                 <p class="collected_info">Name</p>
-                                <p>:</p>
+                                <p class="collected_info">:</p>
                                 <p class="collected_info">{{Session::get('DOCTORS_NAME')}}</p>
 
                                 <p class="collected_info">Department</p>
-                                <p>:</p>
+                                <p class="collected_info">:</p>
                                 <p class="collected_info">{{Session::get('DOCTORS_DEPARTMENT')}}</p>
 
                                 <p class="collected_info">Specialty</p>
-                                <p>:</p>
+                                <p class="collected_info">:</p>
                                 <p class="collected_info">{{Session::get('DOCTORS_SPECIALTY')}}</p>
 
                                 <p class="collected_info"><b>My Wallet</b></p>
-                                <p>:</p>
+                                <p class="collected_info">:</p>
                                 <p class="collected_info"><b>{{Session::get('DOCTORS_BALANCE')}}</b> Tk</p>
 
                             </div>
