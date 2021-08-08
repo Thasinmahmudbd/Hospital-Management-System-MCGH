@@ -53,6 +53,16 @@ p{
     border:5px solid #fff;
 }
 
+.thumbnail{
+    width:40px;
+    border:3px solid #fff;
+}
+
+.thumbnail_small{
+    width:20px;
+    border:0px solid #fff;
+}
+
 .full_width{
     width:100%;
 }
@@ -71,7 +81,6 @@ p{
     display:grid;
     align-self: center;
 }
-
 
 
 

@@ -137,11 +137,11 @@
 
                         @elseif(Session::get('ACCOUNTANTS_GENDER')=='male' || Session::get('ACCOUNTANTS_GENDER')=='Male')
 
-                            <img class="round_image" src="{{url('/UI_Assets/Media/Images/Template_Images/system/default-placeholder-doctor-half-length-portrait-vector-male.png')}}" alt="" width="100%">
+                            <img class="round_image" src="{{url('/UI_Assets/Media/Images/Template_Images/system/default-placeholder-account-half-length-portrait-vector-male.png')}}" alt="" width="100%">
 
                         @elseif(Session::get('ACCOUNTANTS_GENDER')=='female' || Session::get('ACCOUNTANTS_GENDER')=='Female')
 
-                            <img class="round_image" src="{{url('/UI_Assets/Media/Images/Template_Images/system/default-placeholder-doctor-half-length-portrait-vector-female.png')}}" alt="" width="100%">
+                            <img class="round_image" src="{{url('/UI_Assets/Media/Images/Template_Images/system/default-placeholder-employee-half-length-portrait-vector-female.png')}}" alt="" width="100%">
 
                         @else
 

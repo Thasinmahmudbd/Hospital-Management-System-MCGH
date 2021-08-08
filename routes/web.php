@@ -137,7 +137,7 @@ Route::group(['middleware'=>['receptionAuth']],function() {
         
         $pdf = PDF::loadView('hospital.invoice.appointment');
 
-        $file_name = 'ID'.Session::get('pId').'.pdf';
+        $file_name = 'ID: '.Session::get('pId').'.pdf';
 
         return $pdf->stream($file_name);
 

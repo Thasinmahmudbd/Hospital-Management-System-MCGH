@@ -85,6 +85,10 @@
 
 
 
+                <div class="purple_line"></div>
+                <div class="gap"></div>
+
+
 
 
                 <!--Session message-->

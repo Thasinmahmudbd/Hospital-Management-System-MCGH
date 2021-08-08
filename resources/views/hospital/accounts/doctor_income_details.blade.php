@@ -122,27 +122,27 @@
 <form action="{{url('')}}" method="post" class="span_hidden_bar content_container_bg_less_thin center_element">
 @csrf
 
-<div class="patient_and_doctor_info_one_is_to_one">
+    <div class="patient_and_doctor_info_one_is_to_one">
 
-    <div class="patient_form_element_one_is_to_three center_element content_container">
-        <label class="center_element" for="search_from">From</label>
-        <input class="input" type="date" name="search_from" required>  
+        <div class="patient_form_element_one_is_to_three center_element content_container">
+            <label class="center_element" for="search_from">From</label>
+            <input class="input" type="date" name="search_from" required>  
+        </div>
+
+        <div class="patient_form_element_one_is_to_three center_element content_container">
+            <label class="center_element" for="search_to">To</label>
+            <input class="input" type="date" name="search_to" required>  
+        </div>
+
     </div>
 
-    <div class="patient_form_element_one_is_to_three center_element content_container">
-        <label class="center_element" for="search_to">To</label>
-        <input class="input" type="date" name="search_to" required>  
+    <div>
+
+        <button class="btn form_btn" type="submit" name="submit"> 
+            <i class="fas fa-search log_out_btn"></i>
+        </button>
+
     </div>
-
-</div>
-
-<div>
-
-    <button class="btn form_btn" type="submit" name="submit"> 
-        <i class="fas fa-search log_out_btn"></i>
-    </button>
-
-</div>
 
 </form>
 
@@ -150,15 +150,16 @@
 
 
 <div class="purple_line"></div>
+<div class="gap"></div>
 
 
 <div class="content_container_bg_less_thin">
 
-<span></span>
-    
-    <p><b>Logs</b></p>
+    <span></span>
+        
+        <p><b>Logs</b></p>
 
-<span></span>
+    <span></span>
 
 </div>
 

@@ -207,6 +207,13 @@
     margin-bottom:16px;
 }
 
+.content_container_bg_change_thin{
+    padding:8px;
+    background-color: #e0e1ee;
+    border-radius: 15px;
+    margin-bottom:16px;
+}
+
 .content_container_thin{
     padding:8px;
     background-color: #eeefff;
@@ -297,6 +304,11 @@
     transition: 300ms ease-in;
 }
 
+.one_line_five_item_style_one{
+    display:grid;
+    grid-template-columns: 50px 2fr 4fr 2fr 3fr;
+    grid-gap:5px;
+}
 
 /* table */
 

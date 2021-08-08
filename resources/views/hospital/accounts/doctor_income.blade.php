@@ -2,7 +2,7 @@
 
 @section('page_title','MCGH Portal')
 
-@section('page_type','My Profile')
+@section('page_type',"Doctor's Income")
 
 
 
@@ -113,13 +113,45 @@
     <div class="doctor_search_form_element">
 
         <label for="doctor_name_search" class="collected_info vanish_label">Search Doctor</label>
-        <input type="text" class="input" name="doctor_search_info" placeholder="Enter Doctor Name or ID" required>
+
+        <div class="patient_and_doctor_info_one_is_to_one">
+
+            <input type="text" class="input" name="doctor_search_info" placeholder="Enter Doctor Name or ID" required>
+
+            <select name="department" id="department" class="input" required>
+
+                <option value="">All</option>
+                <option value="">Department</option>
+                <option value="">Department</option>
+                <option value="">Department</option>
+                <option value="">Department</option>
+                <option value="">Department</option>
+
+            </select>
+
+        </div>
+
         <button type="submit" class="btn form_btn" name="search_doctor">Search</button>
 
     </div>
 
 </form>
 
+
+
+<div class="purple_line"></div>
+<div class="gap"></div>
+
+
+    <div class="content_container_bg_less_thin">
+
+        <span></span>
+            
+            <p><b>All</b></p>
+
+        <span></span>
+
+    </div>
 
 
 
