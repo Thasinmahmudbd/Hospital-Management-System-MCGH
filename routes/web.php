@@ -166,7 +166,7 @@ Route::group(['middleware'=>['receptionAuth']],function() {
 
 
 
-# Reception [CONTROLLER::profile.php], [MIDDLEWARE::DoctorLoginAuth.php].
+# Doctor [CONTROLLER::profile.php], [MIDDLEWARE::DoctorLoginAuth.php].
 Route::group(['middleware'=>['doctorAuth']],function() {
 
     ##############################################################################################################################################
@@ -263,7 +263,7 @@ Route::group(['middleware'=>['doctorAuth']],function() {
 
 
 
-# Reception [CONTROLLER::accounts.php], [MIDDLEWARE::AccountantLoginAuth.php].
+# Accounts [CONTROLLER::accounts.php], [MIDDLEWARE::AccountantLoginAuth.php].
 Route::group(['middleware'=>['accountantAuth']],function() {
 
     ##############################################################################################################################################
@@ -274,6 +274,14 @@ Route::group(['middleware'=>['accountantAuth']],function() {
     # Redirecting to [FUNCTION-NO::01]---in-controller.
     Route::get('/accounts/home/','App\Http\Controllers\accountant\accounts@set_up_home');
 
+    # setting commission limit.
+    # Redirecting to [FUNCTION-NO::02]---in-controller.
+    Route::post('/update/commission/','App\Http\Controllers\accountant\accounts@set_commission');
+
+    # setting vat limit.
+    # Redirecting to [FUNCTION-NO::03]---in-controller.
+    Route::post('/update/vat/','App\Http\Controllers\accountant\accounts@set_vat');
+
     ##############################################################################################################################################
     # Doctors income.  [C::accounts.php]
     ##############################################################################################################################################
@@ -282,10 +290,23 @@ Route::group(['middleware'=>['accountantAuth']],function() {
     # Redirecting to [FUNCTION-NO::0]---in-controller.
     Route::get('/accounts/doctor/income/','App\Http\Controllers\accountant\accounts@show_all_doctors');
 
+    ##############################################################################################################################################
+    # Accounts Edit Profile.  [C::accounts.php]
+    ##############################################################################################################################################
+    
+    # Going to edit_profile view.
+    # Redirecting to hospital/accounts/edit_profile---in-resources/views/.
+    Route::view('/accounts/edit_profile/','hospital/accounts/edit_profile');
+
+    # Update profile.
+    # Redirecting to [FUNCTION-NO::]---in-controller.
+    Route::post('/accounts/save_edit/','App\Http\Controllers\accountant\accounts@edit_profile');
+
     # disposable.
     Route::view('/accounts/doctor/income/select/','hospital/accounts/doctor_income_details');
     Route::view('/accounts/pay/salary/','hospital/accounts/pay_salary');
     Route::view('/accounts/log/','hospital/accounts/logs');
+
 
 
 

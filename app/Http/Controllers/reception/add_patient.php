@@ -718,9 +718,9 @@ class add_patient extends Controller
                 $day = $request->session()->get('PATIENT_APPOINT_DAY');
 
                 $data=array(
-                    
-                    $day=>$token
-                
+
+                    $day=>$token #logical error exist here.
+
                 );
 
                 DB::table('doctor_schedules')->where('AI_ID',$d_s_ai_id)->update($data);

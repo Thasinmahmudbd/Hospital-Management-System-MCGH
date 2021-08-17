@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 02, 2021 at 07:39 PM
+-- Generation Time: Aug 17, 2021 at 11:06 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.6
 
@@ -29,11 +29,41 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `accounts` (
   `AI_ID` int(11) NOT NULL,
-  `Acc_ID` varchar(8) DEFAULT NULL,
+  `Acc_ID` varchar(10) DEFAULT NULL,
   `Acc_Name` varchar(50) DEFAULT NULL,
   `Acc_Gender` varchar(10) DEFAULT NULL,
+  `Acc_Email` varchar(50) DEFAULT NULL,
+  `Acc_Phone` varchar(11) DEFAULT NULL,
   `Acc_Image` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `accounts`
+--
+
+INSERT INTO `accounts` (`AI_ID`, `Acc_ID`, `Acc_Name`, `Acc_Gender`, `Acc_Email`, `Acc_Phone`, `Acc_Image`) VALUES
+(1, 'AC-M-001', 'Mr. Shamol', 'Male', 'shamol@gmail.com', '01702315892', 'AC-M-001.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `account_variables`
+--
+
+CREATE TABLE `account_variables` (
+  `AI_ID` int(11) NOT NULL,
+  `Vat` float DEFAULT NULL,
+  `Commission` float DEFAULT NULL,
+  `Updater` varchar(20) NOT NULL,
+  `Update_Date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `account_variables`
+--
+
+INSERT INTO `account_variables` (`AI_ID`, `Vat`, `Commission`, `Updater`, `Update_Date`) VALUES
+(1, 10, 20, 'AC-M-001', '2021-08-17');
 
 -- --------------------------------------------------------
 
@@ -49,7 +79,7 @@ CREATE TABLE `doctors` (
   `Specialty` varchar(255) DEFAULT NULL,
   `Department` varchar(50) NOT NULL,
   `Dr_Image` varchar(100) DEFAULT NULL,
-  `Balance` float DEFAULT NULL,
+  `Wallet` float DEFAULT NULL,
   `Basic_Fee` int(11) DEFAULT NULL,
   `Second_Visit_Discount` int(11) NOT NULL,
   `Patient_Cap` int(11) NOT NULL
@@ -59,8 +89,8 @@ CREATE TABLE `doctors` (
 -- Dumping data for table `doctors`
 --
 
-INSERT INTO `doctors` (`AI_ID`, `D_ID`, `Dr_Name`, `Dr_Gender`, `Specialty`, `Department`, `Dr_Image`, `Balance`, `Basic_Fee`, `Second_Visit_Discount`, `Patient_Cap`) VALUES
-(1, 'D-M-001', 'Brig Gen S M Mizanur Rahman', 'Male', 'Adviser Spl', 'Medicine test', 'D-M-001.jpg', NULL, 250, 10, 1),
+INSERT INTO `doctors` (`AI_ID`, `D_ID`, `Dr_Name`, `Dr_Gender`, `Specialty`, `Department`, `Dr_Image`, `Wallet`, `Basic_Fee`, `Second_Visit_Discount`, `Patient_Cap`) VALUES
+(1, 'D-M-001', 'Brig Gen S M Mizanur Rahman', 'Male', 'Adviser Spl', 'Medicine test', 'D-M-001.jpg', 175, 250, 10, 1),
 (2, 'D-M-002', 'Col Mir Azimuddin Ahmed', 'Male', 'Cl Spl', 'Pathology', NULL, NULL, 240, 5, 0),
 (3, 'D-M-003', 'Col Kazi Askar Lateef', 'Male', 'Cl Spl', 'Anaesthesiology', NULL, NULL, 230, 15, 0),
 (4, 'D-M-004', 'Col A K M Asaduzzaman', 'Male', 'Cl Spl', 'Otolaryngology', NULL, NULL, 220, 3, 0),
@@ -98,12 +128,23 @@ INSERT INTO `doctors` (`AI_ID`, `D_ID`, `Dr_Name`, `Dr_Gender`, `Specialty`, `De
 
 CREATE TABLE `doctor_balance_logs` (
   `AI_ID` int(11) NOT NULL,
-  `Dr_ID` varchar(10) DEFAULT NULL,
+  `D_ID` varchar(10) DEFAULT NULL,
   `B_Date` date DEFAULT NULL,
-  `Debit` float DEFAULT NULL,
-  `Credit` float DEFAULT NULL,
-  `Balance` float DEFAULT NULL
+  `Debit` float DEFAULT 0,
+  `Credit` float DEFAULT 0,
+  `Gov_Vat` float DEFAULT 0,
+  `Commission` float DEFAULT 0,
+  `Income` float DEFAULT 0,
+  `Current_Balance` float NOT NULL DEFAULT 0,
+  `Acc_ID` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `doctor_balance_logs`
+--
+
+INSERT INTO `doctor_balance_logs` (`AI_ID`, `D_ID`, `B_Date`, `Debit`, `Credit`, `Gov_Vat`, `Commission`, `Income`, `Current_Balance`, `Acc_ID`) VALUES
+(1, 'D-M-001', '2021-08-18', 0, 250, 25, 50, 175, 175, NULL);
 
 -- --------------------------------------------------------
 
@@ -130,7 +171,28 @@ CREATE TABLE `doctor_schedules` (
 --
 
 INSERT INTO `doctor_schedules` (`AI_ID`, `D_ID`, `F`, `T`, `Sat`, `Sun`, `Mon`, `Tue`, `Wed`, `Thu`, `Fri`) VALUES
-(377, 'D-M-001', '14:00:00', '18:00:00', '1', 'A', 'A', 'A', 'A', 'A', 'A');
+(377, 'D-M-001', '14:00:00', '18:00:00', '1', 'A', 'N/A', '3', '1', 'A', 'N/A');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hospital_income_log`
+--
+
+CREATE TABLE `hospital_income_log` (
+  `AI_ID` int(11) NOT NULL,
+  `Message` varchar(250) NOT NULL,
+  `Debit` float NOT NULL,
+  `Credit` float NOT NULL,
+  `Vat` float NOT NULL,
+  `Service_Charge` float NOT NULL,
+  `Total_Income` float NOT NULL,
+  `Total_Profit` float NOT NULL,
+  `Entry_Date` date NOT NULL,
+  `Entry_Time` time NOT NULL,
+  `Entry_Year` year(4) NOT NULL,
+  `Acc_ID` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -152,7 +214,9 @@ CREATE TABLE `logins` (
 INSERT INTO `logins` (`AI_ID`, `Emp_ID`, `Log_Password`, `status`) VALUES
 (1, 'R-M-001', '1111', 1),
 (2, 'R-M-002', '2222', 0),
-(3, 'D-M-001', '3333', 1);
+(3, 'D-M-001', '3333', 1),
+(4, 'AC-M-001', '5555', 1),
+(5, 'D-M-002', '2222', 1);
 
 -- --------------------------------------------------------
 
@@ -179,7 +243,12 @@ INSERT INTO `patients` (`AI_ID`, `P_ID`, `Patient_Name`, `Patient_Gender`, `Cell
 (158, 'M-02082021-000', 'Thasin', 'Male', '181918618', '8488668515', 'Own', '02082021'),
 (159, 'M-02082021-001', 'Nusrat', 'Male', '181918618', '8488668515', 'Own', '02082021'),
 (160, 'M-02082021-002', 'Hanif', 'Male', '161651658', '419814', 'Own', '02082021'),
-(161, 'M-02082021-003', 'Jakir', 'Male', '01936521487', '289818494881', 'Own', '02082021');
+(161, 'M-02082021-003', 'Jakir', 'Male', '1936521487', '289818494881', 'Own', '02082021'),
+(162, 'M-03082021-000', 'firoja', 'Male', '1982635147', '24414', 'Own', '03082021'),
+(163, 'M-03082021-001', 'Hanif', 'Male', '181918618', '151656548684', 'Own', '03082021'),
+(164, 'F-17082021-000', 'Nusrat', 'Female', '181918618', '1981981', 'Own', '17082021'),
+(165, 'M-17082021-001', 'Jamil', 'Male', '01982635147', '151656548684', 'Own', '17082021'),
+(166, 'F-18082021-000', 'Afia', 'Female', '181918618', '151656548684', 'Own', '18082021');
 
 -- --------------------------------------------------------
 
@@ -212,7 +281,13 @@ INSERT INTO `patient_logs` (`AI_ID`, `P_ID`, `Ap_Date`, `Ap_Time`, `D_ID`, `Basi
 (100, 'M-02082021-000', '2021-08-02', '00:00:00-15:00:00', 'D-M-001', 250, 0, 250, 'Paid', 0, NULL, 1, 136547, 'R-M-001'),
 (101, 'M-02082021-001', '2021-08-02', '00:00:00-15:00:00', 'D-M-001', 250, 0, 250, 'Paid', 0, NULL, 2, 536214, 'R-M-001'),
 (102, 'M-02082021-002', '2021-08-02', '00:00:00-15:00:00', 'D-M-001', 250, 0, 250, 'Paid', 0, NULL, 3, 524523, 'R-M-001'),
-(103, 'M-02082021-003', '2021-08-02', '00:00:00-15:00:00', 'D-M-001', 250, 0, 250, 'Paid', 1, NULL, 4, 204832, 'R-M-001');
+(103, 'M-02082021-003', '2021-08-02', '00:00:00-15:00:00', 'D-M-001', 250, 0, 250, 'Paid', 1, NULL, 4, 204832, 'R-M-001'),
+(104, 'M-03082021-000', '2021-08-04', '14:00:00-18:00:00', 'D-M-001', 250, 0, 250, 'Paid', 0, NULL, 1, 620573, 'R-M-001'),
+(105, 'M-03082021-001', '2021-08-03', '14:00:00-18:00:00', 'D-M-001', 250, 0, 250, 'Paid', 1, NULL, 1, 958392, 'R-M-001'),
+(106, 'F-17082021-000', '2021-08-17', '14:00:00-18:00:00', 'D-M-001', 250, 0, 250, 'Paid', 1, NULL, 1, 952262, 'R-M-001'),
+(107, 'M-17082021-001', '2021-08-17', '14:00:00-18:00:00', 'D-M-001', 250, 0, 250, 'Paid', 0, NULL, 2, 265471, 'R-M-001'),
+(108, 'M-17082021-001', '2021-08-17', '14:00:00-18:00:00', 'D-M-001', 250, 10, 225, 'Paid', 1, NULL, 3, 115689, 'R-M-001'),
+(109, 'F-18082021-000', '2021-08-18', '14:00:00-18:00:00', 'D-M-001', 250, 0, 250, 'Paid', 1, NULL, 1, 310656, 'R-M-001');
 
 -- --------------------------------------------------------
 
@@ -239,6 +314,12 @@ ALTER TABLE `accounts`
   ADD PRIMARY KEY (`AI_ID`);
 
 --
+-- Indexes for table `account_variables`
+--
+ALTER TABLE `account_variables`
+  ADD PRIMARY KEY (`AI_ID`);
+
+--
 -- Indexes for table `doctors`
 --
 ALTER TABLE `doctors`
@@ -254,6 +335,12 @@ ALTER TABLE `doctor_balance_logs`
 -- Indexes for table `doctor_schedules`
 --
 ALTER TABLE `doctor_schedules`
+  ADD PRIMARY KEY (`AI_ID`);
+
+--
+-- Indexes for table `hospital_income_log`
+--
+ALTER TABLE `hospital_income_log`
   ADD PRIMARY KEY (`AI_ID`);
 
 --
@@ -288,7 +375,13 @@ ALTER TABLE `receiptionists`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `account_variables`
+--
+ALTER TABLE `account_variables`
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `doctors`
@@ -300,31 +393,37 @@ ALTER TABLE `doctors`
 -- AUTO_INCREMENT for table `doctor_balance_logs`
 --
 ALTER TABLE `doctor_balance_logs`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `doctor_schedules`
 --
 ALTER TABLE `doctor_schedules`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=379;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=380;
+
+--
+-- AUTO_INCREMENT for table `hospital_income_log`
+--
+ALTER TABLE `hospital_income_log`
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `logins`
 --
 ALTER TABLE `logins`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `patients`
 --
 ALTER TABLE `patients`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=162;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=167;
 
 --
 -- AUTO_INCREMENT for table `patient_logs`
 --
 ALTER TABLE `patient_logs`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
 
 --
 -- AUTO_INCREMENT for table `receiptionists`

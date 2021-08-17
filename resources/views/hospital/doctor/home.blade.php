@@ -128,7 +128,7 @@
 
                                 <p class="collected_info"><b>My Wallet</b></p>
                                 <p class="collected_info">:</p>
-                                <p class="collected_info"><b>{{Session::get('DOCTORS_BALANCE')}}</b> Tk</p>
+                                <p class="collected_info"><b>{{Session::get('DOCTORS_BALANCE')}} Tk</b></p>
 
                             </div>
 

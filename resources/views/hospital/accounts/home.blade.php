@@ -22,9 +22,9 @@
         function drawChart() {
         var data = google.visualization.arrayToDataTable([
             ['Accounts', 'Taka'],
-            ['Total Income',     {{Session::get('test')}}],
-            ['Total Vat',      1],
-            ['Doctor Salary',  7]
+            ['Total Commission',     {{Session::get('COMMISSION')}}],
+            ['Total Vat',      {{Session::get('VAT')}}],
+            ['Doctor Salary',  {{Session::get('REST')}}]
             
         ]);
 
@@ -133,7 +133,7 @@
 
                         @if(Session::get('ACCOUNTANTS_IMAGE'))
 
-                            <img class="round_image" src="{{asset('storage/doctor_profile_pictures/'.Session::get('ACCOUNTANTS_IMAGE'))}}" alt="" width="100%">
+                            <img class="round_image" src="{{asset('storage/account_profile_pictures/'.Session::get('ACCOUNTANTS_IMAGE'))}}" alt="" width="100%">
 
                         @elseif(Session::get('ACCOUNTANTS_GENDER')=='male' || Session::get('ACCOUNTANTS_GENDER')=='Male')
 
@@ -164,15 +164,15 @@
 
                                 <p class="collected_info">Email</p>
                                 <p class="collected_info">:</p>
-                                <p class="collected_info"></p>
+                                <p class="collected_info">{{Session::get('ACCOUNTANTS_EMAIL')}}</p>
 
                                 <p class="collected_info">Phone</p>
                                 <p class="collected_info">:</p>
-                                <p class="collected_info"></p>
+                                <p class="collected_info">{{Session::get('ACCOUNTANTS_PHONE')}}</p>
 
                             </div>
 
-                            <a class="purple_icon" href="{{url('/doctor/edit_profile/')}}">
+                            <a class="purple_icon" href="{{url('/accounts/edit_profile')}}">
                                 <i class="fas fa-user-edit log_out_btn purple_icon"></i>
                             </a>
 
@@ -213,12 +213,12 @@
 
                         <div class="options">
 
-                            <form action="{{url('')}}" method="post" class="option_container">
+                            <form action="{{url('/update/commission/')}}" method="post" class="option_container">
                             @csrf
 
                                 <div class="content_container">
 
-                                    <input class="option_input" type="tel" name="commission" value="" placeholder="%" required>
+                                    <input class="option_input" type="tel" name="commission" value="{{Session::get('COMMISSION')}}" placeholder="%" required>
 
                                 </div>
 
@@ -231,12 +231,12 @@
 
                             </form>
 
-                            <form action="{{url('')}}" method="post" class="option_container">
+                            <form action="{{url('/update/vat/')}}" method="post" class="option_container">
                             @csrf
 
                                 <div class="content_container">
 
-                                    <input class="option_input" type="tel" name="tax" value="" placeholder="%" required>
+                                    <input class="option_input" type="tel" name="vat" value="{{Session::get('VAT')}}" placeholder="%" required>
 
                                 </div>
 

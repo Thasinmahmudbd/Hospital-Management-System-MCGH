@@ -16,7 +16,7 @@ class profile extends Controller
 #### FUNCTION-NO::01 ####
 #########################
 # Sets up required items before loading doctor home page;
-# Stored data in 10 sessions;
+# Stored data in 12 sessions;
 # Gets doctors schedule data.
 
 function set_up_home(Request $request){
@@ -33,7 +33,13 @@ function set_up_home(Request $request){
     session(['DOCTORS_IMAGE' => $basic_info->Dr_Image]);
     session(['DOCTORS_BASIC_FEE' => $basic_info->Basic_Fee]);
     session(['DOCTORS_DISCOUNT' => $basic_info->Second_Visit_Discount]);
-    session(['DOCTORS_BALANCE' => $basic_info->Balance]);
+    session(['DOCTORS_BALANCE' => $basic_info->Wallet]);
+
+    # Getting account variables.
+    $acc_var=DB::table('account_variables')->orderBy('AI_ID','desc')->first();
+
+    session(['VAT' => $acc_var->Vat]);
+    session(['COMMISSION' => $acc_var->Commission]);
 
     date_default_timezone_set('Asia/Dhaka');
     $date = date("Y-m-d");
@@ -211,7 +217,9 @@ function search_patient(Request $request){
 #### FUNCTION-NO::04 ####
 #########################
 # Sets status to treated;
-# Update will happen on  --: TABLE :------ patient_logs.
+# Update will happen on  --: TABLE :------ patient_logs;
+# Update will happen on  --: TABLE :------ patients
+# Insert will happen on  --: TABLE :------ doctor_balance_logs
 
 function set_patient_as_treated(Request $request){
 
@@ -245,6 +253,55 @@ function set_patient_as_treated(Request $request){
     DB::table('patient_logs')
     ->where('AI_ID',$ID->AI_ID)
     ->update($status);
+
+    $final_fee = $ID->Final_Fee;
+    $vat = $request->session()->get('VAT');
+    $commission = $request->session()->get('COMMISSION');
+    $rest = 100-($vat+$commission);
+    $income = ($rest/100)*$final_fee;
+    $gov_vat = ($vat/100)*$final_fee;
+    $hos_commission = ($commission/100)*$final_fee;
+
+    # checking current balance.
+    $wallet=DB::table('doctor_balance_logs')
+    ->where('D_ID',$d_id)
+    ->orderBy('AI_ID','desc')
+    ->first();
+
+    if($wallet){
+        $current_balance = $wallet->Current_Balance;
+        $current_balance = $current_balance + $income;
+    }else{
+        $current_balance = 0;
+        $current_balance = $current_balance + $income;
+    }
+
+    $log=array(
+
+        'D_ID'=>$d_id,
+        'B_Date'=>$request->session()->get('DATE_TODAY'),
+        'Credit'=>$final_fee,
+        'Gov_Vat'=>$gov_vat,
+        'Commission'=>$hos_commission,
+        'Income'=>$income,
+        'Current_Balance'=>$current_balance
+
+    );
+
+    # Insert balance log.
+    DB::table('doctor_balance_logs')
+    ->insert($log);
+
+    $data=array(
+
+        'Wallet'=>$current_balance
+
+    );
+
+    # update wallet.
+    DB::table('doctors')
+    ->where('D_ID',$d_id)
+    ->update($data);
 
     $request->session()->flash('msg','Congratulation, list has been updated.');
 
