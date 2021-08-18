@@ -716,6 +716,8 @@ function edit_profile(Request $request){
         'doc_name'=>'required',
         'doc_dept'=>'required',
         'doc_specialty'=>'required',
+        'doc_fee'=>'required',
+        'doc_discount'=>'required',
         'profile_photo'=>'image|dimensions:ratio=1/1|mimes:jpg,jpeg,png|dimensions:min_width=200,min_height=200,max_width=600,max_height=600|max:2048'
 
     ]);
@@ -725,7 +727,9 @@ function edit_profile(Request $request){
 
         'Dr_Name'=>$request->input('doc_name'),
         'Department'=>$request->input('doc_dept'),
-        'Specialty'=>$request->input('doc_specialty')
+        'Specialty'=>$request->input('doc_specialty'),
+        'Basic_Fee'=>$request->input('doc_fee'),
+        'Second_Visit_Discount'=>$request->input('doc_discount')
         
     );
 

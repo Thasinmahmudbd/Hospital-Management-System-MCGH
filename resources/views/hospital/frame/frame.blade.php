@@ -68,7 +68,15 @@
 
                 <p class="title">MCGH Portal</p>
                 <div class="line"></div>
-                <p class="user_name_id">Mr.A ({{ Session::get('REC_SESSION_ID') }})</p>
+                <p class="user_name_id">(
+                    
+                    @if(Session::get('REC_SESSION_ID'))
+                        {{ Session::get('REC_SESSION_ID') }}
+                    @elseif(Session::get('DOC_SESSION_ID'))
+                        {{ Session::get('DOC_SESSION_ID') }}
+                    @endif
+
+                    )</p>
 
             </div>
             

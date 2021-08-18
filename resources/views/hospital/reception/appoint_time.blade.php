@@ -62,21 +62,6 @@
 
 @section('content')
 
-                {{ Session::get('PATIENT_P_ID') }}
-                {{ Session::get('PATIENT_NAME') }}
-                {{ Session::get('PATIENT_GENDER') }}
-                {{ Session::get('PATIENT_NID') }}
-                {{ Session::get('PATIENT_NID_TYPE') }}
-                {{ Session::get('Cell_NUMBER') }}
-                {{ Session::get('PATIENT_APPOINT_DATE') }}
-                {{ Session::get('PATIENT_APPOINT_DAY') }}
-                {{ Session::get('PATIENT_APPOINT_TYPE') }}
-                {{ Session::get('PATIENT_TYPE') }}
-                {{ Session::get('D_ID') }}
-                {{ Session::get('BASIC_FEE') }}
-                {{ Session::get('D_NAME') }}
-                {{ Session::get('DISCOUNT') }}
-
                 <div class="patient_and_doctor_info_one_is_to_one">
 
                     <div class="content_container">

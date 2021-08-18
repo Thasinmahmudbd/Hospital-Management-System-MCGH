@@ -359,3 +359,137 @@
   </body>
 
 </html>
+
+
+
+
+<!-- Page break -->
+
+<div class="page_break"></div>
+
+
+
+<!-- Patient invoice -->
+
+  <div class="invoice">
+
+    <table style="width:100%">
+
+      <tr>
+        <td style="width:100%" class="page_header"><b>Mainamati Cantonment General Hospital</b> </td>  
+      </tr>
+
+    </table>
+
+    <table style="width:70%">
+
+      <tr>
+        <td style="font-size:20px">Near Cumilla Cantonment, Cumilla - Sylhet Road,</td>
+        <td style="font-size:20px" > RC: {{Session::get('randomCode')}}</td>
+      </tr>
+
+      <tr>
+        <td style="font-size:20px">Tiprabazar, Mainamati, Cumilla 3500</td>
+        <td style="font-size:20px" > Receptionist ID: {{Session::get('rId')}}</td>
+      </tr>
+
+      <tr>
+        <td style="font-size:20px">Bangladesh</td>
+        <td style="font-size:20px">Date: {{Session::get('DATE_TODAY')}}</td>
+      </tr>
+
+    </table>
+
+    <table class="m_invoice">
+
+      <tr>
+        <td>MEDICAL INVOICE (Doctor Copy)</td>
+      </tr>
+
+    </table>
+
+    <table class="Patient_Details_table">
+
+      <tr>
+        <td ><b style="font-size:30px" >Patient Details</b></td>
+        <td></td>
+      </tr>
+
+      <tr>
+        <td style="width:50%">Patient ID: {{Session::get('pId')}}</td>
+        <td style="width:50%" >NID: {{Session::get('nid')}}</td>
+      </tr>
+
+      <tr>
+        <td >Name: {{Session::get('pName')}}</td>
+        <td >NID Type: {{Session::get('nidType')}}</td>
+      </tr>
+
+      <tr>
+        <td >Gender: {{Session::get('pGender')}}</td>
+        <td >Appointment date: {{Session::get('apDate')}}</td>
+      </tr>
+
+      <tr>
+        <td >Phone: {{Session::get('cellNum')}}</td>
+        <td>Appointment time: {{Session::get('apTime')}}</td>
+      </tr>
+
+    </table>
+
+    <table id="doctor_table">
+
+      <tr>
+        <th>#</th>
+        <th style="font-size:20px">Doctor</th>
+        <th style="font-size:20px">Fee</th>
+        <th style="font-size:20px">Discount</th>
+        <th style="font-size:20px">Payable Amount</th>
+      </tr>
+
+      <tr>
+        <td>1</td>
+        <td>{{Session::get('dName')}}</td>
+        <td>{{Session::get('basicFee')}}</td>
+        <td>{{Session::get('discount')}}</td>
+        <td>{{Session::get('finalFee')}}</td>
+      </tr>
+
+    </table>
+
+    <table class="note_table" >
+
+      <tr>
+        <td rowspan="2"><h2> Note:</h2></td>
+      </tr>
+
+    </table>
+
+    <table class="thank">
+
+      <tr>
+        <td >THANK YOU</td>
+      </tr>
+
+    </table>
+
+    <table class="footer">
+
+      <tr>
+        <td >Phone:</td>
+        <td >Email:</td>
+      </tr>
+
+      <tr>
+        <td style="background-color: #04AA6D;height: 4px;"></td>
+        <td style="background-color: #04AA6D;height: 4px;"></td>
+      </tr>
+
+    </table>
+
+
+  </div>
+
+</body>
+
+</html>

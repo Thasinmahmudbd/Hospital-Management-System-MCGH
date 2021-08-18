@@ -136,6 +136,14 @@
                                 <p class="collected_info">:</p>
                                 <input type="text" value="{{Session::get('DOCTORS_SPECIALTY')}}" name="doc_specialty" class="collected_info input">
 
+                                <p class="collected_info">Fee</p>
+                                <p class="collected_info">:</p>
+                                <input type="tel" value="{{Session::get('DOCTORS_BASIC_FEE')}}" name="doc_fee" class="collected_info input">
+
+                                <p class="collected_info">Discount</p>
+                                <p class="collected_info">:</p>
+                                <input type="tel" value="{{Session::get('DOCTORS_DISCOUNT')}}" name="doc_discount" class="collected_info input">
+
                             </div>
 
                             <button type="submit" class="cancel_btn_style purple_icon">
