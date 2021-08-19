@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 17, 2021 at 11:06 PM
+-- Generation Time: Aug 19, 2021 at 02:26 AM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.6
 
@@ -90,7 +90,7 @@ CREATE TABLE `doctors` (
 --
 
 INSERT INTO `doctors` (`AI_ID`, `D_ID`, `Dr_Name`, `Dr_Gender`, `Specialty`, `Department`, `Dr_Image`, `Wallet`, `Basic_Fee`, `Second_Visit_Discount`, `Patient_Cap`) VALUES
-(1, 'D-M-001', 'Brig Gen S M Mizanur Rahman', 'Male', 'Adviser Spl', 'Medicine test', 'D-M-001.jpg', 175, 250, 10, 1),
+(1, 'D-M-001', 'Brig Gen S M Mizanur Rahman', 'Male', 'Adviser Spl', 'Medicine test', NULL, NULL, 2, 20, 1),
 (2, 'D-M-002', 'Col Mir Azimuddin Ahmed', 'Male', 'Cl Spl', 'Pathology', NULL, NULL, 240, 5, 0),
 (3, 'D-M-003', 'Col Kazi Askar Lateef', 'Male', 'Cl Spl', 'Anaesthesiology', NULL, NULL, 230, 15, 0),
 (4, 'D-M-004', 'Col A K M Asaduzzaman', 'Male', 'Cl Spl', 'Otolaryngology', NULL, NULL, 220, 3, 0),
@@ -139,13 +139,6 @@ CREATE TABLE `doctor_balance_logs` (
   `Acc_ID` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `doctor_balance_logs`
---
-
-INSERT INTO `doctor_balance_logs` (`AI_ID`, `D_ID`, `B_Date`, `Debit`, `Credit`, `Gov_Vat`, `Commission`, `Income`, `Current_Balance`, `Acc_ID`) VALUES
-(1, 'D-M-001', '2021-08-18', 0, 250, 25, 50, 175, 175, NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -165,13 +158,6 @@ CREATE TABLE `doctor_schedules` (
   `Thu` varchar(20) DEFAULT 'N/A',
   `Fri` varchar(20) DEFAULT 'N/A'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `doctor_schedules`
---
-
-INSERT INTO `doctor_schedules` (`AI_ID`, `D_ID`, `F`, `T`, `Sat`, `Sun`, `Mon`, `Tue`, `Wed`, `Thu`, `Fri`) VALUES
-(377, 'D-M-001', '14:00:00', '18:00:00', '1', 'A', 'N/A', '3', '1', 'A', 'N/A');
 
 -- --------------------------------------------------------
 
@@ -212,11 +198,60 @@ CREATE TABLE `logins` (
 --
 
 INSERT INTO `logins` (`AI_ID`, `Emp_ID`, `Log_Password`, `status`) VALUES
-(1, 'R-M-001', '1111', 1),
+(1, 'R-M-001', '1111', 0),
 (2, 'R-M-002', '2222', 0),
-(3, 'D-M-001', '3333', 1),
-(4, 'AC-M-001', '5555', 1),
-(5, 'D-M-002', '2222', 1);
+(3, 'D-M-001', '3333', 0),
+(4, 'AC-M-001', '5555', 0),
+(5, 'D-M-002', '2222', 0),
+(6, 'R-M-001', '111213', 1),
+(7, 'R-M-002', '999897', 1),
+(8, 'R-M-003', '595755', 1),
+(9, 'R-M-004', '123000', 1),
+(10, 'R-M-005', '507090', 1),
+(11, 'R-M-006', '975310', 1),
+(12, 'R-M-007', '200400', 1),
+(13, 'R-M-008', '314253', 1),
+(14, 'R-M-009', '900999', 1),
+(15, 'R-M-010', '331931', 1),
+(16, 'R-F-011', '113355', 1),
+(17, 'R-F-012', '886644', 1),
+(18, 'R-F-013', '203302', 1),
+(19, 'R-F-014', '142856', 1),
+(20, 'R-F-015', '907560', 1),
+(21, 'R-F-016', '160061', 1),
+(22, 'R-F-017', '717171', 1),
+(23, 'R-F-018', '800008', 1),
+(24, 'R-F-019', '975579', 1),
+(25, 'R-F-020', '212021', 1),
+(26, 'D-M-001', '2713r1', 1),
+(27, 'D-M-002', 'u14kh9', 1),
+(28, 'D-M-003', '312kr6', 1),
+(29, 'D-M-004', '121z14', 1),
+(30, 'D-M-005', '9813ad', 1),
+(31, 'D-M-006', '414s91', 1),
+(32, 'D-F-007', 'a314ji', 1),
+(33, 'D-F-008', '31s5b9', 1),
+(34, 'D-M-009', 'k158u2', 1),
+(35, 'D-M-010', '8d3h96', 1),
+(36, 'D-F-011', 'j1f98k', 1),
+(37, 'D-M-012', 'm1258e', 1),
+(38, 'D-F-013', '98k6o3', 1),
+(39, 'D-F-014', 'nt26ku', 1),
+(40, 'D-M-015', 'k89624', 1),
+(41, 'D-M-016', '32589j', 1),
+(42, 'D-M-017', 'ji3553', 1),
+(43, 'D-F-018', '65lo80', 1),
+(44, 'D-M-019', '980a58', 1),
+(45, 'D-M-020', 'o698p3', 1),
+(46, 'D-F-021', 'j26mb1', 1),
+(47, 'D-M-022', '25i89h', 1),
+(48, 'D-M-023', 'h125j9', 1),
+(49, 'D-M-024', '846f2u', 1),
+(50, 'D-F-025', 'y4io58', 1),
+(51, 'D-M-026', 'k547p0', 1),
+(52, 'D-M-027', '6p9d28', 1),
+(53, 'D-F-028', '9i873w', 1),
+(54, 'D-M-029', 'm5u320', 1);
 
 -- --------------------------------------------------------
 
@@ -234,21 +269,6 @@ CREATE TABLE `patients` (
   `NID_Type` varchar(10) DEFAULT NULL,
   `Ad_Date` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `patients`
---
-
-INSERT INTO `patients` (`AI_ID`, `P_ID`, `Patient_Name`, `Patient_Gender`, `Cell_Number`, `NID`, `NID_Type`, `Ad_Date`) VALUES
-(158, 'M-02082021-000', 'Thasin', 'Male', '181918618', '8488668515', 'Own', '02082021'),
-(159, 'M-02082021-001', 'Nusrat', 'Male', '181918618', '8488668515', 'Own', '02082021'),
-(160, 'M-02082021-002', 'Hanif', 'Male', '161651658', '419814', 'Own', '02082021'),
-(161, 'M-02082021-003', 'Jakir', 'Male', '1936521487', '289818494881', 'Own', '02082021'),
-(162, 'M-03082021-000', 'firoja', 'Male', '1982635147', '24414', 'Own', '03082021'),
-(163, 'M-03082021-001', 'Hanif', 'Male', '181918618', '151656548684', 'Own', '03082021'),
-(164, 'F-17082021-000', 'Nusrat', 'Female', '181918618', '1981981', 'Own', '17082021'),
-(165, 'M-17082021-001', 'Jamil', 'Male', '01982635147', '151656548684', 'Own', '17082021'),
-(166, 'F-18082021-000', 'Afia', 'Female', '181918618', '151656548684', 'Own', '18082021');
 
 -- --------------------------------------------------------
 
@@ -272,22 +292,6 @@ CREATE TABLE `patient_logs` (
   `Random_code` int(11) NOT NULL,
   `R_ID` varchar(8) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `patient_logs`
---
-
-INSERT INTO `patient_logs` (`AI_ID`, `P_ID`, `Ap_Date`, `Ap_Time`, `D_ID`, `Basic_Fee`, `Discount`, `Final_Fee`, `Payment_Status`, `Treatment_Status`, `Treatment_Date_Time`, `Token`, `Random_code`, `R_ID`) VALUES
-(100, 'M-02082021-000', '2021-08-02', '00:00:00-15:00:00', 'D-M-001', 250, 0, 250, 'Paid', 0, NULL, 1, 136547, 'R-M-001'),
-(101, 'M-02082021-001', '2021-08-02', '00:00:00-15:00:00', 'D-M-001', 250, 0, 250, 'Paid', 0, NULL, 2, 536214, 'R-M-001'),
-(102, 'M-02082021-002', '2021-08-02', '00:00:00-15:00:00', 'D-M-001', 250, 0, 250, 'Paid', 0, NULL, 3, 524523, 'R-M-001'),
-(103, 'M-02082021-003', '2021-08-02', '00:00:00-15:00:00', 'D-M-001', 250, 0, 250, 'Paid', 1, NULL, 4, 204832, 'R-M-001'),
-(104, 'M-03082021-000', '2021-08-04', '14:00:00-18:00:00', 'D-M-001', 250, 0, 250, 'Paid', 0, NULL, 1, 620573, 'R-M-001'),
-(105, 'M-03082021-001', '2021-08-03', '14:00:00-18:00:00', 'D-M-001', 250, 0, 250, 'Paid', 1, NULL, 1, 958392, 'R-M-001'),
-(106, 'F-17082021-000', '2021-08-17', '14:00:00-18:00:00', 'D-M-001', 250, 0, 250, 'Paid', 1, NULL, 1, 952262, 'R-M-001'),
-(107, 'M-17082021-001', '2021-08-17', '14:00:00-18:00:00', 'D-M-001', 250, 0, 250, 'Paid', 0, NULL, 2, 265471, 'R-M-001'),
-(108, 'M-17082021-001', '2021-08-17', '14:00:00-18:00:00', 'D-M-001', 250, 10, 225, 'Paid', 1, NULL, 3, 115689, 'R-M-001'),
-(109, 'F-18082021-000', '2021-08-18', '14:00:00-18:00:00', 'D-M-001', 250, 0, 250, 'Paid', 1, NULL, 1, 310656, 'R-M-001');
 
 -- --------------------------------------------------------
 
@@ -411,7 +415,7 @@ ALTER TABLE `hospital_income_log`
 -- AUTO_INCREMENT for table `logins`
 --
 ALTER TABLE `logins`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT for table `patients`
