@@ -7,7 +7,7 @@
 
     
     <!--icons | font awesome-->
-    <script src="https://kit.fontawesome.com/aafecdc4bf.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="{{ asset('UI_assets/Design/Basic/fontawesome.min.css') }}"/>
     
     <!--font | nunito-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,6 +34,7 @@
     <script src="{{ asset('UI_assets/Javascript/dropdown_menu.js') }}"></script>
     <script src="{{ asset('UI_assets/Javascript/imageViewer.js') }}"></script>
     <script src="{{ asset('UI_assets/Javascript/triggerClick.js') }}"></script>
+	<script src="{{ asset('UI_assets/Javascript/fontawesome.min.js') }}"></script>
     <!--<script type="text/javascript">
         function disableBack() { window.history.forward(); }
         setTimeout("disableBack()", 0);
