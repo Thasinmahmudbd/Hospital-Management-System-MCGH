@@ -45,7 +45,7 @@
 <!-----------------------charts---------------------->
 
     @section('charts')
-            @show
+    @show
 
 <!--------------------charts end---------------------->
 
@@ -101,11 +101,11 @@
             <div class="right_side_top">
 
                 <a href="javascript:void(0);" onclick="myFunction()">
-                    <i class="menu_btn fas fa-bars"></i>
+                    <i class="fas fa-bars menu_btn"></i>
                 </a>
                 <p class="page_type">@yield('page_type')</p>
                 <a href="{{url('/logout')}}">
-                    <i class="log_out_btn fas fa-power-off"></i>
+                    <i class="fas fa-power-off log_out_btn"></i>
                 </a>
 
             </div>

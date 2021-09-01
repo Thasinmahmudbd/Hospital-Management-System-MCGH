@@ -124,6 +124,7 @@
     font-size: 20px;
     cursor:pointer;
     color:#fff;
+    margin: auto;
 }
 
 .mobile_links{
@@ -158,12 +159,13 @@
 }
 
 .log_out_btn{
-    display:grid;
+    display: grid;
     align-self: center;
     justify-self: center;
     font-size: 20px;
     cursor:pointer;
     color:#fff;
+    margin: auto;
 }
 
 /*.log_out_btn:hover::before{

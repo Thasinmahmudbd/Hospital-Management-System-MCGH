@@ -45,8 +45,8 @@ class add_patient extends Controller
 #########################
 #### FUNCTION-NO::02 ####
 #########################
-# Generates unique ID for new patients;
-# Stores data in 10 sessions.
+# Retrieves data from form;
+# Stores data in 9 sessions.
 
     function submit_basic_patient_info(Request $request){
 
@@ -63,69 +63,14 @@ class add_patient extends Controller
 
         ]);
 
-        date_default_timezone_set('Asia/Dhaka');
-        /*$today_date = date("Y/m/d");*/
-
         $patient_type = $request->input('patient_type');
 
-        ########## FOR NEW PATIENTS ##########
-        if($patient_type == 'new'){
-
-            /* Patient id generator */
-
-            $first_part = $request->input('patient_gender');
-            
-            if($first_part == 'Male'){
-                $first_part = 'M';
-            }elseif($first_part == 'Female'){
-                $first_part = 'F';
-                echo $first_part;
-            }elseif($first_part == 'Child'){
-                $first_part = 'C';
-                echo $first_part;
-            }elseif($first_part == 'Others'){
-                $first_part = 'O';
-                echo $first_part;
-            }
-
-            $second_part = date("dmY");
-
-            $current_count = DB::table('patients')->orderBy('AI_ID','desc')->first();
-
-            if($current_count==null){
-                $third_part = 0;
-            }else{
-                $current_count_array = explode('-',$current_count->P_ID);
-                $third_part = end($current_count_array);
-                if($third_part == 999){
-                    #$third_part = 0;
-                    $third_part++;
-                }if($current_count->Ad_Date != $second_part){
-                    $third_part = 0;
-                }else{
-                    $third_part++;
-                }
-            }
-
-            $P_ID = "$first_part"."-"."$second_part"."-".str_pad($third_part,3,"0",STR_PAD_LEFT);
-
-            /* Patient id generator end */
-
-        }
-        
-        ########## FOR OLD PATIENTS ##########
-        else{
-
-            $P_ID = $request->session()->get('P_ID');
-
-        }
-
+        date_default_timezone_set('Asia/Dhaka');
         $ap_type = $request->input('ap_type');
         $ap_date = $request->input('appoint_date');
         $timestamp = strtotime($ap_date);
         $day = date('D', $timestamp);
         
-        session(['PATIENT_P_ID' => $P_ID]);
         session(['PATIENT_NAME' => $request->input('patient_name')]);
         session(['PATIENT_GENDER' => $request->input('patient_gender')]);
         session(['PATIENT_CELL' => $request->input('cell_number')]);
@@ -338,7 +283,7 @@ class add_patient extends Controller
         ]);
 
         $D_ID = $request->input('d_id');
-        $P_ID = $request->session()->get('PATIENT_P_ID');
+        $P_ID = $request->session()->get('P_ID');
         $patient_type = $request->session()->get('PATIENT_TYPE');
         session(['SECOND_VISIT_DISCOUNT' => $request->input('second_visit_discount')]);
         
@@ -611,12 +556,72 @@ class add_patient extends Controller
 #########################
 #### FUNCTION-NO::12 ####
 #########################
+# Generates patient unique ID;
+# Generates token;
 # Completes patient data entry for doctor appointments;
 # Entry will happen on  --: TABLE :------ patients.
 # Entry will happen on  --: TABLE :------ patient_logs.
 # Update will happen on --: TABLE :------ doctor_schedules.
 
     function patient_data_entry_for_doctor_appointment(Request $request){
+
+        date_default_timezone_set('Asia/Dhaka');
+
+        $patient_type = $request->session()->get('PATIENT_TYPE');
+
+        ########## FOR NEW PATIENTS ##########
+        if($patient_type == 'new'){
+
+            /* Patient id generator */
+
+            $first_part = $request->session()->get('PATIENT_GENDER');
+            
+            if($first_part == 'Male'){
+                $first_part = 'M';
+            }elseif($first_part == 'Female'){
+                $first_part = 'F';
+                echo $first_part;
+            }elseif($first_part == 'Child'){
+                $first_part = 'C';
+                echo $first_part;
+            }elseif($first_part == 'Others'){
+                $first_part = 'O';
+                echo $first_part;
+            }
+
+            $second_part = date("dmY");
+
+            $current_count = DB::table('patients')->orderBy('AI_ID','desc')->first();
+
+            if($current_count==null){
+                $third_part = 0;
+            }else{
+                $current_count_array = explode('-',$current_count->P_ID);
+                $third_part = end($current_count_array);
+                if($third_part == 999){
+                    #$third_part = 0;
+                    $third_part++;
+                }if($current_count->Ad_Date != $second_part){
+                    $third_part = 0;
+                }else{
+                    $third_part++;
+                }
+            }
+
+            $P_ID = "$first_part"."-"."$second_part"."-".str_pad($third_part,3,"0",STR_PAD_LEFT);
+
+            /* Patient id generator end */
+
+        }
+        
+        ########## FOR OLD PATIENTS ##########
+        else{
+
+            $P_ID = $request->session()->get('P_ID');
+
+        }
+        
+        session(['PATIENT_P_ID' => $P_ID]);
 
         $p_id = $request->session()->get('PATIENT_P_ID');
         
@@ -631,7 +636,6 @@ class add_patient extends Controller
         $ap_time = $request->session()->get('PATIENT_APPOINT_TIME');
         $ap_date = $request->session()->get('PATIENT_APPOINT_DATE');
 
-        date_default_timezone_set('Asia/Dhaka');
         $todays_date = date("dmY");
 
         $patient_type = $request->session()->get('PATIENT_TYPE');

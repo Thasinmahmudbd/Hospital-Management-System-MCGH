@@ -91,7 +91,7 @@
 
                             <p class="collected_info">Patient ID</p>
                             <p>:</p>
-                            <p class="collected_info">{{ Session::get('PATIENT_P_ID') }}</p>
+                            <p class="collected_info">N/A</p>
 
                         </div>
 
