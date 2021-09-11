@@ -70,20 +70,23 @@
                 <table class="frame_table">
                     
                     <tr class="frame_header">
+                        <th width="5%" class="frame_header_item">S/N</th>
                         <th width="14%" class="frame_header_item">P-ID</th>
                         <th width="17%" class="frame_header_item">Patient Name</th>
                         <th width="14%" class="frame_header_item">Cell</th>
                         <th width="17%" class="frame_header_item">Doctor</th>
-                        <th width="10%" class="frame_header_item">Fee</th>
+                        <th width="8%" class="frame_header_item">Fee</th>
                         <th width="5%" class="frame_header_item">Disc</th>
-                        <th width="10%" class="frame_header_item">Total</th>
-                        <th width="8%" class="frame_header_item">Status</th>
+                        <th width="8%" class="frame_header_item">Total</th>
+                        <th width="7%" class="frame_header_item">Status</th>
                         <th width="5%" class="frame_header_item">Action</th>
                     </tr>
 
+                    <?php $serial = 1; ?>
                     @foreach($result as $list)
 
                     <tr class="frame_rows">
+                        <td class="frame_data" data-label="S/N"><?php echo $serial; $serial++; ?></td>
                         <td class="frame_data" data-label="P-ID">{{$list->P_ID}}</td>
                         <td class="frame_data" data-label="Patient Name">{{$list->Patient_Name}}</td>
                         <td class="frame_data" data-label="Cell">{{$list->Cell_Number}}</td>

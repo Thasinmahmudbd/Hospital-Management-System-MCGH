@@ -229,7 +229,7 @@
 
                     </p>
 
-                    <input type="submit" class="btn form_btn patient_form_btn" name="change_date" value="Change Date">
+                    <input type="submit" class="btn form_btn patient_form_btn" name="change_date" value="Save Changes">
 
                 </div>
 

@@ -46,7 +46,7 @@ class add_patient extends Controller
 #### FUNCTION-NO::02 ####
 #########################
 # Retrieves data from form;
-# Stores data in 9 sessions.
+# Stores data in 10 sessions.
 
     function submit_basic_patient_info(Request $request){
 
@@ -54,6 +54,7 @@ class add_patient extends Controller
 
             'patient_name'=>'required',
             'patient_gender'=>'required',
+            'age'=>'required',
             'cell_number'=>'required',
             'nid'=>'required',
             'nid_type'=>'required',
@@ -73,6 +74,7 @@ class add_patient extends Controller
         
         session(['PATIENT_NAME' => $request->input('patient_name')]);
         session(['PATIENT_GENDER' => $request->input('patient_gender')]);
+        session(['PATIENT_AGE' => $request->input('age')]);
         session(['PATIENT_CELL' => $request->input('cell_number')]);
         session(['PATIENT_NID' => $request->input('nid')]);
         session(['PATIENT_NID_TYPE' => $request->input('nid_type')]);
@@ -105,38 +107,62 @@ class add_patient extends Controller
 #### FUNCTION-NO::03 ####
 #########################
 # Finds old patient data;
-# Stores data in 7 sessions.
+# Stores data in 9 sessions.
 
     function search_old_patient_from_log(Request $request){
 
-        $request->validate([
-
-            'old_patient_search_info'=>'required'
-
-        ]);
-
         $old_patient_search_info = $request->input('old_patient_search_info');
+        $old_patient_cell = $request->input('old_patient_cell');
 
         $old_patient_info=DB::table('patients')
-        ->where('P_ID','like',$old_patient_search_info)
+        ->where('P_ID', $old_patient_search_info)
         ->orderBy('AI_ID','desc')
         ->first();
+
+        $old_patient_info_2=DB::table('patients')
+        ->select('P_ID', 'Patient_Name')
+        ->distinct()
+        ->where('Cell_Number', $old_patient_cell)
+        ->orderBy('AI_ID','desc')
+        ->get();
+
+        $count = count($old_patient_info_2);
 
         if($old_patient_info){
 
             session(['P_ID' => $old_patient_info->P_ID]);
             session(['PATIENT_NAME' => $old_patient_info->Patient_Name]);
             session(['PATIENT_GENDER' => $old_patient_info->Patient_Gender]);
+            session(['PATIENT_AGE' => $old_patient_info->Patient_Age]);
             session(['PATIENT_CELL' => $old_patient_info->Cell_Number]);
             session(['PATIENT_NID' => $old_patient_info->NID]);
             session(['PATIENT_NID_TYPE' => $old_patient_info->NID_Type]);
             session(['PATIENT_TYPE' => 'old']);
+            session(['PATIENT_FOUND_BY' => 'id']);
 
             # Session flash messages.
             $request->session()->flash('msg','Patient Found.');
 
             # Returning to [VIEW-NO::01].
             return redirect('/reception/home/setup/none');
+
+        }elseif($count > 0){
+
+            session(['PATIENT_TYPE' => 'old']);
+            session(['PATIENT_FOUND_BY' => 'cell']);
+
+            $old_patients_found['via_cell']=DB::table('patients')
+            ->select('P_ID', 'Patient_Name')
+            ->distinct()
+            ->where('Cell_Number', $old_patient_cell)
+            ->orderBy('AI_ID','desc')
+            ->get();
+
+            # Session flash messages.
+            $request->session()->flash('msg','Patient Found.');
+
+            # Returning to [VIEW-NO::01].
+            return view('hospital/reception/home',$old_patients_found);
 
         }else{
 
@@ -157,6 +183,44 @@ class add_patient extends Controller
         ->orWhere('patients.NID','like','%'.$old_patient_search_info.'%')
         ->orderBy('patient_logs.AI_ID','desc')
         ->get();*/
+
+    }
+
+# End of function search_old_patient_from_log.              <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note:
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::03.5 ##
+#########################
+# Parses old patient data;
+# Stores data in 7 sessions.
+
+    function parse_old_patient_data(Request $request, $p_id){
+
+        $old_patient_info=DB::table('patients')
+        ->where('P_ID', $p_id)
+        ->orderBy('AI_ID','desc')
+        ->first();
+
+        session(['P_ID' => $old_patient_info->P_ID]);
+        session(['PATIENT_NAME' => $old_patient_info->Patient_Name]);
+        session(['PATIENT_GENDER' => $old_patient_info->Patient_Gender]);
+        session(['PATIENT_AGE' => $old_patient_info->Patient_Age]);
+        session(['PATIENT_CELL' => $old_patient_info->Cell_Number]);
+        session(['PATIENT_NID' => $old_patient_info->NID]);
+        session(['PATIENT_NID_TYPE' => $old_patient_info->NID_Type]);
+        session(['PATIENT_TYPE' => 'old']);
+        session(['PATIENT_FOUND_BY' => 'id']);
+
+        # Returning to [VIEW-NO::01].
+        return redirect('/reception/home/setup/none');
 
     }
 
@@ -594,15 +658,15 @@ class add_patient extends Controller
             $current_count = DB::table('patients')->orderBy('AI_ID','desc')->first();
 
             if($current_count==null){
-                $third_part = 0;
+                $third_part = 1;
             }else{
                 $current_count_array = explode('-',$current_count->P_ID);
                 $third_part = end($current_count_array);
                 if($third_part == 999){
-                    #$third_part = 0;
+                    #$third_part = 1;
                     $third_part++;
                 }if($current_count->Ad_Date != $second_part){
-                    $third_part = 0;
+                    $third_part = 1;
                 }else{
                     $third_part++;
                 }
@@ -665,6 +729,7 @@ class add_patient extends Controller
                     'P_ID'=>$p_id,
                     'Patient_Name'=>$request->session()->get('PATIENT_NAME'),
                     'Patient_Gender'=>$request->session()->get('PATIENT_GENDER'),
+                    'Patient_Age'=>$request->session()->get('PATIENT_AGE'),
                     'Cell_Number'=>$request->session()->get('PATIENT_CELL'),
                     'NID'=>$request->session()->get('PATIENT_NID'),
                     'NID_Type'=>$request->session()->get('PATIENT_NID_TYPE'),
@@ -735,8 +800,8 @@ class add_patient extends Controller
             $msg = 'Patient Entry Successful.';
             session(['SESSION_FLASH_MSG' => $msg]);
 
-            # Redirecting to [FUNCTION-NO::11].
-            return redirect('/reception/cancel_appointment');
+            # Redirecting to [FUNCTION-NO::01], invoice controller.
+            return redirect('/reception/invoice_list/appointment/');
         }
 
     }
@@ -745,7 +810,7 @@ class add_patient extends Controller
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: Hello, future me.
-# This page may route to invoice generator in the future.
+# 
 # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 

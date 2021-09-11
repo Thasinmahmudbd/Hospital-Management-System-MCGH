@@ -73,6 +73,10 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     # Redirecting to [FUNCTION-NO::03]---in-controller.
     Route::post('/reception/find_old_patient/by_search','App\Http\Controllers\reception\add_patient@search_old_patient_from_log');
 
+    # Parsing old patient data fond by cell.
+    # Redirecting to [FUNCTION-NO::03.5]---in-controller.
+    Route::get('/reception/parse/old/patient/data/{P_ID}','App\Http\Controllers\reception\add_patient@parse_old_patient_data');
+
     # Doctor selection page.
     # Redirecting to [FUNCTION-NO::04]---in-controller.
     Route::get('/reception/doctor_selection','App\Http\Controllers\reception\add_patient@show_all_doctor');

@@ -350,7 +350,8 @@
 .table_btn{
     font-size: 1.5rem;
     width:100%;
-    padding:8px 0px;
+    padding:8px 8px;
+    border-radius: 100px;
     background-color: rgb(30, 221, 40);
     color:#fff;
     cursor: pointer;

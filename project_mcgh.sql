@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 21, 2021 at 01:48 PM
+-- Generation Time: Sep 11, 2021 at 10:18 AM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.6
 
@@ -93,7 +93,7 @@ CREATE TABLE `doctors` (
 --
 
 INSERT INTO `doctors` (`AI_ID`, `D_ID`, `Dr_Name`, `Dr_Gender`, `Specialty`, `Department`, `Dr_Image`, `Wallet`, `Basic_Fee`, `Second_Visit_Discount`, `Patient_Cap`, `Time_Stamp`) VALUES
-(1, 'D-M-001', 'Brig Gen S M Mizanur Rahman', 'Male', 'Adviser Spl', 'Medicine test', NULL, NULL, 2, 20, 1, '2021-08-21 10:55:50'),
+(1, 'D-M-001', 'Brig Gen S M Mizanur Rahman', 'Male', 'Adviser Spl', 'Medicine test', 'D-M-001.jpg', 1.4, 2, 20, 5, '2021-08-21 10:55:50'),
 (2, 'D-M-002', 'Col Mir Azimuddin Ahmed', 'Male', 'Cl Spl', 'Pathology', NULL, NULL, 240, 5, 0, '2021-08-21 10:55:50'),
 (3, 'D-M-003', 'Col Kazi Askar Lateef', 'Male', 'Cl Spl', 'Anaesthesiology', NULL, NULL, 230, 15, 0, '2021-08-21 10:55:50'),
 (4, 'D-M-004', 'Col A K M Asaduzzaman', 'Male', 'Cl Spl', 'Otolaryngology', NULL, NULL, 220, 3, 0, '2021-08-21 10:55:50'),
@@ -143,6 +143,13 @@ CREATE TABLE `doctor_balance_logs` (
   `Time_Stamp` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `doctor_balance_logs`
+--
+
+INSERT INTO `doctor_balance_logs` (`AI_ID`, `D_ID`, `B_Date`, `Debit`, `Credit`, `Gov_Vat`, `Commission`, `Income`, `Current_Balance`, `Acc_ID`, `Time_Stamp`) VALUES
+(3, 'D-M-001', '2021-08-25', 0, 2, 0.2, 0.4, 1.4, 1.4, NULL, '2021-08-25 13:59:30');
+
 -- --------------------------------------------------------
 
 --
@@ -163,6 +170,13 @@ CREATE TABLE `doctor_schedules` (
   `Fri` varchar(20) DEFAULT 'N/A',
   `Time_Stamp` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `doctor_schedules`
+--
+
+INSERT INTO `doctor_schedules` (`AI_ID`, `D_ID`, `F`, `T`, `Sat`, `Sun`, `Mon`, `Tue`, `Wed`, `Thu`, `Fri`, `Time_Stamp`) VALUES
+(380, 'D-M-001', '14:00:00', '17:00:00', '3', '1', 'A', '2', '3', '1', 'N/A', '2021-08-21 11:53:30');
 
 -- --------------------------------------------------------
 
@@ -205,10 +219,10 @@ CREATE TABLE `logins` (
 --
 
 INSERT INTO `logins` (`AI_ID`, `Emp_ID`, `Log_Password`, `status`, `Time_Stamp`) VALUES
-(1, 'R-M-001', '1111', 0, '2021-08-21 11:07:04'),
+(1, 'R-M-001', '1111', 1, '2021-08-21 11:07:04'),
 (2, 'R-M-002', '2222', 0, '2021-08-21 11:07:04'),
-(3, 'D-M-001', '3333', 0, '2021-08-21 11:07:04'),
-(4, 'AC-M-001', '5555', 0, '2021-08-21 11:07:04'),
+(3, 'D-M-001', '3333', 1, '2021-08-21 11:07:04'),
+(4, 'AC-M-001', '5555', 1, '2021-08-21 11:07:04'),
 (5, 'D-M-002', '2222', 0, '2021-08-21 11:07:04'),
 (6, 'R-M-001', '111213', 1, '2021-08-21 11:07:04'),
 (7, 'R-M-002', '999897', 1, '2021-08-21 11:07:04'),
@@ -271,6 +285,7 @@ CREATE TABLE `patients` (
   `P_ID` longtext DEFAULT NULL,
   `Patient_Name` longtext DEFAULT NULL,
   `Patient_Gender` longtext DEFAULT NULL,
+  `Patient_Age` int(11) NOT NULL,
   `Cell_Number` longtext DEFAULT NULL,
   `NID` longtext DEFAULT NULL,
   `NID_Type` longtext DEFAULT NULL,
@@ -407,13 +422,13 @@ ALTER TABLE `doctors`
 -- AUTO_INCREMENT for table `doctor_balance_logs`
 --
 ALTER TABLE `doctor_balance_logs`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `doctor_schedules`
 --
 ALTER TABLE `doctor_schedules`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=380;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=381;
 
 --
 -- AUTO_INCREMENT for table `hospital_income_log`
@@ -431,13 +446,13 @@ ALTER TABLE `logins`
 -- AUTO_INCREMENT for table `patients`
 --
 ALTER TABLE `patients`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=167;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=177;
 
 --
 -- AUTO_INCREMENT for table `patient_logs`
 --
 ALTER TABLE `patient_logs`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
 
 --
 -- AUTO_INCREMENT for table `receiptionists`

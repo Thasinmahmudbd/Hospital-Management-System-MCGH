@@ -75,7 +75,12 @@
                     <div class="doctor_search_form_element">
 
                         <label for="old_patient_search_info" class="collected_info vanish_label">Search Old Patients</label>
-                        <input type="text" class="input" name="old_patient_search_info" placeholder="Enter Patient full ID" required>
+
+                        <div class="patient_and_doctor_info_one_is_to_one">
+                            <input type="text" class="input" name="old_patient_search_info" placeholder="Enter Patient full ID">
+                            <input type="text" class="input" name="old_patient_cell" placeholder="Or Mobile">                      
+                        </div>
+
                         <button type="submit" class="btn form_btn" name="search_old_patient">Search</button>
 
                     </div>
@@ -120,97 +125,136 @@
 
                 @if(Session::get('PATIENT_TYPE')=='old')
 
-                <!--admit old patients-->
+                    @if(Session::get('PATIENT_FOUND_BY')=='id')
 
-                <form action="{{url('/reception/submit_basic_patient_info')}}" class="content_container patient_info_form" method="post">
-                @csrf
+                    <!--admit old patients-->
 
-                    <p>Old Patient Entry</p>
+                    <form action="{{url('/reception/submit_basic_patient_info')}}" class="content_container patient_info_form" method="post">
+                    @csrf
 
-                    <div class="patient_form_element">
-
-                        <label for="patient_name" class="label">Patient's Name</label>
-                        <input type="text" class="input disable shade" name="patient_name" value="{{Session::get('PATIENT_NAME')}}" required>
-
-                    </div>
-
-                    <div class="patient_form_element_one_is_to_three">
+                        <p>Old Patient Entry</p>
 
                         <div class="patient_form_element">
 
-                            <label for="patient_gender" class="label">Patient's Gender</label>
-                            <select name="patient_gender" id="patient_gender" class="input disable shade" required>
-                                <option value="{{Session::get('PATIENT_GENDER')}}">{{Session::get('PATIENT_GENDER')}}</option>
-                            </select>
+                            <label for="patient_name" class="label">Patient's Name</label>
+                            <input type="text" class="input disable shade" name="patient_name" value="{{Session::get('PATIENT_NAME')}}" required>
 
                         </div>
+
+                        <div class="patient_form_element_one_is_to_three">
+
+                            <div class="patient_form_element">
+
+                                <label for="patient_gender" class="label">Patient's Gender</label>
+                                <select name="patient_gender" id="patient_gender" class="input disable shade" required>
+                                    <option value="{{Session::get('PATIENT_GENDER')}}">{{Session::get('PATIENT_GENDER')}}</option>
+                                </select>
+
+                            </div>
+
+                            <div class="patient_form_element_one_is_to_three">
+
+                                <div class="patient_form_element">
+
+                                    <label for="age" class="label">Age</label>
+                                    <input type="tel" class="input disable shade"  name="age" value="{{Session::get('PATIENT_AGE')}}" required>
+
+                                </div>
+                                
+                                <div class="patient_form_element">
+
+                                    <label for="cell_number" class="label">Cell Number</label>
+                                    <input type="tel" class="input disable shade"  name="cell_number" value="{{Session::get('PATIENT_CELL')}}" required>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="patient_form_element_one_is_to_three">
+
+                            <div class="patient_form_element">
+
+                                <label for="nid_type" class="label">NID Type</label>
+                                <select name="nid_type" id="nid_type" class="input disable shade" required>
+                                    <option value="{{Session::get('PATIENT_NID_TYPE')}}">{{Session::get('PATIENT_NID_TYPE')}}</option>
+                                </select>
+
+                            </div>
+
+                            <div class="patient_form_element">
+
+                                <label for="nid" class="label">NID Number</label>
+                                <input type="tel" class="input disable shade"  name="nid"  value="{{Session::get('PATIENT_NID')}}" required>
+
+                            </div>
+
+                        </div>
+
+                        <div class="patient_form_element_one_is_to_three">
+
+                            <div class="patient_form_element">
+
+                                <label for="appoint_date" class="label">Date</label>
+                                <input type="date" class="input"  name="appoint_date" value="{{Session::get('DATE_TODAY')}}" required>
+
+                            </div>
+
+                            <div class="patient_form_element">
+
+                                <label for="ap_type" class="label">Service Type</label>
+                                <select name="ap_type" id="ap_type" class="input" required>
+                                    <option value="Appoint-Doctor">Appoint Doctor</option>
+                                    <option value="Admit">Admit Patient</option>
+                                    <option value="Test">Test</option>
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <input type="hidden" value="old" name="patient_type">
 
                         <div class="patient_form_element">
 
-                            <label for="cell_number" class="label">Cell Number</label>
-                            <input type="tel" class="input disable shade"  name="cell_number"  value="{{Session::get('PATIENT_CELL')}}" required>
+                            <input type="submit" class="btn patient_form_btn form_btn"  value="Select Doctor" name="select_doctor">
 
                         </div>
 
-                    </div>
+                    </form>
 
-                    <div class="patient_form_element_one_is_to_three">
+                    @elseif(Session::get('PATIENT_FOUND_BY')=='cell')
 
-                        <div class="patient_form_element">
+                    <table class="frame_table">
 
-                            <label for="nid_type" class="label">NID Type</label>
-                            <select name="nid_type" id="nid_type" class="input disable shade" required>
-                                <option value="{{Session::get('PATIENT_NID_TYPE')}}">{{Session::get('PATIENT_NID_TYPE')}}</option>
-                            </select>
+                        <tr class="frame_header">
+                            <th width="10%" class="frame_header_item">S/N</th>
+                            <th width="40%" class="frame_header_item">P-ID</th>
+                            <th width="40%" class="frame_header_item">Patient Name</th>
+                            <th width="10%" class="frame_header_item">Select</th>
+                        </tr>
 
-                        </div>
+                        <?php $serial = 1; ?>
+                        @foreach($via_cell as $list)
 
-                        <div class="patient_form_element">
+                        <tr class="frame_rows">
+                            <td class="frame_data" data-label="S/N"><?php echo $serial; $serial++; ?></td>
+                            <td class="frame_data" data-label="P-ID">{{$list->P_ID}}</td>
+                            <td class="frame_data" data-label="Patient Name">{{$list->Patient_Name}}</td>
 
-                            <label for="nid" class="label">NID Number</label>
-                            <input type="tel" class="input disable shade"  name="nid"  value="{{Session::get('PATIENT_NID')}}" required>
+                            <td class="frame_action" data-label="Select">
+                                <a href="{{url('/reception/parse/old/patient/data/'.$list->P_ID)}}">
+                                    <i class="table_btn fas fa-print"></i>
+                                </a>
+                            </td>
+                        </tr>
 
-                        </div>
+                        @endforeach
 
-                    </div>
+                    </table>
 
-                    <div class="patient_form_element_one_is_to_three">
-
-                        <div class="patient_form_element">
-
-                            <label for="appoint_date" class="label">Date</label>
-                            <input type="date" class="input"  name="appoint_date" value="{{Session::get('DATE_TODAY')}}" required>
-
-                        </div>
-
-                        <div class="patient_form_element">
-
-                            <label for="ap_type" class="label">Service Type</label>
-                            <select name="ap_type" id="ap_type" class="input" required>
-                                <option value="Appoint-Doctor">Appoint Doctor</option>
-                                <option value="Admit">Admit Patient</option>
-                                <option value="Test">Test</option>
-                            </select>
-
-                        </div>
-
-                    </div>
-
-                    <input type="hidden" value="old" name="patient_type">
-
-                    <div class="patient_form_element">
-
-                        <input type="submit" class="btn patient_form_btn form_btn"  value="Select Doctor" name="select_doctor">
-
-                    </div>
-
-                </form>
-
-
-
-
-
-
+                    @endif
 
                 @else
 
@@ -242,10 +286,21 @@
 
                         </div>
 
-                        <div class="patient_form_element">
+                        <div class="patient_form_element_one_is_to_three">
 
-                            <label for="cell_number" class="label">Cell Number</label>
-                            <input type="tel" class="input"  name="cell_number" required>
+                            <div class="patient_form_element">
+
+                                <label for="age" class="label">Age</label>
+                                <input type="tel" class="input"  name="age" required>
+
+                            </div>
+                            
+                            <div class="patient_form_element">
+
+                                <label for="cell_number" class="label">Cell Number</label>
+                                <input type="tel" class="input"  name="cell_number" required>
+
+                            </div>
 
                         </div>
 
