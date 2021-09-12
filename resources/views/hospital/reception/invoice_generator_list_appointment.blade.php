@@ -238,7 +238,7 @@
 
                     <span></span>
                         
-                    <p><b>All</b></p>
+                    <p><b>Others</b></p>
 
                     <span></span>
 

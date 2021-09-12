@@ -46,6 +46,7 @@ function invoice_list_appointment(Request $request){
     ->select('patient_logs.*', 'patients.Patient_Name', 'patients.Cell_Number', 'doctors.D_ID', 'doctors.Dr_Name', 'doctors.Dr_Gender', 'doctors.Specialty', 'doctors.Department')
     ->where('patient_logs.Treatment_Status',0)
     ->where('patient_logs.Payment_Status','Paid')
+    ->where('patient_logs.Ap_Date', '!=', $date)
     ->orderBy('patient_logs.AI_ID','desc')
     ->get();
 
