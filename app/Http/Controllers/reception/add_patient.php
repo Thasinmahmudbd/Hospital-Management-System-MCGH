@@ -26,6 +26,12 @@ class add_patient extends Controller
         $date = date("Y-m-d");
         $request->session()->put('DATE_TODAY',$date);
 
+        $user_id = $request->session()->get('REC_SESSION_ID');
+
+        $result=DB::table('receptionists')->where('R_ID',$user_id)->get();
+
+        $request->session()->put('R_NAME',$result[0]->R_Name);
+
         # Returning to the view below.
         return view('hospital/reception/home');
 
@@ -746,8 +752,9 @@ class add_patient extends Controller
 
                 $fee = $request->session()->get('BASIC_FEE');
                 $discount = $request->input('discount');
-                $saving = ($discount/100)*$fee;
-                $final_fee = $fee-$saving;
+                $final_fee = $request->input('paidAmount');
+                $received = $request->input('received');
+                $changes = $request->input('change');
 
                 # Generate token.
 
@@ -770,6 +777,8 @@ class add_patient extends Controller
                     'D_ID'=>$request->session()->get('D_ID'),
                     'Basic_Fee'=>$fee,
                     'Discount'=>$discount,
+                    'Received'=>$received,
+                    'Changes'=>$changes,
                     'Final_Fee'=>$final_fee,
                     'Payment_Status'=>$request->input('payment_status'),
                     'Treatment_Status'=>0,

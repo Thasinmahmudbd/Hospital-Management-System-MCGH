@@ -34,7 +34,9 @@
     <script src="{{ asset('UI_assets/Javascript/dropdown_menu.js') }}"></script>
     <script src="{{ asset('UI_assets/Javascript/imageViewer.js') }}"></script>
     <script src="{{ asset('UI_assets/Javascript/triggerClick.js') }}"></script>
+    <script src="{{ asset('UI_assets/Javascript/calc.js') }}"></script>
 	<script src="{{ asset('UI_assets/Javascript/fontawesome.min.js') }}"></script>
+    
     <!--<script type="text/javascript">
         function disableBack() { window.history.forward(); }
         setTimeout("disableBack()", 0);
@@ -57,7 +59,7 @@
 </head>
 
 
-<body>
+<body onload="calcDisc()">
 
     <!--frame-->
     <div class="frame">
@@ -69,15 +71,29 @@
 
                 <p class="title">MCGH Portal</p>
                 <div class="line"></div>
-                <p class="user_name_id">(
+                <p class="user_name_id">
+                    
+                    @if(Session::get('REC_SESSION_ID'))
+                        {{ Session::get('R_NAME') }}
+                    @elseif(Session::get('DOC_SESSION_ID'))
+                        {{ Session::get('D_NAME') }}
+                    @elseif(Session::get('ACC_SESSION_ID'))
+                        {{ Session::get('ACC_NAME') }}
+                    @endif
+                
+                    <br>(
                     
                     @if(Session::get('REC_SESSION_ID'))
                         {{ Session::get('REC_SESSION_ID') }}
                     @elseif(Session::get('DOC_SESSION_ID'))
                         {{ Session::get('DOC_SESSION_ID') }}
+                    @elseif(Session::get('ACC_SESSION_ID'))
+                        {{ Session::get('ACC_SESSION_ID') }}
                     @endif
 
-                    )</p>
+                    )
+                
+                </p>
 
             </div>
             

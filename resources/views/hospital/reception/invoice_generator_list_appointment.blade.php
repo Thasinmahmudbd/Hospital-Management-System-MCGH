@@ -135,7 +135,7 @@
                         <td class="frame_data" data-label="P-ID">{{$list->P_ID}}</td>
                         <td class="frame_data" data-label="Patient Name">{{$list->Patient_Name}}</td>
                         <td class="frame_data" data-label="Cell">{{$list->Cell_Number}}</td>
-                        <td class="frame_data" data-label="Doctor">{{$list->$list->AI_ID}}</td>
+                        <td class="frame_data" data-label="Doctor">{{$list->Dr_Name}}</td>
 
                         <td class="frame_action" data-label="Action">
                             <a target="blank" href="{{url('/reception/collect/appointment/invoice/data/'.$list->AI_ID)}}">

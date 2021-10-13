@@ -143,6 +143,9 @@ Route::group(['middleware'=>['receptionAuth']],function() {
 
         $file_name = 'ID: '.Session::get('pId').'.pdf';
 
+        $pdf->setOption('page-size','a4');
+        $pdf->setOption('orientation','landscape');
+
         return $pdf->stream($file_name);
 
         return view('hospital/invoice/appointment');

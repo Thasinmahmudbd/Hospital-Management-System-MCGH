@@ -62,106 +62,6 @@
 
 @section('content')
 
-                <div class="patient_and_doctor_info_one_is_to_one">
-
-                    <div class="content_container">
-
-                        <p class="section_title">Patient Info</p>
-
-                        <div class="info">
-
-                            <p class="collected_info">Patient's Name</p>
-                            <p>:</p>
-                            <p class="collected_info">{{Session::get('PATIENT_NAME')}}</p>
-
-                            <p class="collected_info">Patient's Gender</p>
-                            <p>:</p>
-                            <p class="collected_info">{{Session::get('PATIENT_GENDER')}}</p>
-
-                            <p class="collected_info">Cell Number</p>
-                            <p>:</p>
-                            <p class="collected_info">{{Session::get('PATIENT_CELL')}}</p>
-
-                            <p class="collected_info">Patient ID</p>
-                            <p>:</p>
-                            <p class="collected_info">N/A</p>
-
-                            <p class="collected_info">Patient NID</p>
-                            <p>:</p>
-                            <p class="collected_info">{{Session::get('PATIENT_NID')}}</p>
-
-                            <p class="collected_info">NID Type</p>
-                            <p>:</p>
-                            <p class="collected_info">{{Session::get('PATIENT_NID_TYPE')}}</p>
-
-                        </div>
-
-                    </div>
-
-                    <div class="content_container">
-
-                        <p class="section_title">Doctor Chosen</p>
-
-                        <div class="info">
-
-                            <p class="collected_info">Doctor's Name</p>
-                            <p>:</p>
-                            <p class="collected_info">{{Session::get('D_NAME')}}</p>
-
-                            <p class="collected_info">Fee</p>
-                            <p>:</p>
-                            <p class="collected_info">{{Session::get('BASIC_FEE')}}</p>
-
-                            <p class="collected_info">Date</p>
-                            <p>:</p>
-                            <p class="collected_info">{{Session::get('PATIENT_APPOINT_DATE')}}</p>
-
-                            <p class="collected_info">Time</p>
-                            <p>:</p>
-                            <p class="collected_info">{{Session::get('PATIENT_APPOINT_TIME')}}</p>
-
-                            <form action="{{url('/reception/patient_data_entry_for_doctor_appointment')}}" method="post" class="doctor_form">
-                            @csrf
-                                
-                                <!--<div class="doctor_form_element">
-                                    <p class="collected_info">Fee</p>
-                                    <input type="tel" class="input collected_info" name="fee" required>
-                                    <p class="collected_info">TK</p>
-                                </div>-->
-
-                                <div class="doctor_form_element">
-                                    <p class="collected_info">Discount</p>
-                                    <input type="tel" class="input collected_info" name="discount" value="{{Session::get('DISCOUNT')}}" required>
-                                    <p class="collected_info">%</p>
-                                </div>
-
-                                <div class="doctor_form_element">
-                                    <p class="collected_info">Payment</p>
-                                    <select name="payment_status" id="payment_status" class="input collected_info" required>
-                                        <option value="Paid">Paid</option>
-                                        <option value="Due">Due</option>
-                                    </select>
-                                </div>
-
-                                <div class="doctor_form_element">
-                                    <span class="collected_info"></span>
-                                    <input type="submit" class="btn form_btn" name="enroll" value="Assign Doctor">
-                                </div>
-
-                            </form>
-
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-
-
-
-
 
 
         <!--Session message-->
@@ -576,6 +476,153 @@
                     @endforeach
 
                 </table>
+
+
+
+
+
+
+
+                <div class="gap"></div>
+
+
+                <!--Patient info tab-->
+
+                <div class="patient_and_doctor_info_one_is_to_one">
+
+                    <div class="content_container_bg_less">
+
+                        <p class="section_title">Patient Info</p>
+
+                        <div class="info">
+
+                            <p class="collected_info">Patient's Name</p>
+                            <p>:</p>
+                            <p class="collected_info">{{Session::get('PATIENT_NAME')}}</p>
+
+                            <p class="collected_info">Patient's Gender</p>
+                            <p>:</p>
+                            <p class="collected_info">{{Session::get('PATIENT_GENDER')}}</p>
+
+                            <p class="collected_info">Cell Number</p>
+                            <p>:</p>
+                            <p class="collected_info">{{Session::get('PATIENT_CELL')}}</p>
+
+                            <p class="collected_info">Patient ID</p>
+                            <p>:</p>
+                            <p class="collected_info">N/A</p>
+
+                            <p class="collected_info">Patient NID</p>
+                            <p>:</p>
+                            <p class="collected_info">{{Session::get('PATIENT_NID')}}</p>
+
+                            <p class="collected_info">NID Type</p>
+                            <p>:</p>
+                            <p class="collected_info">{{Session::get('PATIENT_NID_TYPE')}}</p>
+
+                        </div>
+
+                    </div>
+
+
+
+
+
+                    <!-- Billing -->
+
+                    <div class="content_container">
+
+                        <form action="{{url('/reception/patient_data_entry_for_doctor_appointment')}}" method="post" class="doctor_form">
+                        @csrf
+                                    
+                            <!--<div class="doctor_form_element">
+                                <p class="collected_info">Fee</p>
+                                <input type="tel" class="input collected_info" name="fee" required>
+                                <p class="collected_info">TK</p>
+                            </div>-->
+
+                            <div class="disNone">
+                                <p class="collected_info">Holder Estimated Bill</p>
+                                <input type="tel" class="input_less collected_info" id="fee" value="{{Session::get('BASIC_FEE')}}" readonly>
+                            </div>
+                            
+                            <div class="doctor_form_element">
+                                <p class="collected_info">Estimated Bill</p>
+                                <input type="tel" class="input_less collected_info" name="paidAmount" id="estimate" readonly>
+                            </div>
+                            
+                            <div class="doctor_form_element">
+                                <p class="collected_info">Discount</p>
+                                <input type="tel" class="input collected_info" name="discount" value="{{Session::get('DISCOUNT')}}" id="disc" oninput="calcDisc()" required>
+                                <p class="collected_info">%</p>
+                            </div>
+
+                            <div class="doctor_form_element">
+                                <p class="collected_info">Payment</p>
+                                <select name="payment_status" id="payment_status" class="input collected_info" required>
+                                    <option value="Paid">Paid</option>
+                                    <option value="Due">Due</option>
+                                </select>
+                            </div>
+
+                            <div class="doctor_form_element">
+                                <p class="collected_info">Received</p>
+                                <input type="tel" class="input collected_info" name="received" value="0" required>
+                            </div>
+
+                            <div class="doctor_form_element">
+                                <p class="collected_info">Change</p>
+                                <input type="tel" class="input collected_info" name="change" value="0" required>
+                            </div>
+
+                            <div class="doctor_form_element">
+                                <span class="collected_info"></span>
+                                <input type="submit" class="btn form_btn" name="enroll" value="Register">
+                            </div>
+
+                        </form>
+
+                    </div>
+
+
+
+
+
+                    <div class="content_container_bg_less">
+
+                        <p class="section_title">Doctor Chosen</p>
+
+                        <div class="info">
+
+                            <p class="collected_info">Doctor's Name</p>
+                            <p>:</p>
+                            <p class="collected_info">{{Session::get('D_NAME')}}</p>
+
+                            <p class="collected_info">Fee</p>
+                            <p>:</p>
+                            <p class="collected_info">{{Session::get('BASIC_FEE')}}</p>
+
+                            <p class="collected_info">Date</p>
+                            <p>:</p>
+                            <p class="collected_info">{{Session::get('PATIENT_APPOINT_DATE')}}</p>
+
+                            <p class="collected_info">Time</p>
+                            <p>:</p>
+                            <p class="collected_info">{{Session::get('PATIENT_APPOINT_TIME')}}</p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+
+
+
+
+
 
 @endsection
 
