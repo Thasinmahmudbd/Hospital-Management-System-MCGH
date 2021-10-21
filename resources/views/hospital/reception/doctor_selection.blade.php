@@ -154,6 +154,7 @@
 
                     <form class="doctor_list_item" action="{{url('/reception/submit_doctor_selection')}}" method="post">
                     @csrf
+
                         <input type="hidden" name="d_id" value="{{$list->D_ID}}">
                         <input type="hidden" name="dr_name" value="{{$list->Dr_Name}}">
                         <input type="hidden" name="fee" value="{{$list->Basic_Fee}}">

@@ -69,6 +69,63 @@ function invoice_list_appointment(Request $request){
 
 
 #########################
+#### FUNCTION-NO::02 ####
+#########################
+# Shows printable patient invoices [admits];
+# Stored data in 1 session;
+# Joins table :-
+# -----: TABLE :------ patients,
+# -----: TABLE :------ admission_logs,
+# -----: TABLE :------ doctors,
+# -----: TABLE :------ beds.
+
+function invoice_list_admission(Request $request){
+
+    date_default_timezone_set('Asia/Dhaka');
+    $date = date("Y-m-d");
+    $request->session()->put('DATE_TODAY',$date);
+
+    # Show todays patients.
+    $today['today']=DB::table('admission_logs')
+    ->join('patients', 'admission_logs.P_ID', '=', 'patients.P_ID')
+    ->join('doctors', 'admission_logs.D_ID', '=', 'doctors.D_ID')
+    ->join('beds', 'admission_logs.B_ID', '=', 'beds.B_ID')
+    ->select('admission_logs.*', 'patients.*', 'doctors.*', 'beds.*')
+    ->where('admission_logs.Admission_Date',$date)
+    ->orderBy('admission_logs.AI_ID','desc')
+    ->get();
+    
+    # Show all patients.
+    $all['all']=DB::table('admission_logs')
+    ->join('patients', 'admission_logs.P_ID', '=', 'patients.P_ID')
+    ->join('doctors', 'admission_logs.D_ID', '=', 'doctors.D_ID')
+    ->join('beds', 'admission_logs.B_ID', '=', 'beds.B_ID')
+    ->select('admission_logs.*', 'patients.*', 'doctors.*', 'beds.*')
+    ->where('admission_logs.Ap_Date', '!=', $date)
+    ->orderBy('admission_logs.AI_ID','desc')
+    ->get();
+
+    $request->session()->put('INVOICE','0');
+
+    # start from here, create sessions for invoice type difference.
+
+    # Returning to the view below.
+    return view('hospital/reception/invoice_generator_list_appointment',$today, $all);
+
+}
+
+# End of function invoice_list_admission.                   <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
 #### FUNCTION-NO::0 ####
 #########################
 # Search printable patient invoices [appointments];

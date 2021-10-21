@@ -104,3 +104,8 @@ p{
 .text_center{
     text-align: center;
 }
+
+.cover{
+    width:100%;
+    padding:1rem;
+}

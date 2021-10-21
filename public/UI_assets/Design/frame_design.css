@@ -358,6 +358,16 @@
     cursor: pointer;
 }
 
+.table_btn_red{
+    font-size: 1.5rem;
+    width:100%;
+    padding:8px 8px;
+    border-radius: 100px;
+    background-color: rgba(233, 53, 53, 0.76);
+    color:#fff;
+    cursor: pointer;
+}
+
 .table_basic_btn{
     width:100%;
     padding:8px 0px;
@@ -370,6 +380,10 @@
 
 .table_btn:hover{
     background-color: rgb(19, 170, 26);
+}
+
+.table_btn_red:hover{
+    background-color: rgba(207, 48, 48, 0.76);
 }
 
 .table_item_green{

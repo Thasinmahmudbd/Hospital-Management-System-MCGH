@@ -113,6 +113,64 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     # Redirecting to [FUNCTION-NO::12]---in-controller.
     Route::post('/reception/patient_data_entry_for_doctor_appointment','App\Http\Controllers\reception\add_patient@patient_data_entry_for_doctor_appointment');
 
+    # Adding to basic patient info.
+    Route::get('/reception/add_more_info',function(){
+
+        return view('hospital/reception/admission');
+
+    });
+
+    # Going to doctor selection panel after collecting admit patient info.
+    # Redirecting to [FUNCTION-NO::14]---in-controller.
+    Route::post('/reception/submit_admit_patient_info','App\Http\Controllers\reception\add_patient@submit_admit_patient_info');
+
+    # Bed selection page - male.
+    # Redirecting to [FUNCTION-NO::15]---in-controller.
+    Route::get('/reception/ward/male','App\Http\Controllers\reception\add_patient@show_wards_male');
+
+    # Bed selection page - female.
+    # Redirecting to [FUNCTION-NO::16]---in-controller.
+    Route::get('/reception/ward/female','App\Http\Controllers\reception\add_patient@show_wards_female');
+
+    # Bed selection page - child.
+    # Redirecting to [FUNCTION-NO::17]---in-controller.
+    Route::get('/reception/ward/child','App\Http\Controllers\reception\add_patient@show_wards_child');
+
+    # Bed selection page - cabin.
+    # Redirecting to [FUNCTION-NO::18]---in-controller.
+    Route::get('/reception/cabin','App\Http\Controllers\reception\add_patient@show_cabin');
+
+    # Bed confirmation.
+    # Redirecting to [FUNCTION-NO::19]---in-controller.
+    Route::get('/reception/bed/confirmation/{b_id}','App\Http\Controllers\reception\add_patient@confirm_bed');
+
+    # No beds selected.
+    # Redirecting to [FUNCTION-NO::19.5]---in-controller.
+    Route::get('/reception/ward/cabin/none','App\Http\Controllers\reception\add_patient@local_patient');
+
+    # Payment input form browsing.
+    Route::get('/reception/admission/payment',function(){
+
+        return view('hospital/reception/admission_payment');
+
+    });
+
+    # Bed reselection.
+    # Redirecting to [FUNCTION-NO::20]---in-controller.
+    Route::get('/reception/bed/reselect','App\Http\Controllers\reception\add_patient@reselect_bed');
+
+    # Cancel admission before bed selection.
+    # Redirecting to [FUNCTION-NO::21]---in-controller.
+    Route::get('/reception/cancel/admission','App\Http\Controllers\reception\add_patient@cancel_admission_before_bed_selection');
+
+    # Cancel admission after bed selection.
+    # Redirecting to [FUNCTION-NO::22]---in-controller.
+    Route::get('/reception/cancel/admission/after/bed','App\Http\Controllers\reception\add_patient@cancel_admission_after_bed_selection');
+
+    # Patient data entry in table patients & admission_logs.
+    # Redirecting to [FUNCTION-NO::12]---in-controller.
+    Route::post('/reception/patient_data_entry_for_admission','App\Http\Controllers\reception\add_patient@patient_data_entry_for_admission');
+
     ##############################################################################################################################################
     # All Patients List.  [C::add_patient.php]
     ##############################################################################################################################################
@@ -126,10 +184,14 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     ##############################################################################################################################################
 
     # Reading data in Invoice generator [appointment] page.
-    # Redirecting to [FUNCTION-NO::]---in-controller.
+    # Redirecting to [FUNCTION-NO::01]---in-controller.
     Route::get('/reception/invoice_list/appointment/','App\Http\Controllers\generate\invoice@invoice_list_appointment');
 
-    # searching data in Invoice generator [appointment] page.
+    # Reading data in Invoice generator [admission] page.
+    # Redirecting to [FUNCTION-NO::02]---in-controller.
+    Route::get('/reception/invoice_list/admission/','App\Http\Controllers\generate\invoice@invoice_list_admission');
+
+    # Searching data in Invoice generator [appointment] page.
     # Redirecting to [FUNCTION-NO::]---in-controller.
     Route::post('/reception/find_patient/by_search/invoice/appointment/','App\Http\Controllers\generate\invoice@invoice_search_appointment');
 

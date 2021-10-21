@@ -100,6 +100,10 @@
 
                 @if(session('msg')=='Patient Entry Successful.')
 
+                    <div class="content_container text_center success_msg">{{session('msg')}}</div>
+
+                @elseif(session('msg')=='Patient Admission Successful.')
+
                     <div class="content_container text_center success_msg">{{session('msg')}}</div> 
 
                 @elseif(session('msg')=='Appointment Canceled.')
@@ -111,6 +115,10 @@
                     <div class="content_container text_center success_msg">{{session('msg')}}</div>
 
                 @elseif(session('msg')=='Patient Not Found.')
+
+                    <div class="content_container text_center warning_msg">{{session('msg')}}</div>
+
+                @elseif(session('msg')=='Admission Canceled.')
 
                     <div class="content_container text_center warning_msg">{{session('msg')}}</div>
 
@@ -353,7 +361,7 @@
 
                     <div class="patient_form_element">
 
-                        <input type="submit" class="btn patient_form_btn form_btn"  value="Select Doctor" name="select_doctor">
+                        <input type="submit" class="btn patient_form_btn form_btn"  value="Next" name="select_doctor">
 
                     </div>
 

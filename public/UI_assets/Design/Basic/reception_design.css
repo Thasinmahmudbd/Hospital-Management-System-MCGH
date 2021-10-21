@@ -24,6 +24,12 @@
     grid-gap:20px;
 }
 
+.patient_form_element_one_is_to_one{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap:20px;
+}
+
 .patient_form_element{
     display:grid;
     grid-template-columns:1fr;

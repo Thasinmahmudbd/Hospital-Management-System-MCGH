@@ -76,7 +76,7 @@
                     @if(Session::get('REC_SESSION_ID'))
                         {{ Session::get('R_NAME') }}
                     @elseif(Session::get('DOC_SESSION_ID'))
-                        {{ Session::get('D_NAME') }}
+                        {{ Session::get('DOCTORS_NAME') }}
                     @elseif(Session::get('ACC_SESSION_ID'))
                         {{ Session::get('ACC_NAME') }}
                     @endif
