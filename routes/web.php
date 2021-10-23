@@ -199,6 +199,10 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     # Redirecting to [FUNCTION-NO::]---in-controller.
     Route::get('/reception/collect/appointment/invoice/data/{p_l_ai_id}', 'App\Http\Controllers\generate\invoice@collect_appointment_invoice_data');
 
+    # Generate invoice. [admission]
+    # Redirecting to [FUNCTION-NO::]---in-controller.
+    Route::get('/reception/collect/admission/invoice/data/{a_l_ai_id}', 'App\Http\Controllers\generate\invoice@collect_admission_invoice_data');
+
     Route::get('/reception/generate/appointment/invoice/',function(){
         
         $pdf = PDF::loadView('hospital.invoice.appointment');
@@ -211,6 +215,21 @@ Route::group(['middleware'=>['receptionAuth']],function() {
         return $pdf->stream($file_name);
 
         return view('hospital/invoice/appointment');
+
+    });
+
+    Route::get('/reception/generate/admit/invoice/',function(){
+        
+        $pdf = PDF::loadView('hospital.invoice.admission');
+
+        $file_name = 'ID: '.Session::get('pId').'.pdf';
+
+        $pdf->setOption('page-size','a4');
+        $pdf->setOption('orientation','landscape');
+
+        return $pdf->stream($file_name);
+
+        return view('hospital/invoice/admission');
 
     });
 

@@ -1391,7 +1391,7 @@ function patient_data_entry_for_admission(Request $request){
 
     ]);
 
-    $todays_date = date("dmY");
+    $todays_date = date("Ymd");
 
     $patient_type = $request->session()->get('PATIENT_TYPE');
 
@@ -1411,7 +1411,7 @@ function patient_data_entry_for_admission(Request $request){
                 'Cell_Number'=>$request->session()->get('PATIENT_CELL'),
                 'NID'=>$request->session()->get('PATIENT_NID'),
                 'NID_Type'=>$request->session()->get('PATIENT_NID_TYPE'),
-                'Ad_Date'=>$todays_date
+                'Ad_Date'=>date("dmY")
                 
             );
 
@@ -1442,6 +1442,7 @@ function patient_data_entry_for_admission(Request $request){
                 'Per_Dist'=>$request->session()->get('PER_DIST'),
                 'Admission_Date'=>$request->session()->get('PATIENT_APPOINT_DATE'),
                 'Religion'=>$request->session()->get('PATIENT_RELIGION'),
+                'Consultant'=>$request->session()->get('D_NAME'),
                 'Emergency_Rel_Add'=>$request->session()->get('RELATIVE_ADDRESS'),
                 'Emergency_Number'=>$request->session()->get('EMERGENCY_CELL'),
                 'Package_Confirmation'=>$request->session()->get('PACKAGES'),

@@ -150,13 +150,13 @@
 
                         @if($list->Confirmation == '0')
                             <td class="frame_action" data-label="Pick">
-                                <a target="blank" href="{{url('/reception/bed/confirmation/'.$list->B_ID)}}">
+                                <a href="{{url('/reception/bed/confirmation/'.$list->B_ID)}}">
                                     <i class="fas fa-check-circle table_btn"></i>
                                 </a>
                             </td>
                         @else
                             <td class="frame_action disable shade" data-label="Pick">
-                                <a target="blank" href="">
+                                <a href="">
                                     <i class="fas fa-times-circle table_btn_red"></i>
                                 </a>
                             </td>

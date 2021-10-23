@@ -226,7 +226,7 @@
 
                         <div class="patient_form_element">
 
-                            <input type="submit" class="btn patient_form_btn form_btn"  value="Select Doctor" name="select_doctor">
+                            <input type="submit" class="btn patient_form_btn form_btn"  value="Next" name="select_doctor">
 
                         </div>
 

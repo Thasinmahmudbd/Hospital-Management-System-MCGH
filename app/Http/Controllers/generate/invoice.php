@@ -52,6 +52,8 @@ function invoice_list_appointment(Request $request){
 
     $request->session()->put('INVOICE','0');
 
+    $request->session()->put('InvoiceType','appoint');
+
     # Returning to the view below.
     return view('hospital/reception/invoice_generator_list_appointment',$today, $all);
 
@@ -92,7 +94,7 @@ function invoice_list_admission(Request $request){
     ->join('beds', 'admission_logs.B_ID', '=', 'beds.B_ID')
     ->select('admission_logs.*', 'patients.*', 'doctors.*', 'beds.*')
     ->where('admission_logs.Admission_Date',$date)
-    ->orderBy('admission_logs.AI_ID','desc')
+    ->orderBy('admission_logs.A_ID','desc')
     ->get();
     
     # Show all patients.
@@ -101,13 +103,13 @@ function invoice_list_admission(Request $request){
     ->join('doctors', 'admission_logs.D_ID', '=', 'doctors.D_ID')
     ->join('beds', 'admission_logs.B_ID', '=', 'beds.B_ID')
     ->select('admission_logs.*', 'patients.*', 'doctors.*', 'beds.*')
-    ->where('admission_logs.Ap_Date', '!=', $date)
-    ->orderBy('admission_logs.AI_ID','desc')
+    ->where('admission_logs.Admission_Date', '!=', $date)
+    ->orderBy('admission_logs.A_ID','desc')
     ->get();
 
     $request->session()->put('INVOICE','0');
 
-    # start from here, create sessions for invoice type difference.
+    $request->session()->put('InvoiceType','admit');
 
     # Returning to the view below.
     return view('hospital/reception/invoice_generator_list_appointment',$today, $all);
@@ -166,6 +168,8 @@ function invoice_search_appointment(Request $request){
         $request->session()->put('SEARCH_RESULT','0');
 
     }
+
+    $request->session()->put('InvoiceType','appoint');
 
     # Returning to the view below.
     return view('hospital/reception/invoice_generator_list_appointment',$search);
@@ -249,6 +253,92 @@ function collect_appointment_invoice_data(Request $request, $p_l_ai_id){
 # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Collect data for invoice;
+# Stores data in 32 sessions;
+
+function collect_admission_invoice_data(Request $request, $a_l_ai_id){
+
+    $id = $a_l_ai_id;
+    
+    # Gather data.
+    $data_logs=DB::table('admission_logs')
+    ->where('A_ID',$id)
+    ->first();
+
+    $b_id = $data_logs->B_ID;
+    $p_id = $data_logs->P_ID;
+    
+    # Store in session.
+    session(['pId' => $p_id]);
+    session(['rId' => $data_logs->R_ID]);
+    session(['dId' => $data_logs->D_ID]);
+    session(['pre_vill' => $data_logs->Pre_Vill]);
+    session(['pre_po' => $data_logs->Pre_PO]);
+    session(['pre_upa' => $data_logs->Pre_Upa]);
+    session(['pre_dist' => $data_logs->Pre_Dist]);
+    session(['per_vill' => $data_logs->Per_Vill]);
+    session(['per_po' => $data_logs->Per_PO]);
+    session(['per_upa' => $data_logs->Per_Upa]);
+    session(['per_dist' => $data_logs->Per_Dist]);
+    session(['admission_date' => $data_logs->Admission_Date]);
+    session(['religion' => $data_logs->Religion]);
+    session(['consultant' => $data_logs->Consultant]);
+    session(['rel_address' => $data_logs->Emergency_Rel_Add]);
+    session(['rel_num' => $data_logs->Emergency_Number]);
+    session(['package_confirmation' => $data_logs->Package_Confirmation]);
+    session(['ligation' => $data_logs->Ligation]);
+    session(['third_seizure' => $data_logs->Third_Seizure]);
+    session(['admission_fee' => $data_logs->Admission_Fee]);
+    session(['paid_amount' => $data_logs->Paid_Amount]);
+    session(['changes' => $data_logs->Changes]);
+    session(['admission_timestamp' => $data_logs->Admission_Timestamp]);
+
+    # Gather data.
+    $data_patients=DB::table('patients')
+    ->where('P_ID',$p_id)
+    ->first();
+
+    # Store in session.
+    session(['pName' => $data_patients->Patient_Name]);
+    session(['pGender' => $data_patients->Patient_Gender]);
+    session(['cellNum' => $data_patients->Cell_Number]);
+    session(['dId' => $data_patients->Patient_Name]);
+    session(['nid' => $data_patients->NID]);
+    session(['nidType' => $data_patients->NID_Type]);
+    session(['pAge' => $data_patients->Patient_Age]);
+
+    # Gather data.
+    $data_beds=DB::table('beds')
+    ->where('B_ID',$b_id)
+    ->first();
+
+    # Store in session.
+    session(['bed_no' => $data_beds->Bed_No]);
+    session(['floor_no' => $data_beds->Floor_No]);
+    session(['room_no' => $data_beds->Room_No]);
+    session(['bed_type' => $data_beds->Bed_Type]);
+    session(['quality' => $data_beds->Quality]);
+    session(['b_location' => $data_beds->B_Location]);
+
+    # Redirecting to [FUNCTION-NO::0].
+    return redirect('/reception/generate/admit/invoice/');
+
+}
+
+# End of function collect_admission_invoice_data.           <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# This will change.
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 }
