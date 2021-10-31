@@ -430,6 +430,11 @@ class add_patient extends Controller
             # Redirecting to [FUNCTION-NO::].
             return redirect('/reception/ward/male');
 
+        }if($redirect == 'ot_scheduling'){
+
+            # Redirecting to [FUNCTION-NO::3], [C::operation.php].
+            return redirect('/ot/submit/new/schedule');
+
         }
 
     }

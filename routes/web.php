@@ -34,6 +34,7 @@ Route::get('/logout', function () {
     session()->forget('REC_SESSION_ID');
     session()->forget('DOC_SESSION_ID');
     session()->forget('ACC_SESSION_ID');
+    session()->forget('OTO_SESSION_ID');
     return redirect('/');
 });
 
@@ -397,5 +398,94 @@ Route::group(['middleware'=>['accountantAuth']],function() {
 
 
 
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+# OT [CONTROLLER::ot.php, invoice.php], [MIDDLEWARE::OTLoginAuth.php].
+
+Route::group(['middleware'=>['otAuth']],function() {
+
+    ##############################################################################################################################################
+    # Schedule CRUD.  [C::operations.php]
+    ##############################################################################################################################################
+
+    # Going to home(schedule) with home set-up
+    # Redirecting to [FUNCTION-NO::01]---in-controller.
+    Route::get('/ot/home/','App\Http\Controllers\ot\operations@set_up_home');
+
+    # Going to schedule_entry view.
+    # Redirecting to hospital/ot/schedule_entry---in-resources/views/.
+    Route::view('/ot/schedule/entry/','hospital/ot/schedule_entry');
+
+    # Going to ot_entry view.
+    # Redirecting to hospital/ot/ot_entry---in-resources/views/.
+    Route::view('/ot/new/entry/','hospital/ot/ot_entry');
+
+    # Going to invoice view.
+    # Redirecting to hospital/ot/invoice---in-resources/views/.
+    Route::view('/ot/invoice/','hospital/ot/invoice');
+
+    # Storing new schedule data in sessions
+    # Redirecting to [FUNCTION-NO::02]---in-controller.
+    Route::post('/ot/surgeon/selection','App\Http\Controllers\ot\operations@store_new_schedule_data');
+
+    # Submitting new schedule
+    # Redirecting to [FUNCTION-NO::03]---in-controller.
+    Route::get('/ot/submit/new/schedule','App\Http\Controllers\ot\operations@submit_new_schedule');
+
+    # Show new schedule
+    # Redirecting to [FUNCTION-NO::04]---in-controller.
+    Route::get('/ot/show/all/schedule','App\Http\Controllers\ot\operations@show_schedule_data');
+
+    # Edit schedule
+    # Redirecting to [FUNCTION-NO::05]---in-controller.
+    Route::post('/ot/edit/schedule','App\Http\Controllers\ot\operations@edit_schedule_data');
+
+    # Delete schedule
+    # Redirecting to [FUNCTION-NO::06]---in-controller.
+    Route::get('/ot/edit/schedule/{ai_id}','App\Http\Controllers\ot\operations@delete_schedule_data');
+
+    # Show admission list
+    # Redirecting to [FUNCTION-NO::07]---in-controller.
+    Route::get('/ot/admission/list/','App\Http\Controllers\ot\operations@show_admission_list');
+
+    # Select entry
+    # Redirecting to [FUNCTION-NO::08]---in-controller.
+    Route::post('/ot/select/entry','App\Http\Controllers\ot\operations@select_entry');
+
+    # Select entry
+    # Redirecting to [FUNCTION-NO::09]---in-controller.
+    Route::post('/ot/submit/entry','App\Http\Controllers\ot\operations@submit_entry');
+
+    ##############################################################################################################################################
+    # Doctor List Browsing.  [C::add_patient.php]
+    ##############################################################################################################################################
+
+    # Doctor selection page.
+    # Redirecting to [FUNCTION-NO::04]---in-controller.
+    Route::get('/reception/doctor_selection','App\Http\Controllers\reception\add_patient@show_all_doctor');
+
+    # Doctor selection page department side-bar action buttons.
+    # Redirecting to [FUNCTION-NO::05]---in-controller.
+    Route::get('/reception/doctor_selection/by_department/{department}','App\Http\Controllers\reception\add_patient@show_doctor_by_department');
+
+    # Doctor selection page search-bar action button.
+    # Redirecting to [FUNCTION-NO::06]---in-controller.
+    Route::post('/reception/doctor_selection/by_search','App\Http\Controllers\reception\add_patient@search_doctor');
+    
+    # After selecting doctor.
+    # Redirecting to [FUNCTION-NO::07]---in-controller.
+    Route::post('/reception/submit_doctor_selection','App\Http\Controllers\reception\add_patient@submit_doctor_selection');
 
 });

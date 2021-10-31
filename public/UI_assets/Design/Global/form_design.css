@@ -85,6 +85,16 @@
     text-align: center;
 }
 
+.flexible{
+    width:100%;
+    border: none;
+    padding:4px 0px;
+}
+
+.flexible:active{
+    border: none;
+}
+
 .form_btn{
     background-color: rgb(106, 63, 226);
     padding:4px;

@@ -109,3 +109,8 @@ p{
     width:100%;
     padding:1rem;
 }
+
+.btn_less{
+    background-color: transparent;
+    border:none;
+}

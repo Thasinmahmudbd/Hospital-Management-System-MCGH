@@ -55,6 +55,10 @@ class Kernel extends HttpKernel
         'accountantAuth' => [
             \App\Http\Middleware\AccountantLoginAuth::class,
         ],
+
+        'otAuth' => [
+            \App\Http\Middleware\OTLoginAuth::class,
+        ],
     ];
 
     /**
