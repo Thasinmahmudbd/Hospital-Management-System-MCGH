@@ -468,6 +468,30 @@ Route::group(['middleware'=>['otAuth']],function() {
     # Redirecting to [FUNCTION-NO::09]---in-controller.
     Route::post('/ot/submit/entry','App\Http\Controllers\ot\operations@submit_entry');
 
+    # Going to invoice view.
+    # Redirecting to hospital/ot/surgeon_fee---in-resources/views/.
+    Route::view('/ot/set/fees','hospital/ot/fee_input');
+
+    # Surgeon fee entry
+    # Redirecting to [FUNCTION-NO::10]---in-controller.
+    Route::post('/ot/surgeon/fee/entry','App\Http\Controllers\ot\operations@surgeon_fee_entry');
+
+    # Shows all entry data
+    # Redirecting to [FUNCTION-NO::11]---in-controller.
+    Route::get('/ot/new/entry/all/data','App\Http\Controllers\ot\operations@show_all_entry');
+
+    # Shows all anesthesiologist
+    # Redirecting to [FUNCTION-NO::12]---in-controller.
+    Route::get('/ot/show/anesthesiologist/list','App\Http\Controllers\ot\operations@show_all_anesthesiologist');
+
+    # Selects anesthesiologist
+    # Redirecting to [FUNCTION-NO::13]---in-controller.
+    Route::get('/ot/select/anesthesiologist/{d_id}','App\Http\Controllers\ot\operations@select_anesthesiologist');
+
+    # Anesthesiologist fee entry
+    # Redirecting to [FUNCTION-NO::14]---in-controller.
+    Route::post('/ot/anesthesiologist/fee/entry','App\Http\Controllers\ot\operations@anesthesiologist_fee_entry');
+
     ##############################################################################################################################################
     # Doctor List Browsing.  [C::add_patient.php]
     ##############################################################################################################################################

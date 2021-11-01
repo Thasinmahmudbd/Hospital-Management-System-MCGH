@@ -255,11 +255,9 @@ function set_patient_as_treated(Request $request){
     ->update($status);
 
     $final_fee = $ID->Final_Fee;
-    $vat = $request->session()->get('VAT');
     $commission = $request->session()->get('COMMISSION');
-    $rest = 100-($vat+$commission);
+    $rest = 100-$commission;
     $income = ($rest/100)*$final_fee;
-    $gov_vat = ($vat/100)*$final_fee;
     $hos_commission = ($commission/100)*$final_fee;
 
     # checking current balance.
@@ -281,7 +279,6 @@ function set_patient_as_treated(Request $request){
         'D_ID'=>$d_id,
         'B_Date'=>$request->session()->get('DATE_TODAY'),
         'Credit'=>$final_fee,
-        'Gov_Vat'=>$gov_vat,
         'Commission'=>$hos_commission,
         'Income'=>$income,
         'Current_Balance'=>$current_balance

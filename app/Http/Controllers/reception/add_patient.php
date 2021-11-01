@@ -435,6 +435,13 @@ class add_patient extends Controller
             # Redirecting to [FUNCTION-NO::3], [C::operation.php].
             return redirect('/ot/submit/new/schedule');
 
+        }if($redirect == 'ot_new_entry'){
+
+            session(['fee_input_type' => 'surgeon']);
+
+            # Redirecting to view, hospital/ot/surgeon_fee.
+            return redirect('/ot/set/fees');
+
         }
 
     }

@@ -558,3 +558,17 @@
 .text_center{
     text-align: center;
 }
+
+.purple{
+    display: grid;
+    align-content: end;
+    text-align: center;
+    background-color: rgb(106, 63, 226);
+    color: #fff;
+    transition: 200ms ease-in-out;
+}
+
+.purple:hover{
+    background-color: rgb(70, 44, 141);
+    transition: 200ms ease-in-out;
+}

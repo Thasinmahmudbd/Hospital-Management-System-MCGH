@@ -269,6 +269,7 @@ function show_admission_list(Request $request){
         ->join('patients', 'admission_logs.P_ID', '=', 'patients.P_ID')
         ->select('admission_logs.*', 'patients.*')
         ->where('admission_logs.Payment_Confirmation',null)
+        ->where('admission_logs.OT_Confirmation',null)
         ->orderBy('admission_logs.A_ID','desc')
         ->get();
 
@@ -321,7 +322,8 @@ function select_entry(Request $request){
 #### FUNCTION-NO::09 ####
 #########################
 # Submit entry;
-# Update will happen on --: TABLE :------ ot_logs.
+# Stored data on 14 sessions;
+# Insert will happen on --: TABLE :------ ot_logs.
 
 function submit_entry(Request $request){
 
@@ -334,6 +336,17 @@ function submit_entry(Request $request){
     $ot_charge_income = $ot_charge - $ot_charge_discount;
     $other_charge = $request->input('other_charges');
     $total = $ot_charge_income + $other_charge;
+
+    $request->session()->put('o_type', $request->input('o_type'));
+    $request->session()->put('o_date', $request->input('o_date'));
+    $request->session()->put('o_time', $request->input('o_time'));
+    $request->session()->put('o_duration', $request->input('o_duration'));
+    $request->session()->put('a_type', $request->input('a_type'));
+
+    $request->session()->put('ot_charge', $ot_charge);
+    $request->session()->put('ot_charge_discount', $ot_charge_discount);
+    $request->session()->put('ot_other', $request->input('others'));
+    $request->session()->put('ot_other_charge', $other_charge);
     
     $ot_log_data=array(
 
@@ -362,9 +375,11 @@ function submit_entry(Request $request){
         ->where('P_ID',$p_id)
         ->where('A_ID',$a_id)
         ->where('D_ID',$d_id)
+        ->orderBy('O_ID','desc')
         ->first();
 
     $request->session()->put('O_ID', $hook->O_ID);
+    $request->session()->put('REDIRECT', 'ot_new_entry');
 
     # Redirecting to [FUNCTION-NO::::04], add_patient.php.
     return redirect('/reception/doctor_selection');
@@ -378,6 +393,280 @@ function submit_entry(Request $request){
 # 
 # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::10 ####
+#########################
+# Inserts surgeon fee;
+# Update doctor balance log;
+# Insert will happen on --: TABLE :------ surgeon_logs;
+# Insert will happen on --: TABLE :------ doctor_balance_logs.
+
+function surgeon_fee_entry(Request $request){
+
+    $o_id = $request->session()->get('O_ID');
+    $d_id = $request->session()->get('D_ID');
+
+    $surgeon_fee = $request->input('fee');
+    $surgeon_discount = $request->input('discount');
+    $surgeon_income = $surgeon_fee - $surgeon_discount;
+    
+    $surgeon_log_data=array(
+
+        'D_ID'=>$d_id,
+        'O_ID'=>$o_id,
+        'Surgeon_Name'=>$request->session()->get('D_NAME'),
+        'Surgeon_Fee'=>$surgeon_fee,
+        'Surgeon_Discount'=>$surgeon_discount,
+        'Surgeon_Income'=>$surgeon_income
+
+    );
+
+    DB::table('surgeon_logs')->insert($surgeon_log_data);
+
+    # checking current balance.
+    $wallet=DB::table('doctor_balance_logs')
+    ->where('D_ID',$d_id)
+    ->orderBy('AI_ID','desc')
+    ->first();
+
+    if($wallet){
+        $current_balance = $wallet->Current_Balance;
+        $current_balance = $current_balance + $surgeon_income;
+    }else{
+        $current_balance = 0;
+        $current_balance = $current_balance + $surgeon_income;
+    }
+
+    $log=array(
+
+        'D_ID'=>$d_id,
+        'B_Date'=>$request->session()->get('DATE_TODAY'),
+        'Credit'=>$surgeon_income,
+        'Commission'=>0,
+        'Income'=>$surgeon_income,
+        'Current_Balance'=>$current_balance,
+        'O_ID'=>$o_id,
+        'Acc_ID'=>$request->session()->get('OTO_SESSION_ID')
+
+    );
+
+    # Insert balance log.
+    DB::table('doctor_balance_logs')
+    ->insert($log);
+
+    # Redirecting to [FUNCTION-NO::11].
+    return redirect('/ot/new/entry/all/data');
+
+}
+
+# End of function surgeon_fee_entry.                        <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::11 ####
+#########################
+# Show all entry.
+
+function show_all_entry(Request $request){
+
+    $o_id = $request->session()->get('O_ID');
+
+    $chosen_surgeons=DB::table('surgeon_logs')
+        ->where('O_ID', $o_id)
+        ->orderBy('AI_ID','asc')
+        ->get();
+
+    $chosen_anesthesiologist=DB::table('anesthesiologist_logs')
+        ->where('O_ID', $o_id)
+        ->orderBy('AI_ID','asc')
+        ->get();
+
+    $chosen_nurses=DB::table('ot_nurses_logs')
+        ->where('O_ID', $o_id)
+        ->orderBy('AI_ID','asc')
+        ->get();
+
+    $chosen_assistant=DB::table('ot_assistant_logs')
+        ->where('O_ID', $o_id)
+        ->orderBy('AI_ID','asc')
+        ->get();
+        
+    # Returning to the view below.
+    return view('hospital/ot/ot_entry_data_list', compact('chosen_surgeons','chosen_anesthesiologist','chosen_nurses','chosen_assistant'));
+
+}
+
+# End of function show_all_entry.                           <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::12 ####
+#########################
+# Show all anesthesiologist.
+
+function show_all_anesthesiologist(Request $request){
+
+    $anesthesiologist['data']=DB::table('doctors')
+        ->where('Department', 'Anesthesiology')
+        ->orderBy('AI_ID','asc')
+        ->get();
+
+    # Returning to the view below.
+    return view('hospital/ot/list', $anesthesiologist);
+
+}
+
+# End of function show_all_anesthesiologist.                <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::13 ####
+#########################
+# Selects anesthesiologist;
+# Stores data in 3 sessions.
+
+function select_anesthesiologist(Request $request, $d_id){
+
+    $request->session()->put('Anesthesiologist_ID', $d_id);
+
+    # checking current balance.
+    $anesthesiologist=DB::table('doctors')
+    ->where('D_ID',$d_id)
+    ->orderBy('AI_ID','desc')
+    ->first();
+
+    $request->session()->put('Anesthesiologist_Name', $anesthesiologist->Dr_Name);
+
+    session(['fee_input_type' => 'anesthesiologist']);
+
+    # Redirecting to view, hospital/ot/surgeon_fee.
+    return redirect('/ot/set/fees');
+
+}
+
+# End of function surgeon_fee_entry.                        <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::14 ####
+#########################
+# Inserts anesthesiologist fee;
+# Update doctor balance log;
+# Insert will happen on --: TABLE :------ anesthesiologist_logs;
+# Insert will happen on --: TABLE :------ doctor_balance_logs.
+
+function anesthesiologist_fee_entry(Request $request){
+
+    $o_id = $request->session()->get('O_ID');
+    $anesthesiologist_id = $request->session()->get('Anesthesiologist_ID');
+
+    $fee = $request->input('fee');
+    $discount = $request->input('discount');
+    $income = $fee - $discount;
+    
+    $log_data=array(
+
+        'Ans_ID'=>$anesthesiologist_id,
+        'O_ID'=>$o_id,
+        'Anesthesiologist_Name'=>$request->session()->get('D_NAME'),
+        'Anesthesiologist_Fee'=>$fee,
+        'Anesthesiologist_Discount'=>$discount,
+        'Anesthesiologist_Income'=>$income
+
+    );
+
+    DB::table('anesthesiologist_logs')->insert($log_data);
+
+    # checking current balance.
+    $wallet=DB::table('doctor_balance_logs')
+    ->where('D_ID',$anesthesiologist_id)
+    ->orderBy('AI_ID','desc')
+    ->first();
+
+    if($wallet){
+        $current_balance = $wallet->Current_Balance;
+        $current_balance = $current_balance + $income;
+    }else{
+        $current_balance = 0;
+        $current_balance = $current_balance + $income;
+    }
+
+    $log=array(
+
+        'D_ID'=>$anesthesiologist_id,
+        'B_Date'=>$request->session()->get('DATE_TODAY'),
+        'Credit'=>$income,
+        'Commission'=>0,
+        'Income'=>$income,
+        'Current_Balance'=>$current_balance,
+        'O_ID'=>$o_id,
+        'Acc_ID'=>$request->session()->get('OTO_SESSION_ID')
+
+    );
+
+    # Insert balance log.
+    DB::table('doctor_balance_logs')
+    ->insert($log);
+
+    # Redirecting to [FUNCTION-NO::11].
+    return redirect('/ot/new/entry/all/data');
+
+}
+
+# End of function surgeon_fee_entry.                        <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+
+
+
+
+
+
+
 
 
 
