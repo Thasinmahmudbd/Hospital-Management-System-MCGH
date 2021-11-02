@@ -293,17 +293,46 @@ function show_admission_list(Request $request){
 #### FUNCTION-NO::08 ####
 #########################
 # Select entry;
-# Stores data in 4 sessions.
+# Stores data in 15 sessions.
 
 function select_entry(Request $request){
 
-    $request->session()->put('OT_NEW_ENTRY_A_ID', $request->input('a_id'));
+    $a_id = $request->input('a_id');
+
+    $request->session()->put('OT_NEW_ENTRY_A_ID', $a_id);
     $request->session()->put('OT_NEW_ENTRY_P_ID', $request->input('p_id'));
     $request->session()->put('OT_NEW_ENTRY_D_ID', $request->input('d_id'));
     $request->session()->put('OT_NEW_ENTRY_P_NAME', $request->input('p_name'));
 
-    # Redirecting to a view.
-    return redirect('/ot/new/entry/');
+    $caught=DB::table('ot_logs')
+        ->where('A_ID',$a_id)
+        ->first();
+
+    if($caught){
+
+        $request->session()->put('o_type', $caught->O_Type);
+        $request->session()->put('o_date', $caught->O_Date);
+        $request->session()->put('o_time', $caught->O_Time);
+        $request->session()->put('o_duration', $caught->O_Duration);
+        $request->session()->put('a_type', $caught->Anesthesia_Type);
+
+        $request->session()->put('ot_charge', $caught->OT_Charge);
+        $request->session()->put('ot_charge_discount', $caught->OT_Charge_Discount);
+        $request->session()->put('ot_other', $caught->Others);
+        $request->session()->put('ot_other_charge', $caught->Others_Charges);
+
+        $request->session()->put('O_ID', $caught->O_ID);
+        $request->session()->put('REDIRECT', 'ot_new_entry');
+
+        # Redirecting to [FUNCTION-NO::11].
+        return redirect('/ot/new/entry/all/data');
+
+    }else{
+
+        # Redirecting to a view.
+        return redirect('/ot/new/entry/');
+
+    }
 
 }
 
@@ -458,6 +487,17 @@ function surgeon_fee_entry(Request $request){
     DB::table('doctor_balance_logs')
     ->insert($log);
 
+    $wallet_value=array(
+
+        'Wallet'=>$current_balance
+
+    );
+
+    # updating nurse wallet.
+    $doctor_wallet=DB::table('doctors')
+    ->where('D_ID',$d_id)
+    ->update($wallet_value);
+
     # Redirecting to [FUNCTION-NO::11].
     return redirect('/ot/new/entry/all/data');
 
@@ -531,6 +571,8 @@ function show_all_anesthesiologist(Request $request){
         ->orderBy('AI_ID','asc')
         ->get();
 
+    $request->session()->put('list_data', 'anesthesiologist');
+
     # Returning to the view below.
     return view('hospital/ot/list', $anesthesiologist);
 
@@ -567,12 +609,12 @@ function select_anesthesiologist(Request $request, $d_id){
 
     session(['fee_input_type' => 'anesthesiologist']);
 
-    # Redirecting to view, hospital/ot/surgeon_fee.
+    # Redirecting to view, hospital/ot/fee.
     return redirect('/ot/set/fees');
 
 }
 
-# End of function surgeon_fee_entry.                        <-------#
+# End of function select_anesthesiologist.                  <-------#
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: Hello, future me,
@@ -589,7 +631,8 @@ function select_anesthesiologist(Request $request, $d_id){
 # Inserts anesthesiologist fee;
 # Update doctor balance log;
 # Insert will happen on --: TABLE :------ anesthesiologist_logs;
-# Insert will happen on --: TABLE :------ doctor_balance_logs.
+# Insert will happen on --: TABLE :------ doctor_balance_logs;
+# Update will happen on --: TABLE :------ doctors.
 
 function anesthesiologist_fee_entry(Request $request){
 
@@ -604,7 +647,7 @@ function anesthesiologist_fee_entry(Request $request){
 
         'Ans_ID'=>$anesthesiologist_id,
         'O_ID'=>$o_id,
-        'Anesthesiologist_Name'=>$request->session()->get('D_NAME'),
+        'Anesthesiologist_Name'=>$request->session()->get('Anesthesiologist_Name'),
         'Anesthesiologist_Fee'=>$fee,
         'Anesthesiologist_Discount'=>$discount,
         'Anesthesiologist_Income'=>$income
@@ -644,12 +687,23 @@ function anesthesiologist_fee_entry(Request $request){
     DB::table('doctor_balance_logs')
     ->insert($log);
 
+    $wallet_value=array(
+
+        'Wallet'=>$current_balance
+
+    );
+
+    # updating nurse wallet.
+    $doctor_wallet=DB::table('doctors')
+    ->where('D_ID',$anesthesiologist_id)
+    ->update($wallet_value);
+
     # Redirecting to [FUNCTION-NO::11].
     return redirect('/ot/new/entry/all/data');
 
 }
 
-# End of function surgeon_fee_entry.                        <-------#
+# End of function anesthesiologist_fee_entry.               <-------#
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: Hello, future me,
@@ -660,6 +714,545 @@ function anesthesiologist_fee_entry(Request $request){
 
 
 
+#########################
+#### FUNCTION-NO::15 ####
+#########################
+# Show all nurse.
+
+function show_all_nurse(Request $request){
+
+    $nurse['data']=DB::table('nurses')
+        ->orderBy('AI_ID','asc')
+        ->get();
+
+    $request->session()->put('list_data', 'nurse');
+
+    # Returning to the view below.
+    return view('hospital/ot/list', $nurse);
+
+}
+
+# End of function show_all_nurse.                           <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::16 ####
+#########################
+# Selects nurse;
+# Stores data in 3 sessions.
+
+function select_nurse(Request $request, $n_id){
+
+    $request->session()->put('Nurse_ID', $n_id);
+
+    # checking current balance.
+    $nurse=DB::table('nurses')
+    ->where('N_ID',$n_id)
+    ->orderBy('AI_ID','desc')
+    ->first();
+
+    $request->session()->put('Nurse_Name', $nurse->N_Name);
+
+    session(['fee_input_type' => 'nurse']);
+
+    # Redirecting to view, hospital/ot/fee.
+    return redirect('/ot/set/fees');
+
+}
+
+# End of function select_nurse.                             <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::17 ####
+#########################
+# Inserts nurse fee;
+# Update nurse table;
+# Insert will happen on --: TABLE :------ ot_nurse_logs;
+# Update will happen on --: TABLE :------ nurses.
+
+function nurse_fee_entry(Request $request){
+
+    $o_id = $request->session()->get('O_ID');
+    $nurse_id = $request->session()->get('Nurse_ID');
+
+    $fee = $request->input('fee');
+
+    $log_data=array(
+
+        'N_ID'=>$nurse_id,
+        'O_ID'=>$o_id,
+        'Nurse_Name'=>$request->session()->get('Nurse_Name'),
+        'Nurse_Fee'=>$fee
+
+    );
+
+    DB::table('ot_nurses_logs')->insert($log_data);
+
+    # checking current balance.
+    $wallet=DB::table('nurse_balance_logs')
+    ->where('N_ID',$nurse_id)
+    ->orderBy('AI_ID','desc')
+    ->first();
+
+    if($wallet){
+        $current_balance = $wallet->Current_Balance;
+        $current_balance = $current_balance + $fee;
+    }else{
+        $current_balance = 0;
+        $current_balance = $current_balance + $fee;
+    }
+
+    $log=array(
+
+        'N_ID'=>$nurse_id,
+        'B_Date'=>$request->session()->get('DATE_TODAY'),
+        'Credit'=>$fee,
+        'Current_Balance'=>$current_balance,
+        'O_ID'=>$o_id,
+        'Acc_ID'=>$request->session()->get('OTO_SESSION_ID')
+
+    );
+
+    # Insert balance log.
+    DB::table('nurse_balance_logs')
+    ->insert($log);
+
+    $wallet_value=array(
+
+        'Wallet'=>$current_balance
+
+    );
+
+    # updating nurse wallet.
+    $nurse_wallet=DB::table('nurses')
+    ->where('N_ID',$nurse_id)
+    ->update($wallet_value);
+
+    # Redirecting to [FUNCTION-NO::11].
+    return redirect('/ot/new/entry/all/data');
+
+}
+
+# End of function nurse_fee_entry.                          <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::18 ####
+#########################
+# Go to assistant select.
+
+function assistant_data_collection(Request $request){
+
+    session(['fee_input_type' => 'assistant']);
+
+    # Redirecting to view, hospital/ot/fee.
+    return redirect('/ot/set/fees');
+
+}
+
+# End of function assistant_data_collection.                <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::19 ####
+#########################
+# Inserts assistant data;
+# Insert will happen on --: TABLE :------ ot_assistant_logs.
+
+function assistant_data_entry(Request $request){
+
+    $o_id = $request->session()->get('O_ID');
+
+    $name = $request->input('name');
+    $fee = $request->input('fee');
+
+    $log_data=array(
+
+        'O_ID'=>$o_id,
+        'Assistant_Name'=>$name,
+        'Assistant_Fee'=>$fee
+
+    );
+
+    DB::table('ot_assistant_logs')->insert($log_data);
+
+    # Redirecting to [FUNCTION-NO::11].
+    return redirect('/ot/new/entry/all/data');
+
+}
+
+# End of function assistant_data_entry.                     <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::20 ####
+#########################
+# Delete surgeon entry;
+# Update doctor balance log;
+# Delete will happen on --: TABLE :------ surgeon_logs;
+# Insert will happen on --: TABLE :------ doctor_balance_logs.
+
+function delete_surgeon_entry(Request $request, $ai_id){
+
+    $o_id = $request->session()->get('O_ID');
+
+    # getting income info.
+    $income=DB::table('surgeon_logs')
+    ->where('AI_ID',$ai_id)
+    ->first();
+    
+    $surgeon_income = $income->Surgeon_Income;
+    $d_id = $income->D_ID;
+    $o_id = $income->O_ID;
+
+    DB::table('surgeon_logs')->where('AI_ID',$ai_id)->delete();
+
+    # checking current balance.
+    $wallet=DB::table('doctor_balance_logs')
+    ->where('D_ID',$d_id)
+    ->orderBy('AI_ID','desc')
+    ->first();
+
+    $current_balance = $wallet->Current_Balance;
+    $current_balance = $current_balance - $surgeon_income;
+
+    $log=array(
+
+        'D_ID'=>$d_id,
+        'B_Date'=>$request->session()->get('DATE_TODAY'),
+        'Debit'=>$surgeon_income,
+        'Commission'=>0,
+        'Income'=>0,
+        'Current_Balance'=>$current_balance,
+        'O_ID'=>$o_id,
+        'Acc_ID'=>$request->session()->get('OTO_SESSION_ID')
+
+    );
+
+    # Insert balance log.
+    DB::table('doctor_balance_logs')
+    ->insert($log);
+
+    $wallet_value=array(
+
+        'Wallet'=>$current_balance
+
+    );
+
+    # updating nurse wallet.
+    $doctor_wallet=DB::table('doctors')
+    ->where('D_ID',$d_id)
+    ->update($wallet_value);
+
+    # Redirecting to [FUNCTION-NO::11].
+    return redirect('/ot/new/entry/all/data');
+
+}
+
+# End of function delete_surgeon_entry.                     <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::21 ####
+#########################
+# Delete anesthesiologist entry;
+# Update doctor balance log;
+# Delete will happen on --: TABLE :------ anesthesiologist_logs;
+# Insert will happen on --: TABLE :------ doctor_balance_logs.
+
+function delete_anesthesiologist_entry(Request $request, $ai_id){
+
+    $o_id = $request->session()->get('O_ID');
+
+    # getting income info.
+    $income=DB::table('anesthesiologist_logs')
+    ->where('AI_ID',$ai_id)
+    ->first();
+    
+    $anesthesiologist_income = $income->Anesthesiologist_Income;
+    $d_id = $income->Ans_ID;
+    $o_id = $income->O_ID;
+
+    DB::table('anesthesiologist_logs')->where('AI_ID',$ai_id)->delete();
+
+    # checking current balance.
+    $wallet=DB::table('doctor_balance_logs')
+    ->where('D_ID',$d_id)
+    ->orderBy('AI_ID','desc')
+    ->first();
+
+    $current_balance = $wallet->Current_Balance;
+    $current_balance = $current_balance - $anesthesiologist_income;
+
+    $log=array(
+
+        'D_ID'=>$d_id,
+        'B_Date'=>$request->session()->get('DATE_TODAY'),
+        'Debit'=>$anesthesiologist_income,
+        'Commission'=>0,
+        'Income'=>0,
+        'Current_Balance'=>$current_balance,
+        'O_ID'=>$o_id,
+        'Acc_ID'=>$request->session()->get('OTO_SESSION_ID')
+
+    );
+
+    # Insert balance log.
+    DB::table('doctor_balance_logs')
+    ->insert($log);
+
+    $wallet_value=array(
+
+        'Wallet'=>$current_balance
+
+    );
+
+    # updating nurse wallet.
+    $doctor_wallet=DB::table('doctors')
+    ->where('D_ID',$d_id)
+    ->update($wallet_value);
+
+    # Redirecting to [FUNCTION-NO::11].
+    return redirect('/ot/new/entry/all/data');
+
+}
+
+# End of function delete_anesthesiologist_entry.            <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::22 ####
+#########################
+# Delete nurse entry;
+# Update nurse balance log;
+# Delete will happen on --: TABLE :------ ot_nurses_logs;
+# Insert will happen on --: TABLE :------ nurse_balance_logs.
+
+function delete_nurse_entry(Request $request, $ai_id){
+
+    $o_id = $request->session()->get('O_ID');
+
+    # getting income info.
+    $income=DB::table('ot_nurses_logs')
+    ->where('AI_ID',$ai_id)
+    ->first();
+    
+    $nurse_income = $income->Nurse_Fee;
+    $n_id = $income->N_ID;
+    $o_id = $income->O_ID;
+
+    DB::table('ot_nurses_logs')->where('AI_ID',$ai_id)->delete();
+
+    # checking current balance.
+    $wallet=DB::table('nurse_balance_logs')
+    ->where('N_ID',$n_id)
+    ->orderBy('AI_ID','desc')
+    ->first();
+
+    $current_balance = $wallet->Current_Balance;
+    $current_balance = $current_balance - $nurse_income;
+
+    $log=array(
+
+        'N_ID'=>$n_id,
+        'B_Date'=>$request->session()->get('DATE_TODAY'),
+        'Debit'=>$nurse_income,
+        'Current_Balance'=>$current_balance,
+        'O_ID'=>$o_id,
+        'Acc_ID'=>$request->session()->get('OTO_SESSION_ID')
+
+    );
+
+    # Insert balance log.
+    DB::table('nurse_balance_logs')
+    ->insert($log);
+
+    $wallet_value=array(
+
+        'Wallet'=>$current_balance
+
+    );
+
+    # updating nurse wallet.
+    $doctor_wallet=DB::table('nurses')
+    ->where('N_ID',$n_id)
+    ->update($wallet_value);
+
+    # Redirecting to [FUNCTION-NO::11].
+    return redirect('/ot/new/entry/all/data');
+
+}
+
+# End of function delete_nurse_entry.                       <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::23 ####
+#########################
+# Delete assistant entry;
+# Delete will happen on --: TABLE :------ ot_assistant_logs.
+
+function delete_assistant_entry(Request $request, $ai_id){
+
+    DB::table('ot_assistant_logs')->where('AI_ID',$ai_id)->delete();
+
+    # Redirecting to [FUNCTION-NO::11].
+    return redirect('/ot/new/entry/all/data');
+
+}
+
+# End of function delete_assistant_entry                    <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::24 ####
+#########################
+# Cancels new entry;
+# Delete will happen on --: TABLE :------ ot_logs.
+
+function cancel_new_entry(Request $request){
+
+    $o_id = $request->session()->get('O_ID');
+
+    # checking surgeon logs.
+    $surgeon=DB::table('surgeon_logs')
+    ->where('O_ID',$o_id)
+    ->first();
+
+    # checking anesthesiologist logs.
+    $anesthesiologist=DB::table('anesthesiologist_logs')
+    ->where('O_ID',$o_id)
+    ->first();
+
+    # checking surgeon logs.
+    $nurse=DB::table('ot_nurses_logs')
+    ->where('O_ID',$o_id)
+    ->first();
+
+    # checking surgeon logs.
+    $assistant=DB::table('ot_assistant_logs')
+    ->where('O_ID',$o_id)
+    ->first();
+
+    if($surgeon){
+
+        $request->session()->flash('msg','Delete all Surgeon entry and try again.');
+
+        # Redirecting to [FUNCTION-NO::11].
+        return redirect('/ot/new/entry/all/data');
+        
+    }elseif($anesthesiologist){
+
+        $request->session()->flash('msg','Delete all Anesthesiologist entry and try again.');
+
+        # Redirecting to [FUNCTION-NO::11].
+        return redirect('/ot/new/entry/all/data');
+        
+    }elseif($nurse){
+
+        $request->session()->flash('msg','Delete all Nurse entry and try again.');
+
+        # Redirecting to [FUNCTION-NO::11].
+        return redirect('/ot/new/entry/all/data');
+        
+    }elseif($assistant){
+
+        $request->session()->flash('msg','Delete all Assistant entry and try again.');
+
+        # Redirecting to [FUNCTION-NO::11].
+        return redirect('/ot/new/entry/all/data');
+        
+    }else{
+
+        DB::table('ot_logs')->where('O_ID',$o_id)->delete();
+
+        # Redirecting to [FUNCTION-NO::07].
+        return redirect('/ot/admission/list/');
+
+    }
+
+}
+
+# End of function nurse_fee_entry.                          <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 

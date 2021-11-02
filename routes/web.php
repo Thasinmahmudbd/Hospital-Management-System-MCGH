@@ -456,6 +456,10 @@ Route::group(['middleware'=>['otAuth']],function() {
     # Redirecting to [FUNCTION-NO::06]---in-controller.
     Route::get('/ot/edit/schedule/{ai_id}','App\Http\Controllers\ot\operations@delete_schedule_data');
 
+    ##############################################################################################################################################
+    # New OT Entry After Operation.  [C::operations.php]
+    ##############################################################################################################################################
+
     # Show admission list
     # Redirecting to [FUNCTION-NO::07]---in-controller.
     Route::get('/ot/admission/list/','App\Http\Controllers\ot\operations@show_admission_list');
@@ -491,6 +495,47 @@ Route::group(['middleware'=>['otAuth']],function() {
     # Anesthesiologist fee entry
     # Redirecting to [FUNCTION-NO::14]---in-controller.
     Route::post('/ot/anesthesiologist/fee/entry','App\Http\Controllers\ot\operations@anesthesiologist_fee_entry');
+
+    # Shows all nurse
+    # Redirecting to [FUNCTION-NO::15]---in-controller.
+    Route::get('/ot/show/nurse/list','App\Http\Controllers\ot\operations@show_all_nurse');
+
+    # Selects nurse
+    # Redirecting to [FUNCTION-NO::16]---in-controller.
+    Route::get('/ot/select/nurse/{n_id}','App\Http\Controllers\ot\operations@select_nurse');
+
+    # Nurse fee entry
+    # Redirecting to [FUNCTION-NO::17]---in-controller.
+    Route::post('/ot/nurse/fee/entry','App\Http\Controllers\ot\operations@nurse_fee_entry');
+
+    # Assistant data collection
+    # Redirecting to [FUNCTION-NO::18]---in-controller.
+    Route::get('/ot/assistant/data/collection','App\Http\Controllers\ot\operations@assistant_data_collection');
+
+    # Assistant data entry
+    # Redirecting to [FUNCTION-NO::19]---in-controller.
+    Route::post('/ot/assistant/data/entry','App\Http\Controllers\ot\operations@assistant_data_entry');
+
+    # Delete surgeon entry
+    # Redirecting to [FUNCTION-NO::20]---in-controller.
+    Route::get('/remove/surgeon/{ai_id}','App\Http\Controllers\ot\operations@delete_surgeon_entry');
+
+    # Delete anesthesiologist entry
+    # Redirecting to [FUNCTION-NO::21]---in-controller.
+    Route::get('/remove/anesthesiologist/{ai_id}','App\Http\Controllers\ot\operations@delete_anesthesiologist_entry');
+
+    # Delete nurse entry
+    # Redirecting to [FUNCTION-NO::22]---in-controller.
+    Route::get('/remove/nurse/{ai_id}','App\Http\Controllers\ot\operations@delete_nurse_entry');
+
+    # Delete assistant entry
+    # Redirecting to [FUNCTION-NO::23]---in-controller.
+    Route::get('/remove/assistant/{ai_id}','App\Http\Controllers\ot\operations@delete_assistant_entry');
+
+    # Delete assistant entry
+    # Redirecting to [FUNCTION-NO::24]---in-controller.
+    Route::get('/ot/new/entry/cancel','App\Http\Controllers\ot\operations@cancel_new_entry');
+
 
     ##############################################################################################################################################
     # Doctor List Browsing.  [C::add_patient.php]

@@ -13,10 +13,10 @@
 
 @section('links')
 
-<li class="link_item">
-    <a href="{{url('')}}" class="link">
-        <i class="link_icons far fa-window-close"></i>
-        <span class="link_name"> Cancel Entry </span>
+<li class="list_item">
+    <a href="{{url('/ot/new/entry/all/data')}}" class="link">
+        <i class="link_icons fas fa-th-list"></i>
+        <span class="link_name"> Refresh List </span>
     </a>
 </li>
 
@@ -35,16 +35,23 @@
 </li>
 
 <li class="list_item">
-    <a href="{{url('/ot/invoice/')}}" class="link">
+    <a href="{{url('/ot/show/nurse/list')}}" class="link">
+        <i class="link_icons fas fa-user-plus"></i>
+        <span class="link_name"> Pick Nurse </span>
+    </a>
+</li>
+
+<li class="list_item">
+    <a href="{{url('/ot/assistant/data/collection')}}" class="link">
         <i class="link_icons fas fa-user-plus"></i>
         <span class="link_name"> Pick Assistant </span>
     </a>
 </li>
 
-<li class="list_item">
-    <a href="{{url('/ot/invoice/')}}" class="link">
-        <i class="link_icons fas fa-user-plus"></i>
-        <span class="link_name"> Pick Nurse </span>
+<li class="link_item">
+    <a href="{{url('/ot/new/entry/cancel')}}" class="link">
+        <i class="link_icons far fa-window-close"></i>
+        <span class="link_name"> Cancel Entry </span>
     </a>
 </li>
 
@@ -62,11 +69,12 @@
 @section('mobile_links')
 
 <div id="myLinks" class="mobile_links">
-    <a class="mobile_link" href="{{url('')}}">Cancel Entry</a>
+    <a class="mobile_link" href="{{url('/ot/new/entry/all/data')}}">Refresh List</a>
     <a class="mobile_link" href="{{url('/reception/doctor_selection')}}">Pick Surgeon</a>
     <a class="mobile_link" href="{{url('/ot/show/anesthesiologist/list')}}">Pick Anesthesiologist</a>
-    <a class="mobile_link" href="{{url('')}}">Pick Assistant</a>
-    <a class="mobile_link" href="{{url('')}}">Pick Nurse</a>
+    <a class="mobile_link" href="{{url('/ot/show/nurse/list')}}">Pick Nurse</a>
+    <a class="mobile_link" href="{{url('/ot/assistant/data/collection')}}">Pick Assistant</a>
+    <a class="mobile_link" href="{{url('/ot/new/entry/cancel')}}">Cancel Entry</a>
 </div>
 
 @endsection
@@ -82,25 +90,6 @@
 <!-----------------------content---------------------->
 
 @section('content')
-
-
-
-
-        <!--Session message-->
-
-        @if(session('msg')=='Please assign an appointment time.')
-
-            <div class="content_container text_center warning_msg">{{session('msg')}}</div> 
-
-        @elseif(session('msg')=='Appointment Canceled.')
-
-            <div class="content_container text_center warning_msg">{{session('msg')}}</div>
-
-        @endif
-
-
-
-
 
 
 
@@ -215,7 +204,7 @@
 
                         <div class="content_container_bg_less">
         
-                            <p>Surgeons:</p>
+                            <p><b>Surgeons:</b></p>
 
                         </div>
 
@@ -226,6 +215,15 @@
                         </div>
 
                     </div>
+
+
+                <!--Session message-->
+
+                @if(session('msg')=='Delete all Surgeon entry and try again.')
+
+                    <div class="content_container text_center warning_msg">{{session('msg')}}</div> 
+
+                @endif
 
 
 
@@ -249,7 +247,7 @@
                         <td class="frame_data" data-label="Discount">{{$list->Surgeon_Discount}}</td>
 
                         <td class="frame_action" data-label="Action">
-                            <a target="blank" href="{{url('')}}">
+                            <a target="blank" href="{{url('/remove/surgeon/'.$list->AI_ID)}}">
                                 <i class="table_btn_red fas fa-times-circle"></i>
                             </a>
                         </td>
@@ -274,7 +272,7 @@
 
                         <div class="content_container_bg_less">
         
-                            <p>Anesthesiologists:</p>
+                            <p><b>Anesthesiologists:</b></p>
 
                         </div>
 
@@ -286,6 +284,14 @@
 
                     </div>
 
+
+                <!--Session message-->
+
+                @if(session('msg')=='Delete all Anesthesiologist entry and try again.')
+
+                    <div class="content_container text_center warning_msg">{{session('msg')}}</div> 
+
+                @endif
 
 
                 <table class="frame_table">
@@ -308,7 +314,7 @@
                         <td class="frame_data" data-label="Discount">{{$list->Anesthesiologist_Discount}}</td>
 
                         <td class="frame_action" data-label="Action">
-                            <a target="blank" href="{{url('')}}">
+                            <a target="blank" href="{{url('/remove/anesthesiologist/'.$list->AI_ID)}}">
                                 <i class="table_btn_red fas fa-times-circle"></i>
                             </a>
                         </td>
@@ -332,17 +338,27 @@
 
                         <div class="content_container_bg_less">
         
-                            <p>Nurses:</p>
+                            <p><b>Nurses:</b></p>
 
                         </div>
 
                         <div class="content_nav">
         
-                            <a href="{{url('')}}" class="content_nav_link purple">Add</a>
+                            <a href="{{url('/ot/show/nurse/list')}}" class="content_nav_link purple">Add</a>
 
                         </div>
 
                     </div>
+
+
+
+                <!--Session message-->
+
+                @if(session('msg')=='Delete all Nurse entry and try again.')
+
+                    <div class="content_container text_center warning_msg">{{session('msg')}}</div> 
+
+                @endif
 
 
 
@@ -364,7 +380,7 @@
                         <td class="frame_data" data-label="Fees">{{$list->Nurse_Fee}}</td>
 
                         <td class="frame_action" data-label="Action">
-                            <a target="blank" href="{{url('')}}">
+                            <a target="blank" href="{{url('/remove/nurse/'.$list->AI_ID)}}">
                                 <i class="table_btn_red fas fa-times-circle"></i>
                             </a>
                         </td>
@@ -388,17 +404,28 @@
 
                         <div class="content_container_bg_less">
         
-                            <p>Assistants:</p>
+                            <p><b>Assistants:</b></p>
 
                         </div>
 
                         <div class="content_nav">
         
-                            <a href="{{url('')}}" class="content_nav_link purple">Add</a>
+                            <a href="{{url('/ot/assistant/data/collection')}}" class="content_nav_link purple">Add</a>
 
                         </div>
 
                     </div>
+
+
+
+                <!--Session message-->
+
+                @if(session('msg')=='Delete all Assistant entry and try again.')
+
+                    <div class="content_container text_center warning_msg">{{session('msg')}}</div> 
+
+                @endif
+
 
 
 
@@ -420,7 +447,7 @@
                         <td class="frame_data" data-label="Fees">{{$list->Assistant_Fee}}</td>
 
                         <td class="frame_action" data-label="Action">
-                            <a target="blank" href="{{url('')}}">
+                            <a target="blank" href="{{url('/remove/assistant/'.$list->AI_ID)}}">
                                 <i class="table_btn_red fas fa-times-circle"></i>
                             </a>
                         </td>
