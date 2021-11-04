@@ -13,21 +13,47 @@
 
 @section('links')
 
-<li class="link_item">
-    <a href="{{url('/reception/doctor_selection')}}" class="link">
-        <i class="link_icons fas fa-th"></i>
-        <span class="link_name"> Show All </span>
-    </a>
-</li>
+    @if(Session::get('KernelPoint')=='reception')
+
+    <li class="link_item">
+        <a href="{{url('/reception/doctor_selection')}}" class="link">
+            <i class="link_icons fas fa-th"></i>
+            <span class="link_name"> Show All </span>
+        </a>
+    </li>
+
+    @elseif(Session::get('KernelPoint')=='ot')
+
+    <li class="link_item">
+        <a href="{{url('/ot/doctor_selection')}}" class="link">
+            <i class="link_icons fas fa-th"></i>
+            <span class="link_name"> Show All </span>
+        </a>
+    </li>
+
+    @endif
 
 @foreach($department as $link)
 
-<li class="link_item">
-    <a href="{{url('/reception/doctor_selection/by_department/'.$link->Department)}}" class="link">
-        <i class="link_icons fas fa-notes-medical"></i>
-        <span class="link_name"> {{$link->Department}} </span>
-    </a>
-</li>
+    @if(Session::get('KernelPoint')=='reception')
+
+    <li class="link_item">
+        <a href="{{url('/reception/doctor_selection/by_department/'.$link->Department)}}" class="link">
+            <i class="link_icons fas fa-notes-medical"></i>
+            <span class="link_name"> {{$link->Department}} </span>
+        </a>
+    </li>
+
+    @elseif(Session::get('KernelPoint')=='ot')
+
+    <li class="link_item">
+        <a href="{{url('/ot/doctor_selection/by_department/'.$link->Department)}}" class="link">
+            <i class="link_icons fas fa-notes-medical"></i>
+            <span class="link_name"> {{$link->Department}} </span>
+        </a>
+    </li>
+
+    @endif
 
 @endforeach
 
@@ -49,7 +75,11 @@
 
 @foreach($department as $link)
 
+    @if(Session::get('KernelPoint')=='reception')
     <a class="mobile_link" href="{{url('/reception/doctor_selection/by_department/'.$link->Department)}}">{{$link->Department}}</a>
+    @elseif(Session::get('KernelPoint')=='ot')
+    <a class="mobile_link" href="{{url('/ot/doctor_selection/by_department/'.$link->Department)}}">{{$link->Department}}</a>
+    @endif
 
 @endforeach
 
@@ -131,9 +161,15 @@
 
 
 
-
+                @if(Session::get('KernelPoint')=='reception')
                 <form action="{{url('/reception/doctor_selection/by_search')}}" method="post" class="content_container patient_info_form">
                 @csrf
+
+                @elseif(Session::get('KernelPoint')=='ot')
+                <form action="{{url('/ot/doctor_selection/by_search')}}" method="post" class="content_container patient_info_form">
+                @csrf
+
+                @endif
 
                     <div class="doctor_search_form_element">
 
@@ -152,8 +188,15 @@
 
                 @foreach($result as $list)
 
+                    @if(Session::get('KernelPoint')=='reception')
                     <form class="doctor_list_item" action="{{url('/reception/submit_doctor_selection')}}" method="post">
                     @csrf
+
+                    @elseif(Session::get('KernelPoint')=='ot')
+                    <form class="doctor_list_item" action="{{url('/ot/submit_doctor_selection')}}" method="post">
+                    @csrf
+
+                    @endif
 
                         <input type="hidden" name="d_id" value="{{$list->D_ID}}">
                         <input type="hidden" name="dr_name" value="{{$list->Dr_Name}}">

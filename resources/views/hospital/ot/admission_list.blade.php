@@ -28,7 +28,7 @@
 </li>
 
 <li class="list_item">
-    <a href="{{url('/ot/invoice/')}}" class="link">
+    <a href="{{url('/ot/invoice/generate/list/')}}" class="link">
         <i class="link_icons fas fa-file-invoice"></i>
         <span class="link_name"> Invoice </span>
     </a>
@@ -70,6 +70,15 @@
 
 
 
+
+
+                <!--Session message-->
+
+                @if(session('msg')=='Entry Confirmed.')
+
+                    <div class="content_container text_center success_msg">{{session('msg')}}</div> 
+
+                @endif
 
 
 

@@ -38,6 +38,7 @@ class add_patient extends Controller
 
         session(['VAT' => $acc_var->Vat]);
         session(['COMMISSION' => $acc_var->Commission]);
+        $request->session()->put('KernelPoint','reception');
 
         # Returning to the view below.
         return view('hospital/reception/home');

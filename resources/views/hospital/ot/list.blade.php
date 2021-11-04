@@ -21,7 +21,7 @@
 </li>
 
 <li class="list_item">
-    <a href="{{url('/reception/doctor_selection')}}" class="link">
+    <a href="{{url('/ot/doctor_selection')}}" class="link">
         <i class="link_icons fas fa-user-plus"></i>
         <span class="link_name"> Pick Surgeon </span>
     </a>
@@ -70,7 +70,7 @@
 
 <div id="myLinks" class="mobile_links">
     <a class="mobile_link" href="{{url('/ot/new/entry/all/data')}}">Go To List</a>
-    <a class="mobile_link" href="{{url('/reception/doctor_selection')}}">Pick Surgeon</a>
+    <a class="mobile_link" href="{{url('/ot/doctor_selection')}}">Pick Surgeon</a>
     <a class="mobile_link" href="{{url('/ot/show/anesthesiologist/list')}}">Pick Anesthesiologist</a>
     <a class="mobile_link" href="{{url('/ot/show/nurse/list')}}">Pick Nurse</a>
     <a class="mobile_link" href="{{url('/ot/assistant/data/collection')}}">Pick Assistant</a>

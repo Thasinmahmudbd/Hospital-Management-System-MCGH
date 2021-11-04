@@ -28,7 +28,7 @@
 </li>
 
 <li class="list_item">
-    <a href="{{url('/ot/invoice/')}}" class="link">
+    <a href="{{url('/ot/invoice/generate/list/')}}" class="link">
         <i class="link_icons fas fa-file-invoice"></i>
         <span class="link_name"> Invoice </span>
     </a>
@@ -50,7 +50,7 @@
 <div id="myLinks" class="mobile_links">
     <a class="mobile_link" href="{{url('/ot/home/')}}">Schedule</a>
     <a class="mobile_link" href="{{url('/ot/admission/list/')}}">New Entry</a>
-    <a class="mobile_link" href="{{url('/ot/invoice/')}}">Invoice</a>
+    <a class="mobile_link" href="{{url('/ot/invoice/generate/list/')}}">Invoice</a>
 </div>
 
 @endsection

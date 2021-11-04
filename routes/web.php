@@ -210,8 +210,8 @@ Route::group(['middleware'=>['receptionAuth']],function() {
 
         $file_name = 'ID: '.Session::get('pId').'.pdf';
 
-        $pdf->setOption('page-size','a4');
-        $pdf->setOption('orientation','landscape');
+        $pdf->setOption('page-size','a5');
+        $pdf->setOption('orientation','portrait');
 
         return $pdf->stream($file_name);
 
@@ -225,8 +225,8 @@ Route::group(['middleware'=>['receptionAuth']],function() {
 
         $file_name = 'ID: '.Session::get('pId').'.pdf';
 
-        $pdf->setOption('page-size','a4');
-        $pdf->setOption('orientation','landscape');
+        $pdf->setOption('page-size','a5');
+        $pdf->setOption('orientation','portrait');
 
         return $pdf->stream($file_name);
 
@@ -536,6 +536,9 @@ Route::group(['middleware'=>['otAuth']],function() {
     # Redirecting to [FUNCTION-NO::24]---in-controller.
     Route::get('/ot/new/entry/cancel','App\Http\Controllers\ot\operations@cancel_new_entry');
 
+    # Delete assistant entry
+    # Redirecting to [FUNCTION-NO::25]---in-controller.
+    Route::post('/ot/entry/list/submit','App\Http\Controllers\ot\operations@entry_list_submission');
 
     ##############################################################################################################################################
     # Doctor List Browsing.  [C::add_patient.php]
@@ -543,18 +546,72 @@ Route::group(['middleware'=>['otAuth']],function() {
 
     # Doctor selection page.
     # Redirecting to [FUNCTION-NO::04]---in-controller.
-    Route::get('/reception/doctor_selection','App\Http\Controllers\reception\add_patient@show_all_doctor');
+    Route::get('/ot/doctor_selection','App\Http\Controllers\reception\add_patient@show_all_doctor');
 
     # Doctor selection page department side-bar action buttons.
     # Redirecting to [FUNCTION-NO::05]---in-controller.
-    Route::get('/reception/doctor_selection/by_department/{department}','App\Http\Controllers\reception\add_patient@show_doctor_by_department');
+    Route::get('/ot/doctor_selection/by_department/{department}','App\Http\Controllers\reception\add_patient@show_doctor_by_department');
 
     # Doctor selection page search-bar action button.
     # Redirecting to [FUNCTION-NO::06]---in-controller.
-    Route::post('/reception/doctor_selection/by_search','App\Http\Controllers\reception\add_patient@search_doctor');
+    Route::post('/ot/doctor_selection/by_search','App\Http\Controllers\reception\add_patient@search_doctor');
     
     # After selecting doctor.
     # Redirecting to [FUNCTION-NO::07]---in-controller.
-    Route::post('/reception/submit_doctor_selection','App\Http\Controllers\reception\add_patient@submit_doctor_selection');
+    Route::post('/ot/submit_doctor_selection','App\Http\Controllers\reception\add_patient@submit_doctor_selection');
+
+    ##############################################################################################################################################
+    # Invoice.  [C::invoice.php]
+    ##############################################################################################################################################
+
+    # Reading data in Invoice generator [ot] page.
+    # Redirecting to [FUNCTION-NO::]---in-controller.
+    Route::get('/ot/invoice/generate/list/','App\Http\Controllers\generate\invoice@invoice_list_ot');
+
+    # Searching data in Invoice generator [ot] page.
+    # Redirecting to [FUNCTION-NO::]---in-controller.
+    Route::post('/ot/find_patient/by_search/invoice/ot/bill/','App\Http\Controllers\generate\invoice@invoice_search_ot_bill');
+
+    # Generate invoice. [ot]
+    # Redirecting to [FUNCTION-NO::]---in-controller.
+    Route::get('/ot/collect/ot/bill/invoice/data/{o_id}', 'App\Http\Controllers\generate\invoice@collect_ot_bill_invoice_data');
+
+    Route::get('/ot/generate/bill/invoice/',function(){
+
+        $o_id = Session::get('oId');
+        
+        $chosen_surgeons=DB::table('surgeon_logs')
+            ->where('O_ID', $o_id)
+            ->orderBy('AI_ID','asc')
+            ->get();
+
+        $chosen_anesthesiologist=DB::table('anesthesiologist_logs')
+            ->where('O_ID', $o_id)
+            ->orderBy('AI_ID','asc')
+            ->get();
+
+        $chosen_nurses=DB::table('ot_nurses_logs')
+            ->where('O_ID', $o_id)
+            ->orderBy('AI_ID','asc')
+            ->get();
+
+        $chosen_assistant=DB::table('ot_assistant_logs')
+            ->where('O_ID', $o_id)
+            ->orderBy('AI_ID','asc')
+            ->get();
+        
+        $pdf = PDF::loadView('hospital.invoice.ot_bill', compact('chosen_surgeons','chosen_anesthesiologist','chosen_nurses','chosen_assistant'));
+
+        $file_name = 'ID: '.Session::get('pId').'.pdf';
+
+        $pdf->setOption('page-size','a4');
+        $pdf->setOption('orientation','portrait');
+
+        return $pdf->stream($file_name);
+
+        # Returning to the view below.
+        return view('hospital/invoice/ot_bill', compact('chosen_surgeons','chosen_anesthesiologist','chosen_nurses','chosen_assistant'));
+
+    });
 
 });

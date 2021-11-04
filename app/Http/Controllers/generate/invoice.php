@@ -20,7 +20,7 @@ class invoice extends Controller
 # Joins table :-
 # -----: TABLE :------ patients,
 # -----: TABLE :------ patient_logs,
-# -----: TABLE :------ doctor_schedules.
+# -----: TABLE :------ doctors.
 
 function invoice_list_appointment(Request $request){
 
@@ -135,7 +135,7 @@ function invoice_list_admission(Request $request){
 # Joins table :-
 # -----: TABLE :------ patients,
 # -----: TABLE :------ patient_logs,
-# -----: TABLE :------ doctor_schedules.
+# -----: TABLE :------ doctors.
 
 function invoice_search_appointment(Request $request){
 
@@ -192,7 +192,7 @@ function invoice_search_appointment(Request $request){
 #### FUNCTION-NO::0 ####
 #########################
 # Collect data for invoice;
-# Stores data in 18 sessions;
+# Stores data in 21 sessions;
 
 function collect_appointment_invoice_data(Request $request, $p_l_ai_id){
 
@@ -212,6 +212,8 @@ function collect_appointment_invoice_data(Request $request, $p_l_ai_id){
     session(['apTime' => $data_logs->Ap_Time]);
     session(['dId' => $d_id]);
     session(['basicFee' => $data_logs->Basic_Fee]);
+    session(['received' => $data_logs->Received]);
+    session(['changes' => $data_logs->Changes]);
     session(['discount' => $data_logs->Discount]);
     session(['finalFee' => $data_logs->Final_Fee]);
     session(['token' => $data_logs->Token]);
@@ -226,6 +228,7 @@ function collect_appointment_invoice_data(Request $request, $p_l_ai_id){
     # Store in session.
     session(['pName' => $data_patients->Patient_Name]);
     session(['pGender' => $data_patients->Patient_Gender]);
+    session(['pAge' => $data_patients->Patient_Age]);
     session(['cellNum' => $data_patients->Cell_Number]);
     session(['dId' => $data_patients->Patient_Name]);
     session(['nid' => $data_patients->NID]);
@@ -339,6 +342,134 @@ function collect_admission_invoice_data(Request $request, $a_l_ai_id){
 # This will change.
 # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Shows printable patient invoices [ot bill];
+# Stored data in 1 session;
+# Joins table :-
+# -----: TABLE :------ ot_logs,
+# -----: TABLE :------ patients,
+# -----: TABLE :------ admission_ogs.
+# -----: TABLE :------ doctors.
+
+function invoice_list_ot(Request $request){
+
+    date_default_timezone_set('Asia/Dhaka');
+    $date = date("Y-m-d");
+    $request->session()->put('DATE_TODAY',$date);
+    
+    # Show all bills.
+    $all['all']=DB::table('ot_logs')
+    ->join('patients', 'ot_logs.P_ID', '=', 'patients.P_ID')
+    ->join('doctors', 'ot_logs.D_ID', '=', 'doctors.D_ID')
+    ->join('admission_logs', 'ot_logs.A_ID', '=', 'admission_logs.A_ID')
+    ->select('patients.Patient_Name', 'patients.Cell_Number', 'patients.P_ID', 'doctors.D_ID', 'doctors.Dr_Name', 'doctors.Dr_Gender', 'doctors.Specialty', 'doctors.Department', 'ot_logs.O_ID', 'ot_logs.O_Type')
+    ->where('admission_logs.OT_Confirmation',1)
+    ->where('admission_logs.Payment_Confirmation',null)
+    ->orderBy('ot_logs.O_ID','desc')
+    ->get();
+
+    $request->session()->put('INVOICE','0');
+
+    # Returning to the view below.
+    return view('hospital/ot/invoice_generator_list_ot_bill', $all);
+
+}
+
+# End of function invoice_list_ot.                          <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Collect data for invoice;
+# Stores data in 10 sessions.
+
+function collect_ot_bill_invoice_data(Request $request, $o_id){
+
+    # Gather data.
+    $data_ot_logs=DB::table('ot_logs')
+    ->where('O_ID',$o_id)
+    ->first();
+
+    $p_id = $data_ot_logs->P_ID;
+    $a_id = $data_ot_logs->A_ID;
+
+    # Gather data.
+    $data_admission_logs=DB::table('admission_logs')
+    ->where('A_ID',$a_id)
+    ->first();
+
+    $b_id = $data_admission_logs->B_ID;
+
+    # Gather data.
+    $data_bed_logs=DB::table('beds')
+    ->where('B_ID',$b_id)
+    ->first();
+
+    # Gather data.
+    $data_patients=DB::table('patients')
+    ->where('P_ID',$p_id)
+    ->first();
+
+    # Store in session.
+    session(['oId' => $o_id]);
+    session(['pId' => $p_id]);
+    session(['pName' => $data_patients->Patient_Name]);
+
+    session(['bed_no' => $data_bed_logs->Bed_No]);
+
+    session(['o_type' => $data_ot_logs->O_Type]);
+    session(['o_duration' => $data_ot_logs->O_Duration]);
+    session(['o_time' => $data_ot_logs->O_Time]);
+    session(['o_data' => $data_ot_logs->O_Date]);
+    session(['o_charge_income' => $data_ot_logs->OT_Charge_Income]);
+    session(['other_charges' => $data_ot_logs->Others_Charges]);
+
+    session(['a_type' => $data_ot_logs->Anesthesia_Type]);
+
+    session(['ot_timestamp' => $data_ot_logs->Timestamp]);
+
+    # Redirecting to [FUNCTION-NO::0].
+    return redirect('/ot/generate/bill/invoice/');
+
+}
+
+# End of function collect_ot_bill_invoice_data.             <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# This will change.
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

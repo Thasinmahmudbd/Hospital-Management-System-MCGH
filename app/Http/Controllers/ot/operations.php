@@ -41,6 +41,8 @@ function set_up_home(Request $request){
         ->orderBy('AI_ID','desc')
         ->get();
 
+    $request->session()->put('KernelPoint','ot');
+
     # Returning to the view below.
     return view('hospital/ot/home',$schedule);
 
@@ -61,7 +63,7 @@ function set_up_home(Request $request){
 #### FUNCTION-NO::02 ####
 #########################
 # Schedule data entry;
-# Stores data in 8 sessions.
+# Stores data in 9 sessions.
 
 function store_new_schedule_data(Request $request){
 
@@ -85,7 +87,7 @@ function store_new_schedule_data(Request $request){
     }
 
     # Redirecting to [FUNCTION-NO::::04], add_patient.php.
-    return redirect('/reception/doctor_selection');
+    return redirect('/ot/doctor_selection');
 
 }
 
@@ -198,14 +200,10 @@ function edit_schedule_data(Request $request){
     
     $schedule_data=array(
 
-        'P_ID'=>$request->session()->get('ot_P_ID'),
         'OT_No'=>$request->input('otno'),
         'Operation_Date'=>$request->input('date'),
         'Operation_Start_Time'=>$request->input('time'),
-        'Operation_Type'=>$request->session()->get('ot_Operation_Type'),
         'Estimated_Duration'=>$request->input('estDuration'),
-        'Surgeon_ID'=>$request->session()->get('D_ID'),
-        'Surgeon_Name'=>$request->session()->get('D_NAME'),
         'OTO_ID'=>$request->session()->get('OTO_SESSION_ID')
 
     );
@@ -411,7 +409,7 @@ function submit_entry(Request $request){
     $request->session()->put('REDIRECT', 'ot_new_entry');
 
     # Redirecting to [FUNCTION-NO::::04], add_patient.php.
-    return redirect('/reception/doctor_selection');
+    return redirect('/ot/doctor_selection');
 
 }
 
@@ -1255,6 +1253,61 @@ function cancel_new_entry(Request $request){
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
+
+
+#########################
+#### FUNCTION-NO::25 ####
+#########################
+# Entry list submission;
+# Delete will happen on --: TABLE :------ ot_logs.
+
+function entry_list_submission(Request $request){
+
+    $o_id = $request->session()->get('O_ID');
+
+    # checking surgeon logs.
+    $surgeon=DB::table('surgeon_logs')
+    ->where('O_ID',$o_id)
+    ->first();
+
+    if($surgeon){
+
+        $a_id = $request->session()->get('OT_NEW_ENTRY_A_ID');
+
+        $ot_confirmation=array(
+
+            'OT_Confirmation'=>1
+
+        );
+        
+        # updating ot confirmation.
+        $doctor_wallet=DB::table('admission_logs')
+        ->where('A_ID',$a_id)
+        ->update($ot_confirmation);
+
+        $request->session()->flash('msg','Entry Confirmed.');
+
+        # Redirecting to [FUNCTION-NO::07].
+        return redirect('/ot/admission/list/');
+
+    }else{
+
+        $request->session()->flash('msg','Input at least 1 surgeon.');
+
+        # Redirecting to [FUNCTION-NO::11].
+        return redirect('/ot/new/entry/all/data');
+
+    }
+
+}
+
+# End of function entry_list_submission.                    <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 

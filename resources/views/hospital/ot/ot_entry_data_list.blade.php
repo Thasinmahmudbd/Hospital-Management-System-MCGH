@@ -21,7 +21,7 @@
 </li>
 
 <li class="list_item">
-    <a href="{{url('/reception/doctor_selection')}}" class="link">
+    <a href="{{url('/ot/doctor_selection')}}" class="link">
         <i class="link_icons fas fa-user-plus"></i>
         <span class="link_name"> Pick Surgeon </span>
     </a>
@@ -70,7 +70,7 @@
 
 <div id="myLinks" class="mobile_links">
     <a class="mobile_link" href="{{url('/ot/new/entry/all/data')}}">Refresh List</a>
-    <a class="mobile_link" href="{{url('/reception/doctor_selection')}}">Pick Surgeon</a>
+    <a class="mobile_link" href="{{url('/ot/doctor_selection')}}">Pick Surgeon</a>
     <a class="mobile_link" href="{{url('/ot/show/anesthesiologist/list')}}">Pick Anesthesiologist</a>
     <a class="mobile_link" href="{{url('/ot/show/nurse/list')}}">Pick Nurse</a>
     <a class="mobile_link" href="{{url('/ot/assistant/data/collection')}}">Pick Assistant</a>
@@ -210,7 +210,7 @@
 
                         <div class="content_nav">
         
-                            <a href="{{url('/reception/doctor_selection')}}" class="content_nav_link purple">Add</a>
+                            <a href="{{url('/ot/doctor_selection')}}" class="content_nav_link purple">Add</a>
 
                         </div>
 
@@ -220,6 +220,10 @@
                 <!--Session message-->
 
                 @if(session('msg')=='Delete all Surgeon entry and try again.')
+
+                    <div class="content_container text_center warning_msg">{{session('msg')}}</div> 
+
+                @elseif(session('msg')=='Input at least 1 surgeon.')
 
                     <div class="content_container text_center warning_msg">{{session('msg')}}</div> 
 
@@ -460,7 +464,23 @@
                 <div class="gap"></div>
 
 
+                <form action="{{url('/ot/entry/list/submit')}}" class="patient_info_form" method="post">
+                @csrf
+
+                    <div class="patient_form_element">
+
+                        <input type="submit" class="btn content_nav_link table_item_green"  value="Confirm all entry -- [CAUTION: This is final and can't be undone.]" name="Next">
+
+                    </div>
+
+                </form>
+
+
 
 @endsection
 
 <!--------------------content end---------------------->
+
+
+
+
