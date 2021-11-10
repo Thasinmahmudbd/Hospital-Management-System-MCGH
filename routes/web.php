@@ -35,6 +35,7 @@ Route::get('/logout', function () {
     session()->forget('DOC_SESSION_ID');
     session()->forget('ACC_SESSION_ID');
     session()->forget('OTO_SESSION_ID');
+    session()->forget('NRS_SESSION_ID');
     return redirect('/');
 });
 
@@ -412,7 +413,7 @@ Route::group(['middleware'=>['accountantAuth']],function() {
 
 
 
-# OT [CONTROLLER::ot.php, invoice.php], [MIDDLEWARE::OTLoginAuth.php].
+# OT [CONTROLLER::operations.php, invoice.php, add_patient.php], [MIDDLEWARE::OTLoginAuth.php].
 
 Route::group(['middleware'=>['otAuth']],function() {
 
@@ -613,5 +614,78 @@ Route::group(['middleware'=>['otAuth']],function() {
         return view('hospital/invoice/ot_bill', compact('chosen_surgeons','chosen_anesthesiologist','chosen_nurses','chosen_assistant'));
 
     });
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# OT [CONTROLLER::invigilation.php, invoice.php, add_patient.php], [MIDDLEWARE::NurseLoginAuth.php].
+
+Route::group(['middleware'=>['nurseAuth']],function() {
+
+    ##############################################################################################################################################
+    # Bed Invigilator.  [C::invigilation.php]
+    ##############################################################################################################################################
+
+    # Going to home(admitted patient selection) with home set-up
+    # Redirecting to [FUNCTION-NO::01]---in-controller.
+    Route::get('/nurse/home/','App\Http\Controllers\nurse\invigilation@set_up_home');
+
+    # Searching patient via floor no or ID
+    # Redirecting to [FUNCTION-NO::02]---in-controller.
+    Route::post('/nurse/find_patient/by_search/','App\Http\Controllers\nurse\invigilation@search_patients');
+
+    # Patient targeting
+    # Redirecting to [FUNCTION-NO::03]---in-controller.
+    Route::get('/choose/invigilator/{a_id}','App\Http\Controllers\nurse\invigilation@target');
+    
+    # Going to selection confirmation page
+    # Redirecting to hospital/nurse/confirm---in-resources/views/.
+    Route::view('/nurse/invigilator/selected','hospital/nurse/confirm');
+
+    # Confirming invigilator selection
+    # Redirecting to [FUNCTION-NO::03]---in-controller.
+    Route::get('/nurse/confirm/selection','App\Http\Controllers\nurse\invigilation@invigilator_confirmed');
+
+    ##############################################################################################################################################
+    # Doctor List Browsing.  [C::add_patient.php]
+    ##############################################################################################################################################
+
+    # Doctor selection page.
+    # Redirecting to [FUNCTION-NO::04]---in-controller.
+    Route::get('/nurse/doctor_selection','App\Http\Controllers\reception\add_patient@show_all_doctor');
+
+    # Doctor selection page department side-bar action buttons.
+    # Redirecting to [FUNCTION-NO::05]---in-controller.
+    Route::get('/nurse/doctor_selection/by_department/{department}','App\Http\Controllers\reception\add_patient@show_doctor_by_department');
+
+    # Doctor selection page search-bar action button.
+    # Redirecting to [FUNCTION-NO::06]---in-controller.
+    Route::post('/nurse/doctor_selection/by_search','App\Http\Controllers\reception\add_patient@search_doctor');
+    
+    # After selecting doctor.
+    # Redirecting to [FUNCTION-NO::07]---in-controller.
+    Route::post('/nurse/submit_doctor_selection','App\Http\Controllers\reception\add_patient@submit_doctor_selection');
+
+
+
+
+
+
+
+
+
+
 
 });

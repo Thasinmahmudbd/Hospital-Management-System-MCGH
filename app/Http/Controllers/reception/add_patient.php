@@ -443,6 +443,13 @@ class add_patient extends Controller
             # Redirecting to view, hospital/ot/surgeon_fee.
             return redirect('/ot/set/fees');
 
+        }if($redirect == 'invigilator_selection'){
+
+            session(['fee_input_type' => 'surgeon']);
+
+            # Redirecting to [FUNCTION-NO::4], [C::invigilation.php].
+            return redirect('/nurse/invigilator/selected');
+
         }
 
     }
@@ -671,8 +678,8 @@ class add_patient extends Controller
 # Generates patient unique ID;
 # Generates token;
 # Completes patient data entry for doctor appointments;
-# Entry will happen on  --: TABLE :------ patients.
-# Entry will happen on  --: TABLE :------ patient_logs.
+# Entry will happen on  --: TABLE :------ patients;
+# Entry will happen on  --: TABLE :------ patient_logs;
 # Update will happen on --: TABLE :------ doctor_schedules.
 
     function patient_data_entry_for_doctor_appointment(Request $request){

@@ -59,6 +59,10 @@ class Kernel extends HttpKernel
         'otAuth' => [
             \App\Http\Middleware\OTLoginAuth::class,
         ],
+
+        'nurseAuth' => [
+            \App\Http\Middleware\NurseLoginAuth::class,
+        ],
     ];
 
     /**
