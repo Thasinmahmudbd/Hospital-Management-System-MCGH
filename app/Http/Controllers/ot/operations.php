@@ -491,7 +491,7 @@ function surgeon_fee_entry(Request $request){
 
     );
 
-    # updating nurse wallet.
+    # updating doctor wallet.
     $doctor_wallet=DB::table('doctors')
     ->where('D_ID',$d_id)
     ->update($wallet_value);
@@ -691,7 +691,7 @@ function anesthesiologist_fee_entry(Request $request){
 
     );
 
-    # updating nurse wallet.
+    # updating anesthesiologist wallet.
     $doctor_wallet=DB::table('doctors')
     ->where('D_ID',$anesthesiologist_id)
     ->update($wallet_value);
@@ -978,7 +978,7 @@ function delete_surgeon_entry(Request $request, $ai_id){
 
     );
 
-    # updating nurse wallet.
+    # updating doctor wallet.
     $doctor_wallet=DB::table('doctors')
     ->where('D_ID',$d_id)
     ->update($wallet_value);
@@ -1054,7 +1054,7 @@ function delete_anesthesiologist_entry(Request $request, $ai_id){
 
     );
 
-    # updating nurse wallet.
+    # updating anesthesiologist wallet.
     $doctor_wallet=DB::table('doctors')
     ->where('D_ID',$d_id)
     ->update($wallet_value);

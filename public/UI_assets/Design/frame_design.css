@@ -572,3 +572,7 @@
     background-color: rgb(70, 44, 141);
     transition: 200ms ease-in-out;
 }
+
+.block{
+    display:block;
+}

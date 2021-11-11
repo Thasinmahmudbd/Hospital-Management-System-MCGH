@@ -648,15 +648,27 @@ Route::group(['middleware'=>['nurseAuth']],function() {
 
     # Patient targeting
     # Redirecting to [FUNCTION-NO::03]---in-controller.
-    Route::get('/choose/invigilator/{a_id}','App\Http\Controllers\nurse\invigilation@target');
+    Route::get('/choose/invigilator/{a_id}/{target_path}','App\Http\Controllers\nurse\invigilation@target');
     
     # Going to selection confirmation page
     # Redirecting to hospital/nurse/confirm---in-resources/views/.
     Route::view('/nurse/invigilator/selected','hospital/nurse/confirm');
 
     # Confirming invigilator selection
-    # Redirecting to [FUNCTION-NO::03]---in-controller.
+    # Redirecting to [FUNCTION-NO::04]---in-controller.
     Route::get('/nurse/confirm/selection','App\Http\Controllers\nurse\invigilation@invigilator_confirmed');
+
+    # Patient targeting
+    # Redirecting to [FUNCTION-NO::03]---in-controller.
+    Route::get('/nurse/input/other/{a_id}/{target_path}','App\Http\Controllers\nurse\invigilation@target');
+
+    # Receives other info
+    # Redirecting to [FUNCTION-NO::05]---in-controller.
+    Route::post('/nurse/other/input','App\Http\Controllers\nurse\invigilation@other_Info_Submission');
+
+    # Receives other info
+    # Redirecting to [FUNCTION-NO::06]---in-controller.
+    Route::post('/nurse/personal/selected','App\Http\Controllers\nurse\invigilation@other_info_submission_complete');
 
     ##############################################################################################################################################
     # Doctor List Browsing.  [C::add_patient.php]

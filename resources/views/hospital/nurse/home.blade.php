@@ -52,6 +52,8 @@
 @section('content')
 
 
+
+
                 <div class="patient_and_doctor_info_one_is_to_one">
 
                     <!--Placeholder-->
@@ -90,6 +92,18 @@
                 <div class="purple_line"></div>
                 <div class="gap"></div>
 
+                    <!--Session message-->
+
+                    @if(session('msg')=='Records found.')
+
+                    <div class="content_container text_center success_msg">{{session('msg')}}</div>
+
+                    @elseif(session('msg')=='Records not found.')
+
+                    <div class="content_container text_center warning_msg">{{session('msg')}}</div>
+
+                    @endif
+
                 <!--Showing todays patients-->
 
                 <div class="content_container_bg_less_thin">
@@ -122,14 +136,14 @@
                         <td class="frame_data" data-label="Bed No">{{$list->Bed_No}}</td>
                         <td class="frame_data" data-label="Floor No">{{$list->Floor_No}}</td>
 
-                        <td class="frame_action" data-label="Invigilator">
-                            <a href="{{url('/choose/invigilator/'.$list->A_ID)}}">
+                        <td class="frame_action table_item_dark_green" data-label="Invigilator">
+                            <a class="table_item_dark_green" href="{{url('/choose/invigilator/'.$list->A_ID.'/invigilator')}}">
                                 Select
                             </a>
                         </td>
                         
-                        <td class="frame_action" data-label="Others">
-                            <a href="{{url('/nurse/input/other/'.$list->A_ID)}}">
+                        <td class="frame_action table_item_dark_green" data-label="Others">
+                            <a class="table_item_dark_green" href="{{url('/nurse/input/other/'.$list->A_ID.'/other')}}">
                                 Input
                             </a>
                         </td>
@@ -165,11 +179,21 @@
                 <div class="purple_line"></div>
                 <div class="gap"></div>
 
+                <!--Session message-->
 
+                @if(session('msg')=='Invigilation recorded successfully.')
 
+                <div class="content_container text_center success_msg">{{session('msg')}}</div>
 
+                @elseif(session('msg')=='Services recorded successfully.')
 
+                <div class="content_container text_center success_msg">{{session('msg')}}</div>
 
+                @elseif(session('msg')=='Fill up at-least one section.')
+
+                <div class="content_container text_center warning_msg">{{session('msg')}}</div>
+
+                @endif
 
                 <!--Showing patients-->
 
@@ -204,13 +228,13 @@
                         <td class="frame_data" data-label="Floor No">{{$list->Floor_No}}</td>
 
                         <td class="frame_action table_item_dark_green" data-label="Invigilator">
-                            <a class="table_item_dark_green" href="{{url('/choose/invigilator/'.$list->A_ID)}}">
+                            <a class="table_item_dark_green" href="{{url('/choose/invigilator/'.$list->A_ID.'/invigilator')}}">
                                 Select
                             </a>
                         </td>
                         
                         <td class="frame_action table_item_dark_green" data-label="Others">
-                            <a class="table_item_dark_green" href="{{url('/nurse/input/other/'.$list->A_ID)}}">
+                            <a class="table_item_dark_green" href="{{url('/nurse/input/other/'.$list->A_ID.'/other')}}">
                                 Input
                             </a>
                         </td>
