@@ -121,7 +121,7 @@
 
                     </div>
 
-                    <p>Permanent Address</p>
+                    <p>Permanent Address <button class="btn link_btn" onclick="copyPaste(this.form)">Copy from above</button></p>
 
                     <div class="patient_form_element_one_is_to_one">
 

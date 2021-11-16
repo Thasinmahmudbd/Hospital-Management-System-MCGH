@@ -44,7 +44,7 @@ p{
 .purple_line{
     width:100%;
     height: 2px;
-    background-color: rgba(106, 63, 226, 0.842);
+    background-color: #5C8D89/*rgba(106, 63, 226, 0.842)*/;
 }
 
 .round_image{

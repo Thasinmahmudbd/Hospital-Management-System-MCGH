@@ -35,6 +35,13 @@
 </li>
 
 <li class="list_item">
+    <a href="{{url('/doctor/operation/schedule/')}}" class="link">
+        <i class="link_icons fas fa-calendar-alt"></i>
+        <span class="link_name"> Operation Schedule </span>
+    </a>
+</li>
+
+<li class="list_item">
     <a href="{{url('/doctor/log/')}}" class="link">
         <i class="link_icons fas fa-clipboard-list"></i>
         <span class="link_name"> My Logs </span>
@@ -65,6 +72,7 @@
     <a class="mobile_link" href="{{url('/doctor/home/')}}">My Profile</a>
     <a class="mobile_link" href="{{url('/doctor/patients/')}}">My Patients</a>
     <a class="mobile_link" href="{{url('/doctor/schedule/')}}">My Schedule</a>
+    <a class="mobile_link" href="{{url('/doctor/operation/schedule/')}}">Operation Schedule</a>
     <a class="mobile_link" href="{{url('/doctor/log/')}}">My Logs</a>
     <a class="mobile_link" href="{{url('/doctor/edit_profile/')}}">Edit Profile</a>
 </div>
@@ -89,7 +97,7 @@
 
                     <b class="content_container_bg_less_thin">Search patient & add them as treated. Total appointments today :</b>
 
-                    <span class="text_center table_item_green content_container_bg_less_thin">
+                    <span class="text_center table_item_orange content_container_bg_less_thin">
 
                         {{Session::get('UNTREATED')}}
 
@@ -187,7 +195,7 @@
 
                     <b class="content_container_bg_less_thin">Patients you've treated today :</b>
 
-                    <span class="text_center table_item_green content_container_bg_less_thin">
+                    <span class="text_center table_item_orange content_container_bg_less_thin">
 
                         {{Session::get('TREATED')}}
 

@@ -35,6 +35,7 @@
     <script src="{{ asset('UI_assets/Javascript/imageViewer.js') }}"></script>
     <script src="{{ asset('UI_assets/Javascript/triggerClick.js') }}"></script>
     <script src="{{ asset('UI_assets/Javascript/calc.js') }}"></script>
+    <script src="{{ asset('UI_assets/Javascript/autoFill.js') }}"></script>
 	<script src="{{ asset('UI_assets/Javascript/fontawesome.min.js') }}"></script>
     
     <!--<script type="text/javascript">

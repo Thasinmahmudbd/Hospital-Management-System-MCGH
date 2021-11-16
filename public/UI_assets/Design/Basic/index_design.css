@@ -29,7 +29,7 @@ body{
     position: fixed;
     top:0px;
     left:0px;
-    background-color: rgb(106, 63, 226);
+    background-color: #5C8D89;/*rgb(106, 63, 226);*/
     padding:16px;
     width:100%;
 }
@@ -42,7 +42,7 @@ body{
     position: fixed;
     bottom:0px;
     left:0px;
-    background-color: rgb(106, 63, 226);
+    background-color: #5C8D89;/*rgb(106, 63, 226);*/
     padding:16px;
     width:100%;
 }

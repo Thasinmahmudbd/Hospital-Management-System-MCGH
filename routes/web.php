@@ -182,6 +182,14 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     Route::get('/reception/patient_list/','App\Http\Controllers\reception\add_patient@show_list');
 
     ##############################################################################################################################################
+    #Appointments and Admissions cancellation after submission.  [C::add_patient.php]
+    ##############################################################################################################################################
+
+    # Cancels appointments and admissions after submission.
+    # Redirecting to [FUNCTION-NO::24]---in-controller.
+    Route::get('/reception/cancel/appointment/{ai_id}','App\Http\Controllers\reception\add_patient@appointment_cancellation_after');
+
+    ##############################################################################################################################################
     # Invoice.  [C::invoice.php]
     ##############################################################################################################################################
 
@@ -314,6 +322,10 @@ Route::group(['middleware'=>['doctorAuth']],function() {
     # Adding patient cap.
     # Redirecting to [FUNCTION-NO::11]---in-controller.
     Route::post('/doctor/set_patient_cap/','App\Http\Controllers\doctor\profile@patient_cap');
+
+    # Shows operation schedule.
+    # Redirecting to [FUNCTION-NO::15]---in-controller.
+    Route::get('/doctor/operation/schedule/','App\Http\Controllers\doctor\profile@show_operation_schedule');
 
     ##############################################################################################################################################
     # Doctor Log.  [C::profile.php]

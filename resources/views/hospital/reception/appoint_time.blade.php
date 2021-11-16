@@ -288,7 +288,7 @@
                                     </a>
                                 @else
                                     <a href="{{url('/reception/set_time/'.$time->AI_ID)}}" class="">
-                                        <p class="table_basic_btn table_item_yellow">{{$time->Sat}}</p>
+                                        <p class="table_basic_btn table_item_orange">{{$time->Sat}}</p>
                                     </a>
                                 @endif
 
@@ -317,7 +317,7 @@
                                     </a>
                                 @else
                                     <a href="{{url('/reception/set_time/'.$time->AI_ID)}}" class="">
-                                        <p class="table_basic_btn table_item_yellow">{{$time->Sun}}</p>
+                                        <p class="table_basic_btn table_item_orange">{{$time->Sun}}</p>
                                     </a>
                                 @endif
 
@@ -346,7 +346,7 @@
                                     </a>
                                 @else
                                     <a href="{{url('/reception/set_time/'.$time->AI_ID)}}" class="">
-                                        <p class="table_basic_btn table_item_yellow">{{$time->Mon}}</p>
+                                        <p class="table_basic_btn table_item_orange">{{$time->Mon}}</p>
                                     </a>
                                 @endif
 
@@ -375,7 +375,7 @@
                                     </a>
                                 @else
                                     <a href="{{url('/reception/set_time/'.$time->AI_ID)}}" class="">
-                                        <p class="table_basic_btn table_item_yellow">{{$time->Tue}}</p>
+                                        <p class="table_basic_btn table_item_orange">{{$time->Tue}}</p>
                                     </a>
                                 @endif
 
@@ -404,7 +404,7 @@
                                     </a>
                                 @else
                                     <a href="{{url('/reception/set_time/'.$time->AI_ID)}}" class="">
-                                        <p class="table_basic_btn table_item_yellow">{{$time->Wed}}</p>
+                                        <p class="table_basic_btn table_item_orange">{{$time->Wed}}</p>
                                     </a>
                                 @endif
 
@@ -433,7 +433,7 @@
                                     </a>
                                 @else
                                     <a href="{{url('/reception/set_time/'.$time->AI_ID)}}" class="">
-                                        <p class="table_basic_btn table_item_yellow">{{$time->Thu}}</p>
+                                        <p class="table_basic_btn table_item_orange">{{$time->Thu}}</p>
                                     </a>
                                 @endif
 
@@ -462,7 +462,7 @@
                                     </a>
                                 @else
                                     <a href="{{url('/reception/set_time/'.$time->AI_ID)}}" class="">
-                                        <p class="table_basic_btn table_item_yellow">{{$time->Fri}}</p>
+                                        <p class="table_basic_btn table_item_orange">{{$time->Fri}}</p>
                                     </a>
                                 @endif
 

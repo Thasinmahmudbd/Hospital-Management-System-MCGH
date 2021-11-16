@@ -763,6 +763,35 @@ function edit_profile(Request $request){
 
 
 
+#########################
+#### FUNCTION-NO::15 ####
+#########################
+# shows operation schedule.
+
+function show_operation_schedule(Request $request){
+
+    $d_id = $request->session()->get('DOC_SESSION_ID');
+
+    $data['result']=DB::table('ot_schedules')
+        ->where('Surgeon_ID',$d_id)
+        ->orderBy('AI_ID','desc')
+        ->get();
+        
+        # Returning to the view below.
+        return view('hospital/doctor/operation_schedule',$data);
+
+}
+
+# End of function show_operation_schedule.                  <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
 
 
 

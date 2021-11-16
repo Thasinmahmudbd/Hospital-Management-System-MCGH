@@ -1522,5 +1522,94 @@ function patient_data_entry_for_admission(Request $request){
 # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
+
+
+
+#########################
+#### FUNCTION-NO::24 ####
+#########################
+# Deletes patient data entry after appointment;
+# Delete will happen on  --: TABLE :------ patient_logs.
+# Update will happen on --: TABLE :------ doctor_schedules.
+
+function appointment_cancellation_after(Request $request, $ai_id){
+
+    date_default_timezone_set('Asia/Dhaka');
+
+    # getting log data.
+    $log_data=DB::table('patient_logs')
+        ->where('AI_ID', $ai_id)
+        ->first();
+
+    $final_fee = $log_data->Final_Fee;
+    $ap_date = $log_data->Ap_Date;
+    $ap_time = $log_data->Ap_Time;
+    $D_ID = $log_data->D_ID;
+    $treatment_status = $log_data->Treatment_Status;
+    $timestamp = strtotime($ap_date);
+    $day = date('D', $timestamp);
+
+    # getting from
+    $token_array = explode('-',$ap_time);
+    $from = current($token_array);
+
+    # getting schedule data.
+    $schedule=DB::table('doctor_schedules')
+        ->where('D_ID', $D_ID)
+        ->where('F', $from)
+        ->first();
+
+    $count = $schedule->$day;
+    $count = $count-1;
+    $d_s_ai_id = $schedule->AI_ID;
+
+    $data=array(
+        $day=>$count
+    );
+
+    if($treatment_status==0){
+
+        DB::table('patient_logs')
+            ->where('AI_ID', $ai_id)
+            ->delete();
+
+        DB::table('doctor_schedules')
+            ->where('AI_ID',$d_s_ai_id)
+            ->update($data);
+
+    }
+
+    # Redirecting to [FUNCTION-NO::01], invoice controller.
+    return redirect('/reception/invoice_list/appointment/');
+
+}
+
+# End of function appointment_cancellation_after.           <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 

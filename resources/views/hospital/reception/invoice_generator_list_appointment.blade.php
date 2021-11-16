@@ -134,9 +134,10 @@
                     <tr class="frame_header">
                         <th width="5%" class="frame_header_item">S/N</th>
                         <th width="20%" class="frame_header_item">P-ID</th>
-                        <th width="25%" class="frame_header_item">Patient Name</th>
+                        <th width="20%" class="frame_header_item">Patient Name</th>
                         <th width="20%" class="frame_header_item">Cell</th>
                         <th width="25%" class="frame_header_item">Doctor</th>
+                        <th width="5%" class="frame_header_item">Cancel</th>
                         <th width="5%" class="frame_header_item">Print</th>
                     </tr>
 
@@ -150,7 +151,13 @@
                         <td class="frame_data" data-label="Cell">{{$list->Cell_Number}}</td>
                         <td class="frame_data" data-label="Doctor">{{$list->Dr_Name}}</td>
 
-                        <td class="frame_action" data-label="Action">
+                        <td class="frame_action" data-label="Cancel">
+                            <a href="{{url('/reception/cancel/appointment/'.$list->AI_ID)}}">
+                                <i class="table_btn_red fas fa-times-circle"></i>
+                            </a>
+                        </td>
+
+                        <td class="frame_action" data-label="Print">
                             <a target="blank" href="{{url('/reception/collect/appointment/invoice/data/'.$list->AI_ID)}}">
                                 <i class="table_btn fas fa-print"></i>
                             </a>
@@ -210,9 +217,10 @@
                     <tr class="frame_header">
                         <th width="5%" class="frame_header_item">S/N</th>
                         <th width="20%" class="frame_header_item">P-ID</th>
-                        <th width="25%" class="frame_header_item">Patient Name</th>
+                        <th width="20%" class="frame_header_item">Patient Name</th>
                         <th width="20%" class="frame_header_item">Cell</th>
                         <th width="25%" class="frame_header_item">Doctor</th>
+                        <th width="5%" class="frame_header_item">Cancel</th>
                         <th width="5%" class="frame_header_item">Print</th>
                     </tr>
 
@@ -226,7 +234,13 @@
                         <td class="frame_data" data-label="Cell">{{$list->Cell_Number}}</td>
                         <td class="frame_data" data-label="Doctor">{{$list->Dr_Name}}</td>
 
-                        <td class="frame_action" data-label="Action">
+                        <td class="frame_action" data-label="Cancel">
+                            <a href="{{url('/reception/cancel/appointment/'.$list->AI_ID)}}">
+                                <i class="table_btn_red fas fa-times-circle"></i>
+                            </a>
+                        </td>
+
+                        <td class="frame_action" data-label="Print">
                             <a target="blank" href="{{url('/reception/collect/appointment/invoice/data/'.$list->AI_ID)}}">
                                 <i class="table_btn fas fa-print"></i>
                             </a>
@@ -262,9 +276,10 @@
                     <tr class="frame_header">
                         <th width="5%" class="frame_header_item">S/N</th>
                         <th width="20%" class="frame_header_item">P-ID</th>
-                        <th width="25%" class="frame_header_item">Patient Name</th>
+                        <th width="20%" class="frame_header_item">Patient Name</th>
                         <th width="20%" class="frame_header_item">Cell</th>
                         <th width="25%" class="frame_header_item">Doctor</th>
+                        <th width="5%" class="frame_header_item">Cancel</th>
                         <th width="5%" class="frame_header_item">Print</th>
                     </tr>
 
@@ -278,7 +293,13 @@
                         <td class="frame_data" data-label="Cell">{{$list->Cell_Number}}</td>
                         <td class="frame_data" data-label="Doctor">{{$list->Dr_Name}}</td>
 
-                        <td class="frame_action" data-label="Action">
+                        <td class="frame_action" data-label="Cancel">
+                            <a href="{{url('/reception/cancel/appointment/'.$list->AI_ID)}}">
+                                <i class="table_btn_red fas fa-times-circle"></i>
+                            </a>
+                        </td>
+
+                        <td class="frame_action" data-label="Print">
                             <a target="blank" href="{{url('/reception/collect/appointment/invoice/data/'.$list->AI_ID)}}">
                                 <i class="table_btn fas fa-print"></i>
                             </a>
@@ -340,9 +361,10 @@
                     <tr class="frame_header">
                         <th width="5%" class="frame_header_item">S/N</th>
                         <th width="20%" class="frame_header_item">P-ID</th>
-                        <th width="25%" class="frame_header_item">Patient Name</th>
+                        <th width="20%" class="frame_header_item">Patient Name</th>
                         <th width="20%" class="frame_header_item">Cell</th>
                         <th width="25%" class="frame_header_item">Doctor</th>
+                        <th width="5%" class="frame_header_item">Bed</th>
                         <th width="5%" class="frame_header_item">Print</th>
                     </tr>
 
@@ -356,7 +378,13 @@
                         <td class="frame_data" data-label="Cell">{{$list->Cell_Number}}</td>
                         <td class="frame_data" data-label="Doctor">{{$list->Dr_Name}}</td>
 
-                        <td class="frame_action" data-label="Action">
+                        <td class="frame_action" data-label="Bed">
+                            <a href="{{url('/reception/switch/bed/'.$list->A_ID)}}">
+                                <i class="table_btn_orange fas fa-sync-alt"></i>
+                            </a>
+                        </td>
+
+                        <td class="frame_action" data-label="Print">
                             <a target="blank" href="{{url('/reception/collect/admission/invoice/data/'.$list->A_ID)}}">
                                 <i class="table_btn fas fa-print"></i>
                             </a>
@@ -416,9 +444,10 @@
                     <tr class="frame_header">
                         <th width="5%" class="frame_header_item">S/N</th>
                         <th width="20%" class="frame_header_item">P-ID</th>
-                        <th width="25%" class="frame_header_item">Patient Name</th>
+                        <th width="20%" class="frame_header_item">Patient Name</th>
                         <th width="20%" class="frame_header_item">Cell</th>
                         <th width="25%" class="frame_header_item">Doctor</th>
+                        <th width="5%" class="frame_header_item">Bed</th>
                         <th width="5%" class="frame_header_item">Print</th>
                     </tr>
 
@@ -432,7 +461,13 @@
                         <td class="frame_data" data-label="Cell">{{$list->Cell_Number}}</td>
                         <td class="frame_data" data-label="Doctor">{{$list->Dr_Name}}</td>
 
-                        <td class="frame_action" data-label="Action">
+                        <td class="frame_action" data-label="Bed">
+                            <a href="{{url('/reception/switch/bed/'.$list->A_ID)}}">
+                                <i class="table_btn_orange fas fa-sync-alt"></i>
+                            </a>
+                        </td>
+
+                        <td class="frame_action" data-label="Print">
                             <a target="blank" href="{{url('/reception/collect/admission/invoice/data/'.$list->A_ID)}}">
                                 <i class="table_btn fas fa-print"></i>
                             </a>
@@ -468,9 +503,10 @@
                     <tr class="frame_header">
                         <th width="5%" class="frame_header_item">S/N</th>
                         <th width="20%" class="frame_header_item">P-ID</th>
-                        <th width="25%" class="frame_header_item">Patient Name</th>
+                        <th width="20%" class="frame_header_item">Patient Name</th>
                         <th width="20%" class="frame_header_item">Cell</th>
                         <th width="25%" class="frame_header_item">Doctor</th>
+                        <th width="5%" class="frame_header_item">Bed</th>
                         <th width="5%" class="frame_header_item">Print</th>
                     </tr>
 
@@ -484,7 +520,13 @@
                         <td class="frame_data" data-label="Cell">{{$list->Cell_Number}}</td>
                         <td class="frame_data" data-label="Doctor">{{$list->Dr_Name}}</td>
 
-                        <td class="frame_action" data-label="Action">
+                        <td class="frame_action" data-label="Bed">
+                            <a href="{{url('/reception/switch/bed/'.$list->A_ID)}}">
+                                <i class="table_btn_orange fas fa-sync-alt"></i>
+                            </a>
+                        </td>
+
+                        <td class="frame_action" data-label="Print">
                             <a target="blank" href="{{url('/reception/collect/admission/invoice/data/'.$list->A_ID)}}">
                                 <i class="table_btn fas fa-print"></i>
                             </a>

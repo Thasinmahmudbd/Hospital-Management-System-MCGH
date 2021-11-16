@@ -49,7 +49,7 @@
 }
 
 .form_btn:hover{
-    background-color: rgb(70, 44, 141);
+    background-color: #5C8D89/*rgb(70, 44, 141)*/;
     transition: 300ms ease-in;
 }
 

@@ -190,13 +190,13 @@
                             <td class="frame_action" data-label="Edit" width="7%">
                                 <input type="hidden" name="ai_id" value="{{$list->AI_ID}}">
                                 <button type="submit" class="btn_less" required>
-                                    <i class="table_btn_yellow fas fa-pen"></i>
+                                    <i class="table_btn_orange fas fa-pen"></i>
                                 </button>
                             </td>
 
                             <td class="frame_action" data-label="Delete" width="7%">
                                 <a href="{{url('/ot/edit/schedule/'.$list->AI_ID)}}">
-                                    <i class="table_btn_red fas fa-trash-alt"></i>
+                                    <i class="table_btn_red fas fa-times-circle"></i>
                                 </a>
                             </td>
 

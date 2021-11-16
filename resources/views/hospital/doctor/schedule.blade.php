@@ -35,6 +35,13 @@
 </li>
 
 <li class="list_item">
+    <a href="{{url('/doctor/operation/schedule/')}}" class="link">
+        <i class="link_icons fas fa-calendar-alt"></i>
+        <span class="link_name"> Operation Schedule </span>
+    </a>
+</li>
+
+<li class="list_item">
     <a href="{{url('/doctor/log/')}}" class="link">
         <i class="link_icons fas fa-clipboard-list"></i>
         <span class="link_name"> My Logs </span>
@@ -65,6 +72,7 @@
     <a class="mobile_link" href="{{url('/doctor/home/')}}">My Profile</a>
     <a class="mobile_link" href="{{url('/doctor/patients/')}}">My Patients</a>
     <a class="mobile_link" href="{{url('/doctor/schedule/')}}">My Schedule</a>
+    <a class="mobile_link" href="{{url('/doctor/operation/schedule/')}}">Operation Schedule</a>
     <a class="mobile_link" href="{{url('/doctor/log/')}}">My Logs</a>
     <a class="mobile_link" href="{{url('/doctor/edit_profile/')}}">Edit Profile</a>
 </div>
@@ -291,7 +299,7 @@
                                     </a>
                                 @else
                                     <a href="{{url('/doctor/reschedule/')}}" class="">
-                                        <p class="table_basic_btn table_item_yellow">{{$time->Sat}}</p>
+                                        <p class="table_basic_btn table_item_orange">{{$time->Sat}}</p>
                                     </a>
                                 @endif
 
@@ -320,7 +328,7 @@
                                     </a>
                                 @else
                                     <a href="{{url('/doctor/reschedule/')}}" class="">
-                                        <p class="table_basic_btn table_item_yellow">{{$time->Sun}}</p>
+                                        <p class="table_basic_btn table_item_orange">{{$time->Sun}}</p>
                                     </a>
                                 @endif
 
@@ -349,7 +357,7 @@
                                     </a>
                                 @else
                                     <a href="{{url('/doctor/reschedule/')}}" class="">
-                                        <p class="table_basic_btn table_item_yellow">{{$time->Mon}}</p>
+                                        <p class="table_basic_btn table_item_orange">{{$time->Mon}}</p>
                                     </a>
                                 @endif
 
@@ -378,7 +386,7 @@
                                     </a>
                                 @else
                                     <a href="{{url('/doctor/reschedule/')}}" class="">
-                                        <p class="table_basic_btn table_item_yellow">{{$time->Tue}}</p>
+                                        <p class="table_basic_btn table_item_orange">{{$time->Tue}}</p>
                                     </a>
                                 @endif
 
@@ -407,7 +415,7 @@
                                     </a>
                                 @else
                                     <a href="{{url('/doctor/reschedule/')}}" class="">
-                                        <p class="table_basic_btn table_item_yellow">{{$time->Wed}}</p>
+                                        <p class="table_basic_btn table_item_orange">{{$time->Wed}}</p>
                                     </a>
                                 @endif
 
@@ -436,7 +444,7 @@
                                     </a>
                                 @else
                                     <a href="{{url('/doctor/reschedule/')}}" class="">
-                                        <p class="table_basic_btn table_item_yellow">{{$time->Thu}}</p>
+                                        <p class="table_basic_btn table_item_orange">{{$time->Thu}}</p>
                                     </a>
                                 @endif
 
@@ -465,7 +473,7 @@
                                     </a>
                                 @else
                                     <a href="{{url('/doctor/reschedule/')}}" class="">
-                                        <p class="table_basic_btn table_item_yellow">{{$time->Fri}}</p>
+                                        <p class="table_basic_btn table_item_orange">{{$time->Fri}}</p>
                                     </a>
                                 @endif
 

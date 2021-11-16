@@ -9,14 +9,14 @@
 /* top */
 
 .left_side{
-    background-color:rgb(70, 44, 141);
+    background-color:#5C8D89/*rgb(70, 44, 141)*/;
     color:#fff;
     height: 100%;
 }
 
 .left_side_top{
     padding:25px;
-    background-color: rgb(106, 63, 226);
+    background-color: #74B498/*rgb(106, 63, 226)*/;
     box-shadow: -5px 0px 20px -5px #3b3838;
 }
 
@@ -51,10 +51,10 @@
     grid-template-columns: 30px 1fr;
     padding:10px 25px;
     color:#fff;
-    background-color: rgb(106, 63, 226);
+    background-color: #74B498/*rgb(106, 63, 226)*/;
     text-align: start;
     position:relative;
-    border-bottom:2px solid rgb(70, 44, 141);
+    border-bottom:2px solid #5C8D89/*rgb(70, 44, 141)*/;
 }
 
 .link::after{
@@ -107,7 +107,7 @@
 .right_side_top{
     display:grid;
     grid-template-columns: 50px 1fr 50px;
-    background-color: rgb(70, 44, 141);
+    background-color: #5C8D89/*rgb(70, 44, 141)*/;
     color:#fff;
     font-size: 20px;
     font-weight: bold;
@@ -133,7 +133,7 @@
     align-items: center;
     justify-items: center;
     width:100%;
-    background-color: rgb(70, 44, 141);
+    background-color: #5C8D89/*rgb(70, 44, 141)*/;
     position:absolute;
     top:-5000px;
     box-shadow: 5px 10px 15px -10px #3b3838;
@@ -147,15 +147,15 @@
     width:100%;
     background-color: #fff;
     padding: 10px 0px;
-    color:rgb(70, 44, 141);
-    border-bottom:3px solid rgb(70, 44, 141);
+    color:#5C8D89/*rgb(70, 44, 141)*/;
+    border-bottom:3px solid #5C8D89/*rgb(70, 44, 141)*/;
     transition: 300ms ease-in;
     z-index: 1;
 }
 
 .mobile_link:hover{
     color:#fff;
-    background-color: rgb(106, 63, 226);
+    background-color: #74B498/*rgb(106, 63, 226)*/;
     transition: 300ms ease-in;
 }
 
@@ -249,12 +249,12 @@
 .title_bar_purple{
     text-align: center;
     padding:8px;
-    background-color: rgba(106, 63, 226, 0.842);
+    background-color: #74B498/*rgba(106, 63, 226, 0.842)*/;
     color:#fff;
 }
 
 .purple_icon{
-    color: rgba(106, 63, 226, 0.842);
+    color: #74B498/*rgba(106, 63, 226, 0.842)*/;
     font-size:20px;
 }
 
@@ -293,7 +293,7 @@
 }
 
 .content_nav_link_active{
-    background-color: rgb(106, 63, 226);
+    background-color: #74B498/*rgb(106, 63, 226)*/;
     padding:8px 16px;
     color:#fff;
     font-weight: bold;
@@ -302,7 +302,7 @@
 }
 
 .content_nav_link:hover{
-    background-color: rgb(106, 63, 226);
+    background-color: #74B498/*rgb(106, 63, 226)*/;
     color:#fff;
     transition: 300ms ease-in;
 }
@@ -326,7 +326,7 @@
 .frame_header_item{
     text-align: center;
     padding:8px;
-    background-color: rgba(106, 63, 226, 0.842);
+    background-color: #74B498/*rgba(106, 63, 226, 0.842)*/;
     color:#fff;
 }
 
@@ -378,6 +378,16 @@
     cursor: pointer;
 }
 
+.table_btn_orange{
+    font-size: 1.5rem;
+    width:100%;
+    padding:8px 8px;
+    border-radius: 100px;
+    background-color: rgba(236, 152, 42, 0.76);
+    color:#fff;
+    cursor: pointer;
+}
+
 .table_basic_btn{
     width:100%;
     padding:8px 0px;
@@ -400,6 +410,10 @@
     background-color: rgba(194, 191, 29, 0.726);
 }
 
+.table_btn_orange:hover{
+    background-color: rgba(204, 133, 41, 0.76);
+}
+
 .table_item_green{
     font-size: 1rem;
     background-color: rgba(53, 233, 53, 0.76);
@@ -415,6 +429,12 @@
 .table_item_yellow{
     font-size: 1rem;
     background-color: rgba(215, 233, 53, 0.76);
+    color:#fff;
+}
+
+.table_item_orange{
+    font-size: 1rem;
+    background-color: rgba(236, 152, 42, 0.76);
     color:#fff;
 }
 
@@ -446,24 +466,24 @@
 @keyframes border_indicator_animation {
 
     0% {
-        border-left: 3px solid rgba(106, 63, 226, 0.842);
-        border-right: 3px solid rgba(106, 63, 226, 0.842);
+        border-left: 3px solid #74B498/*rgba(106, 63, 226, 0.842)*/;
+        border-right: 3px solid #74B498/*rgba(106, 63, 226, 0.842)*/;
     }
     25% {
-        border-left: 3px solid rgb(70, 44, 141);
-        border-right: 3px solid rgb(70, 44, 141);
+        border-left: 3px solid #5C8D89/*rgb(70, 44, 141)*/;
+        border-right: 3px solid #5C8D89/*rgb(70, 44, 141)*/;
     }
     50% {
-        border-left: 3px solid rgba(106, 63, 226, 0.842);
-        border-right: 3px solid rgba(106, 63, 226, 0.842);
+        border-left: 3px solid #74B498/*rgba(106, 63, 226, 0.842)*/;
+        border-right: 3px solid #74B498/*rgba(106, 63, 226, 0.842)*/;
     }
     75% {
-        border-left: 3px solid rgb(70, 44, 141);
-        border-right: 3px solid rgb(70, 44, 141);
+        border-left: 3px solid #5C8D89/*rgb(70, 44, 141)*/;
+        border-right: 3px solid #5C8D89/*rgb(70, 44, 141)*/;
     }
     100% {
-        border-left: 3px solid rgba(106, 63, 226, 0.842);
-        border-right: 3px solid rgba(106, 63, 226, 0.842);
+        border-left: 3px solid #74B498/*rgba(106, 63, 226, 0.842)*/;
+        border-right: 3px solid #74B498/*rgba(106, 63, 226, 0.842)*/;
     }
 
 }
@@ -471,27 +491,27 @@
 @keyframes background_indicator_animation {
 
     0% {
-        background-color: rgba(106, 63, 226, 0.842);
+        background-color: #74B498/*rgba(106, 63, 226, 0.842)*/;
     }
     25% {
-        background-color: rgb(70, 44, 141);
+        background-color: #5C8D89/*rgb(70, 44, 141)*/;
     }
     50% {
-        background-color: rgba(106, 63, 226, 0.842);
+        background-color: #74B498/*rgba(106, 63, 226, 0.842)*/;
     }
     75% {
-        background-color: rgb(70, 44, 141);
+        background-color: #5C8D89/*rgb(70, 44, 141)*/;
     }
     100% {
-        background-color: rgba(106, 63, 226, 0.842);
+        background-color: #74B498/*rgba(106, 63, 226, 0.842)*/;
     }
 
 }
 
  /* Animation hook */
 .border_indicator_animation {
-    border-left: 3px solid rgba(106, 63, 226, 0.842);
-    border-right: 3px solid rgba(106, 63, 226, 0.842);
+    border-left: 3px solid #74B498/*rgba(106, 63, 226, 0.842)*/;
+    border-right: 3px solid #74B498/*rgba(106, 63, 226, 0.842)*/;
     animation-name: border_indicator_animation;
     animation-delay: 500ms;
     animation-duration: 3000ms;
@@ -501,7 +521,7 @@
 }
 
 .background_indicator_animation {
-    background-color: rgba(106, 63, 226, 0.842);
+    background-color: #74B498/*rgba(106, 63, 226, 0.842)*/;
     animation-name: background_indicator_animation;
     animation-delay: 500ms;
     animation-duration: 3000ms;
@@ -563,13 +583,13 @@
     display: grid;
     align-content: end;
     text-align: center;
-    background-color: rgb(106, 63, 226);
+    background-color: #74B498/*rgb(106, 63, 226)*/;
     color: #fff;
     transition: 200ms ease-in-out;
 }
 
 .purple:hover{
-    background-color: rgb(70, 44, 141);
+    background-color: #5C8D89/*rgb(70, 44, 141)*/;
     transition: 200ms ease-in-out;
 }
 

@@ -2,7 +2,7 @@
 
 @section('page_title','MCGH Portal')
 
-@section('page_type','My Logs')
+@section('page_type','Operation Schedule')
 
 
 
@@ -91,91 +91,58 @@
 
 @section('content')
 
-    <div class="content_container_bg_less_thin">
-
-        <span></span>
-            
-            <p><b>Search patients</b></p>
-
-        <span></span>
-
-    </div>
 
 
 
 
+                <!--Showing schedules-->
 
-    <form action="{{url('/doctor/search_based_on_date/')}}" method="post" class="span_hidden_bar content_container_bg_less_thin center_element">
-    @csrf
+                <div class="content_container_bg_less_thin">
 
-        <div class="patient_and_doctor_info_one_is_to_one">
+                    <span></span>
+                        
+                    <p><b>My Operation Schedules</b></p>
 
-            <div class="patient_form_element_one_is_to_three center_element content_container">
-                <label class="center_element" for="search_from">From</label>
-                <input class="input" type="date" name="search_from" required>  
-            </div>
+                    <span></span>
 
-            <div class="patient_form_element_one_is_to_three center_element content_container">
-                <label class="center_element" for="search_to">To</label>
-                <input class="input" type="date" name="search_to" required>  
-            </div>
-
-        </div>
-
-        <div>
-
-            <button class="btn form_btn" type="submit" name="submit"> 
-                <i class="fas fa-search log_out_btn"></i>
-            </button>
-
-        </div>
-
-    </form>
-
-
-
-
-    <div class="purple_line"></div>
-
-
-    <div class="content_container_bg_less_thin">
-
-        <span></span>
-            
-            <p><b>Logs {{Session::get('LOG_LIMIT')}}</b></p>
-
-        <span></span>
-
-    </div>
-
-
-
-
+                </div>
 
                 <table class="frame_table">
-                    
+
                     <tr class="frame_header">
-                        <th width="20%" class="frame_header_item">Date</th>
-                        <th width="30%" class="frame_header_item">P-ID</th>
-                        <th width="30%" class="frame_header_item">Patient Name</th>
-                        <th width="20%" class="frame_header_item">Gender</th>
+                        <th width="5%" class="frame_header_item">S/N</th>
+                        <th width="20%" class="frame_header_item">P-ID</th>
+                        <th width="20%" class="frame_header_item">Operation Type</th>
+                        <th width="10%" class="frame_header_item">OT</th>
+                        <th width="15%" class="frame_header_item">Date</th>
+                        <th width="15%" class="frame_header_item">Time</th>
+                        <th width="15%" class="frame_header_item">Est. Duration</th>
                     </tr>
 
-                    @foreach($patients as $list)
+                    <?php $serial = 1; ?>
+                    @foreach($result as $list)
 
                     <tr class="frame_rows">
-                        <td class="frame_data" data-label="Date">{{$list->Ap_Date}}</td>
-                        <td class="frame_data" data-label="P-ID">{{$list->P_ID}}</td>
-                        <td class="frame_data" data-label="Patient Name">{{$list->Patient_Name}}</td>
-                        <td class="frame_data" data-label="Gender">{{$list->Patient_Gender}}</td>
+
+                        <td class="frame_data" data-label="S/N" width="5%"><?php echo $serial; $serial++; ?></td>
+
+                        <td class="frame_data" data-label="P-ID" width="20%">{{$list->P_ID}}</td>
+
+                        <td class="frame_data" data-label="Operation Type" width="20%">{{$list->Operation_Type}}</td>
+
+                        <td class="frame_data" data-label="OT" width="10%">{{$list->OT_No}}</td>
+
+                        <td class="frame_data" data-label="Date" width="15%">{{$list->Operation_Date}}</td>
+
+                        <td class="frame_data" data-label="Time" width="15%">{{$list->Operation_Start_Time}}</td>
+
+                        <td class="frame_data" data-label="Est. Duration" width="15%">{{$list->Estimated_Duration}}</td>
+
                     </tr>
 
                     @endforeach
 
                 </table>
-
-
-
 
 
 
