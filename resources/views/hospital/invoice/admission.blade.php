@@ -123,11 +123,11 @@ h3{
 <!--Header start-->
 <td style="width:50%;padding: 20px;">  <br> <!--1st invoice main td start-->
 <table class="main" style="width:100%">
-        <div class="header">সেনাবাহিনীর তত্ত্বাবধানে পরিচালিত ,সব সাধরনের জন্য উন্মুক্ত</div>
+        <div class="header">সেনাবাহিনীর তত্ত্বাবধানে পরিচালিত ,সর্ব সাধারনের জন্য উন্মুক্ত</div>
             <tr>
                 <td style="line-height: 1.5;">
                     <div style="font-size:30px;">ময়নামতি ক্যান্টনম্যান্ট জেনারেল হসপিটাল</div>
-                    <div style="font-size:22px;">MAYNAMATI CANTOMENT GENERAL HOSPITAL</div>
+                    <div style="font-size:22px;">MAYNAMATI CANTONMENT GENERAL HOSPITAL</div>
                     <div style="font-size:20px;">টিপরা বাজার,কুমিল্লা সেনানিবাস</div>
                     <div style="font-size:15px ;">মোবাইল-০১৭৩০-০৮৭৯৪৯,মোবাইল-০১৭৩০-০৮৭৯৩৯, ফোন ০৮১-৬০-৭,বর্ধিত-সামরিক ৩৫৩৬,বেসামরিক ৭২৭০৭</div>
                 </td> 

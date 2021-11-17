@@ -126,7 +126,7 @@
                                     </td>
 
                                     <td class="frame_action table_item_dark_green" data-label="Action No">
-                                        <input type="submit" class="table_item_dark_green btn"  value="Next" name="next">
+                                        <input type="submit" class="table_item_dark_green btn cover"  value="Next" name="next">
                                     </td>
 
                                     </form>

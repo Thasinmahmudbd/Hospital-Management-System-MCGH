@@ -194,7 +194,7 @@
                             <div class="patient_form_element">
 
                                 <label for="nid" class="label">NID Number</label>
-                                <input type="tel" class="input disable shade"  name="nid"  value="{{Session::get('PATIENT_NID')}}" required>
+                                <input type="tel" class="input disable shade"  name="nid"  value="{{Session::get('PATIENT_NID')}}">
 
                             </div>
 
@@ -320,6 +320,7 @@
 
                             <label for="nid_type" class="label">NID Type</label>
                             <select name="nid_type" id="nid_type" class="input" required>
+                                <option value="None">None</option>
                                 <option value="Own">Own</option>
                                 <option value="Guardian">Guardian</option>
                             </select>
@@ -329,7 +330,7 @@
                         <div class="patient_form_element">
 
                             <label for="nid" class="label">NID Number</label>
-                            <input type="tel" class="input"  name="nid" required>
+                            <input type="tel" class="input"  name="nid">
 
                         </div>
 

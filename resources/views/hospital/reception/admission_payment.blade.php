@@ -13,6 +13,8 @@
 
 @section('links')
 
+@if(Session::get('bed_selection_type')=='insert')
+
     <li class="link_item">
         <a href="{{url('/reception/bed/reselect')}}" class="link">
             <i class="link_icons fas fa-procedures"></i>
@@ -27,6 +29,17 @@
         </a>
     </li>
 
+@elseif(Session::get('bed_selection_type')=='update')
+
+    <li class="link_item">
+        <a href="{{url('/reception/bed/reselect')}}" class="link">
+            <i class="link_icons fas fa-procedures"></i>
+            <span class="link_name"> Reselect Bed </span>
+        </a>
+    </li>
+
+@endif
+
 @endsection
 
 <!--------------------link end---------------------->
@@ -40,6 +53,8 @@
 
 @section('mobile_links')
 
+@if(Session::get('bed_selection_type')=='insert')
+
     <div id="myLinks" class="mobile_links">
         <a class="mobile_link" href="{{url('/reception/bed/reselect')}}">Reselect Bed</a>
     </div>
@@ -47,6 +62,14 @@
     <div id="myLinks" class="mobile_links">
         <a class="mobile_link" href="{{url('/reception/cancel/admission/after/bed')}}">Cancel Admission</a>
     </div>
+
+@elseif(Session::get('bed_selection_type')=='update')
+
+    <div id="myLinks" class="mobile_links">
+        <a class="mobile_link" href="{{url('/reception/bed/reselect')}}">Reselect Bed</a>
+    </div>
+
+@endif
 
 @endsection
 
@@ -244,9 +267,8 @@
 
 
 
-
-
                     <!-- Billing -->
+                    @if(Session::get('bed_selection_type')=='insert')
 
                     <div class="content_container">
 
@@ -255,17 +277,22 @@
                             
                             <div class="doctor_form_element">
                                 <p class="collected_info">Estimated Bill</p>
-                                <input type="tel" class="input_less collected_info" name="estimated_bill" value="{{Session::get('ADMISSION_FEE')}}" readonly>
+                                <input type="text" class="input_less collected_info" name="estimated_bill" id="est" value="{{Session::get('ADMISSION_FEE')}}" readonly>
+                            </div>
+
+                            <div class="doctor_form_element">
+                                <p class="collected_info">Previously Paid</p>
+                                <input type="text" class="input_less collected_info" id="previous" value="0" readonly>
                             </div>
 
                             <div class="doctor_form_element">
                                 <p class="collected_info">Received</p>
-                                <input type="tel" class="input collected_info" name="received" required>
+                                <input type="text" class="input collected_info" id="received" name="received" oninput="calcAdmissionFee()" required>
                             </div>
 
                             <div class="doctor_form_element">
                                 <p class="collected_info">Change</p>
-                                <input type="tel" class="input collected_info" name="change" required>
+                                <input type="text" class="input collected_info" id="change" name="change"  value="0" required>
                             </div>
 
                             <div class="doctor_form_element">
@@ -276,6 +303,44 @@
                         </form>
 
                     </div>
+
+                    @elseif(Session::get('bed_selection_type')=='update')
+
+                    <div class="content_container">
+
+                        <form action="{{url('/reception/patient_data_entry_for_admission')}}" method="post" class="doctor_form">
+                        @csrf
+                            
+                            <div class="doctor_form_element">
+                                <p class="collected_info">Estimated Bill</p>
+                                <input type="text" class="input_less collected_info" name="estimated_bill" id="est" value="{{Session::get('ADMISSION_FEE')}}" readonly>
+                            </div>
+                            
+                            <div class="doctor_form_element">
+                                <p class="collected_info">Previously Paid</p>
+                                <input type="text" class="input_less collected_info" id="previous" value="{{Session::get('previous_credit')}}" readonly>
+                            </div>
+
+                            <div class="doctor_form_element">
+                                <p class="collected_info">Received</p>
+                                <input type="text" class="input collected_info" oninput="calcAdmissionFee()" id="received" name="received" required>
+                            </div>
+
+                            <div class="doctor_form_element">
+                                <p class="collected_info">Change</p>
+                                <input type="text" class="input collected_info" id="change" name="change" value="0" required>
+                            </div>
+
+                            <div class="doctor_form_element">
+                                <span class="collected_info"></span>
+                                <input type="submit" class="btn form_btn" name="enroll" value="Admit">
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                    @endif
 
                 </div>
 

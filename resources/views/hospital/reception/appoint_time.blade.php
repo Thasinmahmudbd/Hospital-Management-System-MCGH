@@ -567,12 +567,12 @@
 
                             <div class="doctor_form_element">
                                 <p class="collected_info">Received</p>
-                                <input type="tel" class="input collected_info" name="received" value="0" required>
+                                <input type="tel" class="input collected_info" name="received" oninput="calcAppointmentFee()" id="r2" value="0" required>
                             </div>
 
                             <div class="doctor_form_element">
                                 <p class="collected_info">Change</p>
-                                <input type="tel" class="input collected_info" name="change" value="0" required>
+                                <input type="tel" class="input collected_info" name="change" id="c2" value="0" required>
                             </div>
 
                             <div class="doctor_form_element">

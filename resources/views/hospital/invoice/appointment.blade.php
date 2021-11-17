@@ -96,7 +96,7 @@
             <tr>
               <td style="line-height: 1.5;">
                   <div style="font-size:20px;">ময়নামতি ক্যান্টনম্যান্ট জেনারেল হসপিটাল</div>
-                  <div style="font-size:15px;">MAYNAMATI CANTOMENT GENERAL HOSPITAL</div>
+                  <div style="font-size:15px;">MAYNAMATI CANTONMENT GENERAL HOSPITAL</div>
                   <div style="font-size:15px;">টিপরা বাজার,কুমিল্লা সেনানিবাস</div>
                   <div style="font-size:15px ;">মোবাইল-০১৭৩০-০৮৭৯৪৯,মোবাইল-০১৭৩০-০৮৭৯৩৯ ,<br>ফোন ০৮১-৬০-৭,বর্ধিত-সামরিক ৩৫৩৬,বেসামরিক ৭২৭০৭</div>
               </td> 

@@ -13,18 +13,31 @@
 
 @section('links')
 
-<li class="link_item">
-    <a href="{{url('/reception/doctor_selection')}}" class="link">
-        <i class="link_icons fas fa-user-md"></i>
-        <span class="link_name"> Reselect Consultant </span>
-    </a>
-</li>
-<li class="link_item">
-    <a href="{{url('/reception/cancel/admission')}}" class="link">
-        <i class="link_icons far fa-window-close"></i>
-        <span class="link_name"> Cancel Admission </span>
-    </a>
-</li>
+@if(Session::get('bed_selection_type')=='insert')
+
+    <li class="link_item">
+        <a href="{{url('/reception/doctor_selection')}}" class="link">
+            <i class="link_icons fas fa-user-md"></i>
+            <span class="link_name"> Reselect Consultant </span>
+        </a>
+    </li>
+    <li class="link_item">
+        <a href="{{url('/reception/cancel/admission')}}" class="link">
+            <i class="link_icons far fa-window-close"></i>
+            <span class="link_name"> Cancel Admission </span>
+        </a>
+    </li>
+
+@elseif(Session::get('bed_selection_type')=='update')
+
+    <li class="link_item">
+        <a href="{{url('/reception/cancel/bed/switch')}}" class="link">
+            <i class="link_icons fas fa-undo-alt"></i>
+            <span class="link_name"> Cancel Bed Switch </span>
+        </a>
+    </li>
+
+@endif
 
 @endsection
 
@@ -39,12 +52,22 @@
 
 @section('mobile_links')
 
-<div id="myLinks" class="mobile_links">
-    <a class="mobile_link" href="{{url('/reception/doctor_selection')}}">Reselect Consultant</a>
-</div>
-<div id="myLinks" class="mobile_links">
-    <a class="mobile_link" href="{{url('/reception/cancel/admission')}}">Cancel Admission</a>
-</div>
+@if(Session::get('bed_selection_type')=='insert')
+
+    <div id="myLinks" class="mobile_links">
+        <a class="mobile_link" href="{{url('/reception/doctor_selection')}}">Reselect Consultant</a>
+    </div>
+    <div id="myLinks" class="mobile_links">
+        <a class="mobile_link" href="{{url('/reception/cancel/admission')}}">Cancel Admission</a>
+    </div>
+
+@elseif(Session::get('bed_selection_type')=='update')
+
+    <div id="myLinks" class="mobile_links">
+        <a class="mobile_link" href="{{url('/reception/cancel/bed/switch')}}">Cancel Bed Switch</a>
+    </div>
+
+@endif
 
 @endsection
 
@@ -88,7 +111,9 @@
                     <a href="/reception/cabin" class="content_nav_link">Cabin</a>
                 @endif
 
+                @if(Session::get('bed_selection_type')=='insert')
                     <a href="/reception/ward/cabin/none" class="content_nav_link table_item_red">None</a>
+                @endif
 
                 </div>
 

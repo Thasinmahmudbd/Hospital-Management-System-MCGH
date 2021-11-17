@@ -182,12 +182,24 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     Route::get('/reception/patient_list/','App\Http\Controllers\reception\add_patient@show_list');
 
     ##############################################################################################################################################
-    #Appointments and Admissions cancellation after submission.  [C::add_patient.php]
+    #Appointments cancellation after submission.  [C::add_patient.php]
     ##############################################################################################################################################
 
-    # Cancels appointments and admissions after submission.
+    # Cancels appointments after submission.
     # Redirecting to [FUNCTION-NO::24]---in-controller.
     Route::get('/reception/cancel/appointment/{ai_id}','App\Http\Controllers\reception\add_patient@appointment_cancellation_after');
+
+    ##############################################################################################################################################
+    # Switch beds after admission.  [C::add_patient.php]
+    ##############################################################################################################################################
+
+    # Switch beds.
+    # Redirecting to [FUNCTION-NO::25]---in-controller.
+    Route::get('/reception/switch/bed/{a_id}','App\Http\Controllers\reception\add_patient@switch_bed');
+
+    # cancel bed switch.
+    # Redirecting to [FUNCTION-NO::25]---in-controller.
+    Route::get('/reception/cancel/bed/switch','App\Http\Controllers\reception\add_patient@cancel_bed_switch');
 
     ##############################################################################################################################################
     # Invoice.  [C::invoice.php]

@@ -38,11 +38,17 @@
     <script src="{{ asset('UI_assets/Javascript/autoFill.js') }}"></script>
 	<script src="{{ asset('UI_assets/Javascript/fontawesome.min.js') }}"></script>
     
-    <!--<script type="text/javascript">
+    <script type="text/javascript">
         function disableBack() { window.history.forward(); }
         setTimeout("disableBack()", 0);
         window.onunload = function () { null };
-    </script>-->
+
+        window.onload=function(){
+            calcDisc();
+            calcAdmissionFee();
+            calcAppointmentFee();
+        }
+    </script>
 
 
 <!-----------------------charts---------------------->
@@ -60,7 +66,7 @@
 </head>
 
 
-<body onload="calcDisc()">
+<body>
 
     <!--frame-->
     <div class="frame">
@@ -80,6 +86,10 @@
                         {{ Session::get('DOCTORS_NAME') }}
                     @elseif(Session::get('ACC_SESSION_ID'))
                         {{ Session::get('ACC_NAME') }}
+                    @elseif(Session::get('OTO_SESSION_ID'))
+                        {{ Session::get('OTO_NAME') }}
+                    @elseif(Session::get('NRS_SESSION_ID'))
+                        {{ Session::get('N_NAME') }}
                     @endif
                 
                     <br>(
@@ -90,6 +100,10 @@
                         {{ Session::get('DOC_SESSION_ID') }}
                     @elseif(Session::get('ACC_SESSION_ID'))
                         {{ Session::get('ACC_SESSION_ID') }}
+                    @elseif(Session::get('OTO_SESSION_ID'))
+                        {{ Session::get('OTO_SESSION_ID') }}
+                    @elseif(Session::get('NRS_SESSION_ID'))
+                        {{ Session::get('NRS_SESSION_ID') }}
                     @endif
 
                     )

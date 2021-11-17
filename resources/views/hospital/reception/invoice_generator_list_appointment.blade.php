@@ -108,6 +108,31 @@
                 </div>
 
 
+
+
+
+
+
+            <!--Session message-->
+
+            @if(session('msg')=='Bed Change Successful.')
+
+            <div class="content_container text_center success_msg">{{session('msg')}}</div> 
+
+            @elseif(session('msg')=='Bed has been changed once. Discharge patient then re-admit again.')
+
+            <div class="content_container text_center warning_msg">{{session('msg')}}</div>
+
+            @endif
+
+
+
+
+
+
+
+
+
         @if(Session::get('InvoiceType')=='appoint')
 
             @if(Session::get('INVOICE')=='1')

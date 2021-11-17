@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use DateTime;
 
 class add_patient extends Controller
 {
@@ -70,7 +71,6 @@ class add_patient extends Controller
             'patient_gender'=>'required',
             'age'=>'required',
             'cell_number'=>'required',
-            'nid'=>'required',
             'nid_type'=>'required',
             'appoint_date'=>'required',
             'ap_type'=>'required',
@@ -912,7 +912,7 @@ class add_patient extends Controller
 #### FUNCTION-NO::14 ####
 #########################
 # Retrieves data from form;
-# Stores data in 14 sessions.
+# Stores data in 15 sessions.
 
 function submit_admit_patient_info(Request $request){
 
@@ -949,6 +949,8 @@ function submit_admit_patient_info(Request $request){
     session(['PACKAGES' => $request->input('packages')]);
     session(['LIGATION' => $request->input('ligation')]);
     session(['THIRD_SEIZURE' => $request->input('thirdSeizure')]);
+
+    session(['bed_selection_type' => 'insert']);
 
     # Redirecting to [FUNCTION-NO::04].
     return redirect('/reception/doctor_selection/');
@@ -1104,9 +1106,9 @@ function confirm_bed(Request $request,$b_id){
         $book=array(
 
             'Confirmation'=>1
-            
+
         );
-    
+        
         # booking bed.
         DB::table('beds')
         ->where('B_ID', $b_id)
@@ -1345,145 +1347,266 @@ function patient_data_entry_for_admission(Request $request){
 
     date_default_timezone_set('Asia/Dhaka');
 
-    $patient_type = $request->session()->get('PATIENT_TYPE');
+    if($request->session()->get('bed_selection_type')=='insert'){
 
-    ########## FOR NEW PATIENTS ##########
-    if($patient_type == 'new'){
+        $a_id = $request->session()->get('old_a_id');
 
-        /* Patient id generator */
+        $patient_type = $request->session()->get('PATIENT_TYPE');
 
-        $first_part = $request->session()->get('PATIENT_GENDER');
-        
-        if($first_part == 'Male'){
-            $first_part = 'M';
-        }elseif($first_part == 'Female'){
-            $first_part = 'F';
-            echo $first_part;
-        }elseif($first_part == 'Child'){
-            $first_part = 'C';
-            echo $first_part;
-        }elseif($first_part == 'Others'){
-            $first_part = 'O';
-            echo $first_part;
-        }
+        ########## FOR NEW PATIENTS ##########
+        if($patient_type == 'new'){
 
-        $second_part = date("dmY");
+            /* Patient id generator */
 
-        $current_count = DB::table('patients')->orderBy('AI_ID','desc')->first();
+            $first_part = $request->session()->get('PATIENT_GENDER');
+            
+            if($first_part == 'Male'){
+                $first_part = 'M';
+            }elseif($first_part == 'Female'){
+                $first_part = 'F';
+                echo $first_part;
+            }elseif($first_part == 'Child'){
+                $first_part = 'C';
+                echo $first_part;
+            }elseif($first_part == 'Others'){
+                $first_part = 'O';
+                echo $first_part;
+            }
 
-        if($current_count==null){
-            $third_part = 1;
-        }else{
-            $current_count_array = explode('-',$current_count->P_ID);
-            $third_part = end($current_count_array);
-            if($third_part == 999){
-                #$third_part = 1;
-                $third_part++;
-            }if($current_count->Ad_Date != $second_part){
+            $second_part = date("dmY");
+
+            $current_count = DB::table('patients')->orderBy('AI_ID','desc')->first();
+
+            if($current_count==null){
                 $third_part = 1;
             }else{
-                $third_part++;
+                $current_count_array = explode('-',$current_count->P_ID);
+                $third_part = end($current_count_array);
+                if($third_part == 999){
+                    #$third_part = 1;
+                    $third_part++;
+                }if($current_count->Ad_Date != $second_part){
+                    $third_part = 1;
+                }else{
+                    $third_part++;
+                }
             }
+
+            $P_ID = "$first_part"."-"."$second_part"."-".str_pad($third_part,3,"0",STR_PAD_LEFT);
+
+            /* Patient id generator end */
+
+        }
+        
+        ########## FOR OLD PATIENTS ##########
+        else{
+
+            $P_ID = $request->session()->get('P_ID');
+
+        }
+        
+        session(['PATIENT_P_ID' => $P_ID]);
+
+        $p_id = $request->session()->get('PATIENT_P_ID');
+        
+        # Validation of form data.
+        $request->validate([
+
+            'received'=>'required',
+            'change' =>'required'
+
+        ]);
+
+        $todays_date = date("Ymd");
+
+        $patient_type = $request->session()->get('PATIENT_TYPE');
+
+            $request->session()->forget('SESSION_FLASH_MSG');
+
+            if($patient_type=='new'){
+
+                # Access able to only new patients.
+                # Data entry to Table:----patients.
+                
+                $patients=array(
+
+                    'P_ID'=>$p_id,
+                    'Patient_Name'=>$request->session()->get('PATIENT_NAME'),
+                    'Patient_Gender'=>$request->session()->get('PATIENT_GENDER'),
+                    'Patient_Age'=>$request->session()->get('PATIENT_AGE'),
+                    'Cell_Number'=>$request->session()->get('PATIENT_CELL'),
+                    'NID'=>$request->session()->get('PATIENT_NID'),
+                    'NID_Type'=>$request->session()->get('PATIENT_NID_TYPE'),
+                    'Ad_Date'=>date("dmY")
+                    
+                );
+
+                DB::table('patients')->insert($patients);
+
+            }if($patient_type=='new' || $patient_type=='old'){
+
+                # Access able to new & old patients.
+                # Data entry to Table:----admission_logs.
+
+                $admission_fee = $request->input('estimated_bill');
+                $received = $request->input('received');
+                $changes = $request->input('change');
+                $ad_fee = $received - $changes;
+
+                $admission_logs=array(
+
+                    'P_ID'=>$p_id,
+                    'R_ID'=>$request->session()->get('REC_SESSION_ID'),
+                    'B_ID'=>$request->session()->get('B_ID'),
+                    'D_ID'=>$request->session()->get('D_ID'),
+                    'Pre_Vill'=>$request->session()->get('PRE_VILL'),
+                    'Pre_PO'=>$request->session()->get('PRE_PO'),
+                    'Pre_Upa'=>$request->session()->get('PRE_UPA'),
+                    'Pre_Dist'=>$request->session()->get('PRE_DIST'),
+                    'Per_Vill'=>$request->session()->get('PER_VILL'),
+                    'Per_PO'=>$request->session()->get('PER_PO'),
+                    'Per_Upa'=>$request->session()->get('PER_UPA'),
+                    'Per_Dist'=>$request->session()->get('PER_DIST'),
+                    'Admission_Date'=>$request->session()->get('PATIENT_APPOINT_DATE'),
+                    'Religion'=>$request->session()->get('PATIENT_RELIGION'),
+                    'Consultant'=>$request->session()->get('D_NAME'),
+                    'Emergency_Rel_Add'=>$request->session()->get('RELATIVE_ADDRESS'),
+                    'Emergency_Number'=>$request->session()->get('EMERGENCY_CELL'),
+                    'Package_Confirmation'=>$request->session()->get('PACKAGES'),
+                    'Ligation'=>$request->session()->get('LIGATION'),
+                    'Third_Seizure'=>$request->session()->get('THIRD_SEIZURE'),
+                    'Admission_Fee'=>$ad_fee,
+                    'Paid_Amount'=>$received,
+                    'Changes'=>$changes
+                    
+                );
+
+                DB::table('admission_logs')->insert($admission_logs);
+
+                # Data insert on Table:----hospital_income_log.
+
+                $vat = $request->session()->get('VAT');
+                $credit = $ad_fee;
+                $gov_vat = ($vat/100)*$credit;
+                $income = $credit-$gov_vat;
+
+                $message='Admission fee for patient: '.$p_id;
+
+                $hospital_income_logs=array(
+
+                    'Message'=>$message,
+                    'Debit'=>0,
+                    'Credit'=>$credit,
+                    'Vat'=>$gov_vat,
+                    'Service_Charge'=>$income,
+                    'Total_Income'=>$income,
+                    'Credit_Type'=>'Admission Fee',
+                    'Entry_Date'=>$todays_date,
+                    'Entry_Time'=>date("H:i:s"),
+                    'Entry_Year'=>date("Y"),
+                    'User_ID'=>$request->session()->get('REC_SESSION_ID')
+
+                );
+
+                DB::table('hospital_income_log')->insert($hospital_income_logs);
+
+            }
+
+            # Session flash message.
+            $msg = 'Patient Admission Successful.';
+            session(['SESSION_FLASH_MSG' => $msg]);
+
+            # Redirecting to [FUNCTION-NO::02], invoice controller.
+            return redirect('/reception/invoice_list/admission/');
+
+
+    # True when switching bed.
+    }if($request->session()->get('bed_selection_type')=='update'){
+
+        # Data insert on Table:----hospital_income_log.
+        $vat = $request->session()->get('VAT');
+        $credit = $request->session()->get('previous_credit');
+        $gov_vat = (($vat/100)*$credit);
+        $income = 0;
+        $p_id = $request->session()->get('old_p_id');
+
+        $todays_date = date("Ymd");
+
+        $message='Bed change for patient: '.$p_id;
+
+        $hospital_income_logs=array(
+
+            'Message'=>$message,
+            'Debit'=>$credit,
+            'Credit'=>0,
+            'Vat'=>$gov_vat*(-1),
+            'Service_Charge'=>$income,
+            'Total_Income'=>$income,
+            'Credit_Type'=>'Bed change',
+            'Entry_Date'=>$todays_date,
+            'Entry_Time'=>date("H:i:s"),
+            'Entry_Year'=>date("Y"),
+            'User_ID'=>$request->session()->get('REC_SESSION_ID')
+
+        );
+
+        DB::table('hospital_income_log')->insert($hospital_income_logs);
+
+        # Admission_logs.
+        $p_id = $request->session()->get('old_p_id');
+        $a_id = $request->session()->get('old_a_id');
+        $bed_type = $request->session()->get('old_bed_type');
+
+        # Finding number of days.
+        $admission_date = $request->session()->get('old_ad_date');
+        $update_date = date("Y-m-d");
+
+        $datetime1 = new DateTime($update_date);
+        $datetime2 = new DateTime($admission_date);
+        $difference = $datetime1->diff($datetime2); 
+        $days = $difference->d;
+
+        # Data update to Table:----admission_logs.
+        $admission_fee = $request->input('estimated_bill');
+        $received = $request->input('received');
+        $changes = $request->input('change');
+        $ad_fee = $received - $changes;
+        $ad_fee_for_admission_log = $ad_fee + $credit;
+
+        if($bed_type=='Cabin'){
+            $Ward_Days = null;
+            $Cabin_Days = $days;
+        }if($bed_type=='Ward'){
+            $Ward_Days = $days;
+            $Cabin_Days = null;
         }
 
-        $P_ID = "$first_part"."-"."$second_part"."-".str_pad($third_part,3,"0",STR_PAD_LEFT);
+        $admission_logs=array(
 
-        /* Patient id generator end */
+            'R_ID'=>$request->session()->get('REC_SESSION_ID'),
+            'B_ID'=>$request->session()->get('B_ID'),
+            'Admission_Fee'=>$ad_fee_for_admission_log,
+            'Paid_Amount'=>$received,
+            'Changes'=>$changes,
+            'Update_date'=>$update_date,
+            'Update_Timestamp'=>date('Y-m-d H:i:s'),
+            'Ward_Days'=>$Ward_Days,
+            'Cabin_Days'=>$Cabin_Days
 
-    }
-    
-    ########## FOR OLD PATIENTS ##########
-    else{
+        );
 
-        $P_ID = $request->session()->get('P_ID');
-
-    }
-    
-    session(['PATIENT_P_ID' => $P_ID]);
-
-    $p_id = $request->session()->get('PATIENT_P_ID');
-    
-    # Validation of form data.
-    $request->validate([
-
-        'received'=>'required',
-        'change' =>'required'
-
-    ]);
-
-    $todays_date = date("Ymd");
-
-    $patient_type = $request->session()->get('PATIENT_TYPE');
-
-        $request->session()->forget('SESSION_FLASH_MSG');
-
-        if($patient_type=='new'){
-
-            # Access able to only new patients.
-            # Data entry to Table:----patients.
-            
-            $patients=array(
-
-                'P_ID'=>$p_id,
-                'Patient_Name'=>$request->session()->get('PATIENT_NAME'),
-                'Patient_Gender'=>$request->session()->get('PATIENT_GENDER'),
-                'Patient_Age'=>$request->session()->get('PATIENT_AGE'),
-                'Cell_Number'=>$request->session()->get('PATIENT_CELL'),
-                'NID'=>$request->session()->get('PATIENT_NID'),
-                'NID_Type'=>$request->session()->get('PATIENT_NID_TYPE'),
-                'Ad_Date'=>date("dmY")
-                
-            );
-
-            DB::table('patients')->insert($patients);
-
-        }if($patient_type=='new' || $patient_type=='old'){
-
-            # Access able to new & old patients.
-            # Data entry to Table:----admission_logs.
-
-            $admission_fee = $request->input('estimated_bill');
-            $received = $request->input('received');
-            $changes = $request->input('change');
-
-            $admission_logs=array(
-
-                'P_ID'=>$p_id,
-                'R_ID'=>$request->session()->get('REC_SESSION_ID'),
-                'B_ID'=>$request->session()->get('B_ID'),
-                'D_ID'=>$request->session()->get('D_ID'),
-                'Pre_Vill'=>$request->session()->get('PRE_VILL'),
-                'Pre_PO'=>$request->session()->get('PRE_PO'),
-                'Pre_Upa'=>$request->session()->get('PRE_UPA'),
-                'Pre_Dist'=>$request->session()->get('PRE_DIST'),
-                'Per_Vill'=>$request->session()->get('PER_VILL'),
-                'Per_PO'=>$request->session()->get('PER_PO'),
-                'Per_Upa'=>$request->session()->get('PER_UPA'),
-                'Per_Dist'=>$request->session()->get('PER_DIST'),
-                'Admission_Date'=>$request->session()->get('PATIENT_APPOINT_DATE'),
-                'Religion'=>$request->session()->get('PATIENT_RELIGION'),
-                'Consultant'=>$request->session()->get('D_NAME'),
-                'Emergency_Rel_Add'=>$request->session()->get('RELATIVE_ADDRESS'),
-                'Emergency_Number'=>$request->session()->get('EMERGENCY_CELL'),
-                'Package_Confirmation'=>$request->session()->get('PACKAGES'),
-                'Ligation'=>$request->session()->get('LIGATION'),
-                'Third_Seizure'=>$request->session()->get('THIRD_SEIZURE'),
-                'Admission_Fee'=>$request->session()->get('ADMISSION_FEE'),
-                'Paid_Amount'=>$request->input('received'),
-                'Changes'=>$request->input('change'),
-                
-            );
-
-            DB::table('admission_logs')->insert($admission_logs);
+            DB::table('admission_logs')
+            ->where('A_ID', $a_id)
+            ->update($admission_logs);
 
             # Data insert on Table:----hospital_income_log.
 
             $vat = $request->session()->get('VAT');
-            $credit = $request->session()->get('ADMISSION_FEE');
+            $credit = $ad_fee_for_admission_log;
             $gov_vat = ($vat/100)*$credit;
             $income = $credit-$gov_vat;
 
-            $message='Admission fee for patient: '.$p_id;
+            $message='New Admission fee for patient: '.$p_id.'. Old admission fee debited.' ;
 
             $hospital_income_logs=array(
 
@@ -1503,19 +1626,19 @@ function patient_data_entry_for_admission(Request $request){
 
             DB::table('hospital_income_log')->insert($hospital_income_logs);
 
-        }
+            # Session flash message.
+            $msg = 'Bed Change Successful.';
+            session(['SESSION_FLASH_MSG' => $msg]);
 
-        # Session flash message.
-        $msg = 'Patient Admission Successful.';
-        session(['SESSION_FLASH_MSG' => $msg]);
+            # Redirecting to [FUNCTION-NO::02], invoice controller.
+            return redirect('/reception/invoice_list/admission/');
 
-        # Redirecting to [FUNCTION-NO::02], invoice controller.
-        return redirect('/reception/invoice_list/admission/');
+    }
 
 }
 
 # End of function patient_data_entry_for_doctor_appointment.<-------#
-                                                                #
+                                                                    #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: Hello, future me.
 # 
@@ -1528,7 +1651,7 @@ function patient_data_entry_for_admission(Request $request){
 #########################
 #### FUNCTION-NO::24 ####
 #########################
-# Deletes patient data entry after appointment;
+# Cancels appointment after submission;
 # Delete will happen on  --: TABLE :------ patient_logs.
 # Update will happen on --: TABLE :------ doctor_schedules.
 
@@ -1593,6 +1716,131 @@ function appointment_cancellation_after(Request $request, $ai_id){
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
+
+
+#########################
+#### FUNCTION-NO::25 ####
+#########################
+# Switching beds;
+# Update will happen on --: TABLE :------ beds.
+
+function switch_bed(Request $request, $a_id){
+
+    date_default_timezone_set('Asia/Dhaka');
+
+    # getting log data.
+    $log_data=DB::table('admission_logs')
+        ->where('A_ID', $a_id)
+        ->where('OT_Confirmation', null)
+        ->where('Payment_Confirmation', null)
+        ->first();
+
+    $update_date = $log_data->Update_Date;
+
+    if(empty($update_date)){
+
+        $b_id = $log_data->B_ID;
+        session(['previous_credit' =>  $log_data->Admission_Fee]);
+        session(['previously_received' =>  $log_data->Paid_Amount]);
+        session(['previously_changed' =>  $log_data->Changes]);
+
+
+        session(['PRE_VILL' => $log_data->Pre_Vill]);
+        session(['PRE_PO' => $log_data->Pre_PO]);
+        session(['PRE_UPA' => $log_data->Pre_Upa]);
+        session(['PRE_DIST' => $log_data->Pre_Dist]);
+        session(['PER_VILL' => $log_data->Per_Vill]);
+        session(['PER_PO' => $log_data->Per_PO]);
+        session(['PER_UPA' => $log_data->Per_Upa]);
+        session(['PER_DIST' => $log_data->Per_Dist]);
+        session(['PATIENT_RELIGION' => $log_data->Religion]);
+        session(['RELATIVE_ADDRESS' => $log_data->Emergency_Rel_Add]);
+        session(['EMERGENCY_CELL' => $log_data->Emergency_Number]);
+        session(['PACKAGES' => $log_data->Package_Confirmation]);
+        session(['LIGATION' => $log_data->Ligation]);
+        session(['THIRD_SEIZURE' => $log_data->Third_Seizure]);
+
+        $cancel=array(
+
+            'Confirmation'=>0
+
+        );
+
+        # canceling old bed.
+        $bed_data=DB::table('beds')
+            ->where('B_ID', $b_id)
+            ->update($cancel);
+
+        session(['bed_selection_type' => 'update']);
+        session(['old_a_id' => $a_id]);
+        session(['old_b_id' => $b_id]);
+        session(['old_ad_date' => $log_data->Admission_Date]);
+        session(['old_p_id' => $log_data->P_ID]);
+
+
+        # getting bed info.
+        $bed_data=DB::table('beds')
+            ->where('B_ID', $b_id)
+            ->first();
+
+        session(['old_bed_type' => $bed_data->Bed_Type]);
+
+        # Redirecting to [FUNCTION-NO::15].
+        return redirect('/reception/ward/male');
+
+    }else{
+
+        # Redirecting to [FUNCTION-NO::02], invoice controller.
+        return redirect('/reception/invoice_list/admission/');
+
+    }
+
+}
+
+# End of function switch_bed.                               <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::25 ####
+#########################
+# Cancels switching beds;
+# Update will happen on --: TABLE :------ beds.
+
+function cancel_bed_switch(Request $request){
+
+    $b_id= $request->session()->get('old_b_id');
+
+    $cancel=array(
+
+        'Confirmation'=>1
+
+    );
+
+    # canceling old bed.
+    $bed_data=DB::table('beds')
+        ->where('B_ID', $b_id)
+        ->update($cancel);
+
+    # Redirecting to [FUNCTION-NO::02], invoice controller.
+    return redirect('/reception/invoice_list/admission/');
+
+}
+
+# End of function switch_bed.                               <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 

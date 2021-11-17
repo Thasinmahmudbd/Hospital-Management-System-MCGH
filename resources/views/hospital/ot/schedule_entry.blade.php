@@ -87,7 +87,7 @@
                         <div class="patient_form_element">
 
                             <label for="patient_id" class="label">Patient's ID</label>
-                            <input type="text" class="input" name="patient_id" value="{{Session::get('PATIENT_NAME')}}" required>
+                            <input type="text" class="input" name="patient_id" required>
 
                         </div>
 
