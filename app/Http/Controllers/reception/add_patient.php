@@ -113,6 +113,14 @@ class add_patient extends Controller
             # Redirecting to [FUNCTION-NO::14].
             return redirect('/reception/add_more_info/');
 
+        }if($ap_type == 'Dental'){
+
+            $redirect = 'dental';
+            session(['REDIRECT' => $redirect]);
+
+            # Redirecting to [FUNCTION-NO::29].
+            return redirect('/reception/test_selection/dental/');
+
         }
 
     }
@@ -1809,7 +1817,7 @@ function switch_bed(Request $request, $a_id){
 
 
 #########################
-#### FUNCTION-NO::25 ####
+#### FUNCTION-NO::26 ####
 #########################
 # Cancels switching beds;
 # Update will happen on --: TABLE :------ beds.
@@ -1834,7 +1842,371 @@ function cancel_bed_switch(Request $request){
 
 }
 
-# End of function switch_bed.                               <-------#
+# End of function cancel_bed_switch.                        <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::27 ####
+#########################
+# Cancels switching beds;
+# Update will happen on --: TABLE :------ beds.
+
+function go_to_emergency(Request $request){
+
+    # doctor list.
+    $doctor['info']=DB::table('doctors')
+        ->where('Department','DMO')
+        ->orderBy('D_ID','desc')
+        ->get();
+
+    # Getting account variables.
+    $acc_var=DB::table('account_variables')
+        ->orderBy('AI_ID','desc')
+        ->first();
+
+    session(['emergency_fee' => $acc_var->Emergency_Fee]);
+
+    # Returning to the view below.
+    return view('hospital/reception/emergency',$doctor);
+
+}
+
+# End of function cancel_bed_switch.                        <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::28 ####
+#########################
+# Stores ER Data;
+# Entry will happen on  --: TABLE :------ emergency_log.
+# Update will happen on --: TABLE :------ doctors.
+# Entry will happen on  --: TABLE :------ doctor_balance_logs.
+# Entry will happen on  --: TABLE :------ hospital_income_log.
+
+function emergency_entry(Request $request){
+
+    # Getting account variables.
+    $acc_var=DB::table('account_variables')
+        ->orderBy('AI_ID','desc')
+        ->first();
+
+    $er_hospital_percentage = $acc_var->ER_Hospital_Percentage;
+    
+    # Getting and inserting er log data.
+    $request->validate([
+
+        'dmo'=>'required',
+        'bill'=>'required',
+        'received'=>'required',
+        'change'=>'required'
+
+    ]);
+
+    $d_id = $request->input('dmo');
+    $bill = $request->input('bill');
+    $received = $request->input('received');
+    $changes = $request->input('change');
+    $income = $received-$changes;
+
+    $er_data=array(
+
+        'Name'=>$request->input('er_patient_name'),
+        'Ref_Name'=>$request->input('ref_name'),
+        'Ref_Cell_Number'=>$request->input('ref_cell'),
+        'D_ID'=>$d_id,
+        'R_ID'=>$request->session()->get('REC_SESSION_ID'),
+        'Bill'=>$bill,
+        'Received'=>$received,
+        'Changes'=>$changes
+
+    );
+
+    DB::table('emergency_log')->insert($er_data);
+
+
+        # checking current balance.
+        $wallet=DB::table('doctor_balance_logs')
+            ->where('D_ID',$d_id)
+            ->orderBy('AI_ID','desc')
+            ->first();
+
+        $income = ($er_hospital_percentage/100)*$income;
+
+        if($wallet){
+            $current_balance = $wallet->Current_Balance;
+            $current_balance = $current_balance + $income;
+        }else{
+            $current_balance = 0;
+            $current_balance = $current_balance + $income;
+        }
+
+        $log=array(
+
+            'D_ID'=>$d_id,
+            'B_Date'=>$request->session()->get('DATE_TODAY'),
+            'Credit'=>$income,
+            'Commission'=>0,
+            'Income'=>$income,
+            'Current_Balance'=>$current_balance,
+            'O_ID'=>0,
+            'Acc_ID'=>$request->session()->get('REC_SESSION_ID')
+
+        );
+
+        # Insert balance log.
+        DB::table('doctor_balance_logs')
+            ->insert($log);
+
+        $wallet_value=array(
+
+            'Wallet'=>$current_balance
+
+        );
+
+        # Updating doctor wallet.
+        $doctor_wallet=DB::table('doctors')
+            ->where('D_ID',$d_id)
+            ->update($wallet_value);
+
+        # Insert in hospital log log.
+
+        $message = "Emergency Fee for: ".$request->input('er_patient_name');
+        $credit = $received - $changes;
+        $credit = $credit - $income;
+        $gov_vat = 0;
+        $credit_type = "Emergency";
+
+        $hospital_income_logs=array(
+
+            'Message'=>$message,
+            'Debit'=>0,
+            'Credit'=>$credit,
+            'Vat'=>$gov_vat,
+            'Service_Charge'=>$credit,
+            'Total_Income'=>$credit,
+            'Credit_Type'=>$credit_type,
+            'Entry_Date'=>date("Ymd"),
+            'Entry_Time'=>date("H:i:s"),
+            'Entry_Year'=>date("Y"),
+            'User_ID'=>$request->session()->get('REC_SESSION_ID')
+
+        );
+
+        DB::table('hospital_income_log')->insert($hospital_income_logs);
+
+        # Redirecting to [FUNCTION-NO::01].
+        return redirect('/reception/home/');
+
+}
+
+# End of function cancel_bed_switch.                        <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# Redirect will point to ER invoice in the future.
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::29 ####
+#########################
+# Generates patient unique ID;
+# Patient data entry for dental;
+# Entry will happen on  --: TABLE :------ patients.
+# Entry will happen on  --: TABLE :------ dental_logs.
+
+function dental_patient_info_entry(Request $request){
+
+    date_default_timezone_set('Asia/Dhaka');
+    $patient_type = $request->session()->get('PATIENT_TYPE');
+
+    ########## FOR NEW PATIENTS ##########
+    if($patient_type == 'new'){
+
+        /* Patient id generator */
+
+        $first_part = $request->session()->get('PATIENT_GENDER');
+            
+        if($first_part == 'Male'){
+            $first_part = 'M';
+        }elseif($first_part == 'Female'){
+            $first_part = 'F';
+            echo $first_part;
+        }elseif($first_part == 'Child'){
+            $first_part = 'C';
+            echo $first_part;
+        }elseif($first_part == 'Others'){
+            $first_part = 'O';
+            echo $first_part;
+        }
+
+        $second_part = date("dmY");
+
+        $current_count = DB::table('patients')->orderBy('AI_ID','desc')->first();
+
+        if($current_count==null){
+            $third_part = 1;
+        }else{
+            $current_count_array = explode('-',$current_count->P_ID);
+            $third_part = end($current_count_array);
+            if($third_part == 999){
+                #$third_part = 1;
+                $third_part++;
+            }if($current_count->Ad_Date != $second_part){
+                $third_part = 1;
+            }else{
+                $third_part++;
+            }
+        }
+
+        $P_ID = "$first_part"."-"."$second_part"."-".str_pad($third_part,3,"0",STR_PAD_LEFT);
+
+        /* Patient id generator end */
+
+    }
+        
+    ########## FOR OLD PATIENTS ##########
+    else{
+
+        $P_ID = $request->session()->get('P_ID');
+
+    }
+        
+    session(['PATIENT_P_ID' => $P_ID]);
+
+    $p_id = $request->session()->get('PATIENT_P_ID');
+    $todays_date = date("Ymd");
+    $patient_type = $request->session()->get('PATIENT_TYPE');
+    $request->session()->forget('SESSION_FLASH_MSG');
+
+    if($patient_type=='new'){
+
+        # Access able to only new patients.
+        # Data entry to Table:----patients.
+                
+        $patients=array(
+
+            'P_ID'=>$p_id,
+            'Patient_Name'=>$request->session()->get('PATIENT_NAME'),
+            'Patient_Gender'=>$request->session()->get('PATIENT_GENDER'),
+            'Patient_Age'=>$request->session()->get('PATIENT_AGE'),
+            'Cell_Number'=>$request->session()->get('PATIENT_CELL'),
+            'NID'=>$request->session()->get('PATIENT_NID'),
+            'NID_Type'=>$request->session()->get('PATIENT_NID_TYPE'),
+            'Ad_Date'=>date("dmY")
+                    
+        );
+
+        DB::table('patients')->insert($patients);
+
+    }if($patient_type=='new' || $patient_type=='old'){
+
+        # Access able to new & old patients.
+
+        # Generate dental test no.
+        $current_count = DB::table('dental_log')->orderBy('AI_ID','desc')->first();
+
+        if($current_count==null){
+            $test_no = 1;
+        }else{
+            $test_no = $current_count->AI_ID;
+            $test_no++;
+        }
+
+        session(['dental_test_no' => $test_no]);
+
+        # Data entry to Table:----dental_logs.
+
+        $dental_logs=array(
+
+            'P_ID'=>$p_id,
+            'R_ID'=>$request->session()->get('REC_SESSION_ID'),
+            'Dental_Test_No'=>$test_no
+
+        );
+
+        DB::table('dental_log')->insert($dental_logs);
+
+    }
+
+    # Session flash message.
+    $msg = 'Patient registered, choose tests to proceed.';
+    session(['SESSION_FLASH_MSG' => $msg]);
+
+    # Redirecting to [FUNCTION-NO::30], invoice controller.
+    return redirect('/reception/show_tests/dental/');
+
+}
+
+# End of function dental_patient_info_entry.                <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::30 ####
+#########################
+# Cancels switching beds;
+# Update will happen on --: TABLE :------ beds.
+
+function show_dental_tests(Request $request){
+
+    $dtn=$request->session()->get('dental_test_no');
+    
+    # test list.
+    $test['info']=DB::table('dental_info')
+        ->where('State','1')
+        ->orderBy('AI_ID','desc')
+        ->get();
+
+    # dental test log.
+    $dtl['logs']=DB::table('dental_test_log')
+        ->where('Dental_Test_No',$dtn)
+        ->orderBy('AI_ID','desc')
+        ->get();
+
+    # checking if dtl table empty
+    $exist = count($dtl);
+
+    if($exist > 1){
+        session(['dtl_state' => 1]);
+    }else{
+        session(['dtl_state' => 0]);
+    }
+
+    session(['dental_test_search' => 3]);
+
+    # Returning to the view below.
+    return view('hospital/reception/dental_tests',$test,$dtl);
+
+}
+
+# End of function show_dental_tests.                        <-------#
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: Hello, future me.

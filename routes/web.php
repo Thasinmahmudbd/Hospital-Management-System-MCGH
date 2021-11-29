@@ -62,7 +62,6 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     # Redirecting to [FUNCTION-NO::01]---in-controller.
     Route::get('/reception/home/','App\Http\Controllers\reception\add_patient@set_up_home');
 
-    # [VIEW-NO::01]
     # Going to home without home set-up
     # Returning to hospital/reception/home.blade.php---in-resources/views/.
     Route::view('/reception/home/setup/none','hospital/reception/home');
@@ -198,8 +197,32 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     Route::get('/reception/switch/bed/{a_id}','App\Http\Controllers\reception\add_patient@switch_bed');
 
     # cancel bed switch.
-    # Redirecting to [FUNCTION-NO::25]---in-controller.
+    # Redirecting to [FUNCTION-NO::26]---in-controller.
     Route::get('/reception/cancel/bed/switch','App\Http\Controllers\reception\add_patient@cancel_bed_switch');
+
+    ##############################################################################################################################################
+    # Emergency.  [C::add_patient.php]
+    ##############################################################################################################################################
+    
+    # Emergency input.
+    # Redirecting to [FUNCTION-NO::27]---in-controller.
+    Route::get('/reception/emergency/','App\Http\Controllers\reception\add_patient@go_to_emergency');
+
+    # ER data entry.
+    # Redirecting to [FUNCTION-NO::28]---in-controller.
+    Route::post('/reception/emergency/data/entry/','App\Http\Controllers\reception\add_patient@emergency_entry');
+
+    ##############################################################################################################################################
+    # Emergency.  [C::add_patient.php]
+    ##############################################################################################################################################
+
+    # Getting dental patient info and sending to database.
+    # Redirecting to [FUNCTION-NO::29]---in-controller.
+    Route::get('/reception/test_selection/dental/','App\Http\Controllers\reception\add_patient@dental_patient_info_entry');
+
+    # Shows all dental tests.
+    # Redirecting to [FUNCTION-NO::29]---in-controller.
+    Route::get('/reception/show_tests/dental/','App\Http\Controllers\reception\add_patient@show_dental_tests');
 
     ##############################################################################################################################################
     # Invoice.  [C::invoice.php]
