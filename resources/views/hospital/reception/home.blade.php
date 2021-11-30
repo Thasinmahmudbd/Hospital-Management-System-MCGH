@@ -130,6 +130,10 @@
 
                     <div class="content_container text_center warning_msg">{{session('msg')}}</div>
 
+                @elseif(session('msg')=='Dental tests canceled.')
+
+                    <div class="content_container text_center warning_msg">{{session('msg')}}</div>
+
                 @endif
 
 

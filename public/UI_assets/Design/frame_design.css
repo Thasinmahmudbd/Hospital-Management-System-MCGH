@@ -420,6 +420,12 @@
     color:#fff;
 }
 
+.table_item_green1{
+    font-size: 1rem;
+    background-color: #5C8D89;
+    color:#fff;
+}
+
 .table_item_red{
     font-size: 1rem;
     background-color: rgba(233, 53, 53, 0.76);

@@ -2125,7 +2125,7 @@ function dental_patient_info_entry(Request $request){
         # Generate dental test no.
         $current_count = DB::table('dental_log')->orderBy('AI_ID','desc')->first();
 
-        if($current_count==null){
+        if(!$current_count){
             $test_no = 1;
         }else{
             $test_no = $current_count->AI_ID;
@@ -2152,7 +2152,7 @@ function dental_patient_info_entry(Request $request){
     $msg = 'Patient registered, choose tests to proceed.';
     session(['SESSION_FLASH_MSG' => $msg]);
 
-    # Redirecting to [FUNCTION-NO::30], invoice controller.
+    # Redirecting to [FUNCTION-NO::30].
     return redirect('/reception/show_tests/dental/');
 
 }
@@ -2171,38 +2171,31 @@ function dental_patient_info_entry(Request $request){
 #########################
 #### FUNCTION-NO::30 ####
 #########################
-# Cancels switching beds;
+# Shows all dental tests;
 # Update will happen on --: TABLE :------ beds.
 
 function show_dental_tests(Request $request){
 
-    $dtn=$request->session()->get('dental_test_no');
+    $dental_test_no = $request->session()->get('dental_test_no');
     
     # test list.
     $test['info']=DB::table('dental_info')
         ->where('State','1')
-        ->orderBy('AI_ID','desc')
+        ->orderBy('Test_Name','asc')
         ->get();
 
-    # dental test log.
-    $dtl['logs']=DB::table('dental_test_log')
-        ->where('Dental_Test_No',$dtn)
-        ->orderBy('AI_ID','desc')
+    $selected_test['logs']=DB::table('dental_info')
+        ->join('dental_test_log', 'dental_info.AI_ID', '=', 'dental_test_log.Dental_Info_AI_ID')
+        ->select('dental_info.*', 'dental_test_log.Dental_Info_AI_ID', 'dental_test_log.Fee', 'dental_test_log.Dental_Test_No')
+        ->where('dental_info.State','1')
+        ->where('dental_test_log.Dental_Test_No',$dental_test_no)
+        ->orderBy('dental_info.Test_Name','asc')
         ->get();
-
-    # checking if dtl table empty
-    $exist = count($dtl);
-
-    if($exist > 1){
-        session(['dtl_state' => 1]);
-    }else{
-        session(['dtl_state' => 0]);
-    }
 
     session(['dental_test_search' => 3]);
 
     # Returning to the view below.
-    return view('hospital/reception/dental_tests',$test,$dtl);
+    return view('hospital/reception/dental_tests',$test,$selected_test);
 
 }
 
@@ -2213,6 +2206,273 @@ function show_dental_tests(Request $request){
 # 
 # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::31 ####
+#########################
+# Shows specific test based on name;
+
+function search_dental_tests(Request $request){
+
+    $dental_test_no = $request->session()->get('dental_test_no');
+    
+    # Searching test
+    $request->validate([
+
+        'test_search_info'=>'required'
+
+    ]);
+
+    $test_search_info = $request->input('test_search_info');
+
+    $available_test_data['info']=DB::table('dental_info')
+        ->where('Test_Name','like','%'.$test_search_info.'%')
+        ->orderBy('Test_Name','asc')
+        ->get();
+
+    $a_t_d=DB::table('dental_info')
+        ->where('Test_Name','like','%'.$test_search_info.'%')
+        ->count();
+
+    $selected_test['logs']=DB::table('dental_info')
+        ->join('dental_test_log', 'dental_info.AI_ID', '=', 'dental_test_log.Dental_Info_AI_ID')
+        ->select('dental_info.*', 'dental_test_log.Dental_Info_AI_ID', 'dental_test_log.Fee', 'dental_test_log.Dental_Test_No')
+        ->where('dental_info.State','1')
+        ->where('dental_test_log.Dental_Test_No',$dental_test_no)
+        ->orderBy('dental_info.Test_Name','asc')
+        ->get();
+
+    if($a_t_d==null){
+        session(['dental_test_search' => 0]);
+    }else{
+        session(['dental_test_search' => 1]);
+    }
+
+    # Returning to the view below.
+    return view('hospital/reception/dental_tests',$available_test_data,$selected_test);
+
+}
+
+# End of function search_dental_tests.                      <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note:
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::32 ####
+#########################
+# Selects test;
+# Entry will happen on  --: TABLE :------ dental_test_log.
+
+function select_dental_tests(Request $request){
+
+    # Data entry to Table:----dental_test_log.
+
+    $D_I_AI_ID=$request->input('test_id');
+    $D_T_N=$request->input('test_no');
+    session(['D_I_AI_ID' => $D_I_AI_ID]);
+    
+    $check=DB::table('dental_test_log')
+        ->where('Dental_Info_AI_ID',$D_I_AI_ID)
+        ->where('Dental_Test_No',$D_T_N)
+        ->count();
+
+    if($check==null){
+
+        $dental_test_logs=array(
+            'Dental_Info_AI_ID'=>$D_I_AI_ID,
+            'Dental_Test_No'=>$D_T_N,
+            'Fee'=>$request->input('test_fee')
+        );
+    
+        DB::table('dental_test_log')
+            ->insert($dental_test_logs);
+
+        # Session flash message.
+        $msg = 'Test selected.';
+
+    }
+
+    # Session flash message.
+    $msg = 'Already selected.';
+
+    session(['SESSION_FLASH_MSG' => $msg]);
+
+    # Redirecting to [FUNCTION-NO::30].
+    return redirect('/reception/show_tests/dental/');
+
+}
+
+# End of function select_dental_tests.                      <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::33 ####
+#########################
+# Unselects test;
+# Delete will happen on  --: TABLE :------ dental_test_log.
+
+function unselect_dental_tests(Request $request, $di_ai_id){
+
+    # Data delete from Table:----dental_test_log.
+
+    $dtn=$request->session()->get('dental_test_no');
+
+    session(['di_ai_id' => $di_ai_id]);
+
+    DB::table('dental_test_log')
+        ->where('Dental_Info_AI_ID', $di_ai_id)
+        ->where('Dental_Test_No', $dtn)
+        ->delete();
+
+    # Session flash message.
+    $msg = 'Test deleted.';
+    session(['SESSION_FLASH_MSG' => $msg]);
+
+    # Redirecting to [FUNCTION-NO::30].
+    return redirect('/reception/show_tests/dental/');
+
+}
+
+# End of function unselect_dental_tests.                    <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::34 ####
+#########################
+# Cancels all prior unfinished dental test input;
+# Delete will happen on  --: TABLE :------ dental_log.
+# Delete will happen on  --: TABLE :------ dental_test_log.
+
+function cancel_all_dental_test(Request $request){
+
+    $dtn=$request->session()->get('dental_test_no');
+
+    $target=DB::table('dental_log')
+        ->where('Dental_Test_No', $dtn)
+        ->orderby('AI_ID','desc')
+        ->first();
+    
+    # Data delete from Table:----dental_log.
+    DB::table('dental_log')
+        ->where('AI_ID', $target->AI_ID)
+        ->delete();
+    
+    # Data delete from Table:----dental_test_log.
+    DB::table('dental_test_log')
+        ->where('Dental_Test_No', $dtn)
+        ->delete();
+    
+    # Session flash message.
+    $msg = 'Dental tests canceled.';
+    session(['SESSION_FLASH_MSG' => $msg]);
+
+    # Redirecting to [FUNCTION-NO::01].
+    return redirect('/reception/home/');
+
+}
+
+# End of function unselect_dental_tests.                    <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::35 ####
+#########################
+# Shows selected tests;
+# Suggests dentists.
+
+function dental_payment_page(Request $request){
+
+    $dental_test_no = $request->session()->get('dental_test_no');
+    $D_I_AI_ID = $request->session()->get('D_I_AI_ID');
+
+    # doctor list.
+    $doctor['info']=DB::table('doctors')
+        ->where('Department','Dental')
+        ->orderBy('D_ID','desc')
+        ->get();
+
+    # selected tests.
+    $selected_test['logs']=DB::table('dental_info')
+        ->join('dental_test_log', 'dental_info.AI_ID', '=', 'dental_test_log.Dental_Info_AI_ID')
+        ->select('dental_info.*', 'dental_test_log.Dental_Info_AI_ID', 'dental_test_log.Fee', 'dental_test_log.Dental_Test_No')
+        ->where('dental_info.State','1')
+        ->where('dental_test_log.Dental_Test_No',$dental_test_no)
+        ->orderBy('dental_info.Test_Name','asc')
+        ->get();
+
+    # count total bill.
+    $total_bill = DB::table('dental_test_log')
+        ->where('Dental_Test_No', $dental_test_no)
+        ->sum('Fee');
+
+    session(['Dentist_Test_Total_Fee' => $total_bill]);
+
+    # Returning to the view below.
+    return view('hospital/reception/dental_payment',$doctor,$selected_test);
+
+}
+
+# End of function dental_payment_page.                      <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

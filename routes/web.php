@@ -220,9 +220,33 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     # Redirecting to [FUNCTION-NO::29]---in-controller.
     Route::get('/reception/test_selection/dental/','App\Http\Controllers\reception\add_patient@dental_patient_info_entry');
 
+    ##############################################################################################################################################
+    # Dental.  [C::add_patient.php]
+    ##############################################################################################################################################
+
     # Shows all dental tests.
-    # Redirecting to [FUNCTION-NO::29]---in-controller.
+    # Redirecting to [FUNCTION-NO::30]---in-controller.
     Route::get('/reception/show_tests/dental/','App\Http\Controllers\reception\add_patient@show_dental_tests');
+
+    # Search dental tests.
+    # Redirecting to [FUNCTION-NO::31]---in-controller.
+    Route::post('/reception/find_test/dental/by_search/','App\Http\Controllers\reception\add_patient@search_dental_tests');
+
+    # Select dental tests.
+    # Redirecting to [FUNCTION-NO::32]---in-controller.
+    Route::post('/reception/select/test/dental/','App\Http\Controllers\reception\add_patient@select_dental_tests');
+
+    # Unselect dental tests.
+    # Redirecting to [FUNCTION-NO::33]---in-controller.
+    Route::get('/reception/unselect/test/dental/{di_ai_id}','App\Http\Controllers\reception\add_patient@unselect_dental_tests');
+
+    # Unselect dental tests.
+    # Redirecting to [FUNCTION-NO::34]---in-controller.
+    Route::get('/reception/cancel_test/dental/','App\Http\Controllers\reception\add_patient@cancel_all_dental_test');
+
+    # Dental payment.
+    # Redirecting to [FUNCTION-NO::35]---in-controller.
+    Route::get('/reception/dental/test/payment/','App\Http\Controllers\reception\add_patient@dental_payment_page');
 
     ##############################################################################################################################################
     # Invoice.  [C::invoice.php]
