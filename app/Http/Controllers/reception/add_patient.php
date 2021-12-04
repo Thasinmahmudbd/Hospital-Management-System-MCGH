@@ -39,6 +39,7 @@ class add_patient extends Controller
 
         session(['VAT' => $acc_var->Vat]);
         session(['COMMISSION' => $acc_var->Commission]);
+        session(['DENTAL_HOSPITAL_PERCENTAGE' => $acc_var->Dental_Hospital_Percentage]);
         $request->session()->put('KernelPoint','reception');
 
         # Returning to the view below.
@@ -117,6 +118,7 @@ class add_patient extends Controller
 
             $redirect = 'dental';
             session(['REDIRECT' => $redirect]);
+            session(['reg_date' => $ap_date]);
 
             # Redirecting to [FUNCTION-NO::29].
             return redirect('/reception/test_selection/dental/');
@@ -2140,7 +2142,8 @@ function dental_patient_info_entry(Request $request){
 
             'P_ID'=>$p_id,
             'R_ID'=>$request->session()->get('REC_SESSION_ID'),
-            'Dental_Test_No'=>$test_no
+            'Dental_Test_No'=>$test_no,
+            'Reg_Date'=>$request->session()->get('reg_date')
 
         );
 
@@ -2452,6 +2455,149 @@ function dental_payment_page(Request $request){
 # 
 # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::36 ####
+#########################
+# Submit dental payment;
+# Update will happen on --: TABLE :------ dental_log;
+# Update will happen on --: TABLE :------ doctors;
+# Entry will happen on --: TABLE :------ doctor_balance_logs;
+# Entry will happen on  --: TABLE :------ hospital_income_log.
+
+function dental_payment_submission(Request $request){
+
+    # Collect require data.
+    $dental_test_no = $request->session()->get('dental_test_no');
+    # $D_I_AI_ID = $request->session()->get('D_I_AI_ID');
+    $vat = $request->session()->get('VAT');
+    $estimated_bill = $request->session()->get('Dentist_Test_Total_Fee');
+    $calculated_bill = $request->input('calculated_bill');
+    $service_charge_percentage = $request->session()->get('DENTAL_HOSPITAL_PERCENTAGE');
+    $p_id = $request->session()->get('PATIENT_P_ID');
+    $d_id = $request->input('dentist');
+
+    $discount = $request->input('discount');
+    $received = $request->input('received');
+    $change = $request->input('change');
+    $due_amount = $calculated_bill-$received;
+    
+    $dental_log=array(
+
+        'D_ID'=>$d_id,
+        'Discount'=>$discount,
+        'Paid'=>$received,
+        'Received'=>$received,
+        'Changes'=>$change,
+        'Payment_Status'=>$request->input('payment_status'),
+        'Due_Amount'=>$due_amount,
+        'Total_Amount'=>$estimated_bill,
+        'Payable_Amount'=>$calculated_bill
+
+    );
+
+    DB::table('dental_log')
+        ->where('Dental_Test_No',$dental_test_no)    
+        ->update($dental_log);
+
+    # Calculate service charge.
+    $service_charge = (($service_charge_percentage/100)*$received);
+
+    # Calculate dentist income.
+    $dentist_income = $received- $service_charge;
+
+    # Calculate gov vat & income.
+    $gov_vat = (($vat/100)*$service_charge);
+    $income = $service_charge-$gov_vat;
+
+    # Date.
+    $todays_date = date("Ymd");
+
+    # Generating message.
+    $message='Dental services for: '.$p_id.', given by: '.$d_id;
+
+    # Log entry on hospital balance log.
+    $hospital_income_logs=array(
+
+        'Message'=>$message,
+        'Debit'=>0,
+        'Credit'=>$received,
+        'Vat'=>$gov_vat,
+        'Service_Charge'=>$service_charge,
+        'Total_Income'=>$income,
+        'Credit_Type'=>'Dental',
+        'Entry_Date'=>$todays_date,
+        'Entry_Time'=>date("H:i:s"),
+        'Entry_Year'=>date("Y"),
+        'User_ID'=>$request->session()->get('REC_SESSION_ID')
+
+    );
+
+    DB::table('hospital_income_log')
+    ->insert($hospital_income_logs);
+
+
+    # checking current balance.
+    $wallet=DB::table('doctor_balance_logs')
+    ->where('D_ID',$d_id)
+    ->orderBy('AI_ID','desc')
+    ->first();
+
+    if($wallet){
+        $current_balance = $wallet->Current_Balance;
+        $current_balance = $current_balance + $dentist_income;
+    }else{
+        $current_balance = 0;
+        $current_balance = $current_balance + $dentist_income;
+    }
+
+    $log=array(
+
+        'D_ID'=>$d_id,
+        'B_Date'=>$request->session()->get('DATE_TODAY'),
+        'Credit'=>$dentist_income,
+        'Commission'=>0,
+        'Income'=>$dentist_income,
+        'Current_Balance'=>$current_balance,
+        'Acc_ID'=>$request->session()->get('REC_SESSION_ID'),
+        'O_ID'=>0
+
+    );
+
+    # Insert balance log.
+    DB::table('doctor_balance_logs')
+    ->insert($log);
+
+    $wallet_value=array(
+
+        'Wallet'=>$current_balance
+
+    );
+
+    # updating doctor wallet.
+    $doctor_wallet=DB::table('doctors')
+    ->where('D_ID',$d_id)
+    ->update($wallet_value);
+
+    # Redirecting to [FUNCTION-NO::02], invoice controller.
+    return redirect('/reception/invoice_list/dental/');
+
+}
+
+# End of function dental_payment_submission.                <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
 
 
 

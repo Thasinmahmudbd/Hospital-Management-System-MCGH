@@ -284,7 +284,7 @@ function invigilator_confirmed(Request $request){
 
 }
 
-# End of function set_up_home.                              <-------#
+# End of function invigilator_confirmed.                    <-------#
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: Hello, future me,
@@ -394,7 +394,7 @@ function other_Info_Submission(Request $request){
 
 }
 
-# End of function set_up_home.                              <-------#
+# End of function other_Info_Submission.                    <-------#
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: Hello, future me,
@@ -595,7 +595,7 @@ function other_info_submission_complete(Request $request){
 
 }
 
-# End of function set_up_home.                              <-------#
+# End of function other_info_submission_complete.           <-------#
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: Hello, future me,

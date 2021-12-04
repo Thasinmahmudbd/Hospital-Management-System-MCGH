@@ -929,6 +929,7 @@ function assistant_data_entry(Request $request){
 # Delete surgeon entry;
 # Update doctor balance log;
 # Delete will happen on --: TABLE :------ surgeon_logs;
+# Update will happen on --: TABLE :------ doctors;
 # Insert will happen on --: TABLE :------ doctor_balance_logs.
 
 function delete_surgeon_entry(Request $request, $ai_id){
@@ -1005,6 +1006,7 @@ function delete_surgeon_entry(Request $request, $ai_id){
 # Delete anesthesiologist entry;
 # Update doctor balance log;
 # Delete will happen on --: TABLE :------ anesthesiologist_logs;
+# Update will happen on --: TABLE :------ doctors;
 # Insert will happen on --: TABLE :------ doctor_balance_logs.
 
 function delete_anesthesiologist_entry(Request $request, $ai_id){

@@ -123,9 +123,66 @@
 
 
 
-            @if(Session::get('dental_test_search')=='1')
+                <!--Selected tests-->
 
                 <div class="purple_line"></div>
+                <div class="gap"></div>
+
+                <!--Showing all of dental tests-->
+
+                <div class="content_container_bg_less_thin">
+
+                    <span></span>
+                        
+                    <p><b>Selected Tests</b></p>
+
+                    <span></span>
+
+                </div>
+
+                <table class="frame_table">
+
+                    <tr class="frame_header">
+                        <th width="5%" class="frame_header_item">S/N</th>
+                        <th width="50%" class="frame_header_item">Test Name</th>
+                        <th width="20%" class="frame_header_item">Rate</th>
+                        <th width="20%" class="frame_header_item">Fee</th>
+                        <th width="5%" class="frame_header_item">Action</th>
+                    </tr>
+
+                    <?php $serial = 1; ?>
+                    @foreach($logs as $list)
+
+                    <tr class="frame_rows">
+                        <td class="frame_data" data-label="S/N"><?php echo $serial; $serial++; ?></td>
+                        <td class="frame_data" data-label="Test Name">{{$list->Test_Name}}</td>
+                        <td class="frame_data" data-label="Rate">{{$list->Rate}}</td>
+
+                            <td class="frame_data" data-label="Fee">{{$list->Fee}}</td>
+
+                            <td class="frame_action" data-label="Action">
+                                <a href="{{url('/reception/unselect/test/dental/'.$list->AI_ID)}}">
+                                    <i class="table_btn_red fas fa-times-circle"></i>
+                                </a>
+                            </td>
+
+                    </tr>
+
+                    @endforeach
+
+                </table>
+
+
+
+
+
+
+
+
+
+
+            @if(Session::get('dental_test_search')=='1')
+
                 <div class="gap"></div>
 
                 <!--Showing search results of dental tests-->
@@ -191,7 +248,6 @@
 
             @elseif(Session::get('dental_test_search')=='0')
 
-                <div class="purple_line"></div>
                 <div class="gap"></div>
 
                 <!--Showing search results of dental tests when no result-->
@@ -218,8 +274,6 @@
 
             @elseif(Session::get('dental_test_search')=='3')
 
-
-                <div class="purple_line"></div>
                 <div class="gap"></div>
 
                 <!--Showing all of dental tests-->
@@ -280,53 +334,7 @@
 
 
 
-                <!--Selected tests-->
 
-                <div class="gap"></div>
-
-                <!--Showing all of dental tests-->
-
-                <div class="content_container_bg_less_thin">
-
-                    <span></span>
-                        
-                    <p><b>Selected Tests</b></p>
-
-                    <span></span>
-
-                </div>
-
-                <table class="frame_table">
-
-                    <tr class="frame_header">
-                        <th width="5%" class="frame_header_item">S/N</th>
-                        <th width="50%" class="frame_header_item">Test Name</th>
-                        <th width="20%" class="frame_header_item">Rate</th>
-                        <th width="20%" class="frame_header_item">Fee</th>
-                        <th width="5%" class="frame_header_item">Action</th>
-                    </tr>
-
-                    <?php $serial = 1; ?>
-                    @foreach($logs as $list)
-
-                    <tr class="frame_rows">
-                        <td class="frame_data" data-label="S/N"><?php echo $serial; $serial++; ?></td>
-                        <td class="frame_data" data-label="Test Name">{{$list->Test_Name}}</td>
-                        <td class="frame_data" data-label="Rate">{{$list->Rate}}</td>
-
-                            <td class="frame_data" data-label="Fee">{{$list->Fee}}</td>
-
-                            <td class="frame_action" data-label="Action">
-                                <a href="{{url('/reception/unselect/test/dental/'.$list->AI_ID)}}">
-                                    <i class="table_btn_red fas fa-times-circle"></i>
-                                </a>
-                            </td>
-
-                    </tr>
-
-                    @endforeach
-
-                </table>
 
 
 

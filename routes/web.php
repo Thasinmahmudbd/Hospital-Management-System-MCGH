@@ -181,7 +181,7 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     Route::get('/reception/patient_list/','App\Http\Controllers\reception\add_patient@show_list');
 
     ##############################################################################################################################################
-    #Appointments cancellation after submission.  [C::add_patient.php]
+    # Appointments cancellation after submission.  [C::add_patient.php]
     ##############################################################################################################################################
 
     # Cancels appointments after submission.
@@ -248,6 +248,10 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     # Redirecting to [FUNCTION-NO::35]---in-controller.
     Route::get('/reception/dental/test/payment/','App\Http\Controllers\reception\add_patient@dental_payment_page');
 
+    # Submit dental payment.
+    # Redirecting to [FUNCTION-NO::36]---in-controller.
+    Route::post('/reception/submit/test/dental/','App\Http\Controllers\reception\add_patient@dental_payment_submission');
+
     ##############################################################################################################################################
     # Invoice.  [C::invoice.php]
     ##############################################################################################################################################
@@ -260,6 +264,10 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     # Redirecting to [FUNCTION-NO::02]---in-controller.
     Route::get('/reception/invoice_list/admission/','App\Http\Controllers\generate\invoice@invoice_list_admission');
 
+    # Reading data in Invoice generator [dental] page.
+    # Redirecting to [FUNCTION-NO::03]---in-controller.
+    Route::get('/reception/invoice_list/dental/','App\Http\Controllers\generate\invoice@invoice_list_dental');
+
     # Searching data in Invoice generator [appointment] page.
     # Redirecting to [FUNCTION-NO::]---in-controller.
     Route::post('/reception/find_patient/by_search/invoice/appointment/','App\Http\Controllers\generate\invoice@invoice_search_appointment');
@@ -271,6 +279,10 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     # Generate invoice. [admission]
     # Redirecting to [FUNCTION-NO::]---in-controller.
     Route::get('/reception/collect/admission/invoice/data/{a_l_ai_id}', 'App\Http\Controllers\generate\invoice@collect_admission_invoice_data');
+
+    # Generate invoice. [dental]
+    # Redirecting to [FUNCTION-NO::]---in-controller.
+    Route::get('/reception/collect/dental/invoice/data/{d_t_n}', 'App\Http\Controllers\generate\invoice@collect_dental_invoice_data');
 
     Route::get('/reception/generate/appointment/invoice/',function(){
         
@@ -299,6 +311,31 @@ Route::group(['middleware'=>['receptionAuth']],function() {
         return $pdf->stream($file_name);
 
         return view('hospital/invoice/admission');
+
+    });
+
+    Route::get('/reception/generate/dental/invoice/',function(){
+
+        $dtn = Session::get('dtn');
+
+        $tests['result']=DB::table('dental_test_log')
+            ->join('dental_info', 'dental_test_log.Dental_Info_AI_ID', '=', 'dental_info.AI_ID')
+            ->select('dental_test_log.*', 'dental_info.*')
+            ->where('dental_test_log.Dental_Test_No', $dtn)
+            ->orderBy('dental_test_log.AI_ID','desc')
+            ->get();
+
+        $pdf = PDF::loadView('hospital.invoice.dental', $tests);
+
+        $file_name = 'ID: '.Session::get('pId').'.pdf';
+
+        $pdf->setOption('page-size','a5');
+        $pdf->setOption('orientation','portrait');
+
+        return $pdf->stream($file_name);
+
+        # Returning to the view below.
+        return view('hospital/invoice/dental', $tests);
 
     });
 

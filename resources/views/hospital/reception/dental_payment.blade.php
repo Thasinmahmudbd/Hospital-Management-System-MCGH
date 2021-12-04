@@ -81,12 +81,11 @@
 
 
 
-            <div class="gap"></div>
 
 
             <!--Patient info tab-->
 
-            <form action="{{url('/reception/select/test/dental/')}}" method="post" class="content_container_white_super_thin center_self">
+            <form action="{{url('/reception/submit/test/dental/')}}" method="post" class="content_container_white_super_thin center_self">
             @csrf
 
             <div class="patient_and_doctor_info_one_is_to_one">
@@ -148,6 +147,20 @@
 
                     <div class="content_container_bg_less">
 
+                        <!--<p class="section_title">Delivery</p>
+
+                        <div class="info">
+
+                            <p class="collected_info">Date</p>
+                            <p>:</p>
+                            <p class="collected_info">
+                                <input type="date" class="input" name="del_date" value="{{Session::get('DATE_TODAY')}}">
+                            </p>
+
+                        </div>
+
+                        <div class="gap"></div>-->
+
                         <p class="section_title">Billing Info</p>
 
                         <div class="info">
@@ -156,7 +169,7 @@
                             <p>:</p>
                             <p class="collected_info">
                                 <input type="tel" class="disNone" id="fee" value="{{Session::get('Dentist_Test_Total_Fee')}}" readonly>
-                                <input class="input disable shade" type="text" name="discount" value="{{Session::get('Dentist_Test_Total_Fee')}}" id="estimate" required>
+                                <input class="input disable shade" type="text" name="calculated_bill" value="{{Session::get('Dentist_Test_Total_Fee')}}" id="estimate" required>
                             </p>
 
                             <p class="collected_info">Payment Status</p>
