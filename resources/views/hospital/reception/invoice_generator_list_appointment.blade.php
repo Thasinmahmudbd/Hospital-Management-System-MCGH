@@ -58,7 +58,7 @@
     <a class="mobile_link" href="{{url('/reception/home/')}}">Patient Entry</a>
     <a class="mobile_link" href="{{url('/reception/emergency/')}}">Emergency</a>
     <a class="mobile_link" href="{{url('/reception/patient_list/')}}">Patients List</a>
-    <a class="mobile_link" href="{{url('/reception/invoice_list/appointment/')}}">Patients List</a>
+    <a class="mobile_link" href="{{url('/reception/invoice_list/appointment/')}}">Generate Invoice</a>
 </div>
 
 @endsection
@@ -651,7 +651,7 @@
                         <td class="frame_data" data-label="Doctor">{{$list->Dr_Name}}</td>
 
                         <td class="frame_action" data-label="Due">
-                            <a href="{{url('')}}">
+                            <a href="{{url('/reception/collect/dental/due/'.$list->Dental_Test_No)}}">
                                 <i class="table_btn_orange fas fa-donate"></i>
                             </a>
                         </td>
@@ -734,7 +734,7 @@
                         <td class="frame_data" data-label="Doctor">{{$list->Dr_Name}}</td>
 
                         <td class="frame_action" data-label="Due">
-                            <a href="{{url('')}}">
+                            <a href="{{url('/reception/collect/dental/due/'.$list->Dental_Test_No)}}">
                                 <i class="table_btn_orange fas fa-donate"></i>
                             </a>
                         </td>
@@ -793,7 +793,7 @@
                         <td class="frame_data" data-label="Doctor">{{$list->Dr_Name}}</td>
 
                         <td class="frame_action" data-label="Due">
-                            <a href="{{url('')}}">
+                            <a href="{{url('/reception/collect/dental/due/'.$list->Dental_Test_No)}}">
                                 <i class="table_btn_orange fas fa-donate"></i>
                             </a>
                         </td>

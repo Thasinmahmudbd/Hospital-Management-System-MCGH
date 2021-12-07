@@ -58,7 +58,7 @@
     <a class="mobile_link" href="{{url('/reception/home/')}}">Patient Entry</a>
     <a class="mobile_link" href="{{url('/reception/emergency/')}}">Emergency</a>
     <a class="mobile_link" href="{{url('/reception/patient_list/')}}">Patients List</a>
-    <a class="mobile_link" href="{{url('/reception/invoice_list/appointment/')}}">Patients List</a>
+    <a class="mobile_link" href="{{url('/reception/invoice_list/appointment/')}}">Generate Invoice</a>
 </div>
 
 @endsection

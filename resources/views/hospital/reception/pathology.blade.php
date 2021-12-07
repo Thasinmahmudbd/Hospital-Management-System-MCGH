@@ -2,7 +2,7 @@
 
 @section('page_title','MCGH Portal')
 
-@section('page_type','Dental Service Selection')
+@section('page_type','Test Selection')
 
 
 
@@ -59,34 +59,51 @@
 
 @section('content')
 
-                <div class="patient_and_doctor_info_one_is_to_three">
 
-                    <!--Links to navigate invoice pages-->
 
-                    <span></span>
 
-                    <!--Search bar to search patients-->
+                <div class="patient_form_element_three_is_to_one">
 
-                    <form action="{{url('/reception/find_test/dental/by_search/')}}" method="post" class="content_container_white_super_thin center_self">
-                    @csrf
+                    <div class="patient_form_element_one_is_to_three">
 
-                        <div class="patient_form_element_three_is_to_one">
+                    <p class="content_container_white_super_thin center_self">
+                        <b>Test</b>
+                    </p>
 
-                            <input type="text" class="input" name="test_search_info" placeholder="Enter Test Name" required>
+                        <!--Search bar to search patients-->
 
-                            <div class="patient_and_doctor_info_one_is_to_one">
+                        <form action="{{url('/reception/find_patient/by_search/invoice/appointment/')}}" method="post" class="content_container_white_super_thin center_self">
+                        @csrf
 
+                            <div class="patient_form_element_three_is_to_one">
+
+                                <input type="text" class="input" name="old_patient_search_info" placeholder="Enter Test Name" required>
                                 <button type="submit" class="btn form_btn" name="search_old_patient">Search</button>
-
-                                <a class="btn form_btn text_center" href="{{url('/reception/dental/test/payment/')}}">Next</a>
 
                             </div>
 
-                        </div>
+                        </form>
 
-                    </form>
+                    </div>
+
+                    <div class="patient_form_element_three_is_to_one content_nav">
+
+                        <a class="form_btn text_center" href="{{url('/reception/dental/test/payment/')}}">Select Refer</a>
+
+                        <a class="form_btn text_center" href="{{url('/reception/dental/test/payment/')}}">Self</a>
+
+                    </div>
 
                 </div>
+
+
+
+
+
+
+
+
+
 
 
 
@@ -144,9 +161,8 @@
 
                     <tr class="frame_header">
                         <th width="5%" class="frame_header_item">S/N</th>
-                        <th width="50%" class="frame_header_item">Test Name</th>
-                        <th width="20%" class="frame_header_item">Rate</th>
-                        <th width="20%" class="frame_header_item">Fee</th>
+                        <th width="70%" class="frame_header_item">Test Name</th>
+                        <th width="20%" class="frame_header_item">Test Fee</th>
                         <th width="5%" class="frame_header_item">Action</th>
                     </tr>
 
@@ -156,15 +172,13 @@
                     <tr class="frame_rows">
                         <td class="frame_data" data-label="S/N"><?php echo $serial; $serial++; ?></td>
                         <td class="frame_data" data-label="Test Name">{{$list->Test_Name}}</td>
-                        <td class="frame_data" data-label="Rate">{{$list->Rate}}</td>
+                        <td class="frame_data" data-label="Test Fee">{{$list->Test_Fee}}</td>
 
-                            <td class="frame_data" data-label="Fee">{{$list->Fee}}</td>
-
-                            <td class="frame_action" data-label="Action">
-                                <a href="{{url('/reception/unselect/test/dental/'.$list->AI_ID)}}">
-                                    <i class="table_btn_red fas fa-times-circle"></i>
-                                </a>
-                            </td>
+                        <td class="frame_action" data-label="Action">
+                            <a href="{{url('/reception/unselect/test/dental/'.$list->AI_ID)}}">
+                                <i class="table_btn_red fas fa-times-circle"></i>
+                            </a>
+                        </td>
 
                     </tr>
 
@@ -181,7 +195,7 @@
 
 
 
-            @if(Session::get('dental_test_search')=='1')
+            @if(Session::get('test_search')=='1')
 
                 <div class="gap"></div>
 
@@ -201,9 +215,8 @@
 
                     <tr class="frame_header">
                         <th width="5%" class="frame_header_item">S/N</th>
-                        <th width="50%" class="frame_header_item">Test Name</th>
-                        <th width="20%" class="frame_header_item">Rate</th>
-                        <th width="20%" class="frame_header_item">Fee</th>
+                        <th width="70%" class="frame_header_item">Test Name</th>
+                        <th width="20%" class="frame_header_item">Test Fee</th>
                         <th width="5%" class="frame_header_item">Action</th>
                     </tr>
 
@@ -213,15 +226,14 @@
                     <tr class="frame_rows">
                         <td class="frame_data" data-label="S/N"><?php echo $serial; $serial++; ?></td>
                         <td class="frame_data" data-label="Test Name">{{$list->Test_Name}}</td>
-                        <td class="frame_data" data-label="Rate">{{$list->Rate}}</td>
+                        <td class="frame_data" data-label="Rate">{{$list->Test_Fee}}</td>
 
                         <form action="{{url('/reception/select/test/dental/')}}" method="post" class="content_container_white_super_thin center_self">
                         @csrf
 
                             <td class="frame_data" data-label="Fee">
-                                <input class="input" type="text" name="test_fee" required>
                                 <input type="hidden" value="{{$list->AI_ID}}" name="test_id">
-                                <input type="hidden" value="{{Session::get('dental_test_no')}}" name="test_no">
+                                <input type="hidden" value="{{Session::get('test_no')}}" name="test_no">
                             </td>
 
                             <td class="frame_action" data-label="Action">
@@ -246,7 +258,7 @@
 
 
 
-            @elseif(Session::get('dental_test_search')=='0')
+            @elseif(Session::get('test_search')=='0')
 
                 <div class="gap"></div>
 
@@ -272,7 +284,7 @@
 
 
 
-            @elseif(Session::get('dental_test_search')=='3')
+            @elseif(Session::get('test_search')=='3')
 
                 <div class="gap"></div>
 
@@ -292,9 +304,8 @@
 
                     <tr class="frame_header">
                         <th width="5%" class="frame_header_item">S/N</th>
-                        <th width="50%" class="frame_header_item">Test Name</th>
-                        <th width="20%" class="frame_header_item">Rate</th>
-                        <th width="20%" class="frame_header_item">Fee</th>
+                        <th width="70%" class="frame_header_item">Test Name</th>
+                        <th width="20%" class="frame_header_item">Test Fee</th>
                         <th width="5%" class="frame_header_item">Action</th>
                     </tr>
 
@@ -304,18 +315,14 @@
                     <tr class="frame_rows">
                         <td class="frame_data" data-label="S/N"><?php echo $serial; $serial++; ?></td>
                         <td class="frame_data" data-label="Test Name">{{$list->Test_Name}}</td>
-                        <td class="frame_data" data-label="Rate">{{$list->Rate}}</td>
+                        <td class="frame_data" data-label="Test Fee">{{$list->Test_Fee}}</td>
 
                         <form action="{{url('/reception/select/test/dental/')}}" method="post" class="content_container_white_super_thin center_self">
                         @csrf
 
-                            <td class="frame_data" data-label="Fee">
-                                <input class="input" type="text" name="test_fee" required>
-                                <input type="hidden" value="{{$list->AI_ID}}" name="test_id">
-                                <input type="hidden" value="{{Session::get('dental_test_no')}}" name="test_no">
-                            </td>
-
                             <td class="frame_action" data-label="Action">
+                                <input type="hidden" value="{{$list->AI_ID}}" name="test_id">
+                                <input type="hidden" value="{{Session::get('test_no')}}" name="test_no">
                                 <button type="submit" class="btn_less">
                                     <i class="fas fa-plus-circle table_btn"></i>
                                 </button>

@@ -123,6 +123,15 @@ class add_patient extends Controller
             # Redirecting to [FUNCTION-NO::29].
             return redirect('/reception/test_selection/dental/');
 
+        }if($ap_type == 'Test'){
+
+            $redirect = 'test';
+            session(['REDIRECT' => $redirect]);
+            session(['reg_date' => $ap_date]);
+
+            # Redirecting to [FUNCTION-NO::39].
+            return redirect('/reception/test_selection/pathology/');
+
         }
 
     }
@@ -2175,7 +2184,6 @@ function dental_patient_info_entry(Request $request){
 #### FUNCTION-NO::30 ####
 #########################
 # Shows all dental tests;
-# Update will happen on --: TABLE :------ beds.
 
 function show_dental_tests(Request $request){
 
@@ -2465,7 +2473,7 @@ function dental_payment_page(Request $request){
 # Submit dental payment;
 # Update will happen on --: TABLE :------ dental_log;
 # Update will happen on --: TABLE :------ doctors;
-# Entry will happen on --: TABLE :------ doctor_balance_logs;
+# Entry will happen on  --: TABLE :------ doctor_balance_logs;
 # Entry will happen on  --: TABLE :------ hospital_income_log.
 
 function dental_payment_submission(Request $request){
@@ -2597,6 +2605,405 @@ function dental_payment_submission(Request $request){
 
 
 
+
+#########################
+#### FUNCTION-NO::37 ####
+#########################
+# Shows patient info, tests taken, due info.
+
+function due_payment(Request $request, $dtn){
+
+    $dental_test_no = $dtn;
+    session(['dtn' => $dtn]);
+
+    # selected tests.
+    $selected_test['logs']=DB::table('dental_info')
+        ->join('dental_test_log', 'dental_info.AI_ID', '=', 'dental_test_log.Dental_Info_AI_ID')
+        ->select('dental_info.*', 'dental_test_log.Dental_Info_AI_ID', 'dental_test_log.Fee', 'dental_test_log.Dental_Test_No')
+        ->where('dental_info.State','1')
+        ->where('dental_test_log.Dental_Test_No',$dental_test_no)
+        ->orderBy('dental_info.Test_Name','asc')
+        ->get();
+
+    # log infos.
+    $log=DB::table('dental_log')
+        ->where('Dental_Test_No',$dental_test_no)
+        ->first();
+
+    $p_id=$log->P_ID;
+    session(['dental_p_id' => $p_id]);
+
+    $d_id=$log->D_ID;
+    session(['dental_d_id' => $d_id]);
+
+    session(['total_amount' => $log->Due_Amount]);
+    session(['paid' => $log->Paid]);
+    session(['discount' => $log->Discount]);
+    session(['bill' => $log->Payable_Amount]);
+    session(['previously_received' => $log->Received]);
+    session(['previously_change' => $log->Changes]);
+
+    # patient infos.
+    $patient=DB::table('patients')
+        ->where('P_ID',$p_id)
+        ->first();
+
+    session(['dental_p_name' => $patient->Patient_Name]);
+    session(['dental_p_age' => $patient->Patient_Age]);
+    session(['dental_p_gender' => $patient->Patient_Gender]);
+
+    # doctor infos.
+    $doctor=DB::table('doctors')
+        ->where('D_ID',$d_id)
+        ->first();
+
+    session(['dental_d_name' => $doctor->Dr_Name]);
+
+    # count total bill.
+    $total_bill = DB::table('dental_test_log')
+        ->where('Dental_Test_No', $dental_test_no)
+        ->sum('Fee');
+
+    session(['DUE_TYPE' => 'dental']);
+
+    # Returning to the view below.
+    return view('hospital/reception/due_payment',$selected_test);
+
+}
+
+# End of function due_payment.                              <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::38 ####
+#########################
+# Submit dental due payment;
+# Update will happen on --: TABLE :------ dental_log;
+# Update will happen on --: TABLE :------ doctors;
+# Entry will happen on  --: TABLE :------ doctor_balance_logs;
+# Entry will happen on  --: TABLE :------ hospital_income_log.
+
+function dental_due_payment_submission(Request $request){
+
+    # Collect require data.
+    $dental_test_no = $request->session()->get('dtn');
+    # $D_I_AI_ID = $request->session()->get('D_I_AI_ID');
+    $vat = $request->session()->get('VAT');
+
+    $calculated_bill = $request->input('calculated_bill');
+    $service_charge_percentage = $request->session()->get('DENTAL_HOSPITAL_PERCENTAGE');
+    $p_id = $request->session()->get('dental_p_id');
+    $d_id = $request->session()->get('dental_d_id');
+
+    $received = $request->input('received');
+    $change = $request->input('change');
+    $due_amount = $calculated_bill-$received;
+    $paid = $request->input('paid');
+    $paid = $paid + $received;
+
+    /*$previously_received = $request->input('previously_received');
+    $total_received = $previously_received + $received;
+
+    $previously_change = $request->input('previously_change');
+    $total_change = $previously_change + $change;*/
+    
+    $dental_log=array(
+
+        'Paid'=>$paid,
+        'Received'=>$received,
+        'Changes'=>$change,
+        'Due_Amount'=>$due_amount
+
+    );
+
+    DB::table('dental_log')
+        ->where('Dental_Test_No',$dental_test_no)    
+        ->update($dental_log);
+
+    # Calculate service charge.
+    $service_charge = (($service_charge_percentage/100)*$received);
+
+    # Calculate dentist income.
+    $dentist_income = $received- $service_charge;
+
+    # Calculate gov vat & income.
+    $gov_vat = (($vat/100)*$service_charge);
+    $income = $service_charge-$gov_vat;
+
+    # Date.
+    $todays_date = date("Ymd");
+
+    # Generating message.
+    $message='Dental services for: '.$p_id.', given by: '.$d_id.', Due payment.';
+
+    # Log entry on hospital balance log.
+    $hospital_income_logs=array(
+
+        'Message'=>$message,
+        'Debit'=>0,
+        'Credit'=>$received,
+        'Vat'=>$gov_vat,
+        'Service_Charge'=>$service_charge,
+        'Total_Income'=>$income,
+        'Credit_Type'=>'Dental',
+        'Entry_Date'=>$todays_date,
+        'Entry_Time'=>date("H:i:s"),
+        'Entry_Year'=>date("Y"),
+        'User_ID'=>$request->session()->get('REC_SESSION_ID')
+
+    );
+
+    DB::table('hospital_income_log')
+    ->insert($hospital_income_logs);
+
+
+    # checking current balance.
+    $wallet=DB::table('doctor_balance_logs')
+    ->where('D_ID',$d_id)
+    ->orderBy('AI_ID','desc')
+    ->first();
+
+    if($wallet){
+        $current_balance = $wallet->Current_Balance;
+        $current_balance = $current_balance + $dentist_income;
+    }else{
+        $current_balance = 0;
+        $current_balance = $current_balance + $dentist_income;
+    }
+
+    $log=array(
+
+        'D_ID'=>$d_id,
+        'B_Date'=>$request->session()->get('DATE_TODAY'),
+        'Credit'=>$dentist_income,
+        'Commission'=>0,
+        'Income'=>$dentist_income,
+        'Current_Balance'=>$current_balance,
+        'Acc_ID'=>$request->session()->get('REC_SESSION_ID'),
+        'O_ID'=>0
+
+    );
+
+    # Insert balance log.
+    DB::table('doctor_balance_logs')
+    ->insert($log);
+
+    $wallet_value=array(
+
+        'Wallet'=>$current_balance
+
+    );
+
+    # updating doctor wallet.
+    $doctor_wallet=DB::table('doctors')
+    ->where('D_ID',$d_id)
+    ->update($wallet_value);
+
+    # Redirecting to [FUNCTION-NO::02], invoice controller.
+    return redirect('/reception/invoice_list/dental/');
+
+}
+
+# End of function dental_payment_submission.                <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::39 ####
+#########################
+# Generates patient unique ID;
+# Patient data entry for pathology;
+# Entry will happen on  --: TABLE :------ patients.
+# Entry will happen on  --: TABLE :------ pathology_log.
+
+function pathology_patient_info_entry(Request $request){
+
+    date_default_timezone_set('Asia/Dhaka');
+    $patient_type = $request->session()->get('PATIENT_TYPE');
+
+    ########## FOR NEW PATIENTS ##########
+    if($patient_type == 'new'){
+
+        /* Patient id generator */
+
+        $first_part = $request->session()->get('PATIENT_GENDER');
+            
+        if($first_part == 'Male'){
+            $first_part = 'M';
+        }elseif($first_part == 'Female'){
+            $first_part = 'F';
+            echo $first_part;
+        }elseif($first_part == 'Child'){
+            $first_part = 'C';
+            echo $first_part;
+        }elseif($first_part == 'Others'){
+            $first_part = 'O';
+            echo $first_part;
+        }
+
+        $second_part = date("dmY");
+
+        $current_count = DB::table('patients')->orderBy('AI_ID','desc')->first();
+
+        if($current_count==null){
+            $third_part = 1;
+        }else{
+            $current_count_array = explode('-',$current_count->P_ID);
+            $third_part = end($current_count_array);
+            if($third_part == 999){
+                #$third_part = 1;
+                $third_part++;
+            }if($current_count->Ad_Date != $second_part){
+                $third_part = 1;
+            }else{
+                $third_part++;
+            }
+        }
+
+        $P_ID = "$first_part"."-"."$second_part"."-".str_pad($third_part,3,"0",STR_PAD_LEFT);
+
+        /* Patient id generator end */
+
+    }
+        
+    ########## FOR OLD PATIENTS ##########
+    else{
+
+        $P_ID = $request->session()->get('P_ID');
+
+    }
+        
+    session(['PATIENT_P_ID' => $P_ID]);
+
+    $p_id = $request->session()->get('PATIENT_P_ID');
+    $todays_date = date("Ymd");
+    $patient_type = $request->session()->get('PATIENT_TYPE');
+    $request->session()->forget('SESSION_FLASH_MSG');
+
+    if($patient_type=='new'){
+
+        # Access able to only new patients.
+        # Data entry to Table:----patients.
+                
+        $patients=array(
+
+            'P_ID'=>$p_id,
+            'Patient_Name'=>$request->session()->get('PATIENT_NAME'),
+            'Patient_Gender'=>$request->session()->get('PATIENT_GENDER'),
+            'Patient_Age'=>$request->session()->get('PATIENT_AGE'),
+            'Cell_Number'=>$request->session()->get('PATIENT_CELL'),
+            'NID'=>$request->session()->get('PATIENT_NID'),
+            'NID_Type'=>$request->session()->get('PATIENT_NID_TYPE'),
+            'Ad_Date'=>date("dmY")
+                    
+        );
+
+        DB::table('patients')->insert($patients);
+
+    }if($patient_type=='new' || $patient_type=='old'){
+
+        # Access able to new & old patients.
+
+        # Generate test no.
+        $current_count = DB::table('pathology_log')->orderBy('AI_ID','desc')->first();
+
+        if(!$current_count){
+            $test_no = 1;
+        }else{
+            $test_no = $current_count->AI_ID;
+            $test_no++;
+        }
+
+        session(['test_no' => $test_no]);
+
+        # Data entry to Table:----dental_logs.
+
+        $pathology_log=array(
+
+            'P_ID'=>$p_id,
+            'R_ID'=>$request->session()->get('REC_SESSION_ID'),
+            'Test_No'=>$test_no,
+            'Reg_Date'=>$request->session()->get('reg_date')
+
+        );
+
+        DB::table('pathology_log')->insert($pathology_log);
+
+    }
+
+    # Session flash message.
+    $msg = 'Patient registered, choose tests to proceed.';
+    session(['SESSION_FLASH_MSG' => $msg]);
+
+    # Redirecting to [FUNCTION-NO::40].
+    return redirect('/reception/show_tests/pathology/');
+
+}
+
+# End of function pathology_patient_info_entry.             <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::40 ####
+#########################
+# Shows all pathology tests;
+
+function show_pathology_tests(Request $request){
+
+    $test_no = $request->session()->get('test_no');
+    
+    # test list.
+    $test['info']=DB::table('pathology_info')
+        ->where('State','1')
+        ->where('Groups','Pathology')
+        ->orderBy('Test_Name','asc')
+        ->get();
+
+    $selected_test['logs']=DB::table('pathology_info')
+        ->join('pathology_test_log', 'pathology_info.AI_ID', '=', 'pathology_test_log.Test_Info_AI_ID')
+        ->select('pathology_info.*', 'pathology_test_log.Test_Info_AI_ID', 'pathology_test_log.Fee', 'pathology_test_log.Test_No')
+        ->where('pathology_info.State','1')
+        ->where('pathology_test_log.Test_No',$test_no)
+        ->orderBy('pathology_info.Test_Name','asc')
+        ->get();
+
+    session(['test_search' => 3]);
+
+    # Returning to the view below.
+    return view('hospital/reception/pathology',$test,$selected_test);
+
+}
+
+# End of function show_pathology_tests.                     <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 

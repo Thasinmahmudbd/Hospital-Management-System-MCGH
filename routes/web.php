@@ -213,16 +213,12 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     Route::post('/reception/emergency/data/entry/','App\Http\Controllers\reception\add_patient@emergency_entry');
 
     ##############################################################################################################################################
-    # Emergency.  [C::add_patient.php]
+    # Dental.  [C::add_patient.php]
     ##############################################################################################################################################
 
     # Getting dental patient info and sending to database.
     # Redirecting to [FUNCTION-NO::29]---in-controller.
     Route::get('/reception/test_selection/dental/','App\Http\Controllers\reception\add_patient@dental_patient_info_entry');
-
-    ##############################################################################################################################################
-    # Dental.  [C::add_patient.php]
-    ##############################################################################################################################################
 
     # Shows all dental tests.
     # Redirecting to [FUNCTION-NO::30]---in-controller.
@@ -251,6 +247,26 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     # Submit dental payment.
     # Redirecting to [FUNCTION-NO::36]---in-controller.
     Route::post('/reception/submit/test/dental/','App\Http\Controllers\reception\add_patient@dental_payment_submission');
+
+    # Due payment.
+    # Redirecting to [FUNCTION-NO::37]---in-controller.
+    Route::get('/reception/collect/dental/due/{dtn}','App\Http\Controllers\reception\add_patient@due_payment');
+
+    # Due payment.
+    # Redirecting to [FUNCTION-NO::38]---in-controller.
+    Route::post('/reception/submit/test/dental/dues/','App\Http\Controllers\reception\add_patient@dental_due_payment_submission');
+
+    ##############################################################################################################################################
+    # Pathology.  [C::add_patient.php]
+    ##############################################################################################################################################
+
+    # Getting dental patient info and sending to database.
+    # Redirecting to [FUNCTION-NO::39]---in-controller.
+    Route::get('/reception/test_selection/pathology/','App\Http\Controllers\reception\add_patient@pathology_patient_info_entry');
+
+    # Shows all tests.
+    # Redirecting to [FUNCTION-NO::40]---in-controller.
+    Route::get('/reception/show_tests/pathology/','App\Http\Controllers\reception\add_patient@show_pathology_tests');
 
     ##############################################################################################################################################
     # Invoice.  [C::invoice.php]

@@ -227,7 +227,9 @@
                                 <select name="ap_type" id="ap_type" class="input" required>
                                     <option value="Appoint-Doctor">Appoint Doctor</option>
                                     <option value="Admit">Admit Patient</option>
+                                    <option value="Dental">Dental</option>
                                     <option value="Test">Test</option>
+                                    <option value="Physio">Physio</option>
                                 </select>
 
                             </div>
@@ -365,6 +367,7 @@
                                 <option value="Admit">Admit Patient</option>
                                 <option value="Dental">Dental</option>
                                 <option value="Test">Test</option>
+                                <option value="Physio">Physio</option>
                             </select>
 
                         </div>
