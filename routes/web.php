@@ -236,7 +236,7 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     # Redirecting to [FUNCTION-NO::33]---in-controller.
     Route::get('/reception/unselect/test/dental/{di_ai_id}','App\Http\Controllers\reception\add_patient@unselect_dental_tests');
 
-    # Unselect dental tests.
+    # Cancel all dental tests.
     # Redirecting to [FUNCTION-NO::34]---in-controller.
     Route::get('/reception/cancel_test/dental/','App\Http\Controllers\reception\add_patient@cancel_all_dental_test');
 
@@ -266,7 +266,31 @@ Route::group(['middleware'=>['receptionAuth']],function() {
 
     # Shows all tests.
     # Redirecting to [FUNCTION-NO::40]---in-controller.
-    Route::get('/reception/show_tests/pathology/','App\Http\Controllers\reception\add_patient@show_pathology_tests');
+    Route::get('/reception/show_tests/pathology/{test_group}','App\Http\Controllers\reception\add_patient@show_pathology_tests');
+
+    # Search all tests.
+    # Redirecting to [FUNCTION-NO::41]---in-controller.
+    Route::post('/reception/find_test/pathology/by_search/','App\Http\Controllers\reception\add_patient@search_pathology_tests');
+
+    # Select tests.
+    # Redirecting to [FUNCTION-NO::42]---in-controller.
+    Route::post('/reception/select/test/pathology/','App\Http\Controllers\reception\add_patient@select_tests');
+
+    # Unselect tests.
+    # Redirecting to [FUNCTION-NO::43]---in-controller.
+    Route::get('/reception/unselect/test/pathology/{ti_ai_id}','App\Http\Controllers\reception\add_patient@unselect_tests');
+
+    # Cancel all tests.
+    # Redirecting to [FUNCTION-NO::44]---in-controller.
+    Route::get('/reception/cancel_test/pathology/','App\Http\Controllers\reception\add_patient@cancel_all_tests');
+
+    # Pathology payment.
+    # Redirecting to [FUNCTION-NO::45]---in-controller.
+    Route::get('/reception/pathology/test/payment/','App\Http\Controllers\reception\add_patient@pathology_payment_page');
+
+    # Submit pathology payment.
+    # Redirecting to [FUNCTION-NO::46]---in-controller.
+    Route::post('/reception/submit/test/pathology/','App\Http\Controllers\reception\add_patient@pathology_payment_submission');
 
     ##############################################################################################################################################
     # Invoice.  [C::invoice.php]

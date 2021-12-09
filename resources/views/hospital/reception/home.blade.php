@@ -134,6 +134,10 @@
 
                     <div class="content_container text_center warning_msg">{{session('msg')}}</div>
 
+                @elseif(session('msg')=='Tests canceled.')
+
+                    <div class="content_container text_center warning_msg">{{session('msg')}}</div>
+
                 @endif
 
 

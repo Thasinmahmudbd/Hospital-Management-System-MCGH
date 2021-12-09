@@ -14,16 +14,44 @@
 @section('links')
 
 <li class="link_item">
-    <a href="{{url('/reception/cancel_test/dental/')}}" class="link">
+    <a href="{{url('/reception/cancel_test/pathology/')}}" class="link">
         <i class="link_icons fas fa-home"></i>
         <span class="link_name"> Go Home </span>
     </a>
 </li>
 
 <li class="link_item">
-    <a href="{{url('/reception/show_tests/dental/')}}" class="link">
+    <a href="{{url('/reception/show_tests/pathology/'.Session::get('test_pathology'))}}" class="link">
         <i class="link_icons fas fa-th-list"></i>
-        <span class="link_name"> All Test </span>
+        <span class="link_name"> Pathology </span>
+    </a>
+</li>
+
+<li class="link_item">
+    <a href="{{url('/reception/show_tests/pathology/'.Session::get('test_hormone'))}}" class="link">
+        <i class="link_icons fas fa-th-list"></i>
+        <span class="link_name"> Hormone </span>
+    </a>
+</li>
+
+<li class="link_item">
+    <a href="{{url('/reception/show_tests/pathology/'.Session::get('test_usg'))}}" class="link">
+        <i class="link_icons fas fa-th-list"></i>
+        <span class="link_name"> Ultrasonography </span>
+    </a>
+</li>
+
+<li class="link_item">
+    <a href="{{url('/reception/show_tests/pathology/'.Session::get('test_xray'))}}" class="link">
+        <i class="link_icons fas fa-th-list"></i>
+        <span class="link_name"> X-Ray </span>
+    </a>
+</li>
+
+<li class="link_item">
+    <a href="{{url('/reception/show_tests/pathology/'.Session::get('test_more'))}}" class="link">
+        <i class="link_icons fas fa-th-list"></i>
+        <span class="link_name"> Others </span>
     </a>
 </li>
 
@@ -62,23 +90,41 @@
 
 
 
-                <div class="patient_form_element_three_is_to_one">
 
                     <div class="patient_form_element_one_is_to_three">
 
-                    <p class="content_container_white_super_thin center_self">
-                        <b>Test</b>
-                    </p>
+                        <p class="content_container_bg_less_thin center_self">
+
+                            @if(session('test_group')=='Pathology')
+                            <b>Pathology</b>
+                            @elseif(session('test_group')=='Hormone')
+                            <b>Hormone</b>
+                            @elseif(session('test_group')=='Ultrasonography')
+                            <b>Ultrasonography</b>
+                            @elseif(session('test_group')=='X-Ray')
+                            <b>X-Ray</b>
+                            @elseif(session('test_group')=='Others')
+                            <b>Others</b>
+                            @endif
+
+                        </p>
 
                         <!--Search bar to search patients-->
 
-                        <form action="{{url('/reception/find_patient/by_search/invoice/appointment/')}}" method="post" class="content_container_white_super_thin center_self">
+                        <form action="{{url('/reception/find_test/pathology/by_search/')}}" method="post" class="content_container_white_super_thin center_self">
                         @csrf
 
                             <div class="patient_form_element_three_is_to_one">
 
-                                <input type="text" class="input" name="old_patient_search_info" placeholder="Enter Test Name" required>
-                                <button type="submit" class="btn form_btn" name="search_old_patient">Search</button>
+                                <input type="text" class="input" name="test_search_info" placeholder="Enter Test Name" required>
+
+                                <div class="patient_and_doctor_info_one_is_to_one">
+
+                                    <button type="submit" class="btn form_btn" name="search_old_patient">Search</button>
+
+                                    <a class="btn form_btn text_center" href="{{url('/reception/pathology/test/payment/')}}">Next</a>
+
+                                </div>
 
                             </div>
 
@@ -86,15 +132,6 @@
 
                     </div>
 
-                    <div class="patient_form_element_three_is_to_one content_nav">
-
-                        <a class="form_btn text_center" href="{{url('/reception/dental/test/payment/')}}">Select Refer</a>
-
-                        <a class="form_btn text_center" href="{{url('/reception/dental/test/payment/')}}">Self</a>
-
-                    </div>
-
-                </div>
 
 
 
@@ -145,7 +182,7 @@
                 <div class="purple_line"></div>
                 <div class="gap"></div>
 
-                <!--Showing all of dental tests-->
+                <!--Showing all of pathologic tests-->
 
                 <div class="content_container_bg_less_thin">
 
@@ -161,7 +198,8 @@
 
                     <tr class="frame_header">
                         <th width="5%" class="frame_header_item">S/N</th>
-                        <th width="70%" class="frame_header_item">Test Name</th>
+                        <th width="50%" class="frame_header_item">Test Name</th>
+                        <th width="20%" class="frame_header_item">Group</th>
                         <th width="20%" class="frame_header_item">Test Fee</th>
                         <th width="5%" class="frame_header_item">Action</th>
                     </tr>
@@ -172,10 +210,11 @@
                     <tr class="frame_rows">
                         <td class="frame_data" data-label="S/N"><?php echo $serial; $serial++; ?></td>
                         <td class="frame_data" data-label="Test Name">{{$list->Test_Name}}</td>
+                        <td class="frame_data" data-label="Test Name">{{$list->Groups}}</td>
                         <td class="frame_data" data-label="Test Fee">{{$list->Test_Fee}}</td>
 
                         <td class="frame_action" data-label="Action">
-                            <a href="{{url('/reception/unselect/test/dental/'.$list->AI_ID)}}">
+                            <a href="{{url('/reception/unselect/test/pathology/'.$list->AI_ID)}}">
                                 <i class="table_btn_red fas fa-times-circle"></i>
                             </a>
                         </td>
@@ -228,15 +267,13 @@
                         <td class="frame_data" data-label="Test Name">{{$list->Test_Name}}</td>
                         <td class="frame_data" data-label="Rate">{{$list->Test_Fee}}</td>
 
-                        <form action="{{url('/reception/select/test/dental/')}}" method="post" class="content_container_white_super_thin center_self">
+                        <form action="{{url('/reception/select/test/pathology/')}}" method="post" class="content_container_white_super_thin center_self">
                         @csrf
 
-                            <td class="frame_data" data-label="Fee">
-                                <input type="hidden" value="{{$list->AI_ID}}" name="test_id">
-                                <input type="hidden" value="{{Session::get('test_no')}}" name="test_no">
-                            </td>
-
                             <td class="frame_action" data-label="Action">
+                                <input type="hidden" value="{{$list->AI_ID}}" name="test_id">
+                                <input type="hidden" value="{{$list->Test_Fee}}" name="test_fee">
+                                <input type="hidden" value="{{Session::get('test_no')}}" name="test_no">
                                 <button type="submit" class="btn_less">
                                     <i class="fas fa-plus-circle table_btn"></i>
                                 </button>
@@ -294,7 +331,7 @@
 
                     <span></span>
                         
-                    <p><b>Dental Tests</b></p>
+                    <p><b>All Tests</b></p>
 
                     <span></span>
 
@@ -317,11 +354,12 @@
                         <td class="frame_data" data-label="Test Name">{{$list->Test_Name}}</td>
                         <td class="frame_data" data-label="Test Fee">{{$list->Test_Fee}}</td>
 
-                        <form action="{{url('/reception/select/test/dental/')}}" method="post" class="content_container_white_super_thin center_self">
+                        <form action="{{url('/reception/select/test/pathology/')}}" method="post" class="content_container_white_super_thin center_self">
                         @csrf
 
                             <td class="frame_action" data-label="Action">
                                 <input type="hidden" value="{{$list->AI_ID}}" name="test_id">
+                                <input type="hidden" value="{{$list->Test_Fee}}" name="test_fee">
                                 <input type="hidden" value="{{Session::get('test_no')}}" name="test_no">
                                 <button type="submit" class="btn_less">
                                     <i class="fas fa-plus-circle table_btn"></i>
