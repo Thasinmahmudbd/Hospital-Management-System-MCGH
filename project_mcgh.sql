@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 25, 2021 at 10:53 PM
+-- Generation Time: Dec 10, 2021 at 08:49 PM
 -- Server version: 10.4.21-MariaDB
--- PHP Version: 8.0.11
+-- PHP Version: 8.0.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -57,6 +57,10 @@ CREATE TABLE `account_variables` (
   `Commission` float DEFAULT NULL,
   `Invigilator_Fee` int(11) NOT NULL,
   `Emergency_Fee` int(11) NOT NULL,
+  `ER_Hospital_Percentage` int(11) NOT NULL,
+  `Dental_Hospital_Percentage` int(11) NOT NULL,
+  `Pathology_Hospital_Percentage` int(11) NOT NULL,
+  `Physio_Hospital_Percentage` int(11) NOT NULL,
   `Updater` longtext DEFAULT NULL,
   `Update_Date` date DEFAULT NULL,
   `Time_Stamp` timestamp NULL DEFAULT current_timestamp()
@@ -66,8 +70,8 @@ CREATE TABLE `account_variables` (
 -- Dumping data for table `account_variables`
 --
 
-INSERT INTO `account_variables` (`AI_ID`, `Vat`, `Commission`, `Invigilator_Fee`, `Emergency_Fee`, `Updater`, `Update_Date`, `Time_Stamp`) VALUES
-(1, 0, 25, 500, 200, 'AC-M-001', '2021-08-17', '2021-08-21 10:14:37');
+INSERT INTO `account_variables` (`AI_ID`, `Vat`, `Commission`, `Invigilator_Fee`, `Emergency_Fee`, `ER_Hospital_Percentage`, `Dental_Hospital_Percentage`, `Pathology_Hospital_Percentage`, `Physio_Hospital_Percentage`, `Updater`, `Update_Date`, `Time_Stamp`) VALUES
+(1, 0, 25, 500, 200, 50, 50, 100, 50, 'AC-M-001', '2021-08-17', '2021-08-21 10:14:37');
 
 -- --------------------------------------------------------
 
@@ -119,7 +123,8 @@ CREATE TABLE `admission_logs` (
 INSERT INTO `admission_logs` (`A_ID`, `P_ID`, `R_ID`, `B_ID`, `D_ID`, `Pre_Vill`, `Pre_PO`, `Pre_Upa`, `Pre_Dist`, `Per_Vill`, `Per_PO`, `Per_Upa`, `Per_Dist`, `Admission_Date`, `Religion`, `Consultant`, `Emergency_Rel_Add`, `Emergency_Number`, `Ward_Days`, `Cabin_Days`, `Payment_Confirmation`, `OT_Confirmation`, `Package_Confirmation`, `Ligation`, `Third_Seizure`, `Bed_Bill`, `Admission_Fee`, `Paid_Amount`, `Changes`, `Admission_Timestamp`, `Update_Timestamp`, `Update_Date`, `Discount`, `Discharge_Date`) VALUES
 (15, 'M-18112021-002', 'R-A-007', '37', 'D-M-004', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', '2021-11-18', 'EE', 'Col A K M Asaduzzmaan', 'RR', '222222', 0, NULL, NULL, NULL, 'none', 'no', 'no', NULL, 1000, 1000, 300, '2021-11-18 08:45:04', '2021-11-18 08:46:52', '2021-11-18', NULL, NULL),
 (16, 'M-18112021-005', 'R-A-007', '1', 'D-M-001', 'dsfaasd', 'fss', 'dffs', 'fsfs', 'dsfaasd', 'fss', 'dffs', 'fsfs', '2021-11-18', 'islam', 'Brig Gen S M Mizanur Rahman', 'sdfadf', 'dfsffs', NULL, 0, NULL, NULL, 'none', 'no', 'no', NULL, 300, 0, 700, '2021-11-18 09:04:05', '2021-11-18 09:05:02', '2021-11-18', NULL, NULL),
-(17, 'F-18112021-010', 'R-F-012', ' ', 'D-M-001', 'Bara Shal Ghor', 'Bara Shal Ghor', 'debidwar', 'Comilla', 'Bara Shal Ghor', 'Bara Shal Ghor', 'debidwar', 'Comilla', '2021-11-18', 'islam', 'Brig Gen S M Mizanur Rahman', 'na', '017', NULL, NULL, NULL, NULL, 'none', 'no', 'no', NULL, 0, 0, 0, '2021-11-18 10:00:08', NULL, NULL, NULL, NULL);
+(17, 'F-18112021-010', 'R-F-012', ' ', 'D-M-001', 'Bara Shal Ghor', 'Bara Shal Ghor', 'debidwar', 'Comilla', 'Bara Shal Ghor', 'Bara Shal Ghor', 'debidwar', 'Comilla', '2021-11-18', 'islam', 'Brig Gen S M Mizanur Rahman', 'na', '017', NULL, NULL, NULL, NULL, 'none', 'no', 'no', NULL, 0, 0, 0, '2021-11-18 10:00:08', NULL, NULL, NULL, NULL),
+(18, 'M-27112021-001', 'R-A-007', '46', 'D-F-025', 'demo pre village', 'demo pre  po', 'demo pre  upa', 'demo pre  dist', 'demo pre village 2', 'demo pre  po', 'demo pre  upa', 'demo pre  dist', '2021-11-27', 'demo religion', 'Dr S. Parvin Sadique', 'demo address', '019856589', NULL, 0, NULL, 1, 'maternity', 'yes', 'no', NULL, 1000, 0, 0, '2021-11-27 06:38:24', '2021-11-27 06:40:03', '2021-11-27', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -136,6 +141,13 @@ CREATE TABLE `anesthesiologist_logs` (
   `Anesthesiologist_Discount` int(11) NOT NULL,
   `Anesthesiologist_Income` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `anesthesiologist_logs`
+--
+
+INSERT INTO `anesthesiologist_logs` (`AI_ID`, `Ans_ID`, `O_ID`, `Anesthesiologist_Name`, `Anesthesiologist_Fee`, `Anesthesiologist_Discount`, `Anesthesiologist_Income`) VALUES
+(13, 'D-M-003', 1, 'Col Kazi Ashkar Lateef', 1000, 0, 1000);
 
 -- --------------------------------------------------------
 
@@ -209,7 +221,7 @@ INSERT INTO `beds` (`B_ID`, `Bed_No`, `Floor_No`, `Room_No`, `Bed_Type`, `Qualit
 (43, '212-1', 2, 212, 'Cabin', 'Double AC', 'Window', 'Maternity', 2400, 20000, 3, 0, 1000),
 (44, '213-1', 2, 213, 'Cabin', 'Double AC', 'Window', 'Maternity', 2400, 20000, 3, 0, 1000),
 (45, '213-1', 2, 213, 'Cabin', 'Double AC', 'Window', 'Maternity', 2400, 20000, 3, 0, 1000),
-(46, '301-1', 3, 301, 'Cabin', 'Double AC', 'Window', 'Maternity', 2400, 20000, 3, 0, 1000),
+(46, '301-1', 3, 301, 'Cabin', 'Double AC', 'Window', 'Maternity', 2400, 20000, 3, 1, 1000),
 (47, '302-1', 3, 302, 'Cabin', 'Double AC', 'Window', 'Maternity', 2400, 20000, 3, 0, 1000),
 (48, '303-1', 3, 303, 'Cabin', 'Double AC', 'Window', 'Maternity', 2400, 20000, 3, 0, 1000),
 (49, '304-1', 3, 304, 'Cabin', 'Double AC', 'Window', 'Maternity', 2400, 20000, 3, 0, 1000),
@@ -258,7 +270,13 @@ INSERT INTO `bed_invigilators` (`AI_ID`, `A_ID`, `D_ID`, `Duty_N_ID`, `Assistant
 (6, '16', 'None', 'None', 'None', 0, 'N-F-009', '1', '2021-11-18', 0, 'Oxygen', 100, 1, '2021-11-18 09:40:05'),
 (7, '16', 'D-F-039', 'None', 'None', 0, 'N-F-009', '1', '2021-11-18', 500, 'None', 0, 0, '2021-11-18 09:44:02'),
 (8, '16', 'None', 'None', 'None', 0, 'N-F-009', '1', '2021-11-18', 0, 'Oxygen', 100, 1, '2021-11-18 09:45:10'),
-(9, '16', 'None', 'None', 'None', 0, 'N-F-002', '1', '2021-11-18', 0, 'Nebulizer ', 200, 1, '2021-11-18 09:49:47');
+(9, '16', 'None', 'None', 'None', 0, 'N-F-002', '1', '2021-11-18', 0, 'Nebulizer ', 200, 1, '2021-11-18 09:49:47'),
+(10, '18', 'D-M-004', 'None', 'None', 0, 'N-A-007', '46', '2021-11-27', 500, 'None', 0, 0, '2021-11-27 07:08:50'),
+(11, '18', 'None', 'None', 'None', 0, 'N-A-007', '46', '2021-11-27', 0, 'Nebulizer ', 400, 2, '2021-11-27 07:09:47'),
+(12, '18', 'None', 'None', 'None', 0, 'N-A-007', '46', '2021-11-27', 0, 'Oxygen', 200, 2, '2021-11-27 07:10:19'),
+(13, '18', 'D-F-028', 'None', 'None', 0, 'N-A-007', '46', '2021-11-27', 0, 'NG Tube\r\n', 1000, 5, '2021-11-27 07:10:44'),
+(14, '18', 'None', 'None', 'halima', 100, 'N-A-007', '46', '2021-11-27', 0, 'Anema\r\n', 200, 1, '2021-11-27 07:11:11'),
+(15, '18', 'None', 'N-F-004', 'None', 0, 'N-A-007', '46', '2021-11-27', 0, 'Cannula\r\n', 400, 2, '2021-11-27 07:11:42');
 
 -- --------------------------------------------------------
 
@@ -270,6 +288,7 @@ CREATE TABLE `dental_info` (
   `AI_ID` int(11) NOT NULL,
   `Test_Name` longtext NOT NULL,
   `Rate` longtext NOT NULL,
+  `State` int(11) NOT NULL DEFAULT 1,
   `Time_Stamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -277,21 +296,21 @@ CREATE TABLE `dental_info` (
 -- Dumping data for table `dental_info`
 --
 
-INSERT INTO `dental_info` (`AI_ID`, `Test_Name`, `Rate`, `Time_Stamp`) VALUES
-(1, 'Dental X-ray (Intra Oral Film)', '150', '2021-11-25 13:06:30'),
-(2, 'Ultrasonic Scaling', '1000-1500', '2021-11-25 13:18:48'),
-(3, 'Temporary Filling/Dressing', '500', '2021-11-25 13:18:48'),
-(4, 'Permanent Filling Amalgam', '1000-1200', '2021-11-25 13:18:48'),
-(5, 'Root Canal Treatment (Single Root)', '3500', '2021-11-25 13:18:48'),
-(6, 'Root Canal Treatment (Multi Root)', '4000', '2021-11-25 13:18:48'),
-(7, 'Extraction (Deciduous) Single Tooth', '500', '2021-11-25 13:18:48'),
-(8, 'Extraction (Permanent) Single Tooth', '1500-2000', '2021-11-25 13:18:48'),
-(9, 'Surgical Extraction/Impacted Tooth Under L/A', '4000-6000', '2021-11-25 13:18:48'),
-(10, 'Minor Oral Surgery Under L/A', '5000-7000', '2021-11-25 13:18:48'),
-(11, 'Fracture Mandible/Maxilla (Close Reduction) Under L/A', '8000-10000', '2021-11-25 13:18:48'),
-(12, 'Partial Denture (Per Teeth)', '1000-1500', '2021-11-25 13:18:48'),
-(13, 'Porcelin Crown (Per Unit)', '3000-4000', '2021-11-25 13:18:48'),
-(14, 'Light Cured Filling', '1000-1500', '2021-11-25 13:18:48');
+INSERT INTO `dental_info` (`AI_ID`, `Test_Name`, `Rate`, `State`, `Time_Stamp`) VALUES
+(1, 'Dental X-ray (Intra Oral Film)', '150', 1, '2021-11-25 13:06:30'),
+(2, 'Ultrasonic Scaling', '1000-1500', 1, '2021-11-25 13:18:48'),
+(3, 'Temporary Filling/Dressing', '500', 1, '2021-11-25 13:18:48'),
+(4, 'Permanent Filling Amalgam', '1000-1200', 1, '2021-11-25 13:18:48'),
+(5, 'Root Canal Treatment (Single Root)', '3500', 1, '2021-11-25 13:18:48'),
+(6, 'Root Canal Treatment (Multi Root)', '4000', 1, '2021-11-25 13:18:48'),
+(7, 'Extraction (Deciduous) Single Tooth', '500', 1, '2021-11-25 13:18:48'),
+(8, 'Extraction (Permanent) Single Tooth', '1500-2000', 1, '2021-11-25 13:18:48'),
+(9, 'Surgical Extraction/Impacted Tooth Under L/A', '4000-6000', 1, '2021-11-25 13:18:48'),
+(10, 'Minor Oral Surgery Under L/A', '5000-7000', 1, '2021-11-25 13:18:48'),
+(11, 'Fracture Mandible/Maxilla (Close Reduction) Under L/A', '8000-10000', 1, '2021-11-25 13:18:48'),
+(12, 'Partial Denture (Per Teeth)', '1000-1500', 1, '2021-11-25 13:18:48'),
+(13, 'Porcelin Crown (Per Unit)', '3000-4000', 1, '2021-11-25 13:18:48'),
+(14, 'Light Cured Filling', '1000-1500', 1, '2021-11-25 13:18:48');
 
 -- --------------------------------------------------------
 
@@ -304,15 +323,38 @@ CREATE TABLE `dental_log` (
   `Dental_Test_No` int(11) NOT NULL,
   `P_ID` longtext NOT NULL,
   `R_ID` longtext NOT NULL,
-  `D_ID` longtext NOT NULL,
-  `Paid` int(11) NOT NULL,
-  `Received` int(11) NOT NULL,
-  `Changes` int(11) NOT NULL,
-  `Payment_Status` longtext NOT NULL,
-  `Due_Amount` int(11) NOT NULL,
-  `Total_Amount` int(11) NOT NULL,
+  `D_ID` longtext DEFAULT NULL,
+  `Discount` float DEFAULT NULL,
+  `Paid` int(11) DEFAULT NULL,
+  `Received` int(11) DEFAULT NULL,
+  `Changes` int(11) DEFAULT NULL,
+  `Payment_Status` longtext DEFAULT NULL,
+  `Due_Amount` int(11) DEFAULT NULL,
+  `Total_Amount` int(11) DEFAULT NULL,
+  `Payable_Amount` int(11) DEFAULT NULL,
+  `Reg_Date` date DEFAULT NULL,
   `Time_Stamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `dental_log`
+--
+
+INSERT INTO `dental_log` (`AI_ID`, `Dental_Test_No`, `P_ID`, `R_ID`, `D_ID`, `Discount`, `Paid`, `Received`, `Changes`, `Payment_Status`, `Due_Amount`, `Total_Amount`, `Payable_Amount`, `Reg_Date`, `Time_Stamp`) VALUES
+(29, 1, 'M-04122021-001', 'R-A-007', 'D-M-015', 20, 5000, 1000, -80, NULL, 80, 6350, 5080, '2021-12-04', '2021-12-04 08:00:12'),
+(30, 30, 'M-04122021-002', 'R-A-007', 'D-F-037', 10, 4000, 3000, -2000, NULL, 4730, 9700, 8730, '2021-12-04', '2021-12-04 08:40:02'),
+(31, 31, 'M-07122021-001', 'R-A-007', 'D-M-015', 10, 4000, 1000, -5000, 'Paid', 5000, 10000, 9000, '2021-12-07', '2021-12-07 14:55:37'),
+(33, 32, 'M-09122021-006', 'R-A-007', 'D-M-015', 35, 150, 150, 50, 'Paid', -50, 150, 100, '2021-12-09', '2021-12-09 17:59:48'),
+(34, 34, 'M-10122021-001', 'R-A-007', 'D-M-015', 20, 1000, 1000, -7000, 'Paid', 7000, 10000, 8000, '2021-12-10', '2021-12-09 18:01:49'),
+(35, 35, 'M-10122021-002', 'R-A-007', 'D-M-015', 16.65, 10500, 1500, 500, 'Paid', -500, 12000, 10000, '2021-12-10', '2021-12-09 18:19:24'),
+(36, 36, 'M-10122021-003', 'R-A-007', 'D-M-015', 20, 6400, 1000, 600, 'Paid', -600, 8000, 6400, '2021-12-10', '2021-12-09 18:35:15'),
+(37, 37, 'M-10122021-004', 'R-A-007', 'D-M-015', 20, 8000, 1500, 500, 'Paid', 0, 10000, 8000, '2021-12-10', '2021-12-09 18:46:30'),
+(38, 38, 'M-10122021-005', 'R-A-007', 'D-M-015', 20, 8000, 1500, 500, 'Paid', 0, 10000, 8000, '2021-12-10', '2021-12-09 19:05:10'),
+(39, 39, 'M-10122021-006', 'R-A-007', 'D-M-015', 0, 2000, 1500, 500, 'Paid', 0, 2000, 2000, '2021-12-10', '2021-12-09 19:09:25'),
+(40, 40, 'M-10122021-007', 'R-A-007', 'D-M-015', 0, 500, 500, 350, 'Paid', 0, 150, 150, '2021-12-10', '2021-12-09 19:10:59'),
+(41, 41, 'M-10122021-008', 'R-A-007', 'D-M-015', 0, 150, 500, 350, 'Paid', 0, 150, 150, '2021-12-10', '2021-12-09 19:17:43'),
+(42, 42, 'M-10122021-009', 'R-A-007', 'D-M-015', 20, 8000, 7000, 1000, 'Paid', 0, 10000, 8000, '2021-12-10', '2021-12-09 19:18:53'),
+(43, 43, 'M-10122021-012', 'R-A-007', 'D-M-015', 20, 4800, 3000, 200, 'Paid', 0, 6000, 4800, '2021-12-10', '2021-12-10 13:12:17');
 
 -- --------------------------------------------------------
 
@@ -327,6 +369,38 @@ CREATE TABLE `dental_test_log` (
   `Fee` int(11) NOT NULL,
   `Time_Stamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `dental_test_log`
+--
+
+INSERT INTO `dental_test_log` (`AI_ID`, `Dental_Info_AI_ID`, `Dental_Test_No`, `Fee`, `Time_Stamp`) VALUES
+(47, 1, 1, 150, '2021-12-04 08:00:18'),
+(48, 12, 1, 1200, '2021-12-04 08:00:27'),
+(49, 9, 1, 5000, '2021-12-04 08:00:34'),
+(50, 7, 30, 500, '2021-12-04 08:40:08'),
+(51, 8, 30, 2000, '2021-12-04 08:40:16'),
+(52, 14, 30, 1000, '2021-12-04 08:40:27'),
+(53, 12, 30, 1200, '2021-12-04 08:40:33'),
+(54, 5, 30, 3500, '2021-12-04 08:40:49'),
+(55, 2, 30, 1500, '2021-12-04 08:40:55'),
+(56, 11, 31, 10000, '2021-12-07 14:55:47'),
+(57, 1, 32, 150, '2021-12-09 17:59:59'),
+(58, 8, 34, 2000, '2021-12-09 18:01:55'),
+(59, 10, 34, 6000, '2021-12-09 18:02:01'),
+(60, 2, 34, 1500, '2021-12-09 18:02:07'),
+(61, 7, 34, 500, '2021-12-09 18:02:15'),
+(62, 11, 35, 8000, '2021-12-09 18:19:32'),
+(63, 6, 35, 4000, '2021-12-09 18:19:41'),
+(64, 11, 36, 8000, '2021-12-09 18:35:25'),
+(65, 11, 37, 10000, '2021-12-09 18:46:37'),
+(66, 11, 38, 10000, '2021-12-09 19:05:17'),
+(67, 8, 39, 2000, '2021-12-09 19:09:33'),
+(68, 1, 40, 150, '2021-12-09 19:11:05'),
+(69, 1, 41, 150, '2021-12-09 19:17:49'),
+(70, 11, 42, 10000, '2021-12-09 19:19:00'),
+(71, 8, 43, 2000, '2021-12-10 13:12:23'),
+(72, 6, 43, 4000, '2021-12-10 13:12:29');
 
 -- --------------------------------------------------------
 
@@ -355,15 +429,15 @@ CREATE TABLE `doctors` (
 
 INSERT INTO `doctors` (`AI_ID`, `D_ID`, `Dr_Name`, `Dr_Gender`, `Specialty`, `Department`, `Dr_Image`, `Wallet`, `Basic_Fee`, `Second_Visit_Discount`, `Patient_Cap`, `Time_Stamp`) VALUES
 (1, 'D-M-001', 'Brig Gen S M Mizanur Rahman', 'Male', 'Adviser Spl', 'Medicine test', NULL, 0, 1000, 20, 0, '2021-08-21 10:55:50'),
-(3, 'D-M-003', 'Col Kazi Ashkar Lateef', 'Male', 'Cl Spl', 'Anesthesiology', NULL, 0, 700, 20, 0, '2021-08-21 10:55:50'),
-(4, 'D-M-004', 'Col A K M Asaduzzmaan', 'Male', 'Cl Spl', 'Otolaryngology', NULL, 0, 800, 20, 0, '2021-08-21 10:55:50'),
-(5, 'D-M-005', 'Col Imranul Hasan Murad', 'Male', 'Cl Spl', 'Dermatology', NULL, 500, 700, 20, 0, '2021-08-21 10:55:50'),
-(6, 'D-M-006', 'Col Abu Daud Md Shariful Islam', 'Male', 'Cl Spl', 'Surgery', NULL, 500, 700, 20, 0, '2021-08-21 10:55:50'),
+(3, 'D-M-003', 'Col Kazi Ashkar Lateef', 'Male', 'Cl Spl', 'Anesthesiology', NULL, 1000, 700, 20, 0, '2021-08-21 10:55:50'),
+(4, 'D-M-004', 'Col A K M Asaduzzmaan', 'Male', 'Cl Spl', 'Otolaryngology', NULL, 500, 800, 20, 0, '2021-08-21 10:55:50'),
+(5, 'D-M-005', 'Col Imranul Hasan Murad', 'Male', 'Cl Spl', 'Dermatology', NULL, 0, 700, 20, 0, '2021-08-21 10:55:50'),
+(6, 'D-M-006', 'Col Abu Daud Md Shariful Islam', 'Male', 'Cl Spl', 'Surgery', NULL, 0, 700, 20, 0, '2021-08-21 10:55:50'),
 (7, 'D-F-007', 'Lt Col Julia Akter Nira', 'Female', 'Cl Spl', 'Gynae & Obs', NULL, 0, 600, 20, 0, '2021-08-21 10:55:50'),
 (8, 'D-F-008', 'Lt Col Selina Bagum', 'Female', 'Cl Spl', 'Gynae & Obs', NULL, 0, 600, 20, 0, '2021-08-21 10:55:50'),
 (9, 'D-M-009', 'Lt Col Mohammad Shahnewaz Hossain Khan', 'Male', 'Cl Spl', 'Orthopaedic', NULL, 0, 600, 20, 0, '2021-08-21 10:55:50'),
 (13, 'D-F-013', 'Lt Col Shamim Ara Yeasmin', 'Female', 'Cl Spl ', 'Ophthalmology', NULL, 0, 600, 20, 0, '2021-08-21 10:55:50'),
-(15, 'D-M-015', 'Lt Col Ataul Gani Sarker', 'Male', 'Cl Spl', 'Oral and Maxilofacial Surgery', NULL, 0, 600, 20, 0, '2021-08-21 10:55:50'),
+(15, 'D-M-015', 'Lt Col Ataul Gani Sarker', 'Male', 'Oral and Maxilofacial Surgery', 'Dental', NULL, 25550, 600, 20, 0, '2021-08-21 10:55:50'),
 (16, 'D-M-016', 'Maj Mohammed Mamun-Ur-Rashid', 'Male', 'Cl Spl', 'Radiology', NULL, 0, 0, 20, 0, '2021-08-21 10:55:50'),
 (17, 'D-M-017', 'Maj Mohammed Nafees Islam', 'Male', 'Gd Spl', 'Anesthesiology', NULL, 0, 0, 20, 0, '2021-08-21 10:55:50'),
 (18, 'D-F-018', 'Maj Durdana Maheen', 'Female', 'Gd Spl', 'Pathology', NULL, 0, 0, 20, 0, '2021-08-21 10:55:50'),
@@ -371,23 +445,25 @@ INSERT INTO `doctors` (`AI_ID`, `D_ID`, `Dr_Name`, `Dr_Gender`, `Specialty`, `De
 (21, 'D-F-021', 'Dr Saima Afroz Niru', 'Female', 'Spl', 'Gynae & Obs', NULL, 0, 700, 20, 0, '2021-08-21 10:55:50'),
 (22, 'D-M-022', 'Dr Zahir Uddin Babar', 'Male', 'Spl', 'Dermatology', NULL, 0, 700, 20, 0, '2021-08-21 10:55:50'),
 (23, 'D-M-023', 'Dr Md Jahangir Alam', 'Male', 'Spl', 'Eye', NULL, 0, 600, 20, 0, '2021-08-21 10:55:50'),
-(25, 'D-F-025', 'Dr S. Parvin Sadique', 'Female', 'Spl', 'Gynae & Obs', NULL, 0, 600, 20, 0, '2021-08-21 10:55:50'),
+(25, 'D-F-025', 'Dr S. Parvin Sadique', 'Female', 'Spl', 'Gynae & Obs', NULL, 800, 600, 20, 0, '2021-08-21 10:55:50'),
 (26, 'D-M-026', 'Dr Anup Mustafa', 'Male', 'Spl', 'Orthopaedic', NULL, 0, 700, 20, 0, '2021-08-21 10:55:50'),
 (27, 'D-M-027', 'Dr Mir Iftekhar Mostafiz', 'Male', 'Spl', 'Chest & Asthma', NULL, 0, 700, 20, 0, '2021-08-21 10:55:50'),
-(28, 'D-F-028', 'Dr Farhana Parveen', 'Female', 'Spl', 'Gynae & Obs', NULL, 0, 600, 20, 0, '2021-08-21 10:55:50'),
+(28, 'D-F-028', 'Dr Farhana Parveen', 'Female', 'Spl', 'Gynae & Obs', NULL, 500, 600, 20, 0, '2021-08-21 10:55:50'),
 (29, 'D-M-029', 'Dr Md Moniruzzaman', 'Male', 'Spl', 'Orthopaedic', NULL, 0, 600, 20, 0, '2021-08-21 10:55:50'),
-(31, 'D-M-030', 'Dr. AKM Asaduzzaman Shohag', 'Male', '', 'DMO', NULL, 1000, 0, 20, 0, '2021-10-18 14:31:33'),
-(32, 'D-M-031', 'Dr. Al-Amin Sarkar', 'Male', '', 'DMO', NULL, 0, 0, 20, 0, '2021-10-18 14:32:36'),
-(33, 'D-M-032', 'Dr. Naim Abdullah', 'Male', '', 'DMO', NULL, 0, 0, 20, 0, '2021-10-18 14:33:04'),
+(31, 'D-M-030', 'Dr. AKM Asaduzzaman Shohag', 'Male', '', 'DMO', NULL, 0, 0, 0, 0, '2021-10-18 14:31:33'),
+(32, 'D-M-031', 'Dr. Al-Amin Sarkar', 'Male', '', 'DMO', NULL, 0, 0, 0, 0, '2021-10-18 14:32:36'),
+(33, 'D-M-032', 'Dr. Naim Abdullah', 'Male', '', 'DMO', NULL, 100, 0, 0, 0, '2021-10-18 14:33:04'),
 (36, 'D-M-033', 'Maj Dr Shahadutth Ullah', 'Male', 'Surgeon', 'ENT', NULL, 0, 600, 20, 0, '2021-10-18 15:25:03'),
 (37, 'D-M-034', 'Lt Col Dr. Asim Kumar Dotto', 'Male', 'Surgeon', 'Surgery', NULL, 0, 600, 20, 0, '2021-10-18 15:25:56'),
 (38, 'D-M-035', 'Dr A.H.M Mohosin (Sujon)', 'Male', '', 'Pediatrics', NULL, 0, 600, 20, 0, '2021-10-18 15:27:41'),
 (39, 'D-M-036', 'Dr. Md. Shah Alam', 'Male', '', 'Medicine', NULL, 0, 700, 20, 0, '2021-10-18 15:28:14'),
-(40, 'D-F-037', 'Dr Nashid Tabbasum Trena', 'Female', 'Surgeon', 'DT', NULL, 0, 600, 20, 0, '2021-10-18 15:30:57'),
-(41, 'D-F-038', 'Brig Gen Dr. Sabina Yeasmin', 'Female', '', 'Pediatrics', NULL, 0, 800, 20, 0, '2021-10-18 15:31:30'),
-(42, 'D-F-039', 'Dr Amena Bagum', 'Female', 'Surgeon', 'Gynae', NULL, 500, 600, 20, 0, '2021-10-18 15:32:03'),
+(40, 'D-F-037', 'Dr Nashid Tabbasum Trena', 'Female', 'Surgeon', 'Dental', NULL, 4000, 600, 20, 0, '2021-10-18 15:30:57'),
+(41, 'D-F-038', 'Brig Gen Dr. Sabina Yeasmin', 'Female', '', 'Pediatrics', NULL, 500, 800, 20, 0, '2021-10-18 15:31:30'),
+(42, 'D-F-039', 'Dr Amena Bagum', 'Female', 'Surgeon', 'Gynae', NULL, 0, 600, 20, 0, '2021-10-18 15:32:03'),
 (43, 'D-F-040', 'Lt.Col Dr Kaoser Jahan', 'Female', 'Surgeon', 'Gynae', '', 0, 600, 20, 0, '2021-10-18 15:41:34'),
-(44, 'D-M-002', 'Maj Dr. Mohammad Bayejid', 'Male', 'Medicine', 'Cardiology', NULL, 0, 600, 20, 0, '2021-11-18 10:16:10');
+(44, 'D-M-002', 'Maj Dr. Mohammad Bayejid', 'Male', 'Medicine', 'Cardiology', NULL, 0, 600, 20, 0, '2021-11-18 10:16:10'),
+(45, 'D-M-041', 'MD. Abul Basher', 'Male', '', 'Physiology', NULL, 1250, 0, 0, 0, '2021-12-10 15:29:50'),
+(46, 'D-M-042', 'Lt Col Md. Abdul Mannan', 'Male', '', 'Dental', NULL, 0, 600, 20, 0, '2021-12-10 15:29:50');
 
 -- --------------------------------------------------------
 
@@ -414,11 +490,56 @@ CREATE TABLE `doctor_balance_logs` (
 --
 
 INSERT INTO `doctor_balance_logs` (`AI_ID`, `D_ID`, `B_Date`, `Debit`, `Credit`, `Commission`, `Income`, `Current_Balance`, `Acc_ID`, `O_ID`, `Time_Stamp`) VALUES
-(1, 'D-M-030', '2021-11-18', 0, 500, 0, 500, 500, 'N-A-007', 0, '2021-11-18 09:00:06'),
-(2, 'D-M-006', '2021-11-18', 0, 500, 0, 500, 500, 'N-F-009', 0, '2021-11-18 09:13:21'),
-(3, 'D-M-005', '2021-11-18', 0, 500, 0, 500, 500, 'N-F-002', 0, '2021-11-18 09:19:17'),
-(4, 'D-M-030', '2021-11-18', 0, 500, 0, 500, 1000, 'N-F-009', 0, '2021-11-18 09:38:11'),
-(5, 'D-F-039', '2021-11-18', 0, 500, 0, 500, 500, 'N-F-009', 0, '2021-11-18 09:44:02');
+(7, 'D-M-032', '2021-11-27', 0, 100, 0, 100, 100, 'R-A-007', 0, '2021-11-26 18:13:33'),
+(8, 'D-F-025', '2021-11-27', 0, 800, 0, 800, 800, 'OT-A-007', 1, '2021-11-27 06:56:53'),
+(9, 'D-F-038', '2021-11-27', 0, 500, 0, 500, 500, 'OT-A-007', 1, '2021-11-27 06:57:14'),
+(10, 'D-M-004', '2021-11-27', 0, 4800, 0, 4800, 4800, 'OT-A-007', 1, '2021-11-27 06:57:59'),
+(11, 'D-M-004', '2021-11-27', 4800, 0, 0, 0, 0, 'OT-A-007', 1, '2021-11-27 06:58:08'),
+(12, 'D-M-003', '2021-11-27', 0, 1000, 0, 1000, 1000, 'OT-A-007', 1, '2021-11-27 06:58:38'),
+(13, 'D-M-004', '2021-11-27', 0, 500, 0, 500, 500, 'N-A-007', 0, '2021-11-27 07:08:51'),
+(14, 'D-F-028', '2021-11-27', 0, 500, 0, 500, 500, 'N-A-007', 0, '2021-11-27 07:10:44'),
+(16, 'D-M-015', '2021-12-01', 0, 250, 0, 250, 250, 'R-A-007', 0, '2021-12-01 10:43:46'),
+(17, 'D-M-015', '2021-12-01', 0, 500, 0, 500, 750, 'R-A-007', 0, '2021-12-01 10:49:42'),
+(18, 'D-F-037', '2021-12-03', 0, 1000, 0, 1000, 1000, 'R-A-007', 0, '2021-12-03 13:21:58'),
+(19, 'D-F-037', '2021-12-03', 0, 1000, 0, 1000, 2000, 'R-A-007', 0, '2021-12-03 13:34:30'),
+(20, 'D-M-015', '2021-12-04', 0, 2000, 0, 2000, 2750, 'R-A-007', 0, '2021-12-04 08:01:01'),
+(21, 'D-F-037', '2021-12-04', 0, 1000, 0, 1000, 3000, 'R-A-007', 0, '2021-12-04 08:41:15'),
+(22, NULL, '2021-12-07', 0, 500, 0, 500, 500, 'R-A-007', 0, '2021-12-07 14:44:36'),
+(23, 'D-F-037', '2021-12-07', 0, 500, 0, 500, 3500, 'R-A-007', 0, '2021-12-07 14:51:35'),
+(24, 'D-F-037', '2021-12-07', 0, 500, 0, 500, 4000, 'R-A-007', 0, '2021-12-07 14:54:16'),
+(25, 'D-M-015', '2021-12-07', 0, 500, 0, 500, 3250, 'R-A-007', 0, '2021-12-07 14:56:04'),
+(26, 'D-M-015', '2021-12-07', 0, 500, 0, 500, 3750, 'R-A-007', 0, '2021-12-07 14:57:59'),
+(27, 'D-M-015', '2021-12-07', 0, 500, 0, 500, 4250, 'R-A-007', 0, '2021-12-07 15:02:38'),
+(28, 'D-M-015', '2021-12-07', 0, 500, 0, 500, 4750, 'R-A-007', 0, '2021-12-07 15:05:22'),
+(29, NULL, '2021-12-09', 0, 1250, 0, 1250, 1750, 'R-A-007', 0, '2021-12-09 17:34:49'),
+(30, 'D-M-015', '2021-12-09', 0, 50, 0, 50, 4800, 'R-A-007', 0, '2021-12-09 18:00:40'),
+(31, 'D-M-015', '2021-12-10', 0, -3000, 0, -3000, 1800, 'R-A-007', 0, '2021-12-09 18:02:39'),
+(32, 'D-M-015', '2021-12-10', 0, 500, 0, 500, 2300, 'R-A-007', 0, '2021-12-09 18:20:45'),
+(33, 'D-M-015', '2021-12-10', 0, 500, 0, 500, 2800, 'R-A-007', 0, '2021-12-09 18:27:59'),
+(34, 'D-M-015', '2021-12-10', 0, 3500, 0, 3500, 6300, 'R-A-007', 0, '2021-12-09 18:29:01'),
+(35, 'D-M-015', '2021-12-10', 0, 500, 0, 500, 6800, 'R-A-007', 0, '2021-12-09 18:30:13'),
+(36, 'D-M-015', '2021-12-10', 0, 3000, 0, 3000, 9800, 'R-A-007', 0, '2021-12-09 18:35:45'),
+(37, 'D-M-015', '2021-12-10', 0, 200, 0, 200, 10000, 'R-A-007', 0, '2021-12-09 18:36:11'),
+(38, 'D-M-015', '2021-12-10', 0, 500, 0, 500, 10500, 'R-A-007', 0, '2021-12-09 18:47:55'),
+(39, 'D-M-015', '2021-12-10', 0, 3000, 0, 3000, 13500, 'R-A-007', 0, '2021-12-09 18:49:13'),
+(40, 'D-M-015', '2021-12-10', 0, 500, 0, 500, 14000, 'R-A-007', 0, '2021-12-09 18:49:40'),
+(41, 'D-M-015', '2021-12-10', 0, 500, 0, 500, 14500, 'R-A-007', 0, '2021-12-09 19:05:30'),
+(42, 'D-M-015', '2021-12-10', 0, 500, 0, 500, 15000, 'R-A-007', 0, '2021-12-09 19:06:11'),
+(43, 'D-M-015', '2021-12-10', 0, 2500, 0, 2500, 17500, 'R-A-007', 0, '2021-12-09 19:06:47'),
+(44, 'D-M-015', '2021-12-10', 0, 500, 0, 500, 18000, 'R-A-007', 0, '2021-12-09 19:07:28'),
+(45, 'D-M-015', '2021-12-10', 0, 500, 0, 500, 18500, 'R-A-007', 0, '2021-12-09 19:09:47'),
+(46, 'D-M-015', '2021-12-10', 0, 500, 0, 500, 19000, 'R-A-007', 0, '2021-12-09 19:10:20'),
+(47, 'D-M-015', '2021-12-10', 0, 75, 0, 75, 19075, 'R-A-007', 0, '2021-12-09 19:11:16'),
+(48, 'D-M-015', '2021-12-10', 0, 75, 0, 75, 19150, 'R-A-007', 0, '2021-12-09 19:18:02'),
+(49, 'D-M-015', '2021-12-10', 0, 1000, 0, 1000, 20150, 'R-A-007', 0, '2021-12-09 19:19:13'),
+(50, 'D-M-015', '2021-12-10', 0, 3000, 0, 3000, 23150, 'R-A-007', 0, '2021-12-09 19:21:10'),
+(51, 'D-M-015', '2021-12-10', 0, 500, 0, 500, 23650, 'R-A-007', 0, '2021-12-10 13:12:51'),
+(52, 'D-M-015', '2021-12-10', 0, 500, 0, 500, 24150, 'R-A-007', 0, '2021-12-10 13:13:21'),
+(53, 'D-M-015', '2021-12-10', 0, 1400, 0, 1400, 25550, 'R-A-007', 0, '2021-12-10 13:14:03'),
+(54, 'D-M-041', '2021-12-11', 0, 500, 0, 500, 500, 'R-A-007', 0, '2021-12-10 18:11:56'),
+(55, 'D-M-041', '2021-12-11', 0, 250, 0, 250, 750, 'R-A-007', 0, '2021-12-10 18:20:20'),
+(56, 'D-M-041', '2021-12-11', 0, 250, 0, 250, 1000, 'R-A-007', 0, '2021-12-10 18:45:39'),
+(57, 'D-M-041', '2021-12-11', 0, 250, 0, 250, 1250, 'R-A-007', 0, '2021-12-10 19:21:04');
 
 -- --------------------------------------------------------
 
@@ -494,22 +615,18 @@ CREATE TABLE `emergency_log` (
   `Name` longtext DEFAULT NULL,
   `Ref_Name` longtext NOT NULL,
   `Ref_Cell_Number` longtext NOT NULL,
+  `Bill` int(11) NOT NULL,
+  `Received` int(11) NOT NULL,
+  `Changes` int(11) NOT NULL,
   `Time_Stamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
-
 --
--- Table structure for table `hormone`
+-- Dumping data for table `emergency_log`
 --
 
-CREATE TABLE `hormone` (
-  `AI_ID` int(11) NOT NULL,
-  `Test_No` int(11) NOT NULL,
-  `Test_Info_AI_ID` int(11) NOT NULL,
-  `Fee` int(11) NOT NULL,
-  `Time_Stamp` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+INSERT INTO `emergency_log` (`AI_ID`, `D_ID`, `R_ID`, `Name`, `Ref_Name`, `Ref_Cell_Number`, `Bill`, `Received`, `Changes`, `Time_Stamp`) VALUES
+(2, 'D-M-032', 'R-A-007', 'Potol', 'Mahin salar put', '01821420420', 200, 1000, 800, '2021-11-26 18:13:33');
 
 -- --------------------------------------------------------
 
@@ -538,17 +655,64 @@ CREATE TABLE `hospital_income_log` (
 --
 
 INSERT INTO `hospital_income_log` (`AI_ID`, `Message`, `Debit`, `Credit`, `Vat`, `Service_Charge`, `Total_Income`, `Credit_Type`, `Entry_Date`, `Entry_Time`, `Entry_Year`, `User_ID`, `Time_Stamp`) VALUES
-(1, 'Admission fee for patient: M-18112021-002', 0, 300, 30, 270, 270, 'Admission Fee', '2021-11-18', '14:45:04', 2021, 'R-A-007', '2021-11-18 08:45:04'),
-(2, 'Bed change for patient: M-18112021-002', 300, 0, -30, 0, 0, 'Bed change', '2021-11-18', '14:46:52', 2021, 'R-A-007', '2021-11-18 08:46:52'),
-(3, 'New Admission fee for patient: M-18112021-002. Old admission fee debited.', 0, 1000, 100, 900, 900, 'Admission Fee', '2021-11-18', '14:46:52', 2021, 'R-A-007', '2021-11-18 08:46:52'),
-(4, 'Nebulizer  fee from patient: M-18112021-002', 0, 200, 20, 180, 180, 'Nebulizer ', '2021-11-18', '09:02:09', 2021, 'N-A-007', '2021-11-18 09:02:09'),
-(5, 'Admission fee for patient: M-18112021-005', 0, 1000, 100, 900, 900, 'Admission Fee', '2021-11-18', '15:04:05', 2021, 'R-A-007', '2021-11-18 09:04:05'),
-(6, 'Bed change for patient: M-18112021-005', 1000, 0, -100, 0, 0, 'Bed change', '2021-11-18', '15:05:02', 2021, 'R-A-007', '2021-11-18 09:05:02'),
-(7, 'New Admission fee for patient: M-18112021-005. Old admission fee debited.', 0, 300, 30, 270, 270, 'Admission Fee', '2021-11-18', '15:05:02', 2021, 'R-A-007', '2021-11-18 09:05:02'),
-(8, 'Oxygen fee from patient: M-18112021-005', 0, 100, 10, 90, 90, 'Oxygen', '2021-11-18', '09:40:05', 2021, 'N-F-009', '2021-11-18 09:40:05'),
-(9, 'Oxygen fee from patient: M-18112021-005', 0, 100, 10, 90, 90, 'Oxygen', '2021-11-18', '09:45:10', 2021, 'N-F-009', '2021-11-18 09:45:10'),
-(10, 'Nebulizer  fee from patient: M-18112021-005', 0, 200, 20, 180, 180, 'Nebulizer ', '2021-11-18', '09:49:47', 2021, 'N-F-002', '2021-11-18 09:49:47'),
-(11, 'Admission fee for patient: F-18112021-010', 0, 0, 0, 0, 0, 'Admission Fee', '2021-11-18', '16:00:08', 2021, 'R-F-012', '2021-11-18 10:00:08');
+(13, 'Emergency Fee for: Potol', 0, 100, 0, 100, 100, 'Emergency', '2021-11-26', '18:13:33', 2021, 'R-A-007', '2021-11-26 18:13:33'),
+(14, 'Admission fee for patient: M-27112021-001', 0, 1000, 0, 1000, 1000, 'Admission Fee', '2021-11-27', '12:38:24', 2021, 'R-A-007', '2021-11-27 06:38:24'),
+(15, 'Bed change for patient: M-27112021-001', 1000, 0, -0, 0, 0, 'Bed change', '2021-11-27', '12:40:03', 2021, 'R-A-007', '2021-11-27 06:40:03'),
+(16, 'New Admission fee for patient: M-27112021-001. Old admission fee debited.', 0, 1000, 0, 1000, 1000, 'Admission Fee', '2021-11-27', '12:40:03', 2021, 'R-A-007', '2021-11-27 06:40:03'),
+(17, 'Nebulizer  fee from patient: M-27112021-001', 0, 400, 0, 400, 400, 'Nebulizer ', '2021-11-27', '07:09:47', 2021, 'N-A-007', '2021-11-27 07:09:47'),
+(18, 'Oxygen fee from patient: M-27112021-001', 0, 200, 0, 200, 200, 'Oxygen', '2021-11-27', '07:10:20', 2021, 'N-A-007', '2021-11-27 07:10:20'),
+(19, 'NG Tube\r\n fee from patient: M-27112021-001', 0, 500, 0, 500, 500, 'NG Tube\r\n', '2021-11-27', '07:10:44', 2021, 'N-A-007', '2021-11-27 07:10:44'),
+(20, 'Anema\r\n fee from patient: M-27112021-001', 0, 100, 0, 100, 100, 'Anema\r\n', '2021-11-27', '07:11:11', 2021, 'N-A-007', '2021-11-27 07:11:11'),
+(21, 'Cannula\r\n fee from patient: M-27112021-001', 0, 200, 0, 200, 200, 'Cannula\r\n', '2021-11-27', '07:11:42', 2021, 'N-A-007', '2021-11-27 07:11:42'),
+(24, 'Dental services for: M-01122021-002, given by: D-M-015', 0, 500, 0, 250, 500, 'Dental', '2021-12-01', '10:43:46', 2021, 'R-A-007', '2021-12-01 10:43:46'),
+(25, 'Dental services for: M-01122021-003, given by: D-M-015', 0, 1000, 0, 500, 500, 'Dental', '2021-12-01', '10:49:42', 2021, 'R-A-007', '2021-12-01 10:49:42'),
+(26, 'Dental services for: M-03122021-002, given by: D-F-037', 0, 2000, 0, 1000, 1000, 'Dental', '2021-12-03', '13:21:58', 2021, 'R-A-007', '2021-12-03 13:21:58'),
+(27, 'Dental services for: M-03122021-005, given by: D-F-037', 0, 2000, 0, 1000, 1000, 'Dental', '2021-12-03', '13:34:29', 2021, 'R-A-007', '2021-12-03 13:34:29'),
+(28, 'Dental services for: M-04122021-001, given by: D-M-015', 0, 4000, 0, 2000, 2000, 'Dental', '2021-12-04', '08:01:01', 2021, 'R-A-007', '2021-12-04 08:01:01'),
+(29, 'Dental services for: M-04122021-002, given by: D-F-037', 0, 2000, 0, 1000, 1000, 'Dental', '2021-12-04', '08:41:15', 2021, 'R-A-007', '2021-12-04 08:41:15'),
+(30, 'Dental services for: M-04122021-001, given by: , Due payment.', 0, 1000, 0, 500, 500, 'Dental', '2021-12-07', '14:44:36', 2021, 'R-A-007', '2021-12-07 14:44:36'),
+(31, 'Dental services for: M-04122021-002, given by: D-F-037, Due payment.', 0, 1000, 0, 500, 500, 'Dental', '2021-12-07', '14:51:35', 2021, 'R-A-007', '2021-12-07 14:51:35'),
+(32, 'Dental services for: M-04122021-002, given by: D-F-037, Due payment.', 0, 1000, 0, 500, 500, 'Dental', '2021-12-07', '14:54:16', 2021, 'R-A-007', '2021-12-07 14:54:16'),
+(33, 'Dental services for: M-07122021-001, given by: D-M-015', 0, 1000, 0, 500, 500, 'Dental', '2021-12-07', '14:56:04', 2021, 'R-A-007', '2021-12-07 14:56:04'),
+(34, 'Dental services for: M-07122021-001, given by: D-M-015, Due payment.', 0, 1000, 0, 500, 500, 'Dental', '2021-12-07', '14:57:59', 2021, 'R-A-007', '2021-12-07 14:57:59'),
+(35, 'Dental services for: M-07122021-001, given by: D-M-015, Due payment.', 0, 1000, 0, 500, 500, 'Dental', '2021-12-07', '15:02:38', 2021, 'R-A-007', '2021-12-07 15:02:38'),
+(36, 'Dental services for: M-07122021-001, given by: D-M-015, Due payment.', 0, 1000, 0, 500, 500, 'Dental', '2021-12-07', '15:05:21', 2021, 'R-A-007', '2021-12-07 15:05:21'),
+(37, 'Dental services for: M-09122021-002, given by: ', 0, 2500, 0, 1250, 1250, 'Dental', '2021-12-09', '17:34:49', 2021, 'R-A-007', '2021-12-09 17:34:49'),
+(38, 'Pathology services for: M-09122021-003, referred by: self', 0, 3000, 0, 0, 0, 'Dental', '2021-12-09', '17:39:39', 2021, 'R-A-007', '2021-12-09 17:39:39'),
+(39, 'Pathology services for: M-09122021-004, referred by: self', 0, 1000, 0, 1000, 1000, 'Dental', '2021-12-09', '17:45:30', 2021, 'R-A-007', '2021-12-09 17:45:30'),
+(40, 'Pathology services for: M-09122021-005, referred by: self', 0, 150, 0, 100, 100, 'Dental', '2021-12-09', '17:54:40', 2021, 'R-A-007', '2021-12-09 17:54:40'),
+(41, 'Dental services for: M-09122021-006, given by: D-M-015', 0, 150, 0, 50, 50, 'Dental', '2021-12-09', '18:00:40', 2021, 'R-A-007', '2021-12-09 18:00:40'),
+(42, 'Dental services for: M-10122021-001, given by: D-M-015', 0, 1000, -0, -3000, -3000, 'Dental', '2021-12-09', '18:02:39', 2021, 'R-A-007', '2021-12-09 18:02:39'),
+(43, 'Dental services for: M-10122021-002, given by: D-M-015', 0, 1000, 0, 500, 500, 'Dental', '2021-12-09', '18:20:45', 2021, 'R-A-007', '2021-12-09 18:20:45'),
+(44, 'Dental services for: M-10122021-002, given by: D-M-015, Due payment.', 0, 1000, 0, 500, 500, 'Dental', '2021-12-09', '18:27:59', 2021, 'R-A-007', '2021-12-09 18:27:59'),
+(45, 'Dental services for: M-10122021-002, given by: D-M-015, Due payment.', 0, 7000, 0, 3500, 3500, 'Dental', '2021-12-09', '18:29:00', 2021, 'R-A-007', '2021-12-09 18:29:00'),
+(46, 'Dental services for: M-10122021-002, given by: D-M-015, Due payment.', 0, 1500, 0, 500, 500, 'Dental', '2021-12-09', '18:30:13', 2021, 'R-A-007', '2021-12-09 18:30:13'),
+(47, 'Dental services for: M-10122021-003, given by: D-M-015', 0, 6000, 0, 3000, 3000, 'Dental', '2021-12-09', '18:35:44', 2021, 'R-A-007', '2021-12-09 18:35:44'),
+(48, 'Dental services for: M-10122021-003, given by: D-M-015, Due payment.', 0, 1000, 0, 200, 200, 'Dental', '2021-12-09', '18:36:11', 2021, 'R-A-007', '2021-12-09 18:36:11'),
+(49, 'Dental services for: M-10122021-004, given by: D-M-015', 0, 1000, 0, 500, 500, 'Dental', '2021-12-09', '18:47:55', 2021, 'R-A-007', '2021-12-09 18:47:55'),
+(50, 'Dental services for: M-10122021-004, given by: D-M-015, Due payment.', 0, 6000, 0, 3000, 3000, 'Dental', '2021-12-09', '18:49:13', 2021, 'R-A-007', '2021-12-09 18:49:13'),
+(51, 'Dental services for: M-10122021-004, given by: D-M-015, Due payment.', 0, 1500, 0, 500, 500, 'Dental', '2021-12-09', '18:49:40', 2021, 'R-A-007', '2021-12-09 18:49:40'),
+(52, 'Dental services for: M-10122021-005, given by: D-M-015', 0, 1000, 0, 500, 500, 'Dental', '2021-12-09', '19:05:30', 2021, 'R-A-007', '2021-12-09 19:05:30'),
+(53, 'Dental services for: M-10122021-005, given by: D-M-015, Due payment.', 0, 1000, 0, 500, 500, 'Dental', '2021-12-09', '19:06:11', 2021, 'R-A-007', '2021-12-09 19:06:11'),
+(54, 'Dental services for: M-10122021-005, given by: D-M-015, Due payment.', 0, 5000, 0, 2500, 2500, 'Dental', '2021-12-09', '19:06:47', 2021, 'R-A-007', '2021-12-09 19:06:47'),
+(55, 'Dental services for: M-10122021-005, given by: D-M-015, Due payment.', 0, 1500, 0, 500, 500, 'Dental', '2021-12-09', '19:07:28', 2021, 'R-A-007', '2021-12-09 19:07:28'),
+(56, 'Dental services for: M-10122021-006, given by: D-M-015', 0, 1000, 0, 500, 500, 'Dental', '2021-12-09', '19:09:47', 2021, 'R-A-007', '2021-12-09 19:09:47'),
+(57, 'Dental services for: M-10122021-006, given by: D-M-015, Due payment.', 0, 1000, 0, 500, 500, 'Dental', '2021-12-09', '19:10:20', 2021, 'R-A-007', '2021-12-09 19:10:20'),
+(58, 'Dental services for: M-10122021-007, given by: D-M-015', 0, 150, 0, 75, 75, 'Dental', '2021-12-09', '19:11:16', 2021, 'R-A-007', '2021-12-09 19:11:16'),
+(59, 'Dental services for: M-10122021-008, given by: D-M-015', 0, 150, 0, 75, 75, 'Dental', '2021-12-09', '19:18:02', 2021, 'R-A-007', '2021-12-09 19:18:02'),
+(60, 'Dental services for: M-10122021-009, given by: D-M-015', 0, 2000, 0, 1000, 1000, 'Dental', '2021-12-09', '19:19:13', 2021, 'R-A-007', '2021-12-09 19:19:13'),
+(61, 'Dental services for: M-10122021-009, given by: D-M-015, Due payment.', 0, 6000, 0, 3000, 3000, 'Dental', '2021-12-09', '19:21:10', 2021, 'R-A-007', '2021-12-09 19:21:10'),
+(62, 'Pathology services for: M-10122021-010, referred by: self', 0, 1000, 0, 1000, 1000, 'Dental', '2021-12-10', '10:16:13', 2021, 'R-A-007', '2021-12-10 10:16:13'),
+(63, 'Pathology services for: M-10122021-011, referred by: self', 0, 2000, 0, 2000, 2000, 'Dental', '2021-12-10', '11:15:14', 2021, 'R-A-007', '2021-12-10 11:15:14'),
+(64, 'Pathology services for: M-10122021-011, given by: self, Due payment.', 0, 1000, 0, 1000, 1000, 'Dental', '2021-12-10', '13:00:09', 2021, 'R-A-007', '2021-12-10 13:00:09'),
+(65, 'Pathology services for: M-10122021-011, given by: self, Due payment.', 0, 1540, 0, 1540, 1540, 'Dental', '2021-12-10', '13:00:35', 2021, 'R-A-007', '2021-12-10 13:00:35'),
+(66, 'Dental services for: M-10122021-012, given by: D-M-015', 0, 1000, 0, 500, 500, 'Dental', '2021-12-10', '13:12:51', 2021, 'R-A-007', '2021-12-10 13:12:51'),
+(67, 'Dental services for: M-10122021-012, given by: D-M-015, Due payment.', 0, 1000, 0, 500, 500, 'Dental', '2021-12-10', '13:13:21', 2021, 'R-A-007', '2021-12-10 13:13:21'),
+(68, 'Dental services for: M-10122021-012, given by: D-M-015, Due payment.', 0, 2800, 0, 1400, 1400, 'Dental', '2021-12-10', '13:14:03', 2021, 'R-A-007', '2021-12-10 13:14:03'),
+(69, 'Physio services for: M-11122021-003, given by: D-M-041', 0, 500, 0, 0, 0, 'Physio', '2021-12-11', '00:11:56', 2021, 'R-A-007', '2021-12-10 18:11:56'),
+(70, 'Physio services for: M-11122021-004, given by: D-M-041', 0, 500, 0, 250, 250, 'Physio', '2021-12-11', '00:20:20', 2021, 'R-A-007', '2021-12-10 18:20:20'),
+(71, 'Physio services for: M-11122021-005, given by: D-M-041', 0, 500, 0, 250, 250, 'Physio', '2021-12-11', '00:45:39', 2021, 'R-A-007', '2021-12-10 18:45:39'),
+(72, 'Physio services for: M-11122021-006, given by: D-M-041', 0, 500, 0, 250, 250, 'Physio', '2021-12-11', '01:21:04', 2021, 'R-A-007', '2021-12-10 19:21:04');
 
 -- --------------------------------------------------------
 
@@ -641,21 +805,9 @@ INSERT INTO `logins` (`AI_ID`, `Emp_ID`, `Log_Password`, `status`, `Time_Stamp`)
 (81, 'OT-M-002', '15jk', 1, '2021-11-17 17:44:07'),
 (82, 'OT-F-003', '13kf', 1, '2021-11-17 17:44:07'),
 (83, 'OT-F-004', '48j6', 1, '2021-11-17 17:44:07'),
-(84, 'D-M-002', 'jk36', 1, '2021-11-18 10:19:01');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `more_tests`
---
-
-CREATE TABLE `more_tests` (
-  `AI_ID` int(11) NOT NULL,
-  `Test_No` int(11) NOT NULL,
-  `Test_Info_AI_ID` int(11) NOT NULL,
-  `Fee` int(11) NOT NULL,
-  `Time_Stamp` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+(84, 'D-M-002', 'jk36', 1, '2021-11-18 10:19:01'),
+(85, 'D-M-041', '524a', 1, '2021-12-10 15:31:53'),
+(86, 'D-M-042', '19g3', 1, '2021-12-10 15:31:53');
 
 -- --------------------------------------------------------
 
@@ -681,10 +833,10 @@ INSERT INTO `nurses` (`AI_ID`, `N_ID`, `N_Name`, `N_Gender`, `N_Image`, `Wallet`
 (1, 'N-F-001', 'Kohinur Akter', 'Female', '', 0, '2021-10-18 14:15:53'),
 (2, 'N-F-002', 'Shanta Mariya', 'Female', '', 0, '2021-10-18 14:17:48'),
 (3, 'N-F-003', 'Kazi Maksuda Akter', 'Female', '', 0, '2021-10-18 14:17:48'),
-(4, 'N-F-004', 'Neshat Akter', 'Female', '', 0, '2021-10-18 14:19:07'),
+(4, 'N-F-004', 'Neshat Akter', 'Female', '', 200, '2021-10-18 14:19:07'),
 (5, 'N-F-005', 'Salma Akter', 'Female', '', 0, '2021-10-18 14:19:07'),
 (6, 'N-F-006', 'Tanjina Akter', 'Female', '', 0, '2021-10-18 14:20:02'),
-(7, 'N-F-007', 'Tithi Podder', 'Female', '', 0, '2021-10-18 14:20:02'),
+(7, 'N-F-007', 'Tithi Podder', 'Female', '', 500, '2021-10-18 14:20:02'),
 (8, 'N-F-008', 'Fahima Parvin', 'Female', '', 0, '2021-10-18 14:20:55'),
 (9, 'N-F-009', 'Popyara', 'Female', '', 0, '2021-10-18 14:20:55'),
 (10, 'N-F-010', 'Sunjida AKter', 'Female', '', 0, '2021-10-18 14:21:22'),
@@ -708,6 +860,14 @@ CREATE TABLE `nurse_balance_logs` (
   `O_ID` longtext DEFAULT NULL,
   `Timestamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `nurse_balance_logs`
+--
+
+INSERT INTO `nurse_balance_logs` (`AI_ID`, `N_ID`, `B_Date`, `Debit`, `Credit`, `Current_Balance`, `Acc_ID`, `O_ID`, `Timestamp`) VALUES
+(1, 'N-F-007', '2021-11-27', 0, 500, 500, 'OT-A-007', '1', '2021-11-27 06:59:00'),
+(2, 'N-F-004', '2021-11-27', 0, 200, 200, 'N-A-007', NULL, '2021-11-27 07:11:42');
 
 -- --------------------------------------------------------
 
@@ -754,6 +914,13 @@ CREATE TABLE `ot_assistant_logs` (
   `Assistant_Fee` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `ot_assistant_logs`
+--
+
+INSERT INTO `ot_assistant_logs` (`AI_ID`, `O_ID`, `Assistant_Name`, `Assistant_Fee`) VALUES
+(5, 1, 'halima', 100);
+
 -- --------------------------------------------------------
 
 --
@@ -781,6 +948,13 @@ CREATE TABLE `ot_logs` (
   `Timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `ot_logs`
+--
+
+INSERT INTO `ot_logs` (`O_ID`, `P_ID`, `A_ID`, `D_ID`, `OTO_ID`, `OT_No`, `O_Type`, `Anesthesia_Type`, `O_Date`, `O_Time`, `O_Duration`, `OT_Charge`, `OT_Charge_Discount`, `OT_Charge_Income`, `Others`, `Others_Charges`, `Total`, `Timestamp`) VALUES
+(1, 'M-27112021-001', '18', 'D-F-025', 'OT-A-007', 2, 'demo o type', 'demo a type', '2021-11-27', '15:00:00', '01 hr 00 min', 10, 5, 5, 'demo other', 7, 12, '2021-11-27 06:56:36');
+
 -- --------------------------------------------------------
 
 --
@@ -794,6 +968,13 @@ CREATE TABLE `ot_nurses_logs` (
   `Nurse_Name` longtext NOT NULL,
   `Nurse_Fee` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `ot_nurses_logs`
+--
+
+INSERT INTO `ot_nurses_logs` (`AI_ID`, `N_ID`, `O_ID`, `Nurse_Name`, `Nurse_Fee`) VALUES
+(8, 'N-F-007', 1, 'Tithi Podder', 500);
 
 -- --------------------------------------------------------
 
@@ -846,21 +1027,362 @@ CREATE TABLE `ot_schedules` (
 --
 
 INSERT INTO `ot_schedules` (`AI_ID`, `P_ID`, `OT_No`, `Operation_Date`, `Operation_Start_Time`, `Operation_Type`, `Estimated_Duration`, `Surgeon_ID`, `Surgeon_Name`, `OTO_ID`, `Time_Stamp`) VALUES
-(1, 'M-18112021-006', 2, '2021-11-19', '17:00:00', 'Appendix', '2', 'D-M-001', 'Brig Gen S M Mizanur Rahman', 'OT-M-001', '2021-11-18 10:15:08');
+(7, 'M-27112021-001', 2, '2021-11-27', '15:33:00', 'dummy operation', '01 hr 00 min', 'D-F-025', 'Dr S. Parvin Sadique', 'OT-A-007', '2021-11-27 06:55:18');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pathology`
+-- Table structure for table `pathology_info`
 --
 
-CREATE TABLE `pathology` (
+CREATE TABLE `pathology_info` (
+  `AI_ID` int(11) NOT NULL,
+  `Groups` longtext NOT NULL,
+  `Room_No` int(11) NOT NULL,
+  `Test_Name` longtext NOT NULL,
+  `Test_Fee` int(11) NOT NULL,
+  `State` int(11) NOT NULL DEFAULT 1,
+  `Time_Stamp` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `pathology_info`
+--
+
+INSERT INTO `pathology_info` (`AI_ID`, `Groups`, `Room_No`, `Test_Name`, `Test_Fee`, `State`, `Time_Stamp`) VALUES
+(1, 'PATHOLOGY', 119, 'TIBC', 900, 1, '2021-11-25 19:08:48'),
+(2, 'PATHOLOGY', 119, 'FERRITIN', 1000, 1, '2021-11-25 19:37:36'),
+(3, 'PATHOLOGY', 119, 'IRON PROFILE', 2400, 1, '2021-11-25 19:37:36'),
+(4, 'PATHOLOGY', 119, 'CPK', 800, 1, '2021-11-25 19:37:36'),
+(5, 'PATHOLOGY', 119, 'ICT FOR FILARIA', 900, 1, '2021-11-25 19:37:36'),
+(6, 'PATHOLOGY', 119, 'ALBUMIN', 300, 1, '2021-11-25 19:37:36'),
+(7, 'PATHOLOGY', 119, 'PLEURAL FLUID PROTEN', 350, 1, '2021-11-25 19:37:36'),
+(8, 'PATHOLOGY', 119, 'WOUND SWAB C/S', 500, 1, '2021-11-25 19:37:36'),
+(9, 'PATHOLOGY', 119, 'STOOL FOR R/S', 200, 1, '2021-11-25 19:37:36'),
+(10, 'PATHOLOGY', 119, 'D-Dimar', 2400, 1, '2021-11-25 19:37:36'),
+(11, 'PATHOLOGY', 119, 'STOOL FOR RE', 100, 1, '2021-11-25 19:37:36'),
+(12, 'PATHOLOGY', 119, 'STOOL FOR OBT', 250, 1, '2021-11-25 19:37:36'),
+(13, 'PATHOLOGY', 119, 'STOOL FOR C/S', 500, 1, '2021-11-25 19:37:36'),
+(14, 'PATHOLOGY', 119, 'SPUTUM FOR AFB', 250, 1, '2021-11-25 19:37:36'),
+(15, 'PATHOLOGY', 119, 'ALDCHYDC TEST', 300, 1, '2021-11-25 19:37:36'),
+(16, 'PATHOLOGY', 119, 'NAIL SCRAPINC FUNGUS M/E', 350, 1, '2021-11-25 19:37:36'),
+(17, 'PATHOLOGY', 119, 'SKIN SCRAPINC FUNGUS M/E', 350, 1, '2021-11-25 19:37:36'),
+(18, 'PATHOLOGY', 119, 'P/S FOR GRAM STAIN C/S', 500, 1, '2021-11-25 19:37:36'),
+(19, 'PATHOLOGY', 119, 'EAR SAWB C/S', 500, 1, '2021-11-25 19:37:36'),
+(20, 'PATHOLOGY', 119, 'PUS FOR AFB', 250, 1, '2021-11-25 19:37:36'),
+(21, 'PATHOLOGY', 119, 'P/S FOR GRAM STAIN', 350, 1, '2021-11-25 19:37:36'),
+(22, 'PATHOLOGY', 119, 'URINE PROTEIN(Micro)', 350, 1, '2021-11-25 19:37:36'),
+(23, 'PATHOLOGY', 119, 'BONE MARROW STUDY', 1500, 1, '2021-11-25 19:37:36'),
+(24, 'PATHOLOGY', 119, 'GROUPING & Rh FACTOR', 150, 1, '2021-11-25 19:37:36'),
+(25, 'PATHOLOGY', 119, 'PCV', 150, 1, '2021-11-25 19:37:36'),
+(26, 'PATHOLOGY', 119, 'MCV', 100, 1, '2021-11-25 19:37:36'),
+(27, 'PATHOLOGY', 119, 'MCHC', 100, 1, '2021-11-25 19:37:36'),
+(28, 'PATHOLOGY', 119, 'MCH', 100, 1, '2021-11-25 19:37:36'),
+(29, 'PATHOLOGY', 119, 'MP', 150, 1, '2021-11-25 19:37:36'),
+(30, 'PATHOLOGY', 119, 'LDH', 900, 1, '2021-11-25 19:37:36'),
+(31, 'PATHOLOGY', 119, 'BT(Bleeding Time)', 120, 1, '2021-11-25 19:37:36'),
+(32, 'PATHOLOGY', 119, 'HDL-CHOLESTEROL', 300, 1, '2021-11-25 19:37:36'),
+(33, 'PATHOLOGY', 119, 'CSF FOR SUGAR', 120, 1, '2021-11-25 19:37:36'),
+(34, 'PATHOLOGY', 119, 'CSF FOR PROTIEN', 900, 1, '2021-11-25 19:37:36'),
+(35, 'PATHOLOGY', 119, 'CREATININE', 350, 1, '2021-11-25 19:37:36'),
+(36, 'PATHOLOGY', 119, 'BUN(BLOOD UREA NITROGEN)', 300, 1, '2021-11-25 19:37:36'),
+(37, 'PATHOLOGY', 119, 'UREA', 300, 1, '2021-11-25 19:37:36'),
+(38, 'PATHOLOGY', 119, 'HBsAg(ELISA)', 1000, 1, '2021-11-25 19:37:36'),
+(39, 'PATHOLOGY', 119, 'G 6-PD ACTIVITIES', 1100, 1, '2021-11-25 19:37:36'),
+(40, 'PATHOLOGY', 119, 'BEFORE DINNER', 120, 1, '2021-11-25 19:37:36'),
+(41, 'PATHOLOGY', 119, 'BEFORE LUNCH', 120, 1, '2021-11-25 19:37:36'),
+(42, 'PATHOLOGY', 119, '2Hrs AFTER DINNER', 120, 1, '2021-11-25 19:37:36'),
+(43, 'PATHOLOGY', 119, 'B-HCG', 1600, 1, '2021-11-25 19:37:36'),
+(44, 'PATHOLOGY', 119, 'PROTINE PROFILE', 900, 1, '2021-11-25 19:37:36'),
+(45, 'PATHOLOGY', 119, 'ALKALINE PROSPHATASE', 260, 1, '2021-11-25 19:37:36'),
+(46, 'PATHOLOGY', 119, 'HAV IgM(ICT)', 900, 1, '2021-11-25 19:37:36'),
+(47, 'PATHOLOGY', 119, 'ASO+CRP+RA', 1650, 1, '2021-11-25 19:37:36'),
+(48, 'PATHOLOGY', 119, '2Hrs AFTER LUNCH', 120, 1, '2021-11-25 19:37:36'),
+(49, 'PATHOLOGY', 119, 'THROST SWAB C/S', 500, 1, '2021-11-25 19:37:36'),
+(50, 'PATHOLOGY', 119, 'PC', 150, 1, '2021-11-25 19:37:36'),
+(51, 'PATHOLOGY', 119, 'MALARIA(ICT)', 900, 1, '2021-11-25 19:37:36'),
+(52, 'PATHOLOGY', 119, 'VDRL-QUANTITATIVE TEST(Q&Q)', 450, 1, '2021-11-25 19:37:36'),
+(53, 'PATHOLOGY', 119, 'RA/RF TEST(RHEUMATOID FACTOR)', 550, 1, '2021-11-25 19:37:36'),
+(54, 'PATHOLOGY', 119, 'ICT FOR TB', 900, 1, '2021-11-25 19:37:36'),
+(55, 'PATHOLOGY', 119, 'ICT FOR KALA AZAR', 900, 1, '2021-11-25 19:37:36'),
+(56, 'PATHOLOGY', 119, 'ICT FOR MALARIA', 900, 1, '2021-11-25 19:37:36'),
+(57, 'PATHOLOGY', 119, 'COOMBS TEST(Direct & Indirect)', 1000, 1, '2021-11-25 19:37:36'),
+(58, 'PATHOLOGY', 119, 'CFT FOR KALA AZAR', 800, 1, '2021-11-25 19:37:36'),
+(59, 'PATHOLOGY', 119, 'CFT FOR FILARIA', 800, 1, '2021-11-25 19:37:36'),
+(60, 'PATHOLOGY', 119, 'CRP', 550, 1, '2021-11-25 19:37:36'),
+(61, 'PATHOLOGY', 119, 'TOTAL RBC COUNT', 150, 1, '2021-11-25 19:37:36'),
+(62, 'PATHOLOGY', 119, 'TC DC OF WBC', 300, 1, '2021-11-25 19:37:36'),
+(63, 'PATHOLOGY', 119, 'PROTHROMBIN TIME(PT)', 500, 1, '2021-11-25 19:37:36'),
+(64, 'PATHOLOGY', 119, 'PLATELET COUNT(TPC)', 150, 1, '2021-11-25 19:37:36'),
+(65, 'PATHOLOGY', 119, 'SYNOVIAL FLUID STUDY', 900, 1, '2021-11-25 19:37:36'),
+(66, 'PATHOLOGY', 119, 'ESR', 100, 1, '2021-11-25 19:37:36'),
+(67, 'PATHOLOGY', 119, 'CT(Clotting Time)', 120, 1, '2021-11-25 19:37:36'),
+(68, 'PATHOLOGY', 119, 'Culating Eosinophil Count(TCEC)', 150, 1, '2021-11-25 19:37:36'),
+(69, 'PATHOLOGY', 119, 'SGPT(ALT)', 250, 1, '2021-11-25 19:37:36'),
+(70, 'PATHOLOGY', 119, 'VDRL', 260, 1, '2021-11-25 19:37:36'),
+(71, 'PATHOLOGY', 119, 'DENGO IgG-IgM(ICT)', 900, 1, '2021-11-25 19:37:36'),
+(72, 'PATHOLOGY', 119, 'FBS', 120, 1, '2021-11-25 19:37:36'),
+(73, 'PATHOLOGY', 119, 'CREATININE', 300, 1, '2021-11-25 19:37:36'),
+(74, 'PATHOLOGY', 119, 'LIPID PROFILE(F)', 940, 1, '2021-11-25 19:37:36'),
+(75, 'PATHOLOGY', 119, 'WIDAL TEST', 360, 1, '2021-11-25 19:37:36'),
+(76, 'PATHOLOGY', 119, 'TRIGLYECRIDE(Tg)', 300, 1, '2021-11-25 19:37:36'),
+(77, 'PATHOLOGY', 119, 'CP+MP+PC', 750, 1, '2021-11-25 19:37:36'),
+(78, 'PATHOLOGY', 119, 'RBS', 120, 1, '2021-11-25 19:37:36'),
+(79, 'PATHOLOGY', 119, 'UREA CREATININE', 600, 1, '2021-11-25 19:37:36'),
+(80, 'ULTRASONOGRAPHY', 110, 'W/A(COLOUR)', 1100, 1, '2021-11-25 13:27:32'),
+(81, 'ULTRASONOGRAPHY', 110, 'PELVIC ORGAN', 1100, 1, '2021-11-25 13:43:12'),
+(82, 'ULTRASONOGRAPHY', 110, 'KNEE', 1100, 1, '2021-11-25 13:43:12'),
+(83, 'ULTRASONOGRAPHY', 110, 'PELVIC ORGAN (Colour)', 1100, 1, '2021-11-25 13:43:12'),
+(84, 'ULTRASONOGRAPHY', 110, 'KUB (Colour)', 1100, 1, '2021-11-25 13:43:12'),
+(85, 'ULTRASONOGRAPHY', 110, 'HBS (Colour)', 1100, 1, '2021-11-25 13:43:12'),
+(86, 'ULTRASONOGRAPHY', 110, 'PREGNANCY PROFILE (Colour)', 1100, 1, '2021-11-25 13:43:12'),
+(87, 'ULTRASONOGRAPHY', 110, 'CAROTIED (Colour)', 1100, 1, '2021-11-25 13:43:12'),
+(88, 'ULTRASONOGRAPHY', 110, 'BREST (Colour)', 1100, 1, '2021-11-25 13:43:12'),
+(89, 'ULTRASONOGRAPHY', 110, 'THYROID (Colour)', 1500, 1, '2021-11-25 13:43:12'),
+(90, 'ULTRASONOGRAPHY', 110, 'THIGT (Colour)', 1100, 1, '2021-11-25 13:43:12'),
+(91, 'ULTRASONOGRAPHY', 110, 'W/A', 1100, 1, '2021-11-25 13:43:12'),
+(92, 'ULTRASONOGRAPHY', 110, 'PAROTIED (Colour)', 1100, 1, '2021-11-25 13:43:12'),
+(93, 'ULTRASONOGRAPHY', 110, 'HBS', 1100, 1, '2021-11-25 13:43:12'),
+(94, 'ULTRASONOGRAPHY', 110, 'KUB', 1100, 1, '2021-11-25 13:43:12'),
+(95, 'ULTRASONOGRAPHY', 110, 'PREGNANCY PROFILE', 1100, 1, '2021-11-25 13:43:12'),
+(96, 'ULTRASONOGRAPHY', 110, 'L/A', 1100, 1, '2021-11-25 13:43:12'),
+(97, 'ULTRASONOGRAPHY', 110, 'SCROTUM', 1100, 1, '2021-11-25 13:43:12'),
+(98, 'ULTRASONOGRAPHY', 110, 'PANIS', 1100, 1, '2021-11-25 13:43:12'),
+(99, 'ULTRASONOGRAPHY', 110, 'KUB & PELVIC', 1100, 1, '2021-11-25 13:43:12'),
+(100, 'ULTRASONOGRAPHY', 110, 'MSK', 1500, 1, '2021-11-25 13:43:12'),
+(101, 'OTHERS', 119, 'ENDOSCOPY', 1700, 1, '2021-11-25 13:43:12'),
+(102, 'OTHERS', 117, 'ECG', 300, 1, '2021-11-25 13:43:12'),
+(103, 'HORMONE', 119, 'PROGESTERONE', 1200, 1, '2021-11-25 14:00:16'),
+(104, 'HORMONE', 119, 'OESTROGEN', 1200, 1, '2021-11-25 14:00:16'),
+(105, 'HORMONE', 119, 'DNA', 1600, 1, '2021-11-25 14:00:16'),
+(106, 'HORMONE', 119, 'ANA', 1200, 1, '2021-11-25 14:00:16'),
+(107, 'HORMONE', 119, 'Anti CCP', 2200, 1, '2021-11-25 14:00:16'),
+(108, 'HORMONE', 119, 'TESTOSTERONE', 1200, 1, '2021-11-25 14:00:16'),
+(109, 'HORMONE', 119, 'T3 T4 TSH', 2700, 1, '2021-11-25 14:00:16'),
+(110, 'HORMONE', 119, 'PROLACTIN(PRL)', 1200, 1, '2021-11-25 14:00:16'),
+(111, 'HORMONE', 119, 'IgE', 1100, 1, '2021-11-25 14:00:16'),
+(112, 'HORMONE', 119, 'LH', 1200, 1, '2021-11-25 14:00:16'),
+(113, 'HORMONE', 119, 'FSH', 1200, 1, '2021-11-25 14:00:16'),
+(114, 'HORMONE', 119, 'FT4', 1200, 1, '2021-11-25 14:00:16'),
+(115, 'HORMONE', 119, 'FT3', 1200, 1, '2021-11-25 14:00:16'),
+(116, 'HORMONE', 119, 'T4', 900, 1, '2021-11-25 14:00:16'),
+(117, 'HORMONE', 119, 'T3', 900, 1, '2021-11-25 14:00:16'),
+(118, 'HORMONE', 119, 'TSH', 900, 1, '2021-11-25 14:00:16'),
+(119, 'HORMONE', 119, 'PSA', 1200, 1, '2021-11-25 14:00:16'),
+(120, 'X-RAY', 111, 'X-RAY PALVIS WITH BOTH HIP JT', 500, 1, '2021-11-25 20:17:04'),
+(121, 'X-RAY', 111, 'X-RAY THIGHT LT B/V', 600, 1, '2021-11-25 20:23:05'),
+(122, 'X-RAY', 111, 'X-RAY THIGHT LT B/V', 600, 1, '2021-11-25 20:23:05'),
+(123, 'X-RAY', 111, 'X-RAY HUMERUS(ARM)RT B/V', 400, 1, '2021-11-25 20:23:05'),
+(124, 'X-RAY', 111, 'X-RAY HUMERUS(ARM)RT B/V', 400, 1, '2021-11-25 20:23:05'),
+(125, 'X-RAY', 111, 'X-RAY HP LT L/V', 400, 1, '2021-11-25 20:23:05'),
+(126, 'X-RAY', 111, 'X-RAY HP RT L/V', 400, 1, '2021-11-25 20:23:05'),
+(127, 'X-RAY', 111, 'X-RAY ABDOMEN SUPPER POSITION', 500, 1, '2021-11-25 20:23:05'),
+(128, 'X-RAY', 111, 'X-RAY BOTH SI JT A/P', 500, 1, '2021-11-25 20:23:05'),
+(129, 'X-RAY', 111, 'X-RAY CHEST OBLIQUE VIEW (CHILD)', 400, 1, '2021-11-25 20:23:05'),
+(130, 'X-RAY', 111, 'X-RAY FISTOLOGRAM', 2000, 1, '2021-11-25 20:23:05'),
+(131, 'X-RAY', 111, 'X-RAY SI JOINT', 1000, 1, '2021-11-25 20:23:05'),
+(132, 'X-RAY', 111, 'X-RAY RGU & MCU', 2000, 1, '2021-11-25 20:23:05'),
+(133, 'X-RAY', 111, 'X-RAY FACT B/V', 800, 1, '2021-11-25 20:23:05'),
+(134, 'X-RAY', 111, 'X-RAY RT SI JOINT', 700, 1, '2021-11-25 20:23:05'),
+(135, 'X-RAY', 111, 'X-RAY ORBIT B/V', 600, 1, '2021-11-25 20:23:05'),
+(136, 'X-RAY', 111, 'X-RAY PNS', 400, 1, '2021-11-25 07:32:12'),
+(137, 'X-RAY', 111, 'X-RAY DORSAL LUMBER SPINE B/V', 800, 1, '2021-11-25 07:35:54'),
+(138, 'X-RAY', 111, 'X-RAY CHEST OBLIQUE VIEW', 500, 1, '2021-11-25 07:36:53'),
+(139, 'X-RAY', 111, 'X-RAY CHEST A/P VIEW', 500, 1, '2021-11-25 07:38:43'),
+(140, 'X-RAY', 111, 'X-RAY STENUM L/V', 450, 1, '2021-11-25 07:39:27'),
+(141, 'X-RAY', 111, 'X-RAY CHEST L/V(CHILD)', 400, 1, '2021-11-25 07:40:19'),
+(142, 'X-RAY', 111, 'X-RAY CERVICAL SPINE B/V', 700, 1, '2021-11-25 07:41:34'),
+(143, 'X-RAY', 111, 'X-RAY MASTOIDA TOWNES & STENVERS VIEW ', 800, 1, '2021-11-25 07:47:51'),
+(144, 'X-RAY', 111, 'X-RAY SACRO - COCCYGEAL B/VIEW', 700, 1, '2021-11-25 07:47:51'),
+(145, 'X-RAY', 111, 'X-RAY ABDOMEN ERECT POSITION ', 550, 1, '2021-11-25 08:04:40'),
+(146, 'X-RAY', 111, 'X-RAY SKULL A/P ', 450, 1, '2021-11-25 08:04:40'),
+(147, 'X-RAY', 111, 'X-RAY SKULL A/P & LN', 800, 1, '2021-11-25 08:04:40'),
+(148, 'X-RAY', 111, 'X-RAY ANKLE LT B/V', 400, 1, '2021-11-25 08:04:40'),
+(149, 'X-RAY', 111, 'X-RAY ANKLE RT B/V', 400, 1, '2021-11-25 08:04:40'),
+(150, 'X-RAY', 111, 'X-RAY FOOT LT B/V', 400, 1, '2021-11-25 08:04:40'),
+(151, 'X-RAY', 111, 'X-RAY CHEST P/A VIEW(CHILD)', 400, 1, '2021-11-25 08:04:40'),
+(152, 'X-RAY', 111, 'X-RAY NECK A/P & L/V', 700, 1, '2021-11-25 08:04:40'),
+(153, 'X-RAY', 111, 'X-RAY NECK L/V', 400, 1, '2021-11-25 08:04:40'),
+(154, 'X-RAY', 111, 'X-RAY FOREARM LT B/V', 400, 1, '2021-11-25 08:04:40'),
+(155, 'X-RAY', 111, 'X-RAY FOREARM RT B/V ', 400, 1, '2021-11-25 08:04:40'),
+(156, 'X-RAY', 111, 'X-RAY HEEL(CALCANE LT WV', 400, 1, '2021-11-25 08:04:40'),
+(157, 'X-RAY', 111, 'X-RAY HEEL CALCANEUM)RT B/V', 400, 1, '2021-11-25 08:04:40'),
+(158, 'X-RAY', 111, 'X-RAY TIBIA & FIBULA LT', 600, 1, '2021-11-25 08:04:40'),
+(159, 'X-RAY', 111, 'X-RAY NOSALBONE', 400, 1, '2021-11-25 08:04:40'),
+(160, 'X-RAY', 111, 'X-RAY NASOPHARYNX L/V', 400, 1, '2021-11-25 08:04:40'),
+(161, 'X-RAY', 111, 'X-RAY LEG RT B/V', 600, 1, '2021-11-25 08:04:40'),
+(162, 'X-RAY', 111, 'X-RAY LEG LT B/V', 600, 1, '2021-11-25 08:04:40'),
+(163, 'X-RAY', 111, 'X-RAY KNEE RT B/V', 400, 1, '2021-11-25 08:04:40'),
+(164, 'X-RAY', 111, 'X-RAY KNEE LT B/V', 700, 1, '2021-11-25 08:04:40'),
+(165, 'X-RAY', 111, 'X-RAY HUMERUS RT B/V', 400, 1, '2021-11-25 08:06:56'),
+(166, 'X-RAY', 111, 'X-RAY HUMERUS LT B/V', 400, 1, '2021-11-25 08:06:56'),
+(167, 'X-RAY', 111, 'X-RAY HIP RT B/V', 800, 1, '2021-11-25 08:25:47'),
+(168, 'X-RAY', 111, 'X-RAY HIP LT B/V', 800, 1, '2021-11-25 08:25:47'),
+(169, 'X-RAY', 111, 'X-RAY CALCANEUM LT B/V', 400, 1, '2021-11-25 08:25:47'),
+(170, 'X-RAY', 111, 'X-RAY HAND RT B/V', 400, 1, '2021-11-25 08:25:47'),
+(171, 'X-RAY', 111, 'X-RAY CLAVICLE RT AP/V', 400, 1, '2021-11-25 08:25:47'),
+(172, 'X-RAY', 111, 'X-RAY CHEST P/A VIEW', 500, 1, '2021-11-25 08:25:47'),
+(173, 'X-RAY', 111, 'X-RAY WRIST RT B/V', 400, 1, '2021-11-25 08:25:47'),
+(174, 'X-RAY', 111, 'X-RAY CLAVICLE LT B/V', 400, 1, '2021-11-25 08:25:47'),
+(175, 'X-RAY', 111, 'X-RAY L/S SPINE B/V', 800, 1, '2021-11-25 08:25:47'),
+(176, 'X-RAY', 111, 'X-RAY CHEST L/V', 500, 1, '2021-11-25 08:25:47'),
+(177, 'X-RAY', 111, 'X-RAY CHEST A/P VIEW', 500, 1, '2021-11-25 08:25:47'),
+(178, 'X-RAY', 111, 'X-RAY CHEST OBLIQUE VIEW', 500, 1, '2021-11-25 08:25:47'),
+(179, 'X-RAY', 111, 'X-RAY MANDIBLE', 1000, 1, '2021-11-25 08:25:47'),
+(180, 'X-RAY', 111, 'X-RAY TM JT B/V', 1200, 1, '2021-11-25 08:25:47'),
+(181, 'X-RAY', 111, 'X-RAY D/L SPINE B/V', 800, 1, '2021-11-25 08:25:47'),
+(182, 'X-RAY', 111, 'X-RAY KUB REIGON (PLAIN)', 550, 1, '2021-11-25 08:25:47'),
+(183, 'X-RAY', 111, 'X-RAY SHOULDER RT B/V', 650, 1, '2021-11-25 08:25:47'),
+(184, 'X-RAY', 111, 'X-RAY ELBOW LT B/V', 400, 1, '2021-11-25 08:25:47'),
+(185, 'X-RAY', 111, 'X-RAY IVU', 2800, 1, '2021-11-25 08:25:47'),
+(186, 'X-RAY', 111, 'X-RAY DORSAL SPINE', 800, 1, '2021-11-25 08:25:47'),
+(187, 'X-RAY', 111, 'X-RAY FEMAR LT B/V', 600, 1, '2021-11-25 08:25:47'),
+(188, 'X-RAY', 111, 'X-RAY FEMAR RT WV', 600, 1, '2021-11-25 08:25:47'),
+(189, 'X-RAY', 111, 'X-RAY HAND LT B/V', 400, 1, '2021-11-25 08:25:47'),
+(190, 'X-RAY', 111, 'X-RAY SUBMANDIBULA REGION', 800, 1, '2021-11-25 08:25:47'),
+(191, 'X-RAY', 111, 'X-RAY MCU', 1800, 1, '2021-11-25 08:25:47'),
+(192, 'X-RAY', 111, 'X-RAY RGU', 1800, 1, '2021-11-25 08:25:47'),
+(193, 'X-RAY', 111, 'X-RAY FOOT RT B/V', 400, 1, '2021-11-25 08:25:47'),
+(194, 'X-RAY', 111, 'X-RAY WRIST LT B/V', 400, 1, '2021-11-25 08:25:47'),
+(195, 'X-RAY', 111, 'X-RAY ELBOW RT B/V', 400, 1, '2021-11-25 08:25:47'),
+(196, 'X-RAY', 111, 'X-RAY SKULL L/V', 400, 1, '2021-11-25 08:25:47'),
+(197, 'X-RAY', 111, 'X-RAY NECK A/P VIEW', 400, 1, '2021-11-25 08:25:47'),
+(198, 'X-RAY', 111, 'X-RAY TIBIA & FIULA RT B/V', 600, 1, '2021-11-25 08:25:47'),
+(199, 'X-RAY', 111, 'X-RAY CALCANEUM RT B/V', 400, 1, '2021-11-25 08:25:47'),
+(200, 'X-RAY', 111, 'X-RAY SHOULDER LT B/V', 650, 1, '2021-11-25 08:25:47'),
+(201, 'X-RAY', 111, 'X-RAY PALVIS A/P VIEW', 500, 1, '2021-11-25 08:25:47'),
+(202, 'PATHOLOGY', 119, 'FNAC', 720, 1, '2021-11-25 07:33:28'),
+(203, 'PATHOLOGY', 119, 'PAPF SMER', 500, 1, '2021-11-25 07:35:54'),
+(204, 'PATHOLOGY', 119, 'CARDIAC EANZIME', 2500, 1, '2021-11-25 07:38:01'),
+(205, 'PATHOLOGY', 119, 'SPUTUM FOR GRAM STAIN', 300, 1, '2021-11-25 07:39:35'),
+(206, 'PATHOLOGY', 119, 'CSF STUDY', 900, 1, '2021-11-25 07:40:40'),
+(207, 'PATHOLOGY', 119, '24hr URINE TOTAL PROTIEN', 500, 1, '2021-11-25 07:43:44'),
+(208, 'PATHOLOGY', 119, 'URINE FOR ALBUMIN', 120, 1, '2021-11-25 07:43:44'),
+(209, 'PATHOLOGY', 119, 'URINE SUGAR', 120, 1, '2021-11-25 07:43:44'),
+(210, 'PATHOLOGY', 119, 'URINE C/S', 500, 1, '2021-11-25 07:58:14'),
+(211, 'PATHOLOGY', 119, 'URINE RE', 100, 1, '2021-11-25 07:58:14'),
+(212, 'PATHOLOGY', 119, 'ANTIBODY HSV2 ', 1100, 1, '2021-11-25 07:58:14'),
+(213, 'PATHOLOGY', 119, 'ANTIBODY HSBI', 1100, 1, '2021-11-25 07:58:14'),
+(214, 'PATHOLOGY', 119, 'HBeAg(ICT)', 900, 1, '2021-11-25 07:58:14'),
+(215, 'PATHOLOGY', 119, 'CA-242', 1600, 1, '2021-11-25 07:58:14'),
+(216, 'PATHOLOGY', 119, 'CA-153', 1600, 1, '2021-11-25 07:58:14'),
+(217, 'PATHOLOGY', 119, 'CA-199', 1600, 1, '2021-11-25 07:58:14'),
+(218, 'PATHOLOGY', 119, 'CA-125', 1600, 1, '2021-11-25 07:58:14'),
+(219, 'PATHOLOGY', 119, 'HCV(ICT)', 900, 1, '2021-11-25 07:58:14'),
+(220, 'PATHOLOGY', 119, 'DENGU(ICT)', 900, 1, '2021-11-25 07:58:14'),
+(221, 'PATHOLOGY', 119, 'HEV IgM(ICT)', 900, 1, '2021-11-25 07:58:14'),
+(222, 'PATHOLOGY', 119, 'HIV(I+II)ICT ', 900, 1, '2021-11-25 07:58:14'),
+(223, 'PATHOLOGY', 119, 'ALFA FETO PROTIEN', 1600, 1, '2021-11-25 07:58:14'),
+(224, 'PATHOLOGY', 119, 'MT(MATOUX TEST)', 300, 1, '2021-11-25 08:04:37'),
+(225, 'PATHOLOGY', 119, 'VEGANA SWAB C/S', 500, 1, '2021-11-25 08:04:37'),
+(226, 'PATHOLOGY', 119, 'VIRAL PROFILE\r\n', 4200, 1, '2021-11-25 08:04:37'),
+(227, 'PATHOLOGY', 119, 'HDAIC', 1000, 1, '2021-11-25 08:04:37'),
+(228, 'PATHOLOGY', 119, 'HBsAg(ICT)', 420, 1, '2021-11-25 08:04:37'),
+(229, 'PATHOLOGY', 119, 'IRON', 900, 1, '2021-11-25 08:04:37'),
+(230, 'PATHOLOGY', 119, 'SGOT(AST)', 250, 1, '2021-11-25 08:04:37'),
+(231, 'PATHOLOGY', 119, 'LIVER FUNCTION TEST(LFT)', 850, 1, '2021-11-25 08:04:37'),
+(232, 'PATHOLOGY', 119, 'CKMB', 950, 1, '2021-11-25 08:12:11'),
+(233, 'PATHOLOGY', 119, 'PERITIAL BLOOD FLIM(PBF)', 420, 1, '2021-11-25 08:12:11'),
+(234, 'PATHOLOGY', 119, 'TROPININ-I\r\n', 1000, 1, '2021-11-25 08:12:11'),
+(235, 'PATHOLOGY', 119, 'HB%', 150, 1, '2021-11-25 08:12:11'),
+(236, 'PATHOLOGY', 119, 'BTCT', 220, 1, '2021-11-25 08:12:11'),
+(237, 'PATHOLOGY', 119, 'TCEC', 150, 1, '2021-11-25 08:12:11'),
+(238, 'PATHOLOGY', 119, 'TPC', 150, 1, '2021-11-25 08:12:11'),
+(239, 'PATHOLOGY', 119, 'URIC ACID', 300, 1, '2021-11-25 08:12:11'),
+(240, 'PATHOLOGY', 119, 'SPUTUM FOR AFB(3 day)', 750, 1, '2021-11-25 08:12:11'),
+(241, 'PATHOLOGY', 119, 'Rh-Antibody Titre', 800, 1, '2021-11-25 08:22:36'),
+(242, 'PATHOLOGY', 119, 'URINE PT', 200, 1, '2021-11-25 08:22:36'),
+(243, 'PATHOLOGY', 119, 'TC DC\r\n', 300, 1, '2021-11-25 08:22:36'),
+(244, 'PATHOLOGY', 119, 'ELECTROLYTES', 950, 1, '2021-11-25 08:22:36'),
+(245, 'PATHOLOGY', 119, 'SEMEN ANALYSIS', 450, 1, '2021-11-25 08:22:36'),
+(246, 'PATHOLOGY', 119, 'CHOLOSTROL', 300, 1, '2021-11-25 08:22:36'),
+(247, 'PATHOLOGY', 119, 'GLUCOMATER', 100, 1, '2021-11-25 08:22:36'),
+(248, 'PATHOLOGY', 119, 'CPC/CP', 600, 1, '2021-11-25 08:22:36'),
+(249, 'PATHOLOGY', 119, 'SYNOVIAL FLUID C/S', 500, 1, '2021-11-25 08:22:36'),
+(250, 'PATHOLOGY', 119, 'TORCH PANCL TEST', 6000, 1, '2021-11-25 08:29:22'),
+(251, 'PATHOLOGY', 119, 'SGPT+SGOT+BILIRUBIN', 700, 1, '2021-11-25 08:29:22'),
+(252, 'PATHOLOGY', 119, 'BILIRUBIN\r\n', 250, 1, '2021-11-25 08:29:22'),
+(253, 'PATHOLOGY', 119, 'CALCIUM', 350, 1, '2021-11-25 08:29:22'),
+(254, 'PATHOLOGY', 119, 'PUS FOR C/S', 500, 1, '2021-11-25 08:29:22'),
+(255, 'PATHOLOGY', 119, '2 ABF', 100, 1, '2021-11-25 08:29:22'),
+(256, 'PATHOLOGY', 119, 'COAGULATION PROFILA', 900, 1, '2021-11-25 08:29:22'),
+(257, 'PATHOLOGY', 119, 'CEA', 1400, 1, '2021-11-25 08:29:22'),
+(258, 'PATHOLOGY', 119, 'BILIRUBIN(Total+Direct+Indirect)', 700, 1, '2021-11-25 08:29:22'),
+(259, 'PATHOLOGY', 119, 'AMYLASE', 800, 1, '2021-11-25 08:38:37'),
+(260, 'PATHOLOGY', 119, 'GTT', 360, 1, '2021-11-25 08:38:37'),
+(261, 'PATHOLOGY', 119, 'ASO\r\n', 550, 1, '2021-11-25 08:38:37'),
+(262, 'PATHOLOGY', 119, 'RA/RF TEST', 550, 1, '2021-11-25 08:38:37'),
+(263, 'PATHOLOGY', 119, 'FILIARIA(ICT)', 900, 1, '2021-11-25 08:38:37'),
+(264, 'PATHOLOGY', 119, 'TPHA(ICT)', 500, 1, '2021-11-25 08:38:37'),
+(265, 'PATHOLOGY', 119, 'APTT', 700, 1, '2021-11-25 08:38:37'),
+(266, 'PATHOLOGY', 119, 'GC PC', 350, 1, '2021-11-25 08:38:37'),
+(267, 'PATHOLOGY', 119, 'LIPID PROFILEⓇ', 940, 1, '2021-11-25 08:38:37'),
+(268, 'PATHOLOGY', 119, 'UMBILICAL C/S', 500, 1, '2021-11-25 08:38:37'),
+(269, 'PATHOLOGY', 119, 'ORAL SWAB ME', 100, 1, '2021-11-25 08:38:37'),
+(270, 'PATHOLOGY', 119, 'ORAL SWAB C/S', 500, 1, '2021-11-25 08:38:37'),
+(271, 'PATHOLOGY', 119, 'TOTAL PROTIEN', 350, 1, '2021-11-25 08:38:37'),
+(272, 'PATHOLOGY', 119, 'SPUTUM FOR C/S', 500, 1, '2021-11-25 08:43:20'),
+(273, 'PATHOLOGY', 119, 'ASCITIC FLUID FOR RE', 900, 1, '2021-11-25 08:43:20'),
+(274, 'PATHOLOGY', 119, 'HBsAg(Confermatory)\r\n', 900, 1, '2021-11-25 08:43:20'),
+(275, 'PATHOLOGY', 119, 'Screening Test, Cross matching & collection', 1000, 1, '2021-11-25 08:43:20'),
+(276, 'PATHOLOGY', 119, 'Dengo NSI', 500, 1, '2021-11-25 08:43:20'),
+(277, 'PATHOLOGY', 119, 'Vaccum Tube & Needle', 30, 1, '2021-11-25 08:43:20');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pathology_log`
+--
+
+CREATE TABLE `pathology_log` (
   `AI_ID` int(11) NOT NULL,
   `Test_No` int(11) NOT NULL,
+  `P_ID` longtext NOT NULL,
+  `R_ID` longtext NOT NULL,
+  `D_ID` longtext DEFAULT NULL,
+  `Discount` float DEFAULT NULL,
+  `Paid` int(11) DEFAULT NULL,
+  `Received` int(11) DEFAULT NULL,
+  `Changes` int(11) DEFAULT NULL,
+  `Payment_Status` longtext DEFAULT NULL,
+  `Due_Amount` int(11) DEFAULT NULL,
+  `Total_Amount` int(11) DEFAULT NULL,
+  `Payable_Amount` int(11) DEFAULT NULL,
+  `Reg_Date` date DEFAULT NULL,
+  `Delivery_Date` date DEFAULT NULL,
+  `Time_Stamp` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `pathology_log`
+--
+
+INSERT INTO `pathology_log` (`AI_ID`, `Test_No`, `P_ID`, `R_ID`, `D_ID`, `Discount`, `Paid`, `Received`, `Changes`, `Payment_Status`, `Due_Amount`, `Total_Amount`, `Payable_Amount`, `Reg_Date`, `Delivery_Date`, `Time_Stamp`) VALUES
+(11, 1, 'M-10122021-011', 'R-A-007', 'self', 25, 4540, 2000, 460, 'Due', 0, 6050, 4540, '2021-12-10', '2021-12-13', '2021-12-10 11:13:55');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pathology_test_log`
+--
+
+CREATE TABLE `pathology_test_log` (
+  `AI_ID` int(11) NOT NULL,
   `Test_Info_AI_ID` int(11) NOT NULL,
+  `Test_No` int(11) NOT NULL,
   `Fee` int(11) NOT NULL,
   `Time_Stamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `pathology_test_log`
+--
+
+INSERT INTO `pathology_test_log` (`AI_ID`, `Test_Info_AI_ID`, `Test_No`, `Fee`, `Time_Stamp`) VALUES
+(34, 223, 1, 1600, '2021-12-10 11:14:02'),
+(35, 47, 1, 1650, '2021-12-10 11:14:06'),
+(36, 101, 1, 1700, '2021-12-10 11:14:09'),
+(37, 98, 1, 1100, '2021-12-10 11:14:14');
 
 -- --------------------------------------------------------
 
@@ -895,7 +1417,53 @@ INSERT INTO `patients` (`AI_ID`, `P_ID`, `Patient_Name`, `Patient_Gender`, `Pati
 (7, 'M-18112021-007', 'Kalam', 'Male', 20, '01726706170', NULL, 'None', '18112021', '2021-11-18 09:28:46'),
 (8, 'M-18112021-008', 'POPY', 'Male', 25, '0160824947122', NULL, 'None', '18112021', '2021-11-18 09:34:09'),
 (9, 'M-18112021-009', 'ttgxg', 'Male', 22, 'hnbj2225', NULL, 'None', '18112021', '2021-11-18 09:37:20'),
-(10, 'F-18112021-010', 'sharmin akter', 'Female', 22, '01968482975', '0', 'None', '18112021', '2021-11-18 10:00:08');
+(10, 'F-18112021-010', 'sharmin akter', 'Female', 22, '01968482975', '0', 'None', '18112021', '2021-11-18 10:00:08'),
+(11, 'M-27112021-001', 'Jalal', 'Male', 20, '01982635147', NULL, 'None', '27112021', '2021-11-27 06:38:24'),
+(42, 'M-01122021-001', 'dental test', 'Male', 20, '01982635147', NULL, 'None', '01122021', '2021-12-01 10:24:04'),
+(43, 'M-01122021-002', 'dental test 01', 'Male', 20, '01982635147', NULL, 'None', '01122021', '2021-12-01 10:42:25'),
+(44, 'M-01122021-003', 'dental test 02', 'Male', 20, '161651658', NULL, 'None', '01122021', '2021-12-01 10:48:37'),
+(45, 'M-03122021-001', 'dental test', 'Male', 20, '01982635147', '1981981', 'Own', '03122021', '2021-12-03 12:10:46'),
+(46, 'M-03122021-002', 'dental test', 'Male', 20, '01982635147', '1235446981', 'None', '03122021', '2021-12-03 13:20:52'),
+(47, 'M-03122021-003', 'dental test', 'Male', 20, '01982635147', '1235446981', 'Own', '03122021', '2021-12-03 13:27:28'),
+(48, 'M-03122021-004', 'dental test', 'Male', 20, '01982635147', '1235446981', 'Own', '03122021', '2021-12-03 13:28:19'),
+(49, 'M-03122021-005', 'dental test 1', 'Male', 20, '01982635147', NULL, 'None', '03122021', '2021-12-03 13:33:34'),
+(50, 'M-04122021-001', 'Jamsed', 'Male', 20, '01982635147', '1235446981', 'Own', '04122021', '2021-12-04 08:00:12'),
+(51, 'M-04122021-002', 'Mohin', 'Male', 25, '181918618', '1981981', 'None', '04122021', '2021-12-04 08:40:02'),
+(52, 'M-07122021-001', 'Jalal', 'Male', 12, '181918618', '1235446981', 'None', '07122021', '2021-12-07 14:55:37'),
+(53, 'M-07122021-002', 'dental test', 'Male', 12, '181918618', '1235446981', 'None', '07122021', '2021-12-07 15:41:29'),
+(54, 'M-08122021-001', 'thasin', 'Male', 20, '01982635147', NULL, 'None', '08122021', '2021-12-07 19:22:52'),
+(55, 'M-08122021-002', 'thasin', 'Male', 20, '01982635147', NULL, 'None', '08122021', '2021-12-07 19:23:50'),
+(56, 'M-08122021-003', 'thasin', 'Male', 20, '01982635147', NULL, 'None', '08122021', '2021-12-07 19:24:28'),
+(57, 'M-08122021-004', 'thasin', 'Male', 20, '01982635147', NULL, 'None', '08122021', '2021-12-07 19:24:49'),
+(58, 'M-08122021-005', 'thasin', 'Male', 20, '01982635147', NULL, 'None', '08122021', '2021-12-07 19:30:55'),
+(59, 'M-08122021-006', 'pathology test', 'Male', 20, '01982635147', NULL, 'None', '08122021', '2021-12-08 05:32:28'),
+(60, 'M-08122021-007', 'pathology test 2', 'Male', 20, '01982635147', NULL, 'None', '08122021', '2021-12-08 06:43:29'),
+(61, 'M-08122021-008', 'pathology test 3', 'Male', 20, '01982635147', NULL, 'None', '08122021', '2021-12-08 09:44:00'),
+(62, 'M-09122021-001', 'pathology test 4', 'Male', 20, '01982635147', NULL, 'None', '09122021', '2021-12-09 15:23:47'),
+(63, 'M-09122021-002', 'p Test 01', 'Male', 20, '01982635147', NULL, 'None', '09122021', '2021-12-09 17:33:55'),
+(64, 'M-09122021-003', 'p Test 02', 'Male', 20, '01982635147', NULL, 'None', '09122021', '2021-12-09 17:38:56'),
+(65, 'M-09122021-004', 'p Test 03', 'Male', 20, '01982635147', NULL, 'None', '09122021', '2021-12-09 17:45:10'),
+(66, 'M-09122021-005', 'p Test 04', 'Male', 20, '01982635147', NULL, 'None', '09122021', '2021-12-09 17:54:20'),
+(67, 'M-09122021-006', 'dental test', 'Male', 12, '01982635147', NULL, 'None', '09122021', '2021-12-09 17:59:48'),
+(68, 'M-10122021-001', 'dental test', 'Male', 20, '01982635147', NULL, 'None', '10122021', '2021-12-09 18:01:48'),
+(69, 'M-10122021-002', 'dental test', 'Male', 20, '01982635147', NULL, 'None', '10122021', '2021-12-09 18:19:24'),
+(70, 'M-10122021-003', 'dental test', 'Male', 20, '01982635147', '1235446981', 'None', '10122021', '2021-12-09 18:35:15'),
+(71, 'M-10122021-004', 'dental test 10', 'Male', 20, '181918618', NULL, 'None', '10122021', '2021-12-09 18:46:30'),
+(72, 'M-10122021-005', 'dental test 20', 'Male', 20, '181918618', NULL, 'None', '10122021', '2021-12-09 19:05:10'),
+(73, 'M-10122021-006', 'Jalal', 'Male', 20, '01982635147', NULL, 'None', '10122021', '2021-12-09 19:09:25'),
+(74, 'M-10122021-007', 'dental test', 'Male', 20, '01982635147', NULL, 'None', '10122021', '2021-12-09 19:10:59'),
+(75, 'M-10122021-008', 'dental test', 'Male', 20, '01982635147', NULL, 'None', '10122021', '2021-12-09 19:17:42'),
+(76, 'M-10122021-009', 'dental test', 'Male', 20, '01982635147', '1235446981', 'None', '10122021', '2021-12-09 19:18:53'),
+(77, 'M-10122021-010', 'pathology test 01', 'Male', 20, '01982635147', '1235446981', 'Own', '10122021', '2021-12-10 10:14:01'),
+(78, 'M-10122021-011', 'Pathology 01', 'Male', 20, '01982635147', NULL, 'None', '10122021', '2021-12-10 11:13:55'),
+(79, 'M-10122021-012', 'dental test', 'Male', 20, '01982635147', NULL, 'None', '10122021', '2021-12-10 13:12:17'),
+(80, 'M-10122021-013', 'physio test', 'Male', 20, '01982635147', NULL, 'None', '10122021', '2021-12-10 17:12:17'),
+(81, 'M-11122021-001', 'physio 2', 'Male', 20, '01982635147', NULL, 'None', '11122021', '2021-12-10 18:10:23'),
+(82, 'M-11122021-002', 'physio 2', 'Male', 20, '01982635147', NULL, 'None', '11122021', '2021-12-10 18:10:51'),
+(83, 'M-11122021-003', 'physio 2', 'Male', 20, '01982635147', NULL, 'None', '11122021', '2021-12-10 18:11:56'),
+(84, 'M-11122021-004', 'physio 3', 'Male', 20, '01982635147', NULL, 'None', '11122021', '2021-12-10 18:20:20'),
+(85, 'M-11122021-005', 'physio 4', 'Male', 20, '01982635147', NULL, 'None', '11122021', '2021-12-10 18:45:38'),
+(86, 'M-11122021-006', 'physio 5', 'Male', 20, '01982635147', '1981981', 'Own', '11122021', '2021-12-10 19:21:04');
 
 -- --------------------------------------------------------
 
@@ -932,6 +1500,36 @@ INSERT INTO `patient_logs` (`AI_ID`, `P_ID`, `Ap_Date`, `Ap_Time`, `D_ID`, `Basi
 (2, 'M-18112021-003', '2021-11-18', '16:00:00-20:00:00', 'D-M-001', 1000, 20, 800, 0, 0, 'Paid', 0, NULL, 2, 929481, 'R-A-007', '2021-11-18 08:51:14'),
 (4, 'M-18112021-006', '2021-11-18', '16:00:00-20:00:00', 'D-M-001', 900, 25, 675, 800, 125, 'Paid', 0, NULL, 3, 879369, 'R-M-001', '2021-11-18 09:11:32'),
 (5, 'M-18112021-007', '2021-11-18', '16:00:00-20:00:00', 'D-M-001', 900, 10, 810, 1000, 190, 'Paid', 0, NULL, 4, 743904, 'R-M-003', '2021-11-18 09:28:46');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `physio_log`
+--
+
+CREATE TABLE `physio_log` (
+  `AI_ID` int(11) NOT NULL,
+  `P_ID` longtext NOT NULL,
+  `R_ID` longtext NOT NULL,
+  `D_ID` longtext NOT NULL,
+  `Received` int(11) NOT NULL,
+  `Changes` int(11) NOT NULL,
+  `Fee` int(11) NOT NULL,
+  `Reg_Date` date NOT NULL,
+  `Time_Stamp` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `physio_log`
+--
+
+INSERT INTO `physio_log` (`AI_ID`, `P_ID`, `R_ID`, `D_ID`, `Received`, `Changes`, `Fee`, `Reg_Date`, `Time_Stamp`) VALUES
+(1, 'M-10122021-013', 'R-A-007', 'D-M-041', 1000, 500, 0, '2021-12-10', '2021-12-10 17:12:17'),
+(2, 'M-11122021-002', 'R-A-007', 'D-M-041', 1000, 500, 0, '2021-12-11', '2021-12-10 18:10:51'),
+(3, 'M-11122021-003', 'R-A-007', 'D-M-041', 1000, 500, 0, '2021-12-11', '2021-12-10 18:11:56'),
+(4, 'M-11122021-004', 'R-A-007', 'D-M-041', 1000, 500, 250, '2021-12-11', '2021-12-10 18:20:20'),
+(5, 'M-11122021-005', 'R-A-007', 'D-M-041', 700, 200, 250, '2021-12-11', '2021-12-10 18:45:39'),
+(6, 'M-11122021-006', 'R-A-007', 'D-M-041', 1000, 500, 500, '2021-12-11', '2021-12-10 19:21:04');
 
 -- --------------------------------------------------------
 
@@ -991,351 +1589,13 @@ CREATE TABLE `surgeon_logs` (
   `Surgeon_Income` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
-
 --
--- Table structure for table `test_info`
+-- Dumping data for table `surgeon_logs`
 --
 
-CREATE TABLE `test_info` (
-  `AI_ID` int(11) NOT NULL,
-  `Groups` longtext NOT NULL,
-  `Test_Name` longtext NOT NULL,
-  `Test_Fee` int(11) NOT NULL,
-  `Time_Stamp` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `test_info`
---
-
-INSERT INTO `test_info` (`AI_ID`, `Groups`, `Test_Name`, `Test_Fee`, `Time_Stamp`) VALUES
-(1, 'PATHOLOGY', 'TIBC', 900, '2021-11-25 19:08:48'),
-(2, 'PATHOLOGY', 'FERRITIN', 1000, '2021-11-25 19:37:36'),
-(3, 'PATHOLOGY', 'IRON PROFILE', 2400, '2021-11-25 19:37:36'),
-(4, 'PATHOLOGY', 'CPK', 800, '2021-11-25 19:37:36'),
-(5, 'PATHOLOGY', 'ICT FOR FILARIA', 900, '2021-11-25 19:37:36'),
-(6, 'PATHOLOGY', 'ALBUMIN', 300, '2021-11-25 19:37:36'),
-(7, 'PATHOLOGY', 'PLEURAL FLUID PROTEN', 350, '2021-11-25 19:37:36'),
-(8, 'PATHOLOGY', 'WOUND SWAB C/S', 500, '2021-11-25 19:37:36'),
-(9, 'PATHOLOGY', 'STOOL FOR R/S', 200, '2021-11-25 19:37:36'),
-(10, 'PATHOLOGY', 'D-Dimar', 2400, '2021-11-25 19:37:36'),
-(11, 'PATHOLOGY', 'STOOL FOR RE', 100, '2021-11-25 19:37:36'),
-(12, 'PATHOLOGY', 'STOOL FOR OBT', 250, '2021-11-25 19:37:36'),
-(13, 'PATHOLOGY', 'STOOL FOR C/S', 500, '2021-11-25 19:37:36'),
-(14, 'PATHOLOGY', 'SPUTUM FOR AFB', 250, '2021-11-25 19:37:36'),
-(15, 'PATHOLOGY', 'ALDCHYDC TEST', 300, '2021-11-25 19:37:36'),
-(16, 'PATHOLOGY', 'NAIL SCRAPINC FUNGUS M/E', 350, '2021-11-25 19:37:36'),
-(17, 'PATHOLOGY', 'SKIN SCRAPINC FUNGUS M/E', 350, '2021-11-25 19:37:36'),
-(18, 'PATHOLOGY', 'P/S FOR GRAM STAIN C/S', 500, '2021-11-25 19:37:36'),
-(19, 'PATHOLOGY', 'EAR SAWB C/S', 500, '2021-11-25 19:37:36'),
-(20, 'PATHOLOGY', 'PUS FOR AFB', 250, '2021-11-25 19:37:36'),
-(21, 'PATHOLOGY', 'P/S FOR GRAM STAIN', 350, '2021-11-25 19:37:36'),
-(22, 'PATHOLOGY', 'URINE PROTEIN(Micro)', 350, '2021-11-25 19:37:36'),
-(23, 'PATHOLOGY', 'BONE MARROW STUDY', 1500, '2021-11-25 19:37:36'),
-(24, 'PATHOLOGY', 'GROUPING & Rh FACTOR', 150, '2021-11-25 19:37:36'),
-(25, 'PATHOLOGY', 'PCV', 150, '2021-11-25 19:37:36'),
-(26, 'PATHOLOGY', 'MCV', 100, '2021-11-25 19:37:36'),
-(27, 'PATHOLOGY', 'MCHC', 100, '2021-11-25 19:37:36'),
-(28, 'PATHOLOGY', 'MCH', 100, '2021-11-25 19:37:36'),
-(29, 'PATHOLOGY', 'MP', 150, '2021-11-25 19:37:36'),
-(30, 'PATHOLOGY', 'LDH', 900, '2021-11-25 19:37:36'),
-(31, 'PATHOLOGY', 'BT(Bleeding Time)', 120, '2021-11-25 19:37:36'),
-(32, 'PATHOLOGY', 'HDL-CHOLESTEROL', 300, '2021-11-25 19:37:36'),
-(33, 'PATHOLOGY', 'CSF FOR SUGAR', 120, '2021-11-25 19:37:36'),
-(34, 'PATHOLOGY', 'CSF FOR PROTIEN', 900, '2021-11-25 19:37:36'),
-(35, 'PATHOLOGY', 'CREATININE', 350, '2021-11-25 19:37:36'),
-(36, 'PATHOLOGY', 'BUN(BLOOD UREA NITROGEN)', 300, '2021-11-25 19:37:36'),
-(37, 'PATHOLOGY', 'UREA', 300, '2021-11-25 19:37:36'),
-(38, 'PATHOLOGY', 'HBsAg(ELISA)', 1000, '2021-11-25 19:37:36'),
-(39, 'PATHOLOGY', 'G 6-PD ACTIVITIES', 1100, '2021-11-25 19:37:36'),
-(40, 'PATHOLOGY', 'BEFORE DINNER', 120, '2021-11-25 19:37:36'),
-(41, 'PATHOLOGY', 'BEFORE LUNCH', 120, '2021-11-25 19:37:36'),
-(42, 'PATHOLOGY', '2Hrs AFTER DINNER', 120, '2021-11-25 19:37:36'),
-(43, 'PATHOLOGY', 'B-HCG', 1600, '2021-11-25 19:37:36'),
-(44, 'PATHOLOGY', 'PROTINE PROFILE', 900, '2021-11-25 19:37:36'),
-(45, 'PATHOLOGY', 'ALKALINE PROSPHATASE', 260, '2021-11-25 19:37:36'),
-(46, 'PATHOLOGY', 'HAV IgM(ICT)', 900, '2021-11-25 19:37:36'),
-(47, 'PATHOLOGY', 'ASO+CRP+RA', 1650, '2021-11-25 19:37:36'),
-(48, 'PATHOLOGY', '2Hrs AFTER LUNCH', 120, '2021-11-25 19:37:36'),
-(49, 'PATHOLOGY', 'THROST SWAB C/S', 500, '2021-11-25 19:37:36'),
-(50, 'PATHOLOGY', 'PC', 150, '2021-11-25 19:37:36'),
-(51, 'PATHOLOGY', 'MALARIA(ICT)', 900, '2021-11-25 19:37:36'),
-(52, 'PATHOLOGY', 'VDRL-QUANTITATIVE TEST(Q&Q)', 450, '2021-11-25 19:37:36'),
-(53, 'PATHOLOGY', 'RA/RF TEST(RHEUMATOID FACTOR)', 550, '2021-11-25 19:37:36'),
-(54, 'PATHOLOGY', 'ICT FOR TB', 900, '2021-11-25 19:37:36'),
-(55, 'PATHOLOGY', 'ICT FOR KALA AZAR', 900, '2021-11-25 19:37:36'),
-(56, 'PATHOLOGY', 'ICT FOR MALARIA', 900, '2021-11-25 19:37:36'),
-(57, 'PATHOLOGY', 'COOMBS TEST(Direct & Indirect)', 1000, '2021-11-25 19:37:36'),
-(58, 'PATHOLOGY', 'CFT FOR KALA AZAR', 800, '2021-11-25 19:37:36'),
-(59, 'PATHOLOGY', 'CFT FOR FILARIA', 800, '2021-11-25 19:37:36'),
-(60, 'PATHOLOGY', 'CRP', 550, '2021-11-25 19:37:36'),
-(61, 'PATHOLOGY', 'TOTAL RBC COUNT', 150, '2021-11-25 19:37:36'),
-(62, 'PATHOLOGY', 'TC DC OF WBC', 300, '2021-11-25 19:37:36'),
-(63, 'PATHOLOGY', 'PROTHROMBIN TIME(PT)', 500, '2021-11-25 19:37:36'),
-(64, 'PATHOLOGY', 'PLATELET COUNT(TPC)', 150, '2021-11-25 19:37:36'),
-(65, 'PATHOLOGY', 'SYNOVIAL FLUID STUDY', 900, '2021-11-25 19:37:36'),
-(66, 'PATHOLOGY', 'ESR', 100, '2021-11-25 19:37:36'),
-(67, 'PATHOLOGY', 'CT(Clotting Time)', 120, '2021-11-25 19:37:36'),
-(68, 'PATHOLOGY', 'Culating Eosinophil Count(TCEC)', 150, '2021-11-25 19:37:36'),
-(69, 'PATHOLOGY', 'SGPT(ALT)', 250, '2021-11-25 19:37:36'),
-(70, 'PATHOLOGY', 'VDRL', 260, '2021-11-25 19:37:36'),
-(71, 'PATHOLOGY', 'DENGO IgG-IgM(ICT)', 900, '2021-11-25 19:37:36'),
-(72, 'PATHOLOGY', 'FBS', 120, '2021-11-25 19:37:36'),
-(73, 'PATHOLOGY', 'CREATININE', 300, '2021-11-25 19:37:36'),
-(74, 'PATHOLOGY', 'LIPID PROFILE(F)', 940, '2021-11-25 19:37:36'),
-(75, 'PATHOLOGY', 'WIDAL TEST', 360, '2021-11-25 19:37:36'),
-(76, 'PATHOLOGY', 'TRIGLYECRIDE(Tg)', 300, '2021-11-25 19:37:36'),
-(77, 'PATHOLOGY', 'CP+MP+PC', 750, '2021-11-25 19:37:36'),
-(78, 'PATHOLOGY', 'RBS', 120, '2021-11-25 19:37:36'),
-(79, 'PATHOLOGY', 'UREA CREATININE', 600, '2021-11-25 19:37:36'),
-(80, 'ULTRASONOGRAPHY', 'W/A(COLOUR)', 1100, '2021-11-25 13:27:32'),
-(81, 'ULTRASONOGRAPHY', 'PELVIC ORGAN', 1100, '2021-11-25 13:43:12'),
-(82, 'ULTRASONOGRAPHY', 'KNEE', 1100, '2021-11-25 13:43:12'),
-(83, 'ULTRASONOGRAPHY', 'PELVIC ORGAN (Colour)', 1100, '2021-11-25 13:43:12'),
-(84, 'ULTRASONOGRAPHY', 'KUB (Colour)', 1100, '2021-11-25 13:43:12'),
-(85, 'ULTRASONOGRAPHY', 'HBS (Colour)', 1100, '2021-11-25 13:43:12'),
-(86, 'ULTRASONOGRAPHY', 'PREGNANCY PROFILE (Colour)', 1100, '2021-11-25 13:43:12'),
-(87, 'ULTRASONOGRAPHY', 'CAROTIED (Colour)', 1100, '2021-11-25 13:43:12'),
-(88, 'ULTRASONOGRAPHY', 'BREST (Colour)', 1100, '2021-11-25 13:43:12'),
-(89, 'ULTRASONOGRAPHY', 'THYROID (Colour)', 1500, '2021-11-25 13:43:12'),
-(90, 'ULTRASONOGRAPHY', 'THIGT (Colour)', 1100, '2021-11-25 13:43:12'),
-(91, 'ULTRASONOGRAPHY', 'W/A', 1100, '2021-11-25 13:43:12'),
-(92, 'ULTRASONOGRAPHY', 'PAROTIED (Colour)', 1100, '2021-11-25 13:43:12'),
-(93, 'ULTRASONOGRAPHY', 'HBS', 1100, '2021-11-25 13:43:12'),
-(94, 'ULTRASONOGRAPHY', 'KUB', 1100, '2021-11-25 13:43:12'),
-(95, 'ULTRASONOGRAPHY', 'PREGNANCY PROFILE', 1100, '2021-11-25 13:43:12'),
-(96, 'ULTRASONOGRAPHY', 'L/A', 1100, '2021-11-25 13:43:12'),
-(97, 'ULTRASONOGRAPHY', 'SCROTUM', 1100, '2021-11-25 13:43:12'),
-(98, 'ULTRASONOGRAPHY', 'PANIS', 1100, '2021-11-25 13:43:12'),
-(99, 'ULTRASONOGRAPHY', 'KUB & PELVIC', 1100, '2021-11-25 13:43:12'),
-(100, 'ULTRASONOGRAPHY', 'MSK', 1500, '2021-11-25 13:43:12'),
-(101, 'MORE_TESTS', 'ENDOSCOPY', 1700, '2021-11-25 13:43:12'),
-(102, 'MORE_TESTS', 'ECG', 300, '2021-11-25 13:43:12'),
-(103, 'HORMONE', 'PROGESTERONE', 1200, '2021-11-25 14:00:16'),
-(104, 'HORMONE', 'OESTROGEN', 1200, '2021-11-25 14:00:16'),
-(105, 'HORMONE', 'DNA', 1600, '2021-11-25 14:00:16'),
-(106, 'HORMONE', 'ANA', 1200, '2021-11-25 14:00:16'),
-(107, 'HORMONE', 'Anti CCP', 2200, '2021-11-25 14:00:16'),
-(108, 'HORMONE', 'TESTOSTERONE', 1200, '2021-11-25 14:00:16'),
-(109, 'HORMONE', 'T3 T4 TSH', 2700, '2021-11-25 14:00:16'),
-(110, 'HORMONE', 'PROLACTIN(PRL)', 1200, '2021-11-25 14:00:16'),
-(111, 'HORMONE', 'IgE', 1100, '2021-11-25 14:00:16'),
-(112, 'HORMONE', 'LH', 1200, '2021-11-25 14:00:16'),
-(113, 'HORMONE', 'FSH', 1200, '2021-11-25 14:00:16'),
-(114, 'HORMONE', 'FT4', 1200, '2021-11-25 14:00:16'),
-(115, 'HORMONE', 'FT3', 1200, '2021-11-25 14:00:16'),
-(116, 'HORMONE', 'T4', 900, '2021-11-25 14:00:16'),
-(117, 'HORMONE', 'T3', 900, '2021-11-25 14:00:16'),
-(118, 'HORMONE', 'TSH', 900, '2021-11-25 14:00:16'),
-(119, 'HORMONE', 'PSA', 1200, '2021-11-25 14:00:16'),
-(120, 'X-RAY', 'X-RAY PALVIS WITH BOTH HIP JT', 500, '2021-11-25 20:17:04'),
-(121, 'X-RAY', 'X-RAY THIGHT LT B/V', 600, '2021-11-25 20:23:05'),
-(122, 'X-RAY', 'X-RAY THIGHT LT B/V', 600, '2021-11-25 20:23:05'),
-(123, 'X-RAY', 'X-RAY HUMERUS(ARM)RT B/V', 400, '2021-11-25 20:23:05'),
-(124, 'X-RAY', 'X-RAY HUMERUS(ARM)RT B/V', 400, '2021-11-25 20:23:05'),
-(125, 'X-RAY', 'X-RAY HP LT L/V', 400, '2021-11-25 20:23:05'),
-(126, 'X-RAY', 'X-RAY HP RT L/V', 400, '2021-11-25 20:23:05'),
-(127, 'X-RAY', 'X-RAY ABDOMEN SUPPER POSITION', 500, '2021-11-25 20:23:05'),
-(128, 'X-RAY', 'X-RAY BOTH SI JT A/P', 500, '2021-11-25 20:23:05'),
-(129, 'X-RAY', 'X-RAY CHEST OBLIQUE VIEW (CHILD)', 400, '2021-11-25 20:23:05'),
-(130, 'X-RAY', 'X-RAY FISTOLOGRAM', 2000, '2021-11-25 20:23:05'),
-(131, 'X-RAY', 'X-RAY SI JOINT', 1000, '2021-11-25 20:23:05'),
-(132, 'X-RAY', 'X-RAY RGU & MCU', 2000, '2021-11-25 20:23:05'),
-(133, 'X-RAY', 'X-RAY FACT B/V', 800, '2021-11-25 20:23:05'),
-(134, 'X-RAY', 'X-RAY RT SI JOINT', 700, '2021-11-25 20:23:05'),
-(135, 'X-RAY', 'X-RAY ORBIT B/V', 600, '2021-11-25 20:23:05'),
-(136, 'X-RAY', 'X-RAY PNS', 400, '2021-11-25 07:32:12'),
-(137, 'X-RAY', 'X-RAY DORSAL LUMBER SPINE B/V', 800, '2021-11-25 07:35:54'),
-(138, 'X-RAY', 'X-RAY CHEST OBLIQUE VIEW', 500, '2021-11-25 07:36:53'),
-(139, 'X-RAY', 'X-RAY CHEST A/P VIEW', 500, '2021-11-25 07:38:43'),
-(140, 'X-RAY', 'X-RAY STENUM L/V', 450, '2021-11-25 07:39:27'),
-(141, 'X-RAY', 'X-RAY CHEST L/V(CHILD)', 400, '2021-11-25 07:40:19'),
-(142, 'X-RAY', 'X-RAY CERVICAL SPINE B/V', 700, '2021-11-25 07:41:34'),
-(143, 'X-RAY', 'X-RAY MASTOIDA TOWNES & STENVERS VIEW ', 800, '2021-11-25 07:47:51'),
-(144, 'X-RAY', 'X-RAY SACRO - COCCYGEAL B/VIEW', 700, '2021-11-25 07:47:51'),
-(145, 'X-RAY', 'X-RAY ABDOMEN ERECT POSITION ', 550, '2021-11-25 08:04:40'),
-(146, 'X-RAY', 'X-RAY SKULL A/P ', 450, '2021-11-25 08:04:40'),
-(147, 'X-RAY', 'X-RAY SKULL A/P & LN', 800, '2021-11-25 08:04:40'),
-(148, 'X-RAY', 'X-RAY ANKLE LT B/V', 400, '2021-11-25 08:04:40'),
-(149, 'X-RAY', 'X-RAY ANKLE RT B/V', 400, '2021-11-25 08:04:40'),
-(150, 'X-RAY', 'X-RAY FOOT LT B/V', 400, '2021-11-25 08:04:40'),
-(151, 'X-RAY', 'X-RAY CHEST P/A VIEW(CHILD)', 400, '2021-11-25 08:04:40'),
-(152, 'X-RAY', 'X-RAY NECK A/P & L/V', 700, '2021-11-25 08:04:40'),
-(153, 'X-RAY', 'X-RAY NECK L/V', 400, '2021-11-25 08:04:40'),
-(154, 'X-RAY', 'X-RAY FOREARM LT B/V', 400, '2021-11-25 08:04:40'),
-(155, 'X-RAY', 'X-RAY FOREARM RT B/V ', 400, '2021-11-25 08:04:40'),
-(156, 'X-RAY', 'X-RAY HEEL(CALCANE LT WV', 400, '2021-11-25 08:04:40'),
-(157, 'X-RAY', 'X-RAY HEEL CALCANEUM)RT B/V', 400, '2021-11-25 08:04:40'),
-(158, 'X-RAY', 'X-RAY TIBIA & FIBULA LT', 600, '2021-11-25 08:04:40'),
-(159, 'X-RAY', 'X-RAY NOSALBONE', 400, '2021-11-25 08:04:40'),
-(160, 'X-RAY', 'X-RAY NASOPHARYNX L/V', 400, '2021-11-25 08:04:40'),
-(161, 'X-RAY', 'X-RAY LEG RT B/V', 600, '2021-11-25 08:04:40'),
-(162, 'X-RAY', 'X-RAY LEG LT B/V', 600, '2021-11-25 08:04:40'),
-(163, 'X-RAY', 'X-RAY KNEE RT B/V', 400, '2021-11-25 08:04:40'),
-(164, 'X-RAY', 'X-RAY KNEE LT B/V', 700, '2021-11-25 08:04:40'),
-(165, 'X-RAY', 'X-RAY HUMERUS RT B/V', 400, '2021-11-25 08:06:56'),
-(166, 'X-RAY', 'X-RAY HUMERUS LT B/V', 400, '2021-11-25 08:06:56'),
-(167, 'X-RAY', 'X-RAY HIP RT B/V', 800, '2021-11-25 08:25:47'),
-(168, 'X-RAY', 'X-RAY HIP LT B/V', 800, '2021-11-25 08:25:47'),
-(169, 'X-RAY', 'X-RAY CALCANEUM LT B/V', 400, '2021-11-25 08:25:47'),
-(170, 'X-RAY', 'X-RAY HAND RT B/V', 400, '2021-11-25 08:25:47'),
-(171, 'X-RAY', 'X-RAY CLAVICLE RT AP/V', 400, '2021-11-25 08:25:47'),
-(172, 'X-RAY', 'X-RAY CHEST P/A VIEW', 500, '2021-11-25 08:25:47'),
-(173, 'X-RAY', 'X-RAY WRIST RT B/V', 400, '2021-11-25 08:25:47'),
-(174, 'X-RAY', 'X-RAY CLAVICLE LT B/V', 400, '2021-11-25 08:25:47'),
-(175, 'X-RAY', 'X-RAY L/S SPINE B/V', 800, '2021-11-25 08:25:47'),
-(176, 'X-RAY', 'X-RAY CHEST L/V', 500, '2021-11-25 08:25:47'),
-(177, 'X-RAY', 'X-RAY CHEST A/P VIEW', 500, '2021-11-25 08:25:47'),
-(178, 'X-RAY', 'X-RAY CHEST OBLIQUE VIEW', 500, '2021-11-25 08:25:47'),
-(179, 'X-RAY', 'X-RAY MANDIBLE', 1000, '2021-11-25 08:25:47'),
-(180, 'X-RAY', 'X-RAY TM JT B/V', 1200, '2021-11-25 08:25:47'),
-(181, 'X-RAY', 'X-RAY D/L SPINE B/V', 800, '2021-11-25 08:25:47'),
-(182, 'X-RAY', 'X-RAY KUB REIGON (PLAIN)', 550, '2021-11-25 08:25:47'),
-(183, 'X-RAY', 'X-RAY SHOULDER RT B/V', 650, '2021-11-25 08:25:47'),
-(184, 'X-RAY', 'X-RAY ELBOW LT B/V', 400, '2021-11-25 08:25:47'),
-(185, 'X-RAY', 'X-RAY IVU', 2800, '2021-11-25 08:25:47'),
-(186, 'X-RAY', 'X-RAY DORSAL SPINE', 800, '2021-11-25 08:25:47'),
-(187, 'X-RAY', 'X-RAY FEMAR LT B/V', 600, '2021-11-25 08:25:47'),
-(188, 'X-RAY', 'X-RAY FEMAR RT WV', 600, '2021-11-25 08:25:47'),
-(189, 'X-RAY', 'X-RAY HAND LT B/V', 400, '2021-11-25 08:25:47'),
-(190, 'X-RAY', 'X-RAY SUBMANDIBULA REGION', 800, '2021-11-25 08:25:47'),
-(191, 'X-RAY', 'X-RAY MCU', 1800, '2021-11-25 08:25:47'),
-(192, 'X-RAY', 'X-RAY RGU', 1800, '2021-11-25 08:25:47'),
-(193, 'X-RAY', 'X-RAY FOOT RT B/V', 400, '2021-11-25 08:25:47'),
-(194, 'X-RAY', 'X-RAY WRIST LT B/V', 400, '2021-11-25 08:25:47'),
-(195, 'X-RAY', 'X-RAY ELBOW RT B/V', 400, '2021-11-25 08:25:47'),
-(196, 'X-RAY', 'X-RAY SKULL L/V', 400, '2021-11-25 08:25:47'),
-(197, 'X-RAY', 'X-RAY NECK A/P VIEW', 400, '2021-11-25 08:25:47'),
-(198, 'X-RAY', 'X-RAY TIBIA & FIULA RT B/V', 600, '2021-11-25 08:25:47'),
-(199, 'X-RAY', 'X-RAY CALCANEUM RT B/V', 400, '2021-11-25 08:25:47'),
-(200, 'X-RAY', 'X-RAY SHOULDER LT B/V', 650, '2021-11-25 08:25:47'),
-(201, 'X-RAY', 'X-RAY PALVIS A/P VIEW', 500, '2021-11-25 08:25:47'),
-(202, 'PATHOLOGY', 'FNAC', 720, '2021-11-25 07:33:28'),
-(203, 'PATHOLOGY', 'PAPF SMER', 500, '2021-11-25 07:35:54'),
-(204, 'PATHOLOGY', ' CARDIAC EANZIME', 2500, '2021-11-25 07:38:01'),
-(205, 'PATHOLOGY', 'SPUTUM FOR GRAM STAIN', 300, '2021-11-25 07:39:35'),
-(206, 'PATHOLOGY', 'CSF STUDY', 900, '2021-11-25 07:40:40'),
-(207, 'PATHOLOGY', ' 24hr URINE TOTAL PROTIEN', 500, '2021-11-25 07:43:44'),
-(208, 'PATHOLOGY', 'URINE FOR ALBUMIN', 120, '2021-11-25 07:43:44'),
-(209, 'PATHOLOGY', 'URINE SUGAR', 120, '2021-11-25 07:43:44'),
-(210, 'PATHOLOGY', ' URINE C/S', 500, '2021-11-25 07:58:14'),
-(211, 'PATHOLOGY', 'URINE RE', 100, '2021-11-25 07:58:14'),
-(212, 'PATHOLOGY', 'ANTIBODY HSV2 ', 1100, '2021-11-25 07:58:14'),
-(213, 'PATHOLOGY', 'ANTIBODY HSBI', 1100, '2021-11-25 07:58:14'),
-(214, 'PATHOLOGY', 'HBeAg(ICT)', 900, '2021-11-25 07:58:14'),
-(215, 'PATHOLOGY', 'CA-242', 1600, '2021-11-25 07:58:14'),
-(216, 'PATHOLOGY', 'CA-153', 1600, '2021-11-25 07:58:14'),
-(217, 'PATHOLOGY', 'CA-199', 1600, '2021-11-25 07:58:14'),
-(218, 'PATHOLOGY', 'CA-125', 1600, '2021-11-25 07:58:14'),
-(219, 'PATHOLOGY', 'HCV(ICT)', 900, '2021-11-25 07:58:14'),
-(220, 'PATHOLOGY', 'DENGU(ICT)', 900, '2021-11-25 07:58:14'),
-(221, 'PATHOLOGY', 'HEV IgM(ICT)', 900, '2021-11-25 07:58:14'),
-(222, 'PATHOLOGY', ' HIV(I+II)ICT ', 900, '2021-11-25 07:58:14'),
-(223, 'PATHOLOGY', 'ALFA FETO PROTIEN', 1600, '2021-11-25 07:58:14'),
-(224, 'PATHOLOGY', '  MT(MATOUX TEST)', 300, '2021-11-25 08:04:37'),
-(225, 'PATHOLOGY', 'VEGANA SWAB C/S', 500, '2021-11-25 08:04:37'),
-(226, 'PATHOLOGY', 'VIRAL PROFILE\r\n', 4200, '2021-11-25 08:04:37'),
-(227, 'PATHOLOGY', 'HDAIC', 1000, '2021-11-25 08:04:37'),
-(228, 'PATHOLOGY', 'HBsAg(ICT)', 420, '2021-11-25 08:04:37'),
-(229, 'PATHOLOGY', 'IRON', 900, '2021-11-25 08:04:37'),
-(230, 'PATHOLOGY', 'SGOT(AST)', 250, '2021-11-25 08:04:37'),
-(231, 'PATHOLOGY', 'LIVER FUNCTION TEST(LFT)', 850, '2021-11-25 08:04:37'),
-(232, 'PATHOLOGY', '  CKMB', 950, '2021-11-25 08:12:11'),
-(233, 'PATHOLOGY', 'PERITIAL BLOOD FLIM(PBF)', 420, '2021-11-25 08:12:11'),
-(234, 'PATHOLOGY', 'TROPININ-I\r\n', 1000, '2021-11-25 08:12:11'),
-(235, 'PATHOLOGY', 'HB%', 150, '2021-11-25 08:12:11'),
-(236, 'PATHOLOGY', 'BTCT', 220, '2021-11-25 08:12:11'),
-(237, 'PATHOLOGY', 'TCEC', 150, '2021-11-25 08:12:11'),
-(238, 'PATHOLOGY', 'TPC', 150, '2021-11-25 08:12:11'),
-(239, 'PATHOLOGY', 'URIC ACID', 300, '2021-11-25 08:12:11'),
-(240, 'PATHOLOGY', ' SPUTUM FOR AFB(3 day)', 750, '2021-11-25 08:12:11'),
-(241, 'PATHOLOGY', '   Rh-Antibody Titre', 800, '2021-11-25 08:22:36'),
-(242, 'PATHOLOGY', 'URINE PT', 200, '2021-11-25 08:22:36'),
-(243, 'PATHOLOGY', 'TC DC\r\n', 300, '2021-11-25 08:22:36'),
-(244, 'PATHOLOGY', 'ELECTROLYTES', 950, '2021-11-25 08:22:36'),
-(245, 'PATHOLOGY', 'SEMEN ANALYSIS', 450, '2021-11-25 08:22:36'),
-(246, 'PATHOLOGY', 'CHOLOSTROL', 300, '2021-11-25 08:22:36'),
-(247, 'PATHOLOGY', 'GLUCOMATER', 100, '2021-11-25 08:22:36'),
-(248, 'PATHOLOGY', 'CPC/CP', 600, '2021-11-25 08:22:36'),
-(249, 'PATHOLOGY', 'SYNOVIAL FLUID C/S', 500, '2021-11-25 08:22:36'),
-(250, 'PATHOLOGY', '   TORCH PANCL TEST', 6000, '2021-11-25 08:29:22'),
-(251, 'PATHOLOGY', 'SGPT+SGOT+BILIRUBIN', 700, '2021-11-25 08:29:22'),
-(252, 'PATHOLOGY', 'BILIRUBIN\r\n', 250, '2021-11-25 08:29:22'),
-(253, 'PATHOLOGY', ' CALCIUM', 350, '2021-11-25 08:29:22'),
-(254, 'PATHOLOGY', 'PUS FOR C/S', 500, '2021-11-25 08:29:22'),
-(255, 'PATHOLOGY', '2 ABF', 100, '2021-11-25 08:29:22'),
-(256, 'PATHOLOGY', 'COAGULATION PROFILA', 900, '2021-11-25 08:29:22'),
-(257, 'PATHOLOGY', 'CEA', 1400, '2021-11-25 08:29:22'),
-(258, 'PATHOLOGY', 'BILIRUBIN(Total+Direct+Indirect)', 700, '2021-11-25 08:29:22'),
-(259, 'PATHOLOGY', '   AMYLASE', 800, '2021-11-25 08:38:37'),
-(260, 'PATHOLOGY', 'GTT', 360, '2021-11-25 08:38:37'),
-(261, 'PATHOLOGY', 'ASO\r\n', 550, '2021-11-25 08:38:37'),
-(262, 'PATHOLOGY', ' RA/RF TEST', 550, '2021-11-25 08:38:37'),
-(263, 'PATHOLOGY', 'FILIARIA(ICT)', 900, '2021-11-25 08:38:37'),
-(264, 'PATHOLOGY', 'TPHA(ICT)', 500, '2021-11-25 08:38:37'),
-(265, 'PATHOLOGY', 'APTT', 700, '2021-11-25 08:38:37'),
-(266, 'PATHOLOGY', 'GC PC', 350, '2021-11-25 08:38:37'),
-(267, 'PATHOLOGY', 'LIPID PROFILEⓇ', 940, '2021-11-25 08:38:37'),
-(268, 'PATHOLOGY', 'UMBILICAL C/S', 500, '2021-11-25 08:38:37'),
-(269, 'PATHOLOGY', 'ORAL SWAB ME', 100, '2021-11-25 08:38:37'),
-(270, 'PATHOLOGY', 'ORAL SWAB C/S', 500, '2021-11-25 08:38:37'),
-(271, 'PATHOLOGY', 'TOTAL PROTIEN', 350, '2021-11-25 08:38:37'),
-(272, 'PATHOLOGY', '   SPUTUM FOR C/S', 500, '2021-11-25 08:43:20'),
-(273, 'PATHOLOGY', 'ASCITIC FLUID FOR RE', 900, '2021-11-25 08:43:20'),
-(274, 'PATHOLOGY', 'HBsAg(Confermatory)\r\n', 900, '2021-11-25 08:43:20'),
-(275, 'PATHOLOGY', ' Screening Test, Cross maching & collection\r\n', 1000, '2021-11-25 08:43:20'),
-(276, 'PATHOLOGY', 'Dengo NSI', 500, '2021-11-25 08:43:20'),
-(277, 'PATHOLOGY', 'Vaccum Tube & Needle', 30, '2021-11-25 08:43:20');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `test_log`
---
-
-CREATE TABLE `test_log` (
-  `AI_ID` int(11) NOT NULL,
-  `Dental_Test_No` int(11) NOT NULL,
-  `P_ID` longtext NOT NULL,
-  `R_ID` longtext NOT NULL,
-  `D_ID` longtext NOT NULL,
-  `Paid` int(11) NOT NULL,
-  `Received` int(11) NOT NULL,
-  `Changes` int(11) NOT NULL,
-  `Payment_Status` longtext NOT NULL,
-  `Due_Amount` int(11) NOT NULL,
-  `Total_Amount` int(11) NOT NULL,
-  `Time_Stamp` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `usg`
---
-
-CREATE TABLE `usg` (
-  `AI_ID` int(11) NOT NULL,
-  `Test_No` int(11) NOT NULL,
-  `Test_Info_AI_ID` int(11) NOT NULL,
-  `Fee` int(11) NOT NULL,
-  `Time_Stamp` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `x_ray`
---
-
-CREATE TABLE `x_ray` (
-  `AI_ID` int(11) NOT NULL,
-  `Test_No` int(11) NOT NULL,
-  `Test_Info_AI_ID` int(11) NOT NULL,
-  `Fee` int(11) NOT NULL,
-  `Time_Stamp` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+INSERT INTO `surgeon_logs` (`AI_ID`, `D_ID`, `O_ID`, `Surgeon_Name`, `Surgeon_Fee`, `Surgeon_Discount`, `Surgeon_Income`) VALUES
+(18, 'D-F-025', '1', 'Dr S. Parvin Sadique', 1000, 200, 800),
+(19, 'D-F-038', '1', 'Brig Gen Dr. Sabina Yeasmin', 500, 0, 500);
 
 --
 -- Indexes for dumped tables
@@ -1420,12 +1680,6 @@ ALTER TABLE `emergency_log`
   ADD PRIMARY KEY (`AI_ID`);
 
 --
--- Indexes for table `hormone`
---
-ALTER TABLE `hormone`
-  ADD PRIMARY KEY (`AI_ID`);
-
---
 -- Indexes for table `hospital_income_log`
 --
 ALTER TABLE `hospital_income_log`
@@ -1435,12 +1689,6 @@ ALTER TABLE `hospital_income_log`
 -- Indexes for table `logins`
 --
 ALTER TABLE `logins`
-  ADD PRIMARY KEY (`AI_ID`);
-
---
--- Indexes for table `more_tests`
---
-ALTER TABLE `more_tests`
   ADD PRIMARY KEY (`AI_ID`);
 
 --
@@ -1492,9 +1740,21 @@ ALTER TABLE `ot_schedules`
   ADD PRIMARY KEY (`AI_ID`);
 
 --
--- Indexes for table `pathology`
+-- Indexes for table `pathology_info`
 --
-ALTER TABLE `pathology`
+ALTER TABLE `pathology_info`
+  ADD PRIMARY KEY (`AI_ID`);
+
+--
+-- Indexes for table `pathology_log`
+--
+ALTER TABLE `pathology_log`
+  ADD PRIMARY KEY (`AI_ID`);
+
+--
+-- Indexes for table `pathology_test_log`
+--
+ALTER TABLE `pathology_test_log`
   ADD PRIMARY KEY (`AI_ID`);
 
 --
@@ -1510,6 +1770,12 @@ ALTER TABLE `patient_logs`
   ADD PRIMARY KEY (`AI_ID`);
 
 --
+-- Indexes for table `physio_log`
+--
+ALTER TABLE `physio_log`
+  ADD PRIMARY KEY (`AI_ID`);
+
+--
 -- Indexes for table `receptionists`
 --
 ALTER TABLE `receptionists`
@@ -1519,24 +1785,6 @@ ALTER TABLE `receptionists`
 -- Indexes for table `surgeon_logs`
 --
 ALTER TABLE `surgeon_logs`
-  ADD PRIMARY KEY (`AI_ID`);
-
---
--- Indexes for table `test_info`
---
-ALTER TABLE `test_info`
-  ADD PRIMARY KEY (`AI_ID`);
-
---
--- Indexes for table `usg`
---
-ALTER TABLE `usg`
-  ADD PRIMARY KEY (`AI_ID`);
-
---
--- Indexes for table `x_ray`
---
-ALTER TABLE `x_ray`
   ADD PRIMARY KEY (`AI_ID`);
 
 --
@@ -1559,13 +1807,13 @@ ALTER TABLE `account_variables`
 -- AUTO_INCREMENT for table `admission_logs`
 --
 ALTER TABLE `admission_logs`
-  MODIFY `A_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `A_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `anesthesiologist_logs`
 --
 ALTER TABLE `anesthesiologist_logs`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `beds`
@@ -1577,7 +1825,7 @@ ALTER TABLE `beds`
 -- AUTO_INCREMENT for table `bed_invigilators`
 --
 ALTER TABLE `bed_invigilators`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `dental_info`
@@ -1589,25 +1837,25 @@ ALTER TABLE `dental_info`
 -- AUTO_INCREMENT for table `dental_log`
 --
 ALTER TABLE `dental_log`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT for table `dental_test_log`
 --
 ALTER TABLE `dental_test_log`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- AUTO_INCREMENT for table `doctors`
 --
 ALTER TABLE `doctors`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `doctor_balance_logs`
 --
 ALTER TABLE `doctor_balance_logs`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
 -- AUTO_INCREMENT for table `doctor_schedules`
@@ -1619,31 +1867,19 @@ ALTER TABLE `doctor_schedules`
 -- AUTO_INCREMENT for table `emergency_log`
 --
 ALTER TABLE `emergency_log`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `hormone`
---
-ALTER TABLE `hormone`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `hospital_income_log`
 --
 ALTER TABLE `hospital_income_log`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- AUTO_INCREMENT for table `logins`
 --
 ALTER TABLE `logins`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
-
---
--- AUTO_INCREMENT for table `more_tests`
---
-ALTER TABLE `more_tests`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 --
 -- AUTO_INCREMENT for table `nurses`
@@ -1655,7 +1891,7 @@ ALTER TABLE `nurses`
 -- AUTO_INCREMENT for table `nurse_balance_logs`
 --
 ALTER TABLE `nurse_balance_logs`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `others_info`
@@ -1667,19 +1903,19 @@ ALTER TABLE `others_info`
 -- AUTO_INCREMENT for table `ot_assistant_logs`
 --
 ALTER TABLE `ot_assistant_logs`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `ot_logs`
 --
 ALTER TABLE `ot_logs`
-  MODIFY `O_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `O_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `ot_nurses_logs`
 --
 ALTER TABLE `ot_nurses_logs`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `ot_operator`
@@ -1691,25 +1927,43 @@ ALTER TABLE `ot_operator`
 -- AUTO_INCREMENT for table `ot_schedules`
 --
 ALTER TABLE `ot_schedules`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT for table `pathology`
+-- AUTO_INCREMENT for table `pathology_info`
 --
-ALTER TABLE `pathology`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `pathology_info`
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=278;
+
+--
+-- AUTO_INCREMENT for table `pathology_log`
+--
+ALTER TABLE `pathology_log`
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `pathology_test_log`
+--
+ALTER TABLE `pathology_test_log`
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `patients`
 --
 ALTER TABLE `patients`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 --
 -- AUTO_INCREMENT for table `patient_logs`
 --
 ALTER TABLE `patient_logs`
   MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `physio_log`
+--
+ALTER TABLE `physio_log`
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `receptionists`
@@ -1721,25 +1975,7 @@ ALTER TABLE `receptionists`
 -- AUTO_INCREMENT for table `surgeon_logs`
 --
 ALTER TABLE `surgeon_logs`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
-
---
--- AUTO_INCREMENT for table `test_info`
---
-ALTER TABLE `test_info`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=278;
-
---
--- AUTO_INCREMENT for table `usg`
---
-ALTER TABLE `usg`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `x_ray`
---
-ALTER TABLE `x_ray`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
