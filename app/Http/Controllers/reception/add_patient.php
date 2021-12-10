@@ -41,6 +41,7 @@ class add_patient extends Controller
         session(['COMMISSION' => $acc_var->Commission]);
         session(['DENTAL_HOSPITAL_PERCENTAGE' => $acc_var->Dental_Hospital_Percentage]);
         session(['PATHOLOGY_HOSPITAL_PERCENTAGE' => $acc_var->Pathology_Hospital_Percentage]);
+        session(['PHYSIO_HOSPITAL_PERCENTAGE' => $acc_var->Physio_Hospital_Percentage]);
         $request->session()->put('KernelPoint','reception');
 
         session(['test_pathology' => 'Pathology']);
@@ -3444,7 +3445,7 @@ function pathology_payment_submission(Request $request){
         'Vat'=>$gov_vat,
         'Service_Charge'=>$service_charge,
         'Total_Income'=>$income,
-        'Credit_Type'=>'Dental',
+        'Credit_Type'=>'Pathology',
         'Entry_Date'=>$todays_date,
         'Entry_Time'=>date("H:i:s"),
         'Entry_Year'=>date("Y"),
@@ -3816,6 +3817,222 @@ function physio_patient_info_entry(Request $request){
 # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
+
+
+
+#########################
+#### FUNCTION-NO::50 ####
+#########################
+# Generates patient unique ID;
+# Patient data entry for physio;
+# Entry will happen on  --: TABLE :------ patients;
+# Entry will happen on  --: TABLE :------ physio_log;
+# Entry will happen on  --: TABLE :------ hospital_income_log;
+# Entry will happen on  --: TABLE :------ doctor_balance_log;
+# Update will happen on --: TABLE :------ doctors.
+
+function physio_log_create(Request $request){
+
+    date_default_timezone_set('Asia/Dhaka');
+    $patient_type = $request->session()->get('PATIENT_TYPE');
+
+    ########## FOR NEW PATIENTS ##########
+    if($patient_type == 'new'){
+
+        /* Patient id generator */
+
+        $first_part = $request->session()->get('PATIENT_GENDER');
+            
+        if($first_part == 'Male'){
+            $first_part = 'M';
+        }elseif($first_part == 'Female'){
+            $first_part = 'F';
+            echo $first_part;
+        }elseif($first_part == 'Child'){
+            $first_part = 'C';
+            echo $first_part;
+        }elseif($first_part == 'Others'){
+            $first_part = 'O';
+            echo $first_part;
+        }
+
+        $second_part = date("dmY");
+
+        $current_count = DB::table('patients')->orderBy('AI_ID','desc')->first();
+
+        if($current_count==null){
+            $third_part = 1;
+        }else{
+            $current_count_array = explode('-',$current_count->P_ID);
+            $third_part = end($current_count_array);
+            if($third_part == 999){
+                #$third_part = 1;
+                $third_part++;
+            }if($current_count->Ad_Date != $second_part){
+                $third_part = 1;
+            }else{
+                $third_part++;
+            }
+        }
+
+        $P_ID = "$first_part"."-"."$second_part"."-".str_pad($third_part,3,"0",STR_PAD_LEFT);
+
+        /* Patient id generator end */
+
+    }
+        
+    ########## FOR OLD PATIENTS ##########
+    else{
+
+        $P_ID = $request->session()->get('P_ID');
+
+    }
+        
+    session(['PATIENT_P_ID' => $P_ID]);
+
+    $p_id = $request->session()->get('PATIENT_P_ID');
+    $todays_date = date("Ymd");
+    $patient_type = $request->session()->get('PATIENT_TYPE');
+    $request->session()->forget('SESSION_FLASH_MSG');
+
+    if($patient_type=='new'){
+
+        # Access able to only new patients.
+        # Data entry to Table:----patients.
+                
+        $patients=array(
+
+            'P_ID'=>$p_id,
+            'Patient_Name'=>$request->session()->get('PATIENT_NAME'),
+            'Patient_Gender'=>$request->session()->get('PATIENT_GENDER'),
+            'Patient_Age'=>$request->session()->get('PATIENT_AGE'),
+            'Cell_Number'=>$request->session()->get('PATIENT_CELL'),
+            'NID'=>$request->session()->get('PATIENT_NID'),
+            'NID_Type'=>$request->session()->get('PATIENT_NID_TYPE'),
+            'Ad_Date'=>date("dmY")
+
+        );
+
+        DB::table('patients')->insert($patients);
+
+    }if($patient_type=='new' || $patient_type=='old'){
+
+        # Access able to new & old patients.
+
+        $d_id = $request->input('doctor');
+
+        $received = $request->input('received');
+        $change = $request->input('change');
+        $fee = $received-$change;
+
+        $service_charge_percentage = $request->session()->get('PHYSIO_HOSPITAL_PERCENTAGE');
+        $vat = $request->session()->get('VAT');
+
+        # Calculate service charge.
+        $service_charge = (($service_charge_percentage/100)*$fee);
+
+        # Calculate gov vat & income.
+        $gov_vat = (($vat/100)*$service_charge);
+        $income = $service_charge-$gov_vat;
+
+        $physio_log=array(
+
+            'P_ID'=>$p_id,
+            'R_ID'=>$request->session()->get('REC_SESSION_ID'),
+            'D_ID'=>$d_id,
+            'Received'=>$received,
+            'Changes'=>$change,
+            'Fee'=>$fee,
+            'Reg_Date'=>$request->session()->get('reg_date')
+
+        );
+
+        DB::table('physio_log')->insert($physio_log);
+
+        # Date.
+        $todays_date = date("Ymd");
+
+        # Generating message.
+        $message='Physio services for: '.$p_id.', given by: '.$d_id;
+
+        # Log entry on hospital balance log.
+        $hospital_income_logs=array(
+
+            'Message'=>$message,
+            'Debit'=>0,
+            'Credit'=>$fee,
+            'Vat'=>$gov_vat,
+            'Service_Charge'=>$service_charge,
+            'Total_Income'=>$income,
+            'Credit_Type'=>'Physio',
+            'Entry_Date'=>$todays_date,
+            'Entry_Time'=>date("H:i:s"),
+            'Entry_Year'=>date("Y"),
+            'User_ID'=>$request->session()->get('REC_SESSION_ID')
+
+        );
+
+        DB::table('hospital_income_log')
+        ->insert($hospital_income_logs);
+
+        $therapist_income = $fee - $service_charge;
+
+        # checking current balance.
+        $wallet=DB::table('doctor_balance_logs')
+        ->where('D_ID',$d_id)
+        ->orderBy('AI_ID','desc')
+        ->first();
+
+        if($wallet){
+            $current_balance = $wallet->Current_Balance;
+            $current_balance = $current_balance + $therapist_income;
+        }else{
+            $current_balance = 0;
+            $current_balance = $current_balance + $therapist_income;
+        }
+
+        $log=array(
+
+            'D_ID'=>$d_id,
+            'B_Date'=>$request->session()->get('DATE_TODAY'),
+            'Credit'=>$therapist_income,
+            'Commission'=>0,
+            'Income'=>$therapist_income,
+            'Current_Balance'=>$current_balance,
+            'Acc_ID'=>$request->session()->get('REC_SESSION_ID'),
+            'O_ID'=>0
+
+        );
+
+        # Insert balance log.
+        DB::table('doctor_balance_logs')
+        ->insert($log);
+
+        $wallet_value=array(
+
+            'Wallet'=>$current_balance
+
+        );
+
+        # updating doctor wallet.
+        $doctor_wallet=DB::table('doctors')
+        ->where('D_ID',$d_id)
+        ->update($wallet_value);
+
+    }
+
+    # Redirecting to [FUNCTION-NO::05].
+    return redirect('/reception/invoice_list/physio/');
+
+}
+
+# End of function physio_log_create.                        <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 

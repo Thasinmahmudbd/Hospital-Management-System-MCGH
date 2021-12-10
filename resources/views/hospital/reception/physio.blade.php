@@ -119,7 +119,6 @@
                             <p class="collected_info">Therapist</p>
                             <p>:</p>
                             <select name="doctor" class="input" required>
-                                <option value="self">Self</option>   
                                 @foreach($info as $list)
                                 <option value="{{$list->D_ID}}">{{$list->Dr_Name}}</option>
                                 @endforeach

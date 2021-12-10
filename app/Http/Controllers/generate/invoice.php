@@ -234,6 +234,60 @@ function invoice_list_pathology(Request $request){
 
 
 #########################
+#### FUNCTION-NO::05 ####
+#########################
+# Shows printable patient invoices [physio];
+# Stored data in 1 session;
+# Joins table :-
+# -----: TABLE :------ patients,
+# -----: TABLE :------ pathology_log,
+# -----: TABLE :------ doctors,
+
+function invoice_list_physio(Request $request){
+
+    date_default_timezone_set('Asia/Dhaka');
+    $date = date("Y-m-d");
+    $request->session()->put('DATE_TODAY',$date);
+
+    # Show todays patients.
+    $today['today']=DB::table('physio_log')
+    ->join('patients', 'physio_log.P_ID', '=', 'patients.P_ID')
+    ->join('doctors', 'physio_log.D_ID', '=', 'doctors.D_ID')
+    ->select('physio_log.*', 'patients.Patient_Name', 'patients.Patient_Gender', 'patients.Patient_Age', 'patients.Cell_Number', 'patients.P_ID', 'doctors.Dr_Name', 'doctors.D_ID')
+    ->where('physio_log.Reg_Date',$date)
+    ->orderBy('physio_log.AI_ID','desc')
+    ->get();
+    
+    # Show all patients.
+    $all['all']=DB::table('physio_log')
+    ->join('patients', 'physio_log.P_ID', '=', 'patients.P_ID')
+    ->join('doctors', 'physio_log.D_ID', '=', 'doctors.D_ID')
+    ->select('physio_log.*', 'patients.Patient_Name', 'patients.Patient_Gender', 'patients.Patient_Age', 'patients.Cell_Number', 'patients.P_ID', 'doctors.Dr_Name', 'doctors.D_ID')
+    ->where('physio_log.Reg_Date', '!=', $date)
+    ->orderBy('physio_log.AI_ID','desc')
+    ->get();
+
+    $request->session()->put('INVOICE','0');
+
+    $request->session()->put('InvoiceType','physio');
+
+    # Returning to the view below.
+    return view('hospital/reception/invoice_generator_list_appointment',$today, $all);
+
+}
+
+# End of function invoice_list_physio.                      <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
 #### FUNCTION-NO::0 ####
 #########################
 # Search printable patient invoices [appointments];
@@ -527,7 +581,7 @@ function collect_dental_invoice_data(Request $request, $d_t_n){
 #### FUNCTION-NO::0 ####
 #########################
 # Collect data for invoice;
-# Stores data in 18 sessions;
+# Stores data in 23 sessions;
 
 function collect_pathology_invoice_data(Request $request, $t_n){
 
@@ -590,6 +644,73 @@ function collect_pathology_invoice_data(Request $request, $t_n){
 
     # Redirecting to [FUNCTION-NO::0].
     return redirect('/reception/generate/pathology/invoice/');
+
+}
+
+# End of function collect_dental_invoice_data.           <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# This will change.
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Collect data for invoice;
+# Stores data in 16 sessions;
+
+function collect_physio_invoice_data(Request $request, $ai_id){
+
+    $id = $ai_id;
+    session(['tn' => $id]);
+    
+    # Gather data.
+    $data_logs=DB::table('physio_log')
+    ->where('AI_ID',$id)
+    ->first();
+
+    $d_id = $data_logs->D_ID;
+    $p_id = $data_logs->P_ID;
+    
+    # Store in session.
+    session(['pId' => $p_id]);
+    session(['rId' => $data_logs->R_ID]);
+    session(['dId' => $data_logs->D_ID]);
+    session(['reg_date' => $data_logs->Reg_Date]);
+    session(['received' => $data_logs->Received]);
+    session(['changes' => $data_logs->Changes]);
+    session(['fee' => $data_logs->Fee]);
+    session(['timestamp' => $data_logs->Time_Stamp]);
+
+    # Gather data.
+    $data_patients=DB::table('patients')
+    ->where('P_ID',$p_id)
+    ->first();
+
+    # Store in session.
+    session(['pName' => $data_patients->Patient_Name]);
+    session(['pGender' => $data_patients->Patient_Gender]);
+    session(['cellNum' => $data_patients->Cell_Number]);
+    session(['nid' => $data_patients->NID]);
+    session(['nidType' => $data_patients->NID_Type]);
+    session(['pAge' => $data_patients->Patient_Age]);
+
+    # Gather data.
+    $data_docs=DB::table('doctors')
+        ->where('D_ID',$d_id)
+        ->first();
+
+    # Store in session.
+    session(['dName' => $data_docs->Dr_Name]);
+
+    # Redirecting to [FUNCTION-NO::0].
+    return redirect('/reception/generate/physio/invoice/');
 
 }
 

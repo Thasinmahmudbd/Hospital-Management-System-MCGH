@@ -308,6 +308,10 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     # Redirecting to [FUNCTION-NO::49]---in-controller.
     Route::get('/reception/physio/','App\Http\Controllers\reception\add_patient@physio_patient_info_entry');
 
+    # Physio log entry.
+    # Redirecting to [FUNCTION-NO::50]---in-controller.
+    Route::post('/reception/physio/entry/','App\Http\Controllers\reception\add_patient@physio_log_create');
+
     ##############################################################################################################################################
     # Invoice.  [C::invoice.php]
     ##############################################################################################################################################
@@ -328,6 +332,10 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     # Redirecting to [FUNCTION-NO::04]---in-controller.
     Route::get('/reception/invoice_list/pathology/','App\Http\Controllers\generate\invoice@invoice_list_pathology');
 
+    # Reading data in Invoice generator [physio] page.
+    # Redirecting to [FUNCTION-NO::05]---in-controller.
+    Route::get('/reception/invoice_list/physio/','App\Http\Controllers\generate\invoice@invoice_list_physio');
+
     # Searching data in Invoice generator [appointment] page.
     # Redirecting to [FUNCTION-NO::]---in-controller.
     Route::post('/reception/find_patient/by_search/invoice/appointment/','App\Http\Controllers\generate\invoice@invoice_search_appointment');
@@ -347,6 +355,10 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     # Generate invoice. [pathology]
     # Redirecting to [FUNCTION-NO::]---in-controller.
     Route::get('/reception/collect/pathology/invoice/data/{t_n}', 'App\Http\Controllers\generate\invoice@collect_pathology_invoice_data');
+
+    # Generate invoice. [pathology]
+    # Redirecting to [FUNCTION-NO::]---in-controller.
+    Route::get('/reception/collect/physio/invoice/data/{ai_id}', 'App\Http\Controllers\generate\invoice@collect_physio_invoice_data');
 
     Route::get('/reception/generate/appointment/invoice/',function(){
         
@@ -425,6 +437,21 @@ Route::group(['middleware'=>['receptionAuth']],function() {
 
         # Returning to the view below.
         return view('hospital/invoice/pathology', $tests);
+
+    });
+
+    Route::get('/reception/generate/physio/invoice/',function(){
+        
+        $pdf = PDF::loadView('hospital.invoice.physio');
+
+        $file_name = 'ID: '.Session::get('pId').'.pdf';
+
+        $pdf->setOption('page-size','a5');
+        $pdf->setOption('orientation','portrait');
+
+        return $pdf->stream($file_name);
+
+        return view('hospital/invoice/physio');
 
     });
 
