@@ -84,7 +84,7 @@
     
                         <a href="{{url('/reception/invoice_list/appointment/')}}" class="content_nav_link_active">Appointments</a>
                         <a href="{{url('/reception/invoice_list/dental/')}}" class="content_nav_link">Dental</a>
-                        <a href="" class="content_nav_link">Tests</a>
+                        <a href="{{url('/reception/invoice_list/pathology/')}}" class="content_nav_link">Tests</a>
                         <a href="{{url('/reception/invoice_list/admission/')}}" class="content_nav_link">Admits</a>
 
                     </div>
@@ -94,7 +94,7 @@
     
                         <a href="{{url('/reception/invoice_list/appointment/')}}" class="content_nav_link">Appointments</a>
                         <a href="{{url('/reception/invoice_list/dental/')}}" class="content_nav_link">Dental</a>
-                        <a href="" class="content_nav_link">Tests</a>
+                        <a href="{{url('/reception/invoice_list/pathology/')}}" class="content_nav_link">Tests</a>
                         <a href="{{url('/reception/invoice_list/admission/')}}" class="content_nav_link_active">Admits</a>
 
                     </div>
@@ -104,7 +104,17 @@
     
                         <a href="{{url('/reception/invoice_list/appointment/')}}" class="content_nav_link">Appointments</a>
                         <a href="{{url('/reception/invoice_list/dental/')}}" class="content_nav_link_active">Dental</a>
-                        <a href="" class="content_nav_link">Tests</a>
+                        <a href="{{url('/reception/invoice_list/pathology/')}}" class="content_nav_link">Tests</a>
+                        <a href="{{url('/reception/invoice_list/admission/')}}" class="content_nav_link">Admits</a>
+
+                    </div>
+
+                    @elseif(Session::get('InvoiceType')=='pathology')
+                    <div class="content_nav">
+    
+                        <a href="{{url('/reception/invoice_list/appointment/')}}" class="content_nav_link">Appointments</a>
+                        <a href="{{url('/reception/invoice_list/dental/')}}" class="content_nav_link">Dental</a>
+                        <a href="{{url('/reception/invoice_list/pathology/')}}" class="content_nav_link_active">Tests</a>
                         <a href="{{url('/reception/invoice_list/admission/')}}" class="content_nav_link">Admits</a>
 
                     </div>
@@ -650,11 +660,19 @@
                         <td class="frame_data" data-label="Cell">{{$list->Cell_Number}}</td>
                         <td class="frame_data" data-label="Doctor">{{$list->Dr_Name}}</td>
 
+                        @if($list->Due_Amount==0)
+                        <td class="frame_action disable shade" data-label="Due">
+                            <a href="{{url('/reception/collect/dental/due/'.$list->Dental_Test_No)}}">
+                                <i class="table_btn_orange fas fa-donate broken"></i>
+                            </a>
+                        </td>
+                        @else
                         <td class="frame_action" data-label="Due">
                             <a href="{{url('/reception/collect/dental/due/'.$list->Dental_Test_No)}}">
                                 <i class="table_btn_orange fas fa-donate"></i>
                             </a>
                         </td>
+                        @endif
                         
                         <td class="frame_action" data-label="Print">
                             <a target="blank" href="{{url('/reception/collect/dental/invoice/data/'.$list->Dental_Test_No)}}">
@@ -733,11 +751,19 @@
                         <td class="frame_data" data-label="Cell">{{$list->Cell_Number}}</td>
                         <td class="frame_data" data-label="Doctor">{{$list->Dr_Name}}</td>
 
+                        @if($list->Due_Amount==0)
+                        <td class="frame_action disable shade" data-label="Due">
+                            <a href="{{url('/reception/collect/dental/due/'.$list->Dental_Test_No)}}">
+                                <i class="table_btn_orange fas fa-donate broken"></i>
+                            </a>
+                        </td>
+                        @else
                         <td class="frame_action" data-label="Due">
                             <a href="{{url('/reception/collect/dental/due/'.$list->Dental_Test_No)}}">
                                 <i class="table_btn_orange fas fa-donate"></i>
                             </a>
                         </td>
+                        @endif
 
                         <td class="frame_action" data-label="Print">
                             <a target="blank" href="{{url('/reception/collect/dental/invoice/data/'.$list->Dental_Test_No)}}">
@@ -792,14 +818,246 @@
                         <td class="frame_data" data-label="Cell">{{$list->Cell_Number}}</td>
                         <td class="frame_data" data-label="Doctor">{{$list->Dr_Name}}</td>
 
+                        @if($list->Due_Amount==0)
+                        <td class="frame_action disable shade" data-label="Due">
+                            <a href="{{url('/reception/collect/dental/due/'.$list->Dental_Test_No)}}">
+                                <i class="table_btn_orange fas fa-donate broken"></i>
+                            </a>
+                        </td>
+                        @else
                         <td class="frame_action" data-label="Due">
                             <a href="{{url('/reception/collect/dental/due/'.$list->Dental_Test_No)}}">
                                 <i class="table_btn_orange fas fa-donate"></i>
                             </a>
                         </td>
+                        @endif
+
 
                         <td class="frame_action" data-label="Print">
                             <a target="blank" href="{{url('/reception/collect/dental/invoice/data/'.$list->Dental_Test_No)}}">
+                                <i class="table_btn fas fa-print"></i>
+                            </a>
+                        </td>
+
+                    </tr>
+
+                    @endforeach
+
+                </table>
+
+            @endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        @elseif(Session::get('InvoiceType')=='pathology')
+
+            @if(Session::get('INVOICE')=='1')
+
+                @if(Session::get('SEARCH_RESULT')=='1')
+
+                <div class="purple_line"></div>
+                <div class="gap"></div>
+
+                <!--Showing todays patients-->
+
+                <div class="content_container_bg_less_thin">
+
+                    <span></span>
+                        
+                    <p><b>Search Result</b></p>
+
+                    <span></span>
+
+                </div>
+
+                <table class="frame_table">
+
+                    <tr class="frame_header">
+                        <th width="5%" class="frame_header_item">S/N</th>
+                        <th width="25%" class="frame_header_item">P-ID</th>
+                        <th width="35%" class="frame_header_item">Patient Name</th>
+                        <th width="25%" class="frame_header_item">Cell</th>
+                        <th width="25%" class="frame_header_item">Doctor</th>
+                        <th width="5%" class="frame_header_item">Due</th>
+                        <th width="5%" class="frame_header_item">Print</th>
+                    </tr>
+
+                    <?php $serial = 1; ?>
+                    @foreach($result as $list)
+
+                    <tr class="frame_rows">
+                        <td class="frame_data" data-label="S/N"><?php echo $serial; $serial++; ?></td>
+                        <td class="frame_data" data-label="P-ID">{{$list->P_ID}}</td>
+                        <td class="frame_data" data-label="Patient Name">{{$list->Patient_Name}}</td>
+                        <td class="frame_data" data-label="Cell">{{$list->Cell_Number}}</td>
+
+                        <td class="frame_action" data-label="Due">
+                            <a href="{{url('/reception/collect/pathology/due/'.$list->Test_No)}}">
+                                <i class="table_btn_orange fas fa-donate"></i>
+                            </a>
+                        </td>
+
+                        <td class="frame_action" data-label="Print">
+                            <a target="blank" href="{{url('/reception/collect/pathology/invoice/data/'.$list->Test_No)}}">
+                                <i class="table_btn fas fa-print"></i>
+                            </a>
+                        </td>
+
+                    </tr>
+
+                    @endforeach
+
+                </table>
+
+
+
+                <div class="gap"></div>
+
+                @else
+
+                <div class="purple_line"></div>
+                <div class="gap"></div>
+
+                <div class="warning_msg content_container_bg_less_thin">
+
+                    <p class="text_center">No one here.</p>
+
+                </div>
+
+                @endif
+
+
+
+            @elseif(Session::get('INVOICE')=='0')
+
+
+                <div class="purple_line"></div>
+                <div class="gap"></div>
+
+
+
+
+
+
+
+                <!--Showing todays patients-->
+
+                <div class="content_container_bg_less_thin">
+
+                    <span></span>
+                        
+                    <p><b>Today</b></p>
+
+                    <span></span>
+
+                </div>
+
+                <table class="frame_table">
+                    
+                    <tr class="frame_header">
+                        <th width="5%" class="frame_header_item">S/N</th>
+                        <th width="25%" class="frame_header_item">P-ID</th>
+                        <th width="35%" class="frame_header_item">Patient Name</th>
+                        <th width="25%" class="frame_header_item">Cell</th>
+                        <th width="5%" class="frame_header_item">Due</th>
+                        <th width="5%" class="frame_header_item">Print</th>
+                    </tr>
+
+                    <?php $serial = 1; ?>
+                    @foreach($today as $list)
+
+                    <tr class="frame_rows">
+                        <td class="frame_data" data-label="S/N"><?php echo $serial; $serial++; ?></td>
+                        <td class="frame_data" data-label="P-ID">{{$list->P_ID}}</td>
+                        <td class="frame_data" data-label="Patient Name">{{$list->Patient_Name}}</td>
+                        <td class="frame_data" data-label="Cell">{{$list->Cell_Number}}</td>
+
+                        <td class="frame_action" data-label="Due">
+                            <a href="{{url('/reception/collect/pathology/due/'.$list->Test_No)}}">
+                                <i class="table_btn_orange fas fa-donate"></i>
+                            </a>
+                        </td>
+
+                        <td class="frame_action" data-label="Print">
+                            <a target="blank" href="{{url('/reception/collect/pathology/invoice/data/'.$list->Test_No)}}">
+                                <i class="table_btn fas fa-print"></i>
+                            </a>
+                        </td>
+
+                    </tr>
+
+                    @endforeach
+
+                </table>
+
+
+
+
+
+                <div class="gap"></div>
+
+
+                <!--Showing all patients-->
+
+                <div class="content_container_bg_less_thin">
+
+                    <span></span>
+                        
+                    <p><b>Others</b></p>
+
+                    <span></span>
+
+                </div>
+
+                <table class="frame_table">
+                    
+                    <tr class="frame_header">
+                        <th width="5%" class="frame_header_item">S/N</th>
+                        <th width="25%" class="frame_header_item">P-ID</th>
+                        <th width="35%" class="frame_header_item">Patient Name</th>
+                        <th width="25%" class="frame_header_item">Cell</th>
+                        <th width="5%" class="frame_header_item">Due</th>
+                        <th width="5%" class="frame_header_item">Print</th>
+                    </tr>
+
+                    <?php $serial = 1; ?>
+                    @foreach($all as $list)
+
+                    <tr class="frame_rows">
+                        <td class="frame_data" data-label="S/N"><?php echo $serial; $serial++; ?></td>
+                        <td class="frame_data" data-label="P-ID">{{$list->P_ID}}</td>
+                        <td class="frame_data" data-label="Patient Name">{{$list->Patient_Name}}</td>
+                        <td class="frame_data" data-label="Cell">{{$list->Cell_Number}}</td>
+
+                        <td class="frame_action" data-label="Due">
+                            <a href="{{url('/reception/collect/pathology/due/'.$list->Test_No)}}">
+                                <i class="table_btn_orange fas fa-donate"></i>
+                            </a>
+                        </td>
+
+                        <td class="frame_action" data-label="Print">
+                            <a target="blank" href="{{url('/reception/collect/pathology/invoice/data/'.$list->Test_No)}}">
                                 <i class="table_btn fas fa-print"></i>
                             </a>
                         </td>

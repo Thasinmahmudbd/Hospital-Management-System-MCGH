@@ -139,6 +139,15 @@ class add_patient extends Controller
             # Redirecting to [FUNCTION-NO::39].
             return redirect('/reception/test_selection/pathology/');
 
+        }if($ap_type == 'Physio'){
+
+            $redirect = 'physio';
+            session(['REDIRECT' => $redirect]);
+            session(['reg_date' => $ap_date]);
+
+            # Redirecting to [FUNCTION-NO::39].
+            return redirect('/reception/physio/');
+
         }
 
     }
@@ -2669,10 +2678,10 @@ function due_payment(Request $request, $dtn){
         ->first();
 
     $p_id=$log->P_ID;
-    session(['dental_p_id' => $p_id]);
+    session(['due_p_id' => $p_id]);
 
     $d_id=$log->D_ID;
-    session(['dental_d_id' => $d_id]);
+    session(['due_d_id' => $d_id]);
 
     session(['total_amount' => $log->Due_Amount]);
     session(['paid' => $log->Paid]);
@@ -2686,16 +2695,16 @@ function due_payment(Request $request, $dtn){
         ->where('P_ID',$p_id)
         ->first();
 
-    session(['dental_p_name' => $patient->Patient_Name]);
-    session(['dental_p_age' => $patient->Patient_Age]);
-    session(['dental_p_gender' => $patient->Patient_Gender]);
+    session(['due_p_name' => $patient->Patient_Name]);
+    session(['due_p_age' => $patient->Patient_Age]);
+    session(['due_p_gender' => $patient->Patient_Gender]);
 
     # doctor infos.
     $doctor=DB::table('doctors')
         ->where('D_ID',$d_id)
         ->first();
 
-    session(['dental_d_name' => $doctor->Dr_Name]);
+    session(['due_d_name' => $doctor->Dr_Name]);
 
     # count total bill.
     $total_bill = DB::table('dental_test_log')
@@ -2738,8 +2747,8 @@ function dental_due_payment_submission(Request $request){
 
     $calculated_bill = $request->input('calculated_bill');
     $service_charge_percentage = $request->session()->get('DENTAL_HOSPITAL_PERCENTAGE');
-    $p_id = $request->session()->get('dental_p_id');
-    $d_id = $request->session()->get('dental_d_id');
+    $p_id = $request->session()->get('due_p_id');
+    $d_id = $request->session()->get('due_d_id');
 
     $received = $request->input('received');
     $change = $request->input('change');
@@ -2879,7 +2888,7 @@ function dental_due_payment_submission(Request $request){
     ->where('D_ID',$d_id)
     ->update($wallet_value);
 
-    # Redirecting to [FUNCTION-NO::02], invoice controller.
+    # Redirecting to [FUNCTION-NO::03], invoice controller.
     return redirect('/reception/invoice_list/dental/');
 
 }
@@ -3366,6 +3375,12 @@ function pathology_payment_submission(Request $request){
         $abs_change = $change;
     }
     $due_amount = $calculated_bill-$received;
+
+    if($due_amount>0){
+        $real_due = $due_amount;
+    }else{
+        $real_due = 0;
+    }
     
     $pathology_log=array(
 
@@ -3375,9 +3390,10 @@ function pathology_payment_submission(Request $request){
         'Received'=>$received,
         'Changes'=>$change,
         'Payment_Status'=>$request->input('payment_status'),
-        'Due_Amount'=>$due_amount,
+        'Due_Amount'=>$real_due,
         'Total_Amount'=>$estimated_bill,
-        'Payable_Amount'=>$calculated_bill
+        'Payable_Amount'=>$calculated_bill,
+        'Delivery_Date'=>$request->input('del_date')
 
     );
 
@@ -3413,12 +3429,18 @@ function pathology_payment_submission(Request $request){
     # Generating message.
     $message='Pathology services for: '.$p_id.', referred by: '.$d_id;
 
+    if($change<0){
+        $actual_credit = $received;
+    }else{
+        $actual_credit = $received-$change;
+    }
+
     # Log entry on hospital balance log.
     $hospital_income_logs=array(
 
         'Message'=>$message,
         'Debit'=>0,
-        'Credit'=>$received,
+        'Credit'=>$actual_credit,
         'Vat'=>$gov_vat,
         'Service_Charge'=>$service_charge,
         'Total_Income'=>$income,
@@ -3433,7 +3455,7 @@ function pathology_payment_submission(Request $request){
     DB::table('hospital_income_log')
     ->insert($hospital_income_logs);
 
-    if($d_id != 'self'){
+    if($d_id != 'self' && $doctor_income!=0){
 
         # checking current balance.
         $wallet=DB::table('doctor_balance_logs')
@@ -3477,19 +3499,316 @@ function pathology_payment_submission(Request $request){
         ->where('D_ID',$d_id)
         ->update($wallet_value);
 
-        # Redirecting to [FUNCTION-NO::02], invoice controller.
-        return redirect('/reception/invoice_list/dental/');
+        # Redirecting to [FUNCTION-NO::04], invoice controller.
+        return redirect('/reception/invoice_list/pathology/');
 
     }else{
 
-        # Redirecting to [FUNCTION-NO::02], invoice controller.
-        return redirect('/reception/invoice_list/dental/');
+        # Redirecting to [FUNCTION-NO::04], invoice controller.
+        return redirect('/reception/invoice_list/pathology/');
 
     }
 
 }
 
-# End of function dental_payment_submission.                <-------#
+# End of function pathology_payment_submission.                <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::47 ####
+#########################
+# Shows patient info, tests taken, due info.
+
+function due_payment_pathology(Request $request, $tn){
+
+    $test_no = $tn;
+    session(['tn' => $tn]);
+
+    # selected tests.
+    $selected_test['logs']=DB::table('pathology_info')
+        ->join('pathology_test_log', 'pathology_info.AI_ID', '=', 'pathology_test_log.Test_Info_AI_ID')
+        ->select('pathology_info.*', 'pathology_test_log.Test_Info_AI_ID', 'pathology_test_log.Fee', 'pathology_test_log.Test_No')
+        ->where('pathology_info.State','1')
+        ->where('pathology_test_log.Test_No',$test_no)
+        ->orderBy('pathology_info.Test_Name','asc')
+        ->get();
+
+    # log infos.
+    $log=DB::table('pathology_log')
+        ->where('Test_No',$test_no)
+        ->first();
+
+    $p_id=$log->P_ID;
+    session(['due_p_id' => $p_id]);
+
+    $d_id=$log->D_ID;
+    session(['due_d_id' => $d_id]);
+
+    session(['total_amount' => $log->Due_Amount]);
+    session(['paid' => $log->Paid]);
+    session(['discount' => $log->Discount]);
+    session(['bill' => $log->Payable_Amount]);
+    session(['previously_received' => $log->Received]);
+    session(['previously_change' => $log->Changes]);
+
+    # patient infos.
+    $patient=DB::table('patients')
+        ->where('P_ID',$p_id)
+        ->first();
+
+    session(['due_p_name' => $patient->Patient_Name]);
+    session(['due_p_age' => $patient->Patient_Age]);
+    session(['due_p_gender' => $patient->Patient_Gender]);
+
+    if($d_id != 'self'){
+
+        # doctor infos.
+        $doctor=DB::table('doctors')
+            ->where('D_ID',$d_id)
+            ->first();
+
+        session(['due_d_name' => $doctor->Dr_Name]);
+
+    }else{
+
+        session(['due_d_name' => $d_id]);
+
+    }
+
+    # count total bill.
+    $total_bill = DB::table('pathology_test_log')
+        ->where('Test_No', $test_no)
+        ->sum('Fee');
+
+    session(['DUE_TYPE' => 'pathology']);
+
+    # Returning to the view below.
+    return view('hospital/reception/due_payment',$selected_test);
+
+}
+
+# End of function due_payment_pathology.                    <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::48 ####
+#########################
+# Submit dental due payment;
+# Update will happen on --: TABLE :------ dental_log;
+# Update will happen on --: TABLE :------ doctors;
+# Entry will happen on  --: TABLE :------ doctor_balance_logs;
+# Entry will happen on  --: TABLE :------ hospital_income_log.
+
+function pathology_due_payment_submission(Request $request){
+
+    # Collect require data.
+    $test_no = $request->session()->get('tn');
+    # $D_I_AI_ID = $request->session()->get('D_I_AI_ID');
+    $vat = $request->session()->get('VAT');
+
+    $calculated_bill = $request->input('calculated_bill');
+    $service_charge_percentage = $request->session()->get('PATHOLOGY_HOSPITAL_PERCENTAGE');
+    $p_id = $request->session()->get('due_p_id');
+    $d_id = $request->session()->get('due_d_id');
+
+    $received = $request->input('received');
+    $change = $request->input('change');
+    if($change < 0){
+        $abs_change = $change*(-1);
+    }else{
+        $abs_change = $change;
+    }
+    $due_amount = $calculated_bill-$received;
+    $paid = $request->input('paid');
+
+    if($due_amount>0){
+
+        $paid = $paid + $received;
+        $real_due = $due_amount;
+
+    }else{
+
+        $paid = $paid + ($received-$abs_change);
+        $real_due = 0;
+
+    }
+
+    /*$previously_received = $request->input('previously_received');
+    $total_received = $previously_received + $received;
+
+    $previously_change = $request->input('previously_change');
+    $total_change = $previously_change + $change;*/
+    
+    $pathology_log=array(
+
+        'Paid'=>$paid,
+        'Received'=>$received,
+        'Changes'=>$change,
+        'Due_Amount'=>$real_due
+
+    );
+
+    DB::table('pathology_log')
+        ->where('Test_No',$test_no)    
+        ->update($pathology_log);
+
+    if($due_amount>0){
+
+        # Calculate service charge.
+        $service_charge = (($service_charge_percentage/100)*$received);
+
+        # Calculate refer income.
+        $refer_income = $received-$service_charge;
+
+    }else{
+
+        # Calculate service charge.
+        $service_charge = (($service_charge_percentage/100)*($received-$abs_change));
+
+        # Calculate refer income.
+        $refer_income = ($received-$abs_change)-$service_charge;
+
+    }
+
+    # Calculate gov vat & income.
+    $gov_vat = (($vat/100)*$service_charge);
+    $income = $service_charge-$gov_vat;
+
+    # Date.
+    $todays_date = date("Ymd");
+
+    # Generating message.
+    $message='Pathology services for: '.$p_id.', given by: '.$d_id.', Due payment.';
+
+    if($change<0){
+        $actual_credit = $received;
+    }else{
+        $actual_credit = $received-$change;
+    }
+
+    # Log entry on hospital balance log.
+    $hospital_income_logs=array(
+
+        'Message'=>$message,
+        'Debit'=>0,
+        'Credit'=>$actual_credit,
+        'Vat'=>$gov_vat,
+        'Service_Charge'=>$service_charge,
+        'Total_Income'=>$income,
+        'Credit_Type'=>'Dental',
+        'Entry_Date'=>$todays_date,
+        'Entry_Time'=>date("H:i:s"),
+        'Entry_Year'=>date("Y"),
+        'User_ID'=>$request->session()->get('REC_SESSION_ID')
+
+    );
+
+    DB::table('hospital_income_log')
+    ->insert($hospital_income_logs);
+
+    if($d_id != 'self' && $doctor_income!=0){
+
+        # checking current balance.
+        $wallet=DB::table('doctor_balance_logs')
+        ->where('D_ID',$d_id)
+        ->orderBy('AI_ID','desc')
+        ->first();
+
+        if($wallet){
+            $current_balance = $wallet->Current_Balance;
+            $current_balance = $current_balance + $refer_income;
+        }else{
+            $current_balance = 0;
+            $current_balance = $current_balance + $refer_income;
+        }
+
+        $log=array(
+
+            'D_ID'=>$d_id,
+            'B_Date'=>$request->session()->get('DATE_TODAY'),
+            'Credit'=>$refer_income,
+            'Commission'=>0,
+            'Income'=>$refer_income,
+            'Current_Balance'=>$current_balance,
+            'Acc_ID'=>$request->session()->get('REC_SESSION_ID'),
+            'O_ID'=>0
+
+        );
+
+        # Insert balance log.
+        DB::table('doctor_balance_logs')
+        ->insert($log);
+
+        $wallet_value=array(
+
+            'Wallet'=>$current_balance
+
+        );
+
+        # updating doctor wallet.
+        $doctor_wallet=DB::table('doctors')
+        ->where('D_ID',$d_id)
+        ->update($wallet_value);
+
+        # Redirecting to [FUNCTION-NO::04], invoice controller.
+        return redirect('/reception/invoice_list/pathology/');
+
+    }else{
+
+        # Redirecting to [FUNCTION-NO::04], invoice controller.
+        return redirect('/reception/invoice_list/pathology/');
+
+    }
+
+}
+
+# End of function pathology_due_payment_submission.         <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::49 ####
+#########################
+# Collects billing info; 
+# Suggests doctors.
+
+function physio_patient_info_entry(Request $request){
+
+    # doctor list.
+    $doctor['info']=DB::table('doctors')
+        ->where('Department','Physiology')
+        ->orderBy('D_ID','desc')
+        ->get();
+
+    # Returning to the view below.
+    return view('hospital/reception/physio',$doctor);
+
+}
+
+# End of function pathology_payment_page.                   <-------#
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: Hello, future me.
@@ -3528,8 +3847,6 @@ function pathology_payment_submission(Request $request){
 
 
 
-
-
-
 }
+
 

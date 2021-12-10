@@ -34,12 +34,25 @@
     </a>
 </li>
 
+@if(Session::get('DUE_TYPE')=='dental')
+
 <li class="list_item">
     <a href="{{url('/reception/invoice_list/dental/')}}" class="link">
         <i class="link_icons fas fa-file-invoice"></i>
         <span class="link_name"> Generate Invoice </span>
     </a>
 </li>
+
+@elseif(Session::get('DUE_TYPE')=='pathology')
+
+<li class="list_item">
+    <a href="{{url('/reception/invoice_list/pathology/')}}" class="link">
+        <i class="link_icons fas fa-file-invoice"></i>
+        <span class="link_name"> Generate Invoice </span>
+    </a>
+</li>
+
+@endif
 
 @endsection
 
@@ -58,7 +71,12 @@
     <a class="mobile_link" href="{{url('/reception/home/')}}">Patient Entry</a>
     <a class="mobile_link" href="{{url('/reception/emergency/')}}">Emergency</a>
     <a class="mobile_link" href="{{url('/reception/patient_list/')}}">Patients List</a>
+
+    @if(Session::get('DUE_TYPE')=='dental')
     <a class="mobile_link" href="{{url('/reception/invoice_list/dental/')}}">Generate Invoice</a>
+    @elseif(Session::get('DUE_TYPE')=='pathology')
+    <a class="mobile_link" href="{{url('/reception/invoice_list/pathology/')}}">Generate Invoice</a>
+    @endif
 </div>
 
 @endsection
@@ -90,9 +108,17 @@
 
 
             <!--Patient info tab-->
+            @if(Session::get('DUE_TYPE')=='dental')
 
             <form action="{{url('/reception/submit/test/dental/dues/')}}" method="post" class="content_container_white_super_thin center_self">
             @csrf
+
+            @elseif(Session::get('DUE_TYPE')=='pathology')
+
+            <form action="{{url('/reception/submit/test/pathology/dues/')}}" method="post" class="content_container_white_super_thin center_self">
+            @csrf
+
+            @endif
 
             <div class="patient_and_doctor_info_one_is_to_one">
 
@@ -106,19 +132,19 @@
 
                             <p class="collected_info">Patient ID</p>
                             <p>:</p>
-                            <p class="collected_info">{{Session::get('dental_p_id')}}</p>
+                            <p class="collected_info">{{Session::get('due_p_id')}}</p>
 
                             <p class="collected_info">Patient's Name</p>
                             <p>:</p>
-                            <p class="collected_info">{{Session::get('dental_p_name')}}</p>
+                            <p class="collected_info">{{Session::get('due_p_name')}}</p>
 
                             <p class="collected_info">Patient's Age</p>
                             <p>:</p>
-                            <p class="collected_info">{{Session::get('dental_p_age')}}</p>
+                            <p class="collected_info">{{Session::get('due_p_age')}}</p>
 
                             <p class="collected_info">Patient's Gender</p>
                             <p>:</p>
-                            <p class="collected_info">{{Session::get('dental_p_gender')}}</p>
+                            <p class="collected_info">{{Session::get('due_p_gender')}}</p>
 
                         </div>
 
@@ -130,9 +156,13 @@
 
                         <div class="info">
 
+                            @if(Session::get('DUE_TYPE')=='dental')
                             <p class="collected_info">Dentist</p>
+                            @elseif(Session::get('DUE_TYPE')=='pathology')
+                            <p class="collected_info">Refer</p>
+                            @endif
                             <p>:</p>
-                            <p class="collected_info">{{Session::get('dental_d_name')}}</p>
+                            <p class="collected_info">{{Session::get('due_d_name')}}</p>
 
                         </div>
 
@@ -149,19 +179,23 @@
 
                     <div class="content_container_bg_less">
 
-                        <!--<p class="section_title">Delivery</p>
+                        @if(Session::get('DUE_TYPE')=='pathology')
+
+                        <p class="section_title">Delivery</p>
 
                         <div class="info">
 
                             <p class="collected_info">Date</p>
                             <p>:</p>
                             <p class="collected_info">
-                                <input type="date" class="input" name="del_date" value="{{Session::get('DATE_TODAY')}}">
+                                <input type="date" class="input disable shade" value="{{Session::get('DATE_TODAY')}}" readonly>
                             </p>
 
                         </div>
 
-                        <div class="gap"></div>-->
+                        <div class="gap"></div>
+
+                        @endif
 
                         <p class="section_title">Billing Info</p>
 
@@ -250,8 +284,15 @@
 
                     <tr class="frame_header">
                         <th width="5%" class="frame_header_item">S/N</th>
+
+                        @if(Session::get('DUE_TYPE')=='dental')
                         <th width="55%" class="frame_header_item">Test Name</th>
                         <th width="20%" class="frame_header_item">Rate</th>
+                        @elseif(Session::get('DUE_TYPE')=='pathology')
+                        <th width="50%" class="frame_header_item">Test Name</th>
+                        <th width="25%" class="frame_header_item">Groups</th>
+                        @endif
+
                         <th width="20%" class="frame_header_item">Fee</th>
                     </tr>
 
@@ -261,7 +302,13 @@
                     <tr class="frame_rows">
                         <td class="frame_data" data-label="S/N"><?php echo $serial; $serial++; ?></td>
                         <td class="frame_data" data-label="Test Name">{{$list->Test_Name}}</td>
+
+                        @if(Session::get('DUE_TYPE')=='dental')
                         <td class="frame_data" data-label="Rate">{{$list->Rate}}</td>
+                        @elseif(Session::get('DUE_TYPE')=='pathology')
+                        <td class="frame_data" data-label="Groups">{{$list->Groups}}</td>
+                        @endif
+
                         <td class="frame_data" data-label="Fee">{{$list->Fee}}</td>
                     </tr>
 

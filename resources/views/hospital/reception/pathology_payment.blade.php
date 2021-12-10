@@ -176,7 +176,7 @@
 
                     <div class="content_container_bg_less">
 
-                        <!--<p class="section_title">Delivery</p>
+                        <p class="section_title">Delivery</p>
 
                         <div class="info">
 
@@ -188,7 +188,7 @@
 
                         </div>
 
-                        <div class="gap"></div>-->
+                        <div class="gap"></div>
 
                         <p class="section_title">Billing Info</p>
 

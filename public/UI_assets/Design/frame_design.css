@@ -602,3 +602,7 @@
 .block{
     display:block;
 }
+
+.broken{
+    background-color: #555;
+}

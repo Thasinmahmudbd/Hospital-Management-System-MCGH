@@ -248,7 +248,7 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     # Redirecting to [FUNCTION-NO::36]---in-controller.
     Route::post('/reception/submit/test/dental/','App\Http\Controllers\reception\add_patient@dental_payment_submission');
 
-    # Due payment.
+    # Show due.
     # Redirecting to [FUNCTION-NO::37]---in-controller.
     Route::get('/reception/collect/dental/due/{dtn}','App\Http\Controllers\reception\add_patient@due_payment');
 
@@ -291,6 +291,22 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     # Submit pathology payment.
     # Redirecting to [FUNCTION-NO::46]---in-controller.
     Route::post('/reception/submit/test/pathology/','App\Http\Controllers\reception\add_patient@pathology_payment_submission');
+    
+    # Show due.
+    # Redirecting to [FUNCTION-NO::47]---in-controller.
+    Route::get('/reception/collect/pathology/due/{tn}','App\Http\Controllers\reception\add_patient@due_payment_pathology');
+
+    # Due payment.
+    # Redirecting to [FUNCTION-NO::48]---in-controller.
+    Route::post('/reception/submit/test/pathology/dues/','App\Http\Controllers\reception\add_patient@pathology_due_payment_submission');
+
+    ##############################################################################################################################################
+    # Physiotherapy.  [C::add_patient.php]
+    ##############################################################################################################################################
+
+    # Getting physio patient info.
+    # Redirecting to [FUNCTION-NO::49]---in-controller.
+    Route::get('/reception/physio/','App\Http\Controllers\reception\add_patient@physio_patient_info_entry');
 
     ##############################################################################################################################################
     # Invoice.  [C::invoice.php]
@@ -308,6 +324,10 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     # Redirecting to [FUNCTION-NO::03]---in-controller.
     Route::get('/reception/invoice_list/dental/','App\Http\Controllers\generate\invoice@invoice_list_dental');
 
+    # Reading data in Invoice generator [pathology] page.
+    # Redirecting to [FUNCTION-NO::04]---in-controller.
+    Route::get('/reception/invoice_list/pathology/','App\Http\Controllers\generate\invoice@invoice_list_pathology');
+
     # Searching data in Invoice generator [appointment] page.
     # Redirecting to [FUNCTION-NO::]---in-controller.
     Route::post('/reception/find_patient/by_search/invoice/appointment/','App\Http\Controllers\generate\invoice@invoice_search_appointment');
@@ -323,6 +343,10 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     # Generate invoice. [dental]
     # Redirecting to [FUNCTION-NO::]---in-controller.
     Route::get('/reception/collect/dental/invoice/data/{d_t_n}', 'App\Http\Controllers\generate\invoice@collect_dental_invoice_data');
+
+    # Generate invoice. [pathology]
+    # Redirecting to [FUNCTION-NO::]---in-controller.
+    Route::get('/reception/collect/pathology/invoice/data/{t_n}', 'App\Http\Controllers\generate\invoice@collect_pathology_invoice_data');
 
     Route::get('/reception/generate/appointment/invoice/',function(){
         
@@ -376,6 +400,31 @@ Route::group(['middleware'=>['receptionAuth']],function() {
 
         # Returning to the view below.
         return view('hospital/invoice/dental', $tests);
+
+    });
+
+    Route::get('/reception/generate/pathology/invoice/',function(){
+
+        $tn = Session::get('tn');
+
+        $tests['result']=DB::table('pathology_test_log')
+            ->join('pathology_info', 'pathology_test_log.Test_Info_AI_ID', '=', 'pathology_info.AI_ID')
+            ->select('pathology_test_log.*', 'pathology_info.*')
+            ->where('pathology_test_log.Test_No', $tn)
+            ->orderBy('pathology_info.Groups','desc')
+            ->get();
+
+        $pdf = PDF::loadView('hospital.invoice.pathology', $tests);
+
+        $file_name = 'ID: '.Session::get('pId').'.pdf';
+
+        $pdf->setOption('page-size','a5');
+        $pdf->setOption('orientation','portrait');
+
+        return $pdf->stream($file_name);
+
+        # Returning to the view below.
+        return view('hospital/invoice/pathology', $tests);
 
     });
 

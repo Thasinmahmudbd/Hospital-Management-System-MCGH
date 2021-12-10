@@ -134,7 +134,7 @@ function invoice_list_admission(Request $request){
 # Stored data in 1 session;
 # Joins table :-
 # -----: TABLE :------ patients,
-# -----: TABLE :------ admission_logs,
+# -----: TABLE :------ dental_log,
 # -----: TABLE :------ doctors,
 
 function invoice_list_dental(Request $request){
@@ -171,6 +171,58 @@ function invoice_list_dental(Request $request){
 }
 
 # End of function invoice_list_dental.                      <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::04 ####
+#########################
+# Shows printable patient invoices [pathology];
+# Stored data in 1 session;
+# Joins table :-
+# -----: TABLE :------ patients,
+# -----: TABLE :------ pathology_log,
+# -----: TABLE :------ doctors,
+
+function invoice_list_pathology(Request $request){
+
+    date_default_timezone_set('Asia/Dhaka');
+    $date = date("Y-m-d");
+    $request->session()->put('DATE_TODAY',$date);
+
+    # Show todays patients.
+    $today['today']=DB::table('pathology_log')
+    ->join('patients', 'pathology_log.P_ID', '=', 'patients.P_ID')
+    ->select('pathology_log.*', 'patients.*')
+    ->where('pathology_log.Reg_Date',$date)
+    ->orderBy('pathology_log.AI_ID','desc')
+    ->get();
+    
+    # Show all patients.
+    $all['all']=DB::table('pathology_log')
+    ->join('patients', 'pathology_log.P_ID', '=', 'patients.P_ID')
+    ->select('pathology_log.*', 'patients.*')
+    ->where('pathology_log.Reg_Date', '!=', $date)
+    ->orderBy('pathology_log.AI_ID','desc')
+    ->get();
+
+    $request->session()->put('INVOICE','0');
+
+    $request->session()->put('InvoiceType','pathology');
+
+    # Returning to the view below.
+    return view('hospital/reception/invoice_generator_list_appointment',$today, $all);
+
+}
+
+# End of function invoice_list_pathology.                   <-------#
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: Hello, future me,
@@ -466,6 +518,89 @@ function collect_dental_invoice_data(Request $request, $d_t_n){
 # This will change.
 # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Collect data for invoice;
+# Stores data in 18 sessions;
+
+function collect_pathology_invoice_data(Request $request, $t_n){
+
+    $id = $t_n;
+    session(['tn' => $id]);
+    
+    # Gather data.
+    $data_logs=DB::table('pathology_log')
+    ->where('Test_No',$id)
+    ->first();
+
+    $d_id = $data_logs->D_ID;
+    $p_id = $data_logs->P_ID;
+    
+    # Store in session.
+    session(['pId' => $p_id]);
+    session(['rId' => $data_logs->R_ID]);
+    session(['dId' => $data_logs->D_ID]);
+    session(['reg_date' => $data_logs->Reg_Date]);
+    session(['del_date' => $data_logs->Delivery_Date]);
+    session(['payment_status' => $data_logs->Payment_Status]);
+    session(['total_amount' => $data_logs->Total_Amount]);
+    session(['payable_amount' => $data_logs->Payable_Amount]);
+    session(['paid_amount' => $data_logs->Paid]);
+    session(['received' => $data_logs->Received]);
+    session(['changes' => $data_logs->Changes]);
+    session(['discount' => $data_logs->Discount]);
+    session(['due' => $data_logs->Due_Amount]);
+    session(['timestamp' => $data_logs->Time_Stamp]);
+
+    # Gather data.
+    $data_patients=DB::table('patients')
+    ->where('P_ID',$p_id)
+    ->first();
+
+    # Store in session.
+    session(['pName' => $data_patients->Patient_Name]);
+    session(['pGender' => $data_patients->Patient_Gender]);
+    session(['cellNum' => $data_patients->Cell_Number]);
+    session(['nid' => $data_patients->NID]);
+    session(['nidType' => $data_patients->NID_Type]);
+    session(['pAge' => $data_patients->Patient_Age]);
+
+    if($d_id != 'self'){
+
+        # Gather data.
+        $data_docs=DB::table('doctors')
+        ->where('D_ID',$d_id)
+        ->first();
+
+        # Store in session.
+        session(['dName' => $data_docs->Dr_Name]);
+
+    }else{
+
+        # Store in session.
+        session(['dName' => $d_id]);
+
+    }
+
+    # Redirecting to [FUNCTION-NO::0].
+    return redirect('/reception/generate/pathology/invoice/');
+
+}
+
+# End of function collect_dental_invoice_data.           <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# This will change.
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
 
 
 
