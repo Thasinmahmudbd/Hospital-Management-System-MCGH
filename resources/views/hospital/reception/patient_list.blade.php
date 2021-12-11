@@ -115,6 +115,17 @@
                     </tr>
 
                     <?php $serial = 1; ?>
+                    @foreach($doctor as $list)
+
+                    <tr class="frame_rows">
+                        <td class="frame_data" data-label="S/N"><?php echo $serial; $serial++; ?></td>
+                        <td class="frame_data text_left" data-label="Transaction Message">Appointment for {{$list->P_ID}} with {{$list->D_ID}}.</td>
+                        <td class="frame_data" data-label="Timestamp">{{$list->Time_Stamp}}</td>
+                        <td class="frame_data text_right" data-label="Amount Collected">{{$list->Final_Fee}}</td>
+                    </tr>
+
+                    @endforeach
+                    
                     @foreach($result as $list)
 
                     <tr class="frame_rows">
@@ -127,6 +138,18 @@
                     @endforeach
 
                 </table>
+
+
+
+
+
+
+
+
+
+
+
+
 
 @endsection
 

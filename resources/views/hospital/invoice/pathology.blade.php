@@ -216,7 +216,12 @@
             <td class= "test_table_border_less" style="width:20%"></td>
             <td class= "test_table_border_less" style="width:40%"></td>
             <td class= "test_table_border_less" style="width:14%">Change:</td>
-            <td class= "test_table_border" style="width:18%" >{{Session::get('changes')}}</td>
+            @if(Session::get('changes')<'0')
+                <td class= "test_table_border" style="width:18%" >0</td>
+            @else
+                <td class= "test_table_border" style="width:18%" >{{Session::get('changes')}}</td>
+            @endif
+            
         </tr>
 
         <tr>

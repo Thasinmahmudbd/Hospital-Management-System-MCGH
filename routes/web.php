@@ -169,7 +169,7 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     Route::get('/reception/cancel/admission/after/bed','App\Http\Controllers\reception\add_patient@cancel_admission_after_bed_selection');
 
     # Patient data entry in table patients & admission_logs.
-    # Redirecting to [FUNCTION-NO::12]---in-controller.
+    # Redirecting to [FUNCTION-NO::23]---in-controller.
     Route::post('/reception/patient_data_entry_for_admission','App\Http\Controllers\reception\add_patient@patient_data_entry_for_admission');
 
     ##############################################################################################################################################

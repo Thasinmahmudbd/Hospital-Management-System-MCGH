@@ -49,6 +49,7 @@ class add_patient extends Controller
         session(['test_usg' => 'Ultrasonography']);
         session(['test_xray' => 'X-Ray']);
         session(['test_more' => 'Others']);
+        session(['test_all' => 'All']);
 
         # Returning to the view below.
         return view('hospital/reception/home');
@@ -992,15 +993,36 @@ class add_patient extends Controller
         ->orderBy('Credit_Type','asc')
         ->get();
 
+        $outdoor['doctor']=DB::table('patient_logs')
+        ->where('Time_Stamp','like',$date.'%')
+        ->where('R_ID',$r_id)
+        ->where('Treatment_Status',0)
+        ->orderBy('AI_ID','desc')
+        ->get();
+
         $collection=DB::table('hospital_income_log')
         ->where('Time_Stamp','like',$date.'%')
         ->where('User_ID',$r_id)
         ->sum('Credit');
 
+        $deduction=DB::table('hospital_income_log')
+        ->where('Time_Stamp','like',$date.'%')
+        ->where('User_ID',$r_id)
+        ->sum('Debit');
+
+        $outdoor_collection=DB::table('patient_logs')
+        ->where('Time_Stamp','like',$date.'%')
+        ->where('R_ID',$r_id)
+        ->where('Treatment_Status',0)
+        ->sum('Final_Fee');
+
+        $collection = $collection - $deduction;
+        $collection = $collection + $outdoor_collection;
+
         session(['collection' => $collection]);
         
         # Returning to the view below.
-        return view('hospital/reception/patient_list',$data);
+        return view('hospital/reception/patient_list',$data,$outdoor);
 
     }
 
@@ -2119,7 +2141,7 @@ function emergency_entry(Request $request){
 
         $message = "Emergency Fee for: ".$request->input('er_patient_name');
         $credit = $received - $changes;
-        $credit = $credit - $income;
+        $service_charge = $credit - $income;
         $gov_vat = 0;
         $credit_type = "Emergency";
 
@@ -2129,8 +2151,8 @@ function emergency_entry(Request $request){
             'Debit'=>0,
             'Credit'=>$credit,
             'Vat'=>$gov_vat,
-            'Service_Charge'=>$credit,
-            'Total_Income'=>$credit,
+            'Service_Charge'=>$service_charge,
+            'Total_Income'=>$service_charge,
             'Credit_Type'=>$credit_type,
             'Entry_Date'=>date("Ymd"),
             'Entry_Time'=>date("H:i:s"),
@@ -3135,7 +3157,7 @@ function pathology_patient_info_entry(Request $request){
     $msg = 'Patient registered, choose tests to proceed.';
     session(['SESSION_FLASH_MSG' => $msg]);
 
-    session(['test_group' => 'Pathology']);
+    session(['test_group' => 'All']);
     $test_group = $request->session()->get('test_group');
 
     # Redirecting to [FUNCTION-NO::40].
@@ -3162,13 +3184,25 @@ function pathology_patient_info_entry(Request $request){
 function show_pathology_tests(Request $request, $test_group){
 
     $test_no = $request->session()->get('test_no');
-    
-    # test list.
-    $test['info']=DB::table('pathology_info')
+
+    if($test_group=="All"){
+
+        # test list.
+        $test['info']=DB::table('pathology_info')
+        ->where('State','1')
+        ->orderBy('Test_Name','asc')
+        ->get();
+
+    }else{
+
+        # test list.
+        $test['info']=DB::table('pathology_info')
         ->where('State','1')
         ->where('Groups',$test_group)
         ->orderBy('Test_Name','asc')
         ->get();
+
+    }
 
     $selected_test['logs']=DB::table('pathology_info')
         ->join('pathology_test_log', 'pathology_info.AI_ID', '=', 'pathology_test_log.Test_Info_AI_ID')
@@ -3216,11 +3250,22 @@ function search_pathology_tests(Request $request){
 
     $test_search_info = $request->input('test_search_info');
 
-    $available_test_data['info']=DB::table('pathology_info')
+    if($test_group=="All"){
+
+        $available_test_data['info']=DB::table('pathology_info')
+        ->where('Test_Name','like','%'.$test_search_info.'%')
+        ->orderBy('Test_Name','asc')
+        ->get();
+    
+    }else{
+    
+        $available_test_data['info']=DB::table('pathology_info')
         ->where('Test_Name','like','%'.$test_search_info.'%')
         ->where('Groups','like','%'.$test_group.'%')
         ->orderBy('Test_Name','asc')
         ->get();
+    
+    }
 
     $a_t_d=DB::table('pathology_info')
         ->where('Test_Name','like','%'.$test_search_info.'%')
@@ -3510,7 +3555,7 @@ function pathology_payment_submission(Request $request){
         # Calculate service charge.
         $service_charge = (($service_charge_percentage/100)*$received);
 
-        # Calculate dentist income.
+        # Calculate doctor income.
         $doctor_income = $received-$service_charge;
 
     }else{
@@ -3518,7 +3563,7 @@ function pathology_payment_submission(Request $request){
         # Calculate service charge.
         $service_charge = (($service_charge_percentage/100)*($received-$abs_change));
 
-        # Calculate dentist income.
+        # Calculate doctor income.
         $doctor_income = ($received-$abs_change)-$service_charge;
 
     }
@@ -3746,10 +3791,22 @@ function pathology_due_payment_submission(Request $request){
         $paid = $paid + $received;
         $real_due = $due_amount;
 
+        # Calculate service charge.
+        $service_charge = (($service_charge_percentage/100)*$received);
+
+        # Calculate refer income.
+        $refer_income = $received-$service_charge;
+
     }else{
 
         $paid = $paid + ($received-$abs_change);
         $real_due = 0;
+
+        # Calculate service charge.
+        $service_charge = (($service_charge_percentage/100)*($received-$abs_change));
+
+        # Calculate refer income.
+        $refer_income = ($received-$abs_change)-$service_charge;
 
     }
 
@@ -3771,24 +3828,6 @@ function pathology_due_payment_submission(Request $request){
     DB::table('pathology_log')
         ->where('Test_No',$test_no)    
         ->update($pathology_log);
-
-    if($due_amount>0){
-
-        # Calculate service charge.
-        $service_charge = (($service_charge_percentage/100)*$received);
-
-        # Calculate refer income.
-        $refer_income = $received-$service_charge;
-
-    }else{
-
-        # Calculate service charge.
-        $service_charge = (($service_charge_percentage/100)*($received-$abs_change));
-
-        # Calculate refer income.
-        $refer_income = ($received-$abs_change)-$service_charge;
-
-    }
 
     # Calculate gov vat & income.
     $gov_vat = (($vat/100)*$service_charge);
@@ -3826,7 +3865,7 @@ function pathology_due_payment_submission(Request $request){
     DB::table('hospital_income_log')
     ->insert($hospital_income_logs);
 
-    if($d_id != 'self' && $doctor_income!=0){
+    if($d_id != 'self' && $refer_income!=0){
 
         # checking current balance.
         $wallet=DB::table('doctor_balance_logs')

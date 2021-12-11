@@ -21,6 +21,13 @@
 </li>
 
 <li class="link_item">
+    <a href="{{url('/reception/show_tests/pathology/'.Session::get('test_all'))}}" class="link">
+        <i class="link_icons fas fa-th-list"></i>
+        <span class="link_name"> All </span>
+    </a>
+</li>
+
+<li class="link_item">
     <a href="{{url('/reception/show_tests/pathology/'.Session::get('test_pathology'))}}" class="link">
         <i class="link_icons fas fa-th-list"></i>
         <span class="link_name"> Pathology </span>
@@ -97,6 +104,8 @@
 
                             @if(session('test_group')=='Pathology')
                             <b>Pathology</b>
+                            @elseif(session('test_group')=='All')
+                            <b>All</b>
                             @elseif(session('test_group')=='Hormone')
                             <b>Hormone</b>
                             @elseif(session('test_group')=='Ultrasonography')
