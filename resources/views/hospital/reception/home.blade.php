@@ -28,9 +28,9 @@
 </li>
 
 <li class="list_item">
-    <a href="{{url('/reception/patient_list/')}}" class="link">
+    <a href="{{url('/reception/patient_list/'.Session::get('DATE_TODAY'))}}" class="link">
         <i class=" link_icons fas fa-th-list"></i>
-        <span class="link_name"> Patients List </span>
+        <span class="link_name"> Daily Summary </span>
     </a>
 </li>
 
@@ -57,7 +57,7 @@
 <div id="myLinks" class="mobile_links">
     <a class="mobile_link" href="{{url('/reception/home/')}}">Patient Entry</a>
     <a class="mobile_link" href="{{url('/reception/emergency/')}}">Emergency</a>
-    <a class="mobile_link" href="{{url('/reception/patient_list/')}}">Patients List</a>
+    <a class="mobile_link" href="{{url('/reception/patient_list/'.Session::get('DATE_TODAY'))}}">Daily Summary</a>
     <a class="mobile_link" href="{{url('/reception/invoice_list/appointment/')}}">Generate Invoice</a>
 </div>
 

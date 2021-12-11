@@ -20,7 +20,7 @@
 }
 
 .header{
-    background-color: #bdbbb7;
+    background-color: #f2f2f2;
     font-size: 20px;
     text-align: center;
     padding: 5px;
@@ -36,7 +36,7 @@
     width:100%;
     margin-top: 10px;
     text-align: center;
-    background-color: #bdbbb7;
+    background-color: #f2f2f2;
     color: BLACK;
     font-weight: bold;
     font-size: 20px;
@@ -82,7 +82,7 @@ h3{
     width:100%;
     margin-top: 10px;
     text-align: center;
-    background-color: #bdbbb7;
+    background-color: #f2f2f2;
     color: #000;
     font-weight: bold;
     font-size: 20px;

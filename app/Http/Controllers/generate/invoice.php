@@ -104,6 +104,7 @@ function invoice_list_admission(Request $request){
     ->join('beds', 'admission_logs.B_ID', '=', 'beds.B_ID')
     ->select('admission_logs.*', 'patients.*', 'doctors.*', 'beds.*')
     ->where('admission_logs.Admission_Date', '!=', $date)
+    ->where('admission_logs.Payment_Confirmation', null)
     ->orderBy('admission_logs.A_ID','desc')
     ->get();
 
@@ -142,6 +143,7 @@ function invoice_list_dental(Request $request){
     date_default_timezone_set('Asia/Dhaka');
     $date = date("Y-m-d");
     $request->session()->put('DATE_TODAY',$date);
+    $one_week = date('Y-m-d', strtotime($date. ' - 7 days'));
 
     # Show todays patients.
     $today['today']=DB::table('dental_log')
@@ -158,6 +160,7 @@ function invoice_list_dental(Request $request){
     ->join('doctors', 'dental_log.D_ID', '=', 'doctors.D_ID')
     ->select('dental_log.*', 'patients.*', 'doctors.*')
     ->where('dental_log.Reg_Date', '!=', $date)
+    ->where('dental_log.Reg_Date', '>', $one_week)
     ->orderBy('dental_log.AI_ID','desc')
     ->get();
 
@@ -196,6 +199,7 @@ function invoice_list_pathology(Request $request){
     date_default_timezone_set('Asia/Dhaka');
     $date = date("Y-m-d");
     $request->session()->put('DATE_TODAY',$date);
+    $one_week = date('Y-m-d', strtotime($date. ' - 7 days'));
 
     # Show todays patients.
     $today['today']=DB::table('pathology_log')
@@ -210,6 +214,7 @@ function invoice_list_pathology(Request $request){
     ->join('patients', 'pathology_log.P_ID', '=', 'patients.P_ID')
     ->select('pathology_log.*', 'patients.*')
     ->where('pathology_log.Reg_Date', '!=', $date)
+    ->where('pathology_log.Reg_Date', '>', $one_week)
     ->orderBy('pathology_log.AI_ID','desc')
     ->get();
 
@@ -248,6 +253,7 @@ function invoice_list_physio(Request $request){
     date_default_timezone_set('Asia/Dhaka');
     $date = date("Y-m-d");
     $request->session()->put('DATE_TODAY',$date);
+    $one_week = date('Y-m-d', strtotime($date. ' - 7 days'));
 
     # Show todays patients.
     $today['today']=DB::table('physio_log')
@@ -264,6 +270,7 @@ function invoice_list_physio(Request $request){
     ->join('doctors', 'physio_log.D_ID', '=', 'doctors.D_ID')
     ->select('physio_log.*', 'patients.Patient_Name', 'patients.Patient_Gender', 'patients.Patient_Age', 'patients.Cell_Number', 'patients.P_ID', 'doctors.Dr_Name', 'doctors.D_ID')
     ->where('physio_log.Reg_Date', '!=', $date)
+    ->where('physio_log.Reg_Date', '>', $one_week)
     ->orderBy('physio_log.AI_ID','desc')
     ->get();
 
@@ -277,6 +284,59 @@ function invoice_list_physio(Request $request){
 }
 
 # End of function invoice_list_physio.                      <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me, 
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::06 ####
+#########################
+# Shows printable patient invoices [er];
+# Stored data in 1 session;
+# Joins table :-
+# -----: TABLE :------ emergency_log,
+# -----: TABLE :------ doctors,
+
+function invoice_list_er(Request $request){
+
+    date_default_timezone_set('Asia/Dhaka');
+    $date = date("Y-m-d");
+    $request->session()->put('DATE_TODAY',$date);
+    $one_week = date('Y-m-d', strtotime($date. ' - 7 days'));
+
+    # Show todays patients.
+    $today['today']=DB::table('emergency_log')
+    ->join('doctors', 'emergency_log.D_ID', '=', 'doctors.D_ID')
+    ->select('emergency_log.*', 'doctors.Dr_Name', 'doctors.D_ID')
+    ->where('emergency_log.Reg_Date',$date)
+    ->orderBy('emergency_log.AI_ID','desc')
+    ->get();
+    
+    # Show all patients.
+    $all['all']=DB::table('emergency_log')
+    ->join('doctors', 'emergency_log.D_ID', '=', 'doctors.D_ID')
+    ->select('emergency_log.*', 'doctors.Dr_Name', 'doctors.D_ID')
+    ->where('emergency_log.Reg_Date', '!=', $date)
+    ->where('emergency_log.Reg_Date', '>', $one_week)
+    ->orderBy('emergency_log.AI_ID','desc')
+    ->get();
+
+    $request->session()->put('INVOICE','0');
+
+    $request->session()->put('InvoiceType','er');
+
+    # Returning to the view below.
+    return view('hospital/reception/invoice_generator_list_appointment',$today, $all);
+
+}
+
+# End of function invoice_list_er.                          <-------#
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: Hello, future me,
@@ -344,6 +404,291 @@ function invoice_search_appointment(Request $request){
 # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Search printable patient invoices [admit];
+# Stored data in 1 session;
+# Joins table :-
+# -----: TABLE :------ patients,
+# -----: TABLE :------ admission_logs,
+# -----: TABLE :------ doctors.
+
+function invoice_search_admit(Request $request){
+
+    $request->validate([
+
+        'old_patient_search_info'=>'required'
+
+    ]);
+
+    $old_patient_search_info = $request->input('old_patient_search_info');
+
+    # Show searched patients.
+    $search['result']=DB::table('admission_logs')
+    ->join('patients', 'admission_logs.P_ID', '=', 'patients.P_ID')
+    ->join('doctors', 'admission_logs.D_ID', '=', 'doctors.D_ID')
+    ->select('admission_logs.*', 'patients.Patient_Name', 'patients.Cell_Number', 'doctors.D_ID', 'doctors.Dr_Name', 'doctors.Dr_Gender', 'doctors.Specialty', 'doctors.Department')
+    ->where('admission_logs.P_ID','like',$old_patient_search_info)
+    ->orwhere('patients.Cell_Number','like',$old_patient_search_info)
+    ->orwhere('doctors.Dr_Name','like','%'.$old_patient_search_info.'%')
+    ->orderBy('admission_logs.A_ID','desc')
+    ->get();
+
+    $request->session()->put('INVOICE','1');
+    $request->session()->put('SEARCH_RESULT','1');
+
+    if(count($search['result']) == 0){
+
+        $request->session()->put('SEARCH_RESULT','0');
+
+    }
+
+    $request->session()->put('InvoiceType','admit');
+
+    # Returning to the view below.
+    return view('hospital/reception/invoice_generator_list_appointment',$search);
+
+}
+
+# End of function invoice_search_admit.                     <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Search printable patient invoices [pathology];
+# Stored data in 1 session;
+# Joins table :-
+# -----: TABLE :------ patients,
+# -----: TABLE :------ pathology_logs.
+
+function invoice_search_pathology(Request $request){
+
+    $request->validate([
+
+        'old_patient_search_info'=>'required'
+
+    ]);
+
+    $old_patient_search_info = $request->input('old_patient_search_info');
+
+    # Show searched patients.
+    $search['result']=DB::table('pathology_log')
+    ->join('patients', 'pathology_log.P_ID', '=', 'patients.P_ID')
+    ->select('pathology_log.*', 'patients.Patient_Name', 'patients.Cell_Number')
+    ->where('pathology_log.P_ID','like',$old_patient_search_info)
+    ->orwhere('patients.Cell_Number','like',$old_patient_search_info)
+    ->orderBy('pathology_log.AI_ID','desc')
+    ->get();
+
+    $request->session()->put('INVOICE','1');
+    $request->session()->put('SEARCH_RESULT','1');
+
+    if(count($search['result']) == 0){
+
+        $request->session()->put('SEARCH_RESULT','0');
+
+    }
+
+    $request->session()->put('InvoiceType','pathology');
+
+    # Returning to the view below.
+    return view('hospital/reception/invoice_generator_list_appointment',$search);
+
+}
+
+# End of function invoice_search_pathology.                 <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Search printable patient invoices [dental];
+# Stored data in 1 session;
+# Joins table :-
+# -----: TABLE :------ patients,
+# -----: TABLE :------ dental_logs,
+# -----: TABLE :------ doctors.
+
+function invoice_search_dental(Request $request){
+
+    $request->validate([
+
+        'old_patient_search_info'=>'required'
+
+    ]);
+
+    $old_patient_search_info = $request->input('old_patient_search_info');
+
+    # Show searched patients.
+    $search['result']=DB::table('dental_log')
+    ->join('patients', 'dental_log.P_ID', '=', 'patients.P_ID')
+    ->join('doctors', 'dental_log.D_ID', '=', 'doctors.D_ID')
+    ->select('dental_log.*', 'patients.Patient_Name', 'patients.Cell_Number', 'doctors.D_ID', 'doctors.Dr_Name', 'doctors.Dr_Gender', 'doctors.Specialty', 'doctors.Department')
+    ->where('dental_log.P_ID','like',$old_patient_search_info)
+    ->orwhere('patients.Cell_Number','like',$old_patient_search_info)
+    ->orwhere('doctors.Dr_Name','like','%'.$old_patient_search_info.'%')
+    ->orderBy('dental_log.AI_ID','desc')
+    ->get();
+
+    $request->session()->put('INVOICE','1');
+    $request->session()->put('SEARCH_RESULT','1');
+
+    if(count($search['result']) == 0){
+
+        $request->session()->put('SEARCH_RESULT','0');
+
+    }
+
+    $request->session()->put('InvoiceType','dental');
+
+    # Returning to the view below.
+    return view('hospital/reception/invoice_generator_list_appointment',$search);
+
+}
+
+# End of function invoice_search_dental.                    <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Search printable patient invoices [physio];
+# Stored data in 1 session;
+# Joins table :-
+# -----: TABLE :------ patients,
+# -----: TABLE :------ physio_log,
+# -----: TABLE :------ doctors.
+
+function invoice_search_physio(Request $request){
+
+    $request->validate([
+
+        'old_patient_search_info'=>'required'
+
+    ]);
+
+    $old_patient_search_info = $request->input('old_patient_search_info');
+
+    # Show searched patients.
+    $search['result']=DB::table('physio_log')
+    ->join('patients', 'physio_log.P_ID', '=', 'patients.P_ID')
+    ->join('doctors', 'physio_log.D_ID', '=', 'doctors.D_ID')
+    ->select('physio_log.*', 'patients.Patient_Name', 'patients.Cell_Number', 'doctors.D_ID', 'doctors.Dr_Name', 'doctors.Dr_Gender', 'doctors.Specialty', 'doctors.Department')
+    ->where('physio_log.P_ID','like',$old_patient_search_info)
+    ->orwhere('patients.Cell_Number','like',$old_patient_search_info)
+    ->orwhere('doctors.Dr_Name','like','%'.$old_patient_search_info.'%')
+    ->orderBy('physio_log.AI_ID','desc')
+    ->get();
+
+    $request->session()->put('INVOICE','1');
+    $request->session()->put('SEARCH_RESULT','1');
+
+    if(count($search['result']) == 0){
+
+        $request->session()->put('SEARCH_RESULT','0');
+
+    }
+
+    $request->session()->put('InvoiceType','physio');
+
+    # Returning to the view below.
+    return view('hospital/reception/invoice_generator_list_appointment',$search);
+
+}
+
+# End of function invoice_search_physio.                    <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Search printable patient invoices [er];
+# Stored data in 1 session;
+# Joins table :-
+# -----: TABLE :------ emergency_log,
+# -----: TABLE :------ doctors.
+
+function invoice_search_er(Request $request){
+
+    $request->validate([
+
+        'old_patient_search_info'=>'required'
+
+    ]);
+
+    $old_patient_search_info = $request->input('old_patient_search_info');
+
+    # Show searched patients.
+    $search['result']=DB::table('emergency_log')
+    ->join('doctors', 'emergency_log.D_ID', '=', 'doctors.D_ID')
+    ->select('emergency_log.*', 'doctors.D_ID', 'doctors.Dr_Name', 'doctors.Dr_Gender', 'doctors.Specialty', 'doctors.Department')
+    ->orwhere('emergency_log.Ref_Cell_Number','like',$old_patient_search_info)
+    ->orwhere('doctors.Dr_Name','like','%'.$old_patient_search_info.'%')
+    ->orwhere('emergency_log.Ref_Name','like','%'.$old_patient_search_info.'%')
+    ->orwhere('emergency_log.Name','like','%'.$old_patient_search_info.'%')
+    ->orderBy('emergency_log.AI_ID','desc')
+    ->get();
+
+    $request->session()->put('INVOICE','1');
+    $request->session()->put('SEARCH_RESULT','1');
+
+    if(count($search['result']) == 0){
+
+        $request->session()->put('SEARCH_RESULT','0');
+
+    }
+
+    $request->session()->put('InvoiceType','er');
+
+    # Returning to the view below.
+    return view('hospital/reception/invoice_generator_list_appointment',$search);
+
+}
+
+# End of function invoice_search_er.                    <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 
@@ -663,12 +1008,11 @@ function collect_pathology_invoice_data(Request $request, $t_n){
 #### FUNCTION-NO::0 ####
 #########################
 # Collect data for invoice;
-# Stores data in 16 sessions;
+# Stores data in 15 sessions;
 
 function collect_physio_invoice_data(Request $request, $ai_id){
 
     $id = $ai_id;
-    session(['tn' => $id]);
     
     # Gather data.
     $data_logs=DB::table('physio_log')
@@ -714,7 +1058,7 @@ function collect_physio_invoice_data(Request $request, $ai_id){
 
 }
 
-# End of function collect_dental_invoice_data.           <-------#
+# End of function collect_dental_invoice_data.              <-------#
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: Hello, future me,
@@ -722,6 +1066,59 @@ function collect_physio_invoice_data(Request $request, $ai_id){
 # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Collect data for invoice;
+# Stores data in 9 sessions;
+
+function collect_er_invoice_data(Request $request, $ai_id){
+
+    $id = $ai_id;
+    
+    # Gather data.
+    $data_logs=DB::table('emergency_log')
+    ->where('AI_ID',$id)
+    ->first();
+
+    $d_id = $data_logs->D_ID;
+    
+    # Store in session.
+    session(['er_pName' => $data_logs->Name]);
+    session(['er_refName' => $data_logs->Ref_Name]);
+    session(['er_refCell' => $data_logs->Ref_Cell_Number]);
+    session(['er_rId' => $data_logs->R_ID]);
+    session(['er_dId' => $d_id]);
+    session(['reg_date' => $data_logs->Reg_Date]);
+    session(['received' => $data_logs->Received]);
+    session(['changes' => $data_logs->Changes]);
+    session(['fee' => $data_logs->Bill]);
+    session(['timestamp' => $data_logs->Time_Stamp]);
+
+    # Gather data.
+    $data_docs=DB::table('doctors')
+        ->where('D_ID',$d_id)
+        ->first();
+
+    # Store in session.
+    session(['dName' => $data_docs->Dr_Name]);
+
+    # Redirecting to [FUNCTION-NO::0].
+    return redirect('/reception/generate/er/invoice/');
+
+}
+
+# End of function collect_er_invoice_data.                  <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# This will change.
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 

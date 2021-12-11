@@ -606,3 +606,11 @@
 .broken{
     background-color: #555;
 }
+
+.text_left{
+    text-align:left;
+}
+
+.text_right{
+    text-align:right;
+}

@@ -28,9 +28,9 @@
 </li>
 
 <li class="list_item">
-    <a href="{{url('/reception/patient_list/')}}" class="link">
+    <a href="{{url('/reception/patient_list/'.Session::get('DATE_TODAY'))}}" class="link">
         <i class=" link_icons fas fa-th-list"></i>
-        <span class="link_name"> Patients List </span>
+        <span class="link_name"> Daily Summary </span>
     </a>
 </li>
 
@@ -57,7 +57,7 @@
 <div id="myLinks" class="mobile_links">
     <a class="mobile_link" href="{{url('/reception/home/')}}">Patient Entry</a>
     <a class="mobile_link" href="{{url('/reception/emergency/')}}">Emergency</a>
-    <a class="mobile_link" href="{{url('/reception/patient_list/')}}">Patients List</a>
+    <a class="mobile_link" href="{{url('/reception/patient_list/'.Session::get('DATE_TODAY'))}}">Daily Summary</a>
     <a class="mobile_link" href="{{url('/reception/invoice_list/appointment/')}}">Generate Invoice</a>
 </div>
 
@@ -75,19 +75,43 @@
 
 @section('content')
 
+
+
+
+
+                <div class="patient_and_doctor_info_one_is_to_one">
+
+                    <p class="content_container_bg_less_thin text_center alert_msg">
+                        You've collected : {{Session::get('collection')}} Tk.
+                    </p>
+
+                    <form action="{{url('/reception/filter/summary/')}}" method="post" class="content_container_white_super_thin center_self">
+                    @csrf
+
+                        <div class="patient_form_element_three_is_to_one">
+
+                            <input type="date" class="input" name="summary_date" value="{{Session::get('DATE_TODAY')}}" required>
+                            <button type="submit" class="btn form_btn" name="search_summary">Filter</button>
+
+                        </div>
+
+                    </form>
+
+
+
+                </div>
+
+
+
+
+
                 <table class="frame_table">
                     
                     <tr class="frame_header">
                         <th width="5%" class="frame_header_item">S/N</th>
-                        <th width="14%" class="frame_header_item">P-ID</th>
-                        <th width="17%" class="frame_header_item">Patient Name</th>
-                        <th width="14%" class="frame_header_item">Cell</th>
-                        <th width="17%" class="frame_header_item">Doctor</th>
-                        <th width="8%" class="frame_header_item">Fee</th>
-                        <th width="5%" class="frame_header_item">Disc</th>
-                        <th width="8%" class="frame_header_item">Total</th>
-                        <th width="7%" class="frame_header_item">Status</th>
-                        <th width="5%" class="frame_header_item">Action</th>
+                        <th width="60%" class="frame_header_item">Transaction Message</th>
+                        <th width="20%" class="frame_header_item">Timestamp</th>
+                        <th width="15%" class="frame_header_item">Amount Collected</th>
                     </tr>
 
                     <?php $serial = 1; ?>
@@ -95,33 +119,9 @@
 
                     <tr class="frame_rows">
                         <td class="frame_data" data-label="S/N"><?php echo $serial; $serial++; ?></td>
-                        <td class="frame_data" data-label="P-ID">{{$list->P_ID}}</td>
-                        <td class="frame_data" data-label="Patient Name">{{$list->Patient_Name}}</td>
-                        <td class="frame_data" data-label="Cell">{{$list->Cell_Number}}</td>
-                        <td class="frame_data" data-label="Doctor">{{$list->Dr_Name}}</td>
-                        <td class="frame_data" data-label="Fee">{{$list->Basic_Fee}}</td>
-                        <td class="frame_data" data-label="Disc">{{$list->Discount}}</td>
-                        <td class="frame_data" data-label="Total">{{$list->Final_Fee}}</td>
-                        <td class="frame_data" data-label="Status">{{$list->Payment_Status}}</td>
-
-                        @if($list->Payment_Status == 'Unpaid')
-
-                        <td class="frame_action" data-label="Action">
-                            <a href="">
-                                <i class="table_btn far fa-money-bill-alt"></i>
-                            </a>
-                        </td>
-
-                        @else
-
-                        <td class="frame_action" data-label="Action">
-                            <a href=""  class="disable">
-                                <i class="table_basic_btn far fa-money-bill-alt"></i>
-                            </a>
-                        </td>
-
-                        @endif
-
+                        <td class="frame_data text_left" data-label="Transaction Message">{{$list->Message}}</td>
+                        <td class="frame_data" data-label="Timestamp">{{$list->Time_Stamp}}</td>
+                        <td class="frame_data text_right" data-label="Amount Collected">{{$list->Credit}}</td>
                     </tr>
 
                     @endforeach

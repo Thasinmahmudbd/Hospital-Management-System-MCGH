@@ -914,20 +914,90 @@ class add_patient extends Controller
 #########################
 #### FUNCTION-NO::13 ####
 #########################
-# Joins table :-
-# -----: TABLE :------ patients,
-# -----: TABLE :------ patient_logs,
-# -----: TABLE :------ doctor_schedules;
+# Calculates individual money collection.
 # Reads data from joined table.
 
-    function show_list(){
+    function show_list(Request $request, $date){
 
-        $data['result']=DB::table('patient_logs')
+        $r_id = $request->session()->get('REC_SESSION_ID');
+
+        /*$out_door['result']=DB::table('patient_logs')
         ->join('patients', 'patient_logs.P_ID', '=', 'patients.P_ID')
         ->join('doctors', 'patient_logs.D_ID', '=', 'doctors.D_ID')
         ->select('patient_logs.*', 'patients.*', 'doctors.*')
+        ->where('patient_logs.Time_Stamp','like',$date.'%')
+        ->where('patient_logs.R_ID',$r_id)
         ->orderBy('patient_logs.AI_ID','desc')
         ->get();
+
+        $out_door_collection=DB::table('patient_logs')
+        ->where('Time_Stamp','like',$date.'%')
+        ->where('R_ID',$r_id)
+        ->sum('Final_Fee');
+
+        $admission['result']=DB::table('admission_logs')
+        ->join('patients', 'admission_logs.P_ID', '=', 'patients.P_ID')
+        ->join('doctors', 'admission_logs.D_ID', '=', 'doctors.D_ID')
+        ->select('admission_logs.*', 'patients.*', 'doctors.*')
+        ->where('admission_logs.Admission_Timestamp','like',$date.'%')
+        ->where('admission_logs.R_ID',$r_id)
+        ->orderBy('admission_logs.A_ID','desc')
+        ->get();
+
+        $admission_collection=DB::table('admission_logs')
+        ->where('Admission_Timestamp','like',$date.'%')
+        ->where('R_ID',$r_id)
+        ->sum('Admission_Fee');
+
+        $pathology['result']=DB::table('pathology_log')
+        ->join('patients', 'pathology_log.P_ID', '=', 'patients.P_ID')
+        ->select('pathology_log.*', 'patients.*')
+        ->where('pathology_log.Time_Stamp','like',$date.'%')
+        ->where('pathology_log.R_ID',$r_id)
+        ->orderBy('pathology_log.AI_ID','desc')
+        ->get();
+
+        $pathology_collection=DB::table('pathology_log')
+        ->where('Time_Stamp','like',$date.'%')
+        ->where('R_ID',$r_id)
+        ->sum('Paid');
+
+        $physio['result']=DB::table('physio_log')
+        ->join('patients', 'physio_log.P_ID', '=', 'patients.P_ID')
+        ->select('physio_log.*', 'patients.*')
+        ->where('physio_log.Time_Stamp','like',$date.'%')
+        ->where('physio_log.R_ID',$r_id)
+        ->orderBy('physio_log.AI_ID','desc')
+        ->get();
+
+        $physio_collection=DB::table('physio_log')
+        ->where('Time_Stamp','like',$date.'%')
+        ->where('R_ID',$r_id)
+        ->sum('Fee');
+
+        $er['result']=DB::table('emergency_log')
+        ->where('Time_Stamp','like',$date.'%')
+        ->where('R_ID',$r_id)
+        ->orderBy('AI_ID','desc')
+        ->get();
+
+        $er_collection=DB::table('emergency_log')
+        ->where('Time_Stamp','like',$date.'%')
+        ->where('R_ID',$r_id)
+        ->sum('Bill');*/
+
+        $data['result']=DB::table('hospital_income_log')
+        ->where('Time_Stamp','like',$date.'%')
+        ->where('User_ID',$r_id)
+        ->orderBy('Credit_Type','asc')
+        ->get();
+
+        $collection=DB::table('hospital_income_log')
+        ->where('Time_Stamp','like',$date.'%')
+        ->where('User_ID',$r_id)
+        ->sum('Credit');
+
+        session(['collection' => $collection]);
         
         # Returning to the view below.
         return view('hospital/reception/patient_list',$data);
@@ -937,7 +1007,39 @@ class add_patient extends Controller
 # End of function show_list.                                <-------#
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# Note:
+# Note: 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::13.5 ####
+#########################
+# Retrieves data from form;
+# Stores data in 15 sessions.
+
+function filter_summary(Request $request){
+
+    $request->validate([
+
+        'summary_date'=>'required'
+
+    ]);
+    
+    $date = $request->input('summary_date');
+
+    # Redirecting to [FUNCTION-NO::13].
+    return redirect('/reception/patient_list/'.$date);
+
+}
+
+# End of function submit_basic_patient_info.                <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
 # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -991,7 +1093,7 @@ function submit_admit_patient_info(Request $request){
     # Redirecting to [FUNCTION-NO::04].
     return redirect('/reception/doctor_selection/');
 
-    }
+}
 
 # End of function submit_basic_patient_info.                <-------#
                                                                     #
@@ -1961,7 +2063,8 @@ function emergency_entry(Request $request){
         'R_ID'=>$request->session()->get('REC_SESSION_ID'),
         'Bill'=>$bill,
         'Received'=>$received,
-        'Changes'=>$changes
+        'Changes'=>$changes,
+        'Reg_Date'=>$request->session()->get('DATE_TODAY')
 
     );
 
@@ -2038,12 +2141,12 @@ function emergency_entry(Request $request){
 
         DB::table('hospital_income_log')->insert($hospital_income_logs);
 
-        # Redirecting to [FUNCTION-NO::01].
-        return redirect('/reception/home/');
+        # Redirecting to [FUNCTION-NO::06], invoice controller.
+        return redirect('/reception/invoice_list/er/');
 
 }
 
-# End of function cancel_bed_switch.                        <-------#
+# End of function emergency_entry.                          <-------#
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: Hello, future me.
@@ -4021,7 +4124,7 @@ function physio_log_create(Request $request){
 
     }
 
-    # Redirecting to [FUNCTION-NO::05].
+    # Redirecting to [FUNCTION-NO::05], invoice controller.
     return redirect('/reception/invoice_list/physio/');
 
 }

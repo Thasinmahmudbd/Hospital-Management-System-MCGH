@@ -14,11 +14,12 @@
 }
 
 .header{
-  background-color:#04AA6D;;
+  background-color:#f2f2f2/*#04AA6D;*/;
   font-size: 15px;
   text-align: center;
   padding: 3px;
-  color: white;
+  color: #000;
+  font-weight:bold;
  
 }
 .main {
@@ -31,10 +32,11 @@
   width:100%;
   margin-top:10px;
   text-align: center;
-  background-color: #04AA6D;
-  color: white;
+  background-color: #f2f2f2/*#04AA6D;*/;
+  color: #000;
   font-size: 13px;
   padding: 3px;
+  font-weight:bold;
  
 }
 .Patient_Details_table{
@@ -57,13 +59,13 @@
   text-align:center;
 }
 
-#doctor_table tr:nth-child(even){background-color: #f2f2f2;}
+#doctor_table tr:nth-child(odd){background-color: #f2f2f2;}
 
 #doctor_table tr:hover {background-color: #ddd;}
 
 #doctor_table th {
-  background-color: #04AA6D;
-  color: white;
+  background-color: #f2f2f2/*#04AA6D;*/;
+  color: #000;
   font-size: 12px;
   letter-spacing:2px;
 }
