@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 11, 2021 at 07:48 PM
+-- Generation Time: Jan 25, 2022 at 07:02 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.12
 
@@ -43,7 +43,7 @@ CREATE TABLE `accounts` (
 --
 
 INSERT INTO `accounts` (`AI_ID`, `Acc_ID`, `Acc_Name`, `Acc_Gender`, `Acc_Email`, `Acc_Phone`, `Acc_Image`, `Time_Stamp`) VALUES
-(1, 'AC-M-001', 'Hashem', 'Male', 'shamol@gmail.com', '01702315892', NULL, '2021-08-21 10:12:49');
+(1, 'AC-A-007', 'Agent 47', '', 'agent@gmail.com', '01702315892', NULL, '2021-08-21 10:12:49');
 
 -- --------------------------------------------------------
 
@@ -116,6 +116,13 @@ CREATE TABLE `admission_logs` (
   `Discharge_Date` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `admission_logs`
+--
+
+INSERT INTO `admission_logs` (`A_ID`, `P_ID`, `R_ID`, `B_ID`, `D_ID`, `Pre_Vill`, `Pre_PO`, `Pre_Upa`, `Pre_Dist`, `Per_Vill`, `Per_PO`, `Per_Upa`, `Per_Dist`, `Admission_Date`, `Religion`, `Consultant`, `Emergency_Rel_Add`, `Emergency_Number`, `Ward_Days`, `Cabin_Days`, `Payment_Confirmation`, `OT_Confirmation`, `Package_Confirmation`, `Ligation`, `Third_Seizure`, `Bed_Bill`, `Admission_Fee`, `Paid_Amount`, `Changes`, `Admission_Timestamp`, `Update_Timestamp`, `Update_Date`, `Discount`, `Discharge_Date`) VALUES
+(21, 'M-12122021-001', 'R-A-007', '1', 'D-M-001', 'demo pre village', 'demo pre  po', 'demo pre  upa', 'demo pre  dist', 'demo pre village', 'demo pre  po', 'demo pre  upa', 'demo pre  dist', '2021-12-12', 'demo religion', 'Brig Gen S M Mizanur Rahman', 'demo address', '01985235648', NULL, NULL, NULL, NULL, 'none', 'no', 'no', NULL, 300, 500, 200, '2021-12-12 05:20:51', NULL, NULL, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -159,7 +166,7 @@ CREATE TABLE `beds` (
 --
 
 INSERT INTO `beds` (`B_ID`, `Bed_No`, `Floor_No`, `Room_No`, `Bed_Type`, `Quality`, `B_Location`, `Package_Name`, `Normal_Pricing`, `Package_Pricing`, `Day_Range`, `Confirmation`, `Admission_Fee`) VALUES
-(1, '210-1', 2, 210, 'Ward', 'Male', 'Window', '', 750, 0, 0, 0, 300),
+(1, '210-1', 2, 210, 'Ward', 'Male', 'Window', '', 750, 0, 0, 1, 300),
 (2, '210-2', 2, 210, 'Ward', 'Male', 'Window', '', 750, 0, 0, 0, 300),
 (3, '210-3', 2, 210, 'Ward', 'Male', 'Window', '', 750, 0, 0, 0, 300),
 (4, '210-4', 2, 210, 'Ward', 'Male', 'Window', '', 750, 0, 0, 0, 300),
@@ -230,6 +237,7 @@ CREATE TABLE `bed_invigilators` (
   `Duty_N_ID` longtext DEFAULT 'None',
   `Assistant_Name` longtext DEFAULT 'None',
   `Assistant_Fee` float DEFAULT 0,
+  `Creditor_Status` int(11) DEFAULT 1,
   `N_ID` longtext NOT NULL,
   `B_ID` longtext NOT NULL,
   `Visit_Date` date NOT NULL,
@@ -298,6 +306,13 @@ CREATE TABLE `dental_log` (
   `Time_Stamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `dental_log`
+--
+
+INSERT INTO `dental_log` (`AI_ID`, `Dental_Test_No`, `P_ID`, `R_ID`, `D_ID`, `Discount`, `Paid`, `Received`, `Changes`, `Payment_Status`, `Due_Amount`, `Total_Amount`, `Payable_Amount`, `Reg_Date`, `Time_Stamp`) VALUES
+(50, 1, 'M-12122021-001', 'R-A-007', 'D-M-042', 10, 4185, 3000, 815, 'Paid', 0, 4650, 4185, '2021-12-12', '2021-12-12 05:21:41');
+
 -- --------------------------------------------------------
 
 --
@@ -311,6 +326,15 @@ CREATE TABLE `dental_test_log` (
   `Fee` int(11) NOT NULL,
   `Time_Stamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `dental_test_log`
+--
+
+INSERT INTO `dental_test_log` (`AI_ID`, `Dental_Info_AI_ID`, `Dental_Test_No`, `Fee`, `Time_Stamp`) VALUES
+(82, 1, 1, 150, '2021-12-12 05:22:15'),
+(83, 8, 1, 1500, '2021-12-12 05:22:21'),
+(84, 13, 1, 3000, '2021-12-12 05:22:28');
 
 -- --------------------------------------------------------
 
@@ -362,7 +386,7 @@ INSERT INTO `doctors` (`AI_ID`, `D_ID`, `Dr_Name`, `Dr_Gender`, `Specialty`, `De
 (29, 'D-M-029', 'Dr Md Moniruzzaman', 'Male', 'Spl', 'Orthopaedic', NULL, 0, 600, 20, 0, '2021-08-21 10:55:50'),
 (31, 'D-M-030', 'Dr. AKM Asaduzzaman Shohag', 'Male', '', 'DMO', NULL, 0, 0, 0, 0, '2021-10-18 14:31:33'),
 (32, 'D-M-031', 'Dr. Al-Amin Sarkar', 'Male', '', 'DMO', NULL, 0, 0, 0, 0, '2021-10-18 14:32:36'),
-(33, 'D-M-032', 'Dr. Naim Abdullah', 'Male', '', 'DMO', NULL, 0, 0, 0, 0, '2021-10-18 14:33:04'),
+(33, 'D-M-032', 'Dr. Naim Abdullah', 'Male', '', 'DMO', NULL, 100, 0, 0, 0, '2021-10-18 14:33:04'),
 (36, 'D-M-033', 'Maj Dr Shahadutth Ullah', 'Male', 'Surgeon', 'ENT', NULL, 0, 600, 20, 0, '2021-10-18 15:25:03'),
 (37, 'D-M-034', 'Lt Col Dr. Asim Kumar Dotto', 'Male', 'Surgeon', 'Surgery', NULL, 0, 600, 20, 0, '2021-10-18 15:25:56'),
 (38, 'D-M-035', 'Dr A.H.M Mohosin (Sujon)', 'Male', '', 'Pediatrics', NULL, 0, 600, 20, 0, '2021-10-18 15:27:41'),
@@ -372,8 +396,8 @@ INSERT INTO `doctors` (`AI_ID`, `D_ID`, `Dr_Name`, `Dr_Gender`, `Specialty`, `De
 (42, 'D-F-039', 'Dr Amena Bagum', 'Female', 'Surgeon', 'Gynae', NULL, 0, 600, 20, 0, '2021-10-18 15:32:03'),
 (43, 'D-F-040', 'Lt.Col Dr Kaoser Jahan', 'Female', 'Surgeon', 'Gynae', '', 0, 600, 20, 0, '2021-10-18 15:41:34'),
 (44, 'D-M-002', 'Maj Dr. Mohammad Bayejid', 'Male', 'Medicine', 'Cardiology', NULL, 0, 600, 20, 0, '2021-11-18 10:16:10'),
-(45, 'D-M-041', 'MD. Abul Basher', 'Male', '', 'Physiology', NULL, 0, 0, 0, 0, '2021-12-10 15:29:50'),
-(46, 'D-M-042', 'Lt Col Md. Abdul Mannan', 'Male', '', 'Dental', NULL, 0, 600, 20, 0, '2021-12-10 15:29:50');
+(45, 'D-M-041', 'MD. Abul Basher', 'Male', '', 'Physiology', NULL, 250, 0, 0, 0, '2021-12-10 15:29:50'),
+(46, 'D-M-042', 'Lt Col Md. Abdul Mannan', 'Male', '', 'Dental', NULL, 2092.5, 600, 20, 0, '2021-12-10 15:29:50');
 
 -- --------------------------------------------------------
 
@@ -394,6 +418,16 @@ CREATE TABLE `doctor_balance_logs` (
   `O_ID` int(11) NOT NULL,
   `Time_Stamp` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `doctor_balance_logs`
+--
+
+INSERT INTO `doctor_balance_logs` (`AI_ID`, `D_ID`, `B_Date`, `Debit`, `Credit`, `Commission`, `Income`, `Current_Balance`, `Acc_ID`, `O_ID`, `Time_Stamp`) VALUES
+(75, 'D-M-032', '2021-12-12', 0, 100, 0, 100, 100, 'R-A-007', 0, '2021-12-12 05:18:05'),
+(76, 'D-M-042', '2021-12-12', 0, 1000, 0, 1000, 1000, 'R-A-007', 0, '2021-12-12 05:25:42'),
+(77, 'D-M-042', '2021-12-12', 0, 1092.5, 0, 1092.5, 2092.5, 'R-A-007', 0, '2021-12-12 05:26:22'),
+(78, 'D-M-041', '2021-12-12', 0, 250, 0, 250, 250, 'R-A-007', 0, '2021-12-12 05:27:32');
 
 -- --------------------------------------------------------
 
@@ -421,7 +455,7 @@ CREATE TABLE `doctor_schedules` (
 --
 
 INSERT INTO `doctor_schedules` (`AI_ID`, `D_ID`, `F`, `T`, `Sat`, `Sun`, `Mon`, `Tue`, `Wed`, `Thu`, `Fri`, `Time_Stamp`) VALUES
-(383, 'D-M-001', '16:00:00', '20:00:00', 'A', 'A', 'A', 'A', 'A', 'A', 'A', '2021-11-17 17:26:51'),
+(383, 'D-M-001', '16:00:00', '20:00:00', 'A', '1', 'A', 'A', 'A', 'A', 'A', '2021-11-17 17:26:51'),
 (384, 'D-M-003', '16:00:00', '20:00:00', 'A', 'A', 'A', 'A', 'A', 'A', 'A', '2021-11-17 17:34:25'),
 (385, 'D-M-004', '16:00:00', '20:00:00', 'A', 'A', 'A', 'A', 'A', 'A', 'A', '2021-11-17 17:34:25'),
 (386, 'D-M-005', '16:00:00', '20:00:00', 'A', 'A', 'A', 'A', 'A', 'A', 'A', '2021-11-17 17:34:25'),
@@ -476,6 +510,13 @@ CREATE TABLE `emergency_log` (
   `Time_Stamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `emergency_log`
+--
+
+INSERT INTO `emergency_log` (`AI_ID`, `D_ID`, `R_ID`, `Name`, `Ref_Name`, `Ref_Cell_Number`, `Bill`, `Received`, `Changes`, `Reg_Date`, `Time_Stamp`) VALUES
+(9, 'D-M-032', 'R-A-007', 'Jakir', 'Manik', '01821420420', 200, 500, 300, '2021-12-12', '2021-12-12 05:18:05');
+
 -- --------------------------------------------------------
 
 --
@@ -498,6 +539,19 @@ CREATE TABLE `hospital_income_log` (
   `Time_Stamp` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `hospital_income_log`
+--
+
+INSERT INTO `hospital_income_log` (`AI_ID`, `Message`, `Debit`, `Credit`, `Vat`, `Service_Charge`, `Total_Income`, `Credit_Type`, `Entry_Date`, `Entry_Time`, `Entry_Year`, `User_ID`, `Time_Stamp`) VALUES
+(105, 'Emergency Fee for: Jakir', 0, 200, 0, 100, 100, 'Emergency', '2021-12-12', '05:18:06', 2021, 'R-A-007', '2021-12-12 05:18:06'),
+(106, 'Admission fee for patient: M-12122021-001', 0, 300, 0, 300, 300, 'Admission Fee', '2021-12-12', '11:20:51', 2021, 'R-A-007', '2021-12-12 05:20:51'),
+(107, 'Dental services for: M-12122021-001, given by: D-M-042', 0, 2000, 0, 1000, 1000, 'Dental', '2021-12-12', '05:25:42', 2021, 'R-A-007', '2021-12-12 05:25:42'),
+(108, 'Dental services for: M-12122021-001, given by: D-M-042, Due payment.', 0, 2185, 0, 1092.5, 1092.5, 'Dental', '2021-12-12', '05:26:22', 2021, 'R-A-007', '2021-12-12 05:26:22'),
+(109, 'Physio services for: M-12122021-001, given by: D-M-041', 0, 500, 0, 250, 250, 'Physio', '2021-12-12', '11:27:32', 2021, 'R-A-007', '2021-12-12 05:27:32'),
+(110, 'Pathology services for: M-12122021-001, referred by: self', 0, 2000, 0, 2000, 2000, 'Pathology', '2021-12-12', '05:31:15', 2021, 'R-A-007', '2021-12-12 05:31:15'),
+(111, 'Pathology services for: M-12122021-001, given by: self, Due payment.', 0, 2720, 0, 2720, 2720, 'Dental', '2021-12-12', '05:32:09', 2021, 'R-A-007', '2021-12-12 05:32:09');
+
 -- --------------------------------------------------------
 
 --
@@ -518,7 +572,7 @@ CREATE TABLE `logins` (
 
 INSERT INTO `logins` (`AI_ID`, `Emp_ID`, `Log_Password`, `status`, `Time_Stamp`) VALUES
 (1, 'R-A-007', '7777', 1, '2021-08-21 11:07:04'),
-(4, 'AC-M-001', '5555', 1, '2021-08-21 11:07:04'),
+(4, 'AC-A-007', '7777', 1, '2021-08-21 11:07:04'),
 (6, 'R-M-001', '111213', 1, '2021-08-21 11:07:04'),
 (7, 'R-M-002', '999897', 1, '2021-08-21 11:07:04'),
 (8, 'R-M-003', '595755', 1, '2021-08-21 11:07:04'),
@@ -687,7 +741,8 @@ CREATE TABLE `ot_assistant_logs` (
   `AI_ID` int(11) NOT NULL,
   `O_ID` int(11) NOT NULL,
   `Assistant_Name` longtext NOT NULL,
-  `Assistant_Fee` int(11) NOT NULL
+  `Assistant_Fee` int(11) NOT NULL,
+  `Creditor_Status` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -1101,6 +1156,13 @@ CREATE TABLE `pathology_log` (
   `Time_Stamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `pathology_log`
+--
+
+INSERT INTO `pathology_log` (`AI_ID`, `Test_No`, `P_ID`, `R_ID`, `D_ID`, `Discount`, `Paid`, `Received`, `Changes`, `Payment_Status`, `Due_Amount`, `Total_Amount`, `Payable_Amount`, `Reg_Date`, `Delivery_Date`, `Time_Stamp`) VALUES
+(19, 1, 'M-12122021-001', 'R-A-007', 'self', 20, 4720, 3000, 280, 'Paid', 0, 5900, 4720, '2021-12-12', '2021-12-12', '2021-12-12 05:28:18');
+
 -- --------------------------------------------------------
 
 --
@@ -1114,6 +1176,18 @@ CREATE TABLE `pathology_test_log` (
   `Fee` int(11) NOT NULL,
   `Time_Stamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `pathology_test_log`
+--
+
+INSERT INTO `pathology_test_log` (`AI_ID`, `Test_Info_AI_ID`, `Test_No`, `Fee`, `Time_Stamp`) VALUES
+(49, 102, 1, 300, '2021-12-12 05:29:17'),
+(50, 15, 1, 300, '2021-12-12 05:29:23'),
+(51, 199, 1, 400, '2021-12-12 05:29:28'),
+(52, 107, 1, 2200, '2021-12-12 05:29:34'),
+(53, 105, 1, 1600, '2021-12-12 05:29:36'),
+(54, 92, 1, 1100, '2021-12-12 05:29:43');
 
 -- --------------------------------------------------------
 
@@ -1133,6 +1207,13 @@ CREATE TABLE `patients` (
   `Ad_Date` longtext DEFAULT NULL,
   `Time_Stamp` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `patients`
+--
+
+INSERT INTO `patients` (`AI_ID`, `P_ID`, `Patient_Name`, `Patient_Gender`, `Patient_Age`, `Cell_Number`, `NID`, `NID_Type`, `Ad_Date`, `Time_Stamp`) VALUES
+(105, 'M-12122021-001', 'Test Patient', 'Male', 20, '01982635147', NULL, 'None', '12122021', '2021-12-12 05:15:43');
 
 -- --------------------------------------------------------
 
@@ -1160,6 +1241,13 @@ CREATE TABLE `patient_logs` (
   `Time_Stamp` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `patient_logs`
+--
+
+INSERT INTO `patient_logs` (`AI_ID`, `P_ID`, `Ap_Date`, `Ap_Time`, `D_ID`, `Basic_Fee`, `Discount`, `Final_Fee`, `Received`, `Changes`, `Payment_Status`, `Treatment_Status`, `Treatment_Date_Time`, `Token`, `Random_code`, `R_ID`, `Time_Stamp`) VALUES
+(9, 'M-12122021-001', '2021-12-12', '16:00:00-20:00:00', 'D-M-001', 1000, 20, 800, 1000, 200, 'Paid', 0, NULL, 1, 249930, 'R-A-007', '2021-12-12 05:15:43');
+
 -- --------------------------------------------------------
 
 --
@@ -1177,6 +1265,13 @@ CREATE TABLE `physio_log` (
   `Reg_Date` date NOT NULL,
   `Time_Stamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `physio_log`
+--
+
+INSERT INTO `physio_log` (`AI_ID`, `P_ID`, `R_ID`, `D_ID`, `Received`, `Changes`, `Fee`, `Reg_Date`, `Time_Stamp`) VALUES
+(9, 'M-12122021-001', 'R-A-007', 'D-M-041', 1000, 500, 500, '2021-12-12', '2021-12-12 05:27:32');
 
 -- --------------------------------------------------------
 
@@ -1234,6 +1329,25 @@ CREATE TABLE `surgeon_logs` (
   `Surgeon_Fee` int(11) NOT NULL,
   `Surgeon_Discount` int(11) NOT NULL,
   `Surgeon_Income` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `transaction_logs`
+--
+
+CREATE TABLE `transaction_logs` (
+  `AI_ID` int(11) NOT NULL,
+  `Acc_ID` longtext NOT NULL,
+  `Emp_ID` longtext DEFAULT NULL,
+  `Log_Type` longtext NOT NULL,
+  `Log_Message` longtext NOT NULL,
+  `Log_Year` year(4) NOT NULL,
+  `Log_Amount` double NOT NULL,
+  `Log_Genre` longtext NOT NULL,
+  `Log_Date` date NOT NULL,
+  `Time_Stamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -1427,6 +1541,12 @@ ALTER TABLE `surgeon_logs`
   ADD PRIMARY KEY (`AI_ID`);
 
 --
+-- Indexes for table `transaction_logs`
+--
+ALTER TABLE `transaction_logs`
+  ADD PRIMARY KEY (`AI_ID`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -1446,7 +1566,7 @@ ALTER TABLE `account_variables`
 -- AUTO_INCREMENT for table `admission_logs`
 --
 ALTER TABLE `admission_logs`
-  MODIFY `A_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `A_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `anesthesiologist_logs`
@@ -1476,13 +1596,13 @@ ALTER TABLE `dental_info`
 -- AUTO_INCREMENT for table `dental_log`
 --
 ALTER TABLE `dental_log`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `dental_test_log`
 --
 ALTER TABLE `dental_test_log`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 
 --
 -- AUTO_INCREMENT for table `doctors`
@@ -1494,7 +1614,7 @@ ALTER TABLE `doctors`
 -- AUTO_INCREMENT for table `doctor_balance_logs`
 --
 ALTER TABLE `doctor_balance_logs`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- AUTO_INCREMENT for table `doctor_schedules`
@@ -1506,13 +1626,13 @@ ALTER TABLE `doctor_schedules`
 -- AUTO_INCREMENT for table `emergency_log`
 --
 ALTER TABLE `emergency_log`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `hospital_income_log`
 --
 ALTER TABLE `hospital_income_log`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
 
 --
 -- AUTO_INCREMENT for table `logins`
@@ -1578,31 +1698,31 @@ ALTER TABLE `pathology_info`
 -- AUTO_INCREMENT for table `pathology_log`
 --
 ALTER TABLE `pathology_log`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `pathology_test_log`
 --
 ALTER TABLE `pathology_test_log`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT for table `patients`
 --
 ALTER TABLE `patients`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
 
 --
 -- AUTO_INCREMENT for table `patient_logs`
 --
 ALTER TABLE `patient_logs`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `physio_log`
 --
 ALTER TABLE `physio_log`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `receptionists`
@@ -1615,6 +1735,12 @@ ALTER TABLE `receptionists`
 --
 ALTER TABLE `surgeon_logs`
   MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
+-- AUTO_INCREMENT for table `transaction_logs`
+--
+ALTER TABLE `transaction_logs`
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

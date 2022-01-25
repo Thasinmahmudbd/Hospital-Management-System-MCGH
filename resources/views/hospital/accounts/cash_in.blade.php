@@ -2,7 +2,7 @@
 
 @section('page_title','MCGH Portal')
 
-@section('page_type','My Profile')
+@section('page_type','Cash In (Full List)')
 
 
 
@@ -153,46 +153,21 @@
 
 @section('content')
 
-<div class="content_container_bg_less_thin">
 
-<span></span>
-    
-    <p><b>Search Logs</b></p>
 
-<span></span>
+
+
+
+
+<div class="patient_form_element_three_is_to_one">
+
+    <p class="content_container_thin text_center">
+        Refreshing before every action is recommended.
+    </p>
+
+    <a class="content_container_thin title_bar_purple btn form_btn" href="{{url('/accounts/cash/in/')}}">Refresh</a>
 
 </div>
-
-
-
-
-
-<form action="{{url('')}}" method="post" class="span_hidden_bar content_container_bg_less_thin center_element">
-@csrf
-
-    <div class="patient_and_doctor_info_one_is_to_one">
-
-        <div class="patient_form_element_one_is_to_three center_element content_container">
-            <label class="center_element" for="search_from">From</label>
-            <input class="input" type="date" name="search_from" required>  
-        </div>
-
-        <div class="patient_form_element_one_is_to_three center_element content_container">
-            <label class="center_element" for="search_to">To</label>
-            <input class="input" type="date" name="search_to" required>  
-        </div>
-
-    </div>
-
-    <div>
-
-        <button class="btn form_btn" type="submit" name="submit"> 
-            <i class="fas fa-search log_out_btn"></i>
-        </button>
-
-    </div>
-
-</form>
 
 
 
@@ -201,15 +176,7 @@
 <div class="gap"></div>
 
 
-<div class="content_container_bg_less_thin">
 
-    <span></span>
-        
-        <p><b>Logs</b></p>
-
-    <span></span>
-
-</div>
 
 
 
@@ -218,24 +185,40 @@
         <table class="frame_table">
             
             <tr class="frame_header">
-                <th width="20%" class="frame_header_item">Date</th>
-                <th width="20%" class="frame_header_item">Credit</th>
-                <th width="20%" class="frame_header_item">Debit</th>
-                <th width="20%" class="frame_header_item">Balance</th>
-                <th width="20%" class="frame_header_item">Accountant ID</th>
+                <th width="10%" class="frame_header_item">S/N</th>
+                <th width="15%" class="frame_header_item">R-ID</th>
+                <th width="25%" class="frame_header_item">Receptionist</th>
+                <th width="20%" class="frame_header_item">Collected (TK)</th>
+                <th width="20%" class="frame_header_item">Cashed In (TK)</th>
+                <th width="10%" class="frame_header_item">Action</th>
             </tr>
 
-            
+            <form action="{{url('')}}" method="post" class="span_hidden_bar content_container_bg_less_thin center_element">
+            @csrf
 
             <tr class="frame_rows">
-                <td class="frame_data" data-label="Date"></td>
-                <td class="frame_data" data-label="P-ID"></td>
-                <td class="frame_data" data-label="T-ID"></td>
-                <td class="frame_data" data-label="Balance"></td>
-                <td class="frame_data" data-label="Accountant ID"></td>
+                <td class="frame_data" data-label="S/N"></td>
+                <td class="frame_data" data-label="R-ID"></td>
+                <td class="frame_data" data-label="Receptionist"></td>
+                <td class="frame_data" data-label="Collected"></td>
+                <td class="frame_data" data-label="Cashed In">
+
+                    <input class="input" type="number" name="search_from" required> 
+
+                </td>
+
+                <td class="frame_action" data-label="Action">
+
+                    <button class="btn_less" type="submit" name="submit"> 
+
+                        <i class="fas fa-check-circle table_btn"></i>
+
+                    </button>
+
+                </td>
             </tr>
 
-            
+            </form>
 
         </table>
 

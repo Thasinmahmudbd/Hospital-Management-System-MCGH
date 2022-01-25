@@ -161,21 +161,91 @@ function set_vat(Request $request){
 
 
 #########################
-#### FUNCTION-NO::0 ####
+#### FUNCTION-NO::04 ####
 #########################
 # Sets up required items before loading account home page;
-# Stored data in 4 sessions.
+# Stored data in 1 sessions.
 
 function show_all_doctors(Request $request){
 
-    $acc_id = $request->session()->get('ACC_SESSION_ID');
-    
+    $available_doctor_data['result']=DB::table('doctors')->orderBy('Dr_Name','asc')->get();
+
+    $available_doctor_department['department']=DB::table('doctors')->select('Department')->distinct()->orderBy('Department','asc')->get();
+
+    session(['doctor_salary_filter_type' => 'All']);
+
     # Returning to the view below.
-    return view('hospital/accounts/doctor_income');
+    return view('hospital/accounts/doctor_income',$available_doctor_data,$available_doctor_department);
 
 }
 
 # End of function show_all_doctors.                         <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# This will be updated in the future.
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::05 ####
+#########################
+# Filters doctor income log;
+
+function filter_doctor_income(Request $request){
+
+    $doctor_search_info = $request->input('doctor_search_info');
+    $department = $request->input('department');
+
+    if($department=="All" && !empty($doctor_search_info)){
+
+        $available_doctor_data['result']=DB::table('doctors')
+            ->where('D_ID',$doctor_search_info)
+            ->orwhere('Dr_Name','like','%'.$doctor_search_info.'%')
+            ->orderBy('Dr_Name','asc')
+            ->get();
+
+    }if($department=="All" && empty($doctor_search_info)){
+
+        $available_doctor_data['result']=DB::table('doctors')
+            ->orderBy('Dr_Name','asc')
+            ->get();
+
+    }if($department!="All" && empty($doctor_search_info)){
+
+        $available_doctor_data['result']=DB::table('doctors')
+            ->where('Department',$department)
+            ->orderBy('Dr_Name','asc')
+            ->get();
+
+    }if($department!="All" && !empty($doctor_search_info)){
+
+        $available_doctor_data['result']=DB::table('doctors')
+            ->where('Department',$department)
+            ->orwhere('D_ID',$doctor_search_info)
+            ->orwhere('Dr_Name','like','%'.$doctor_search_info.'%')
+            ->orderBy('Dr_Name','asc')
+            ->get();
+
+    }
+
+    $available_doctor_department['department']=DB::table('doctors')
+        ->select('Department')
+        ->distinct()
+        ->orderBy('Department','asc')
+        ->get();
+
+    session(['doctor_salary_filter_type' => $department]);
+
+    # Returning to the view below.
+    return view('hospital/accounts/doctor_income',$available_doctor_data,$available_doctor_department);
+
+}
+
+# End of function filter_doctor_income.                     <-------#
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: Hello, future me,

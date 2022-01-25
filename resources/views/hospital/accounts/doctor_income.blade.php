@@ -50,9 +50,51 @@
 </li>
 
 <li class="list_item">
+    <a href="{{url('/accounts/cash/in/')}}" class="link">
+        <i class="link_icons fas fa-cash-register"></i>
+        <span class="link_name"> Cash In </span>
+    </a>
+</li>
+
+<li class="list_item">
     <a href="{{url('/accounts/pay/salary/')}}" class="link">
         <i class="link_icons fas fa-credit-card"></i>
         <span class="link_name"> Pay Salary </span>
+    </a>
+</li>
+
+<li class="list_item">
+    <a href="{{url('/accounts/creditors/')}}" class="link">
+        <i class="link_icons fas fa-search-dollar"></i>
+        <span class="link_name"> Creditors </span>
+    </a>
+</li>
+
+<li class="list_item">
+    <a href="{{url('/accounts/patient/release/')}}" class="link">
+        <i class="link_icons fas fa-hospital-user"></i>
+        <span class="link_name"> Patient Release </span>
+    </a>
+</li>
+
+<li class="list_item">
+    <a href="{{url('/accounts/release/slips/')}}" class="link">
+        <i class="link_icons fas fa-file-invoice"></i>
+        <span class="link_name"> Release Slips </span>
+    </a>
+</li>
+
+<li class="list_item">
+    <a href="{{url('/accounts/ambulance/')}}" class="link">
+        <i class="link_icons fas fa-ambulance"></i>
+        <span class="link_name"> Ambulance </span>
+    </a>
+</li>
+
+<li class="list_item">
+    <a href="{{url('/accounts/other/transactions/')}}" class="link">
+        <i class="link_icons fas fa-random"></i>
+        <span class="link_name"> Other Transactions </span>
     </a>
 </li>
 
@@ -86,7 +128,13 @@
 <div id="myLinks" class="mobile_links">
     <a class="mobile_link" href="{{url('/accounts/home/')}}">My Profile</a>
     <a class="mobile_link" href="{{url('/accounts/doctor/income/')}}">Doctors Income</a>
+    <a class="mobile_link" href="{{url('/accounts/cash/in/')}}">Cash In</a>
     <a class="mobile_link" href="{{url('/accounts/pay/salary/')}}">Pay Salary</a>
+    <a class="mobile_link" href="{{url('/accounts/creditors/')}}">Creditors</a>
+    <a class="mobile_link" href="{{url('/accounts/patient/release/')}}">Patient Release</a>
+    <a class="mobile_link" href="{{url('/accounts/release/slips/')}}">Release Slips</a>
+    <a class="mobile_link" href="{{url('/accounts/ambulance/')}}">Ambulance</a>
+    <a class="mobile_link" href="{{url('/accounts/other/transactions/')}}">Other Transactions</a>
     <a class="mobile_link" href="{{url('/accounts/log/')}}">Logs</a>
     <a class="mobile_link" href="{{url('/accounts/edit_profile/')}}">Edit Profile</a>
 </div>
@@ -107,7 +155,7 @@
 
 
 
-<form action="{{url('')}}" method="post" class="content_container patient_info_form">
+<form action="{{url('/accounts/doctor/income/filter/')}}" method="post" class="content_container patient_info_form">
 @csrf
 
     <div class="doctor_search_form_element">
@@ -116,16 +164,15 @@
 
         <div class="patient_and_doctor_info_one_is_to_one">
 
-            <input type="text" class="input" name="doctor_search_info" placeholder="Enter Doctor Name or ID" required>
+            <input type="text" class="input" name="doctor_search_info" placeholder="Enter Doctor Name or ID">
 
             <select name="department" id="department" class="input" required>
 
-                <option value="">All</option>
-                <option value="">Department</option>
-                <option value="">Department</option>
-                <option value="">Department</option>
-                <option value="">Department</option>
-                <option value="">Department</option>
+                <option value="All">All</option>
+
+                @foreach($department as $list)
+                <option value="{{$list->Department}}">{{$list->Department}}</option>
+                @endforeach
 
             </select>
 
@@ -147,7 +194,7 @@
 
         <span></span>
             
-            <p><b>All</b></p>
+            <p><b>{{Session::get('doctor_salary_filter_type')}}</b></p>
 
         <span></span>
 
@@ -157,34 +204,47 @@
 
 <div class="doctors_list">
 
-    <a href="{{url('/accounts/doctor/income/select/')}}"><!--<form class="doctor_list_item" action="{{url('')}}" method="post">-->
+    @foreach($result as $doctor)
+    <!--<a href="{{url('/accounts/doctor/income/select/')}}">-->
+    <form class="doctor_list_item" action="{{url('')}}" method="post">
     @csrf
-        <input type="hidden" name="d_id" value="">
-        <input type="hidden" name="dr_name" value="">
-        <input type="hidden" name="fee" value="">
-        <input type="hidden" name="second_visit_discount" value="">
+        <input type="hidden" name="d_id" value="{{$doctor->D_ID}}">
+        <input type="hidden" name="dr_name" value="{{$doctor->Dr_Name}}">
+        <input type="hidden" name="wallet" value="{{$doctor->Wallet}}">
+        <input type="hidden" name="department" value="{{$doctor->Department}}">
         <button type="submit" name="select_doctor" class="btn capsule">
 
         
 
-            <img class="round_image" src="{{url('/UI_Assets/Media/Images/Template_Images/system/default-placeholder-doctor-half-length-portrait-vector-male.png')}}" alt="" width="100%">
+            @if($doctor->Dr_Image)
 
-        
+                <img class="round_image" src="{{asset('storage/doctor_profile_pictures/'.$doctor->Dr_Image)}}" alt="" width="100%">
 
-            <!--<img class="round_image" src="{{url('/UI_Assets/Media/Images/Template_Images/system/default-placeholder-doctor-half-length-portrait-vector-female.png')}}" alt="" width="100%">
+            @elseif($doctor->Dr_Gender=='male' || $doctor->Dr_Gender=='Male')
 
-        
+                <img class="round_image" src="{{url('/UI_Assets/Media/Images/Template_Images/system/default-placeholder-doctor-half-length-portrait-vector-male.png')}}" alt="" width="100%">
 
-            <img class="round_image" src="{{url('/UI_Assets/Media/Images/Template_Images/system/Profile_avatar_placeholder_large.png')}}" alt="" width="100%">-->
+            @elseif($doctor->Dr_Gender=='female' || $doctor->Dr_Gender=='Female')
+
+                <img class="round_image" src="{{url('/UI_Assets/Media/Images/Template_Images/system/default-placeholder-doctor-half-length-portrait-vector-female.png')}}" alt="" width="100%">
+
+            @else
+
+                <img class="round_image" src="{{url('/UI_Assets/Media/Images/Template_Images/system/Profile_avatar_placeholder_large.png')}}" alt="" width="100%">
+
+            @endif
 
         
 
             <div class="doctor_name_dept">
-                <p class="doctor_name">Name</p>
-                <p> Wallet: 10 tk </p>
+                <p class="doctor_name">{{$doctor->Dr_Name}}</p>
+                <p> Wallet: {{$doctor->Wallet}} tk </p>
             </div>
         </button>
-    <!--</form>--></a>
+    </form>
+    <!--</a>-->
+    @endforeach
+
 
 </div>
 

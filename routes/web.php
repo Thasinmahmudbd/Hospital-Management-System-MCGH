@@ -648,8 +648,12 @@ Route::group(['middleware'=>['accountantAuth']],function() {
     ##############################################################################################################################################
 
     # Going to doctors income page.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::04]---in-controller.
     Route::get('/accounts/doctor/income/','App\Http\Controllers\accountant\accounts@show_all_doctors');
+
+    # filtering doctor income page.
+    # Redirecting to [FUNCTION-NO::05]---in-controller.
+    Route::post('/accounts/doctor/income/filter/','App\Http\Controllers\accountant\accounts@filter_doctor_income');
 
     ##############################################################################################################################################
     # Accounts Edit Profile.  [C::accounts.php]
@@ -664,9 +668,15 @@ Route::group(['middleware'=>['accountantAuth']],function() {
     Route::post('/accounts/save_edit/','App\Http\Controllers\accountant\accounts@edit_profile');
 
     # disposable.
-    Route::view('/accounts/doctor/income/select/','hospital/accounts/doctor_income_details');
+    Route::view('/accounts/doctor/income/log/','hospital/accounts/doctor_income_details');
     Route::view('/accounts/pay/salary/','hospital/accounts/pay_salary');
     Route::view('/accounts/log/','hospital/accounts/logs');
+    Route::view('/accounts/cash/in/','hospital/accounts/cash_in');
+    Route::view('/accounts/creditors/','hospital/accounts/creditors');
+    Route::view('/accounts/patient/release/','hospital/accounts/patient_release');
+    Route::view('/accounts/release/slips/','hospital/accounts/release_slips');
+    Route::view('/accounts/ambulance/','hospital/accounts/ambulance');
+    Route::view('/accounts/other/transactions/','hospital/accounts/other_transactions');
 
 
 
