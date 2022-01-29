@@ -106,7 +106,7 @@
 
 
                 <table class="frame_table">
-                    
+
                     <tr class="frame_header">
                         <th width="5%" class="frame_header_item">S/N</th>
                         <th width="60%" class="frame_header_item">Transaction Message</th>
@@ -125,7 +125,7 @@
                     </tr>
 
                     @endforeach
-                    
+
                     @foreach($result as $list)
 
                     <tr class="frame_rows">

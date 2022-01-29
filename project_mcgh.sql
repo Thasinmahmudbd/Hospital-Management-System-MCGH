@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 25, 2022 at 07:02 PM
+-- Generation Time: Jan 29, 2022 at 07:20 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.12
 
@@ -251,6 +251,39 @@ CREATE TABLE `bed_invigilators` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `cash_ins`
+--
+
+CREATE TABLE `cash_ins` (
+  `AI_ID` int(11) NOT NULL,
+  `R_ID` longtext NOT NULL,
+  `Cash_In_Date` date NOT NULL,
+  `Cash_In_Amount` double NOT NULL,
+  `Amount_Received` double NOT NULL DEFAULT 0,
+  `Cash_In_Status` longtext NOT NULL DEFAULT 'Due'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `cash_ins`
+--
+
+INSERT INTO `cash_ins` (`AI_ID`, `R_ID`, `Cash_In_Date`, `Cash_In_Amount`, `Amount_Received`, `Cash_In_Status`) VALUES
+(161, 'R-A-007', '2022-01-29', 1000, 1000, 'Due'),
+(162, 'R-M-001', '2022-01-29', 0, 0, 'Due'),
+(163, 'R-M-003', '2022-01-29', 0, 0, 'Due'),
+(164, 'R-F-012', '2022-01-29', 0, 0, 'Due'),
+(165, 'R-A-007', '2021-12-12', 10705, 0, 'Due'),
+(166, 'R-M-001', '2021-12-12', 0, 0, 'Due'),
+(167, 'R-M-003', '2021-12-12', 0, 0, 'Due'),
+(168, 'R-F-012', '2021-12-12', 0, 0, 'Due'),
+(169, 'R-A-007', '2022-01-30', 0, 0, 'Due'),
+(170, 'R-M-001', '2022-01-30', 0, 0, 'Due'),
+(171, 'R-M-003', '2022-01-30', 0, 0, 'Due'),
+(172, 'R-F-012', '2022-01-30', 0, 0, 'Due');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `dental_info`
 --
 
@@ -392,7 +425,7 @@ INSERT INTO `doctors` (`AI_ID`, `D_ID`, `Dr_Name`, `Dr_Gender`, `Specialty`, `De
 (38, 'D-M-035', 'Dr A.H.M Mohosin (Sujon)', 'Male', '', 'Pediatrics', NULL, 0, 600, 20, 0, '2021-10-18 15:27:41'),
 (39, 'D-M-036', 'Dr. Md. Shah Alam', 'Male', '', 'Medicine', NULL, 0, 700, 20, 0, '2021-10-18 15:28:14'),
 (40, 'D-F-037', 'Dr Nashid Tabbasum Trena', 'Female', 'Surgeon', 'Dental', NULL, 0, 600, 20, 0, '2021-10-18 15:30:57'),
-(41, 'D-F-038', 'Brig Gen Dr. Sabina Yeasmin', 'Female', '', 'Pediatrics', NULL, 0, 800, 20, 0, '2021-10-18 15:31:30'),
+(41, 'D-F-038', 'Brig Gen Dr. Sabina Yeasmin', 'Female', '', 'Pediatrics', NULL, 1200, 800, 20, 0, '2021-10-18 15:31:30'),
 (42, 'D-F-039', 'Dr Amena Bagum', 'Female', 'Surgeon', 'Gynae', NULL, 0, 600, 20, 0, '2021-10-18 15:32:03'),
 (43, 'D-F-040', 'Lt.Col Dr Kaoser Jahan', 'Female', 'Surgeon', 'Gynae', '', 0, 600, 20, 0, '2021-10-18 15:41:34'),
 (44, 'D-M-002', 'Maj Dr. Mohammad Bayejid', 'Male', 'Medicine', 'Cardiology', NULL, 0, 600, 20, 0, '2021-11-18 10:16:10'),
@@ -415,7 +448,7 @@ CREATE TABLE `doctor_balance_logs` (
   `Income` float DEFAULT 0,
   `Current_Balance` float DEFAULT NULL,
   `Acc_ID` longtext DEFAULT NULL,
-  `O_ID` int(11) NOT NULL,
+  `O_ID` int(11) DEFAULT NULL,
   `Time_Stamp` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -427,7 +460,9 @@ INSERT INTO `doctor_balance_logs` (`AI_ID`, `D_ID`, `B_Date`, `Debit`, `Credit`,
 (75, 'D-M-032', '2021-12-12', 0, 100, 0, 100, 100, 'R-A-007', 0, '2021-12-12 05:18:05'),
 (76, 'D-M-042', '2021-12-12', 0, 1000, 0, 1000, 1000, 'R-A-007', 0, '2021-12-12 05:25:42'),
 (77, 'D-M-042', '2021-12-12', 0, 1092.5, 0, 1092.5, 2092.5, 'R-A-007', 0, '2021-12-12 05:26:22'),
-(78, 'D-M-041', '2021-12-12', 0, 250, 0, 250, 250, 'R-A-007', 0, '2021-12-12 05:27:32');
+(78, 'D-M-041', '2021-12-12', 0, 250, 0, 250, 250, 'R-A-007', 0, '2021-12-12 05:27:32'),
+(79, 'D-F-038', '2022-01-27', 0, 800, 200, 600, 600, NULL, NULL, '2022-01-27 12:16:25'),
+(80, 'D-F-038', '2022-01-27', 0, 800, 200, 600, 1200, NULL, NULL, '2022-01-27 13:00:59');
 
 -- --------------------------------------------------------
 
@@ -455,7 +490,7 @@ CREATE TABLE `doctor_schedules` (
 --
 
 INSERT INTO `doctor_schedules` (`AI_ID`, `D_ID`, `F`, `T`, `Sat`, `Sun`, `Mon`, `Tue`, `Wed`, `Thu`, `Fri`, `Time_Stamp`) VALUES
-(383, 'D-M-001', '16:00:00', '20:00:00', 'A', '1', 'A', 'A', 'A', 'A', 'A', '2021-11-17 17:26:51'),
+(383, 'D-M-001', '16:00:00', '20:00:00', '1', '1', 'A', 'A', 'A', 'A', 'A', '2021-11-17 17:26:51'),
 (384, 'D-M-003', '16:00:00', '20:00:00', 'A', 'A', 'A', 'A', 'A', 'A', 'A', '2021-11-17 17:34:25'),
 (385, 'D-M-004', '16:00:00', '20:00:00', 'A', 'A', 'A', 'A', 'A', 'A', 'A', '2021-11-17 17:34:25'),
 (386, 'D-M-005', '16:00:00', '20:00:00', 'A', 'A', 'A', 'A', 'A', 'A', 'A', '2021-11-17 17:34:25'),
@@ -485,7 +520,7 @@ INSERT INTO `doctor_schedules` (`AI_ID`, `D_ID`, `F`, `T`, `Sat`, `Sun`, `Mon`, 
 (410, 'D-M-035', '16:00:00', '20:00:00', 'A', 'A', 'A', 'A', 'A', 'A', 'A', '2021-11-17 17:34:25'),
 (411, 'D-M-036', '16:00:00', '20:00:00', 'A', 'A', 'A', 'A', 'A', 'A', 'A', '2021-11-17 17:34:25'),
 (412, 'D-F-037', '16:00:00', '20:00:00', 'A', 'A', 'A', 'A', 'A', 'A', 'A', '2021-11-17 17:34:25'),
-(413, 'D-F-038', '16:00:00', '20:00:00', 'A', 'A', 'A', 'A', 'A', 'A', 'A', '2021-11-17 17:34:25'),
+(413, 'D-F-038', '16:00:00', '20:00:00', 'A', 'A', 'A', 'A', 'A', '1', 'A', '2021-11-17 17:34:25'),
 (414, 'D-F-039', '16:00:00', '20:00:00', 'A', 'A', 'A', 'A', 'A', '4', 'A', '2021-11-17 17:34:25'),
 (415, 'D-M-040', '16:00:00', '20:00:00', 'A', 'A', 'A', 'A', 'A', 'A', 'A', '2021-11-17 17:34:25'),
 (416, 'D-M-002', '16:00:00', '20:00:00', 'A', 'A', 'A', 'A', 'A', 'A', 'A', '2021-11-18 10:22:56');
@@ -550,7 +585,8 @@ INSERT INTO `hospital_income_log` (`AI_ID`, `Message`, `Debit`, `Credit`, `Vat`,
 (108, 'Dental services for: M-12122021-001, given by: D-M-042, Due payment.', 0, 2185, 0, 1092.5, 1092.5, 'Dental', '2021-12-12', '05:26:22', 2021, 'R-A-007', '2021-12-12 05:26:22'),
 (109, 'Physio services for: M-12122021-001, given by: D-M-041', 0, 500, 0, 250, 250, 'Physio', '2021-12-12', '11:27:32', 2021, 'R-A-007', '2021-12-12 05:27:32'),
 (110, 'Pathology services for: M-12122021-001, referred by: self', 0, 2000, 0, 2000, 2000, 'Pathology', '2021-12-12', '05:31:15', 2021, 'R-A-007', '2021-12-12 05:31:15'),
-(111, 'Pathology services for: M-12122021-001, given by: self, Due payment.', 0, 2720, 0, 2720, 2720, 'Dental', '2021-12-12', '05:32:09', 2021, 'R-A-007', '2021-12-12 05:32:09');
+(111, 'Pathology services for: M-12122021-001, given by: self, Due payment.', 0, 2720, 0, 2720, 2720, 'Dental', '2021-12-12', '05:32:09', 2021, 'R-A-007', '2021-12-12 05:32:09'),
+(112, 'Out-door patient bill: 800. Doctor D-F-038 receives: 600. Hospital income: 200.', 0, 800, 0, 200, 200, 'Out-door patient', '2022-01-27', '13:00:59', 2022, 'D-F-038', '2022-01-27 13:00:59');
 
 -- --------------------------------------------------------
 
@@ -574,25 +610,25 @@ INSERT INTO `logins` (`AI_ID`, `Emp_ID`, `Log_Password`, `status`, `Time_Stamp`)
 (1, 'R-A-007', '7777', 1, '2021-08-21 11:07:04'),
 (4, 'AC-A-007', '7777', 1, '2021-08-21 11:07:04'),
 (6, 'R-M-001', '111213', 1, '2021-08-21 11:07:04'),
-(7, 'R-M-002', '999897', 1, '2021-08-21 11:07:04'),
+(7, 'R-M-002', '999897', 0, '2021-08-21 11:07:04'),
 (8, 'R-M-003', '595755', 1, '2021-08-21 11:07:04'),
-(9, 'R-M-004', '123000', 1, '2021-08-21 11:07:04'),
-(10, 'R-M-005', '507090', 1, '2021-08-21 11:07:04'),
-(11, 'R-M-006', '975310', 1, '2021-08-21 11:07:04'),
-(12, 'R-M-007', '200400', 1, '2021-08-21 11:07:04'),
-(13, 'R-M-008', '314253', 1, '2021-08-21 11:07:04'),
-(14, 'R-M-009', '900999', 1, '2021-08-21 11:07:04'),
-(15, 'R-M-010', '331931', 1, '2021-08-21 11:07:04'),
-(16, 'R-F-011', '113355', 1, '2021-08-21 11:07:04'),
+(9, 'R-M-004', '123000', 0, '2021-08-21 11:07:04'),
+(10, 'R-M-005', '507090', 0, '2021-08-21 11:07:04'),
+(11, 'R-M-006', '975310', 0, '2021-08-21 11:07:04'),
+(12, 'R-M-007', '200400', 0, '2021-08-21 11:07:04'),
+(13, 'R-M-008', '314253', 0, '2021-08-21 11:07:04'),
+(14, 'R-M-009', '900999', 0, '2021-08-21 11:07:04'),
+(15, 'R-M-010', '331931', 0, '2021-08-21 11:07:04'),
+(16, 'R-F-011', '113355', 0, '2021-08-21 11:07:04'),
 (17, 'R-F-012', '886644', 1, '2021-08-21 11:07:04'),
-(18, 'R-F-013', '203302', 1, '2021-08-21 11:07:04'),
-(19, 'R-F-014', '142856', 1, '2021-08-21 11:07:04'),
-(20, 'R-F-015', '907560', 1, '2021-08-21 11:07:04'),
-(21, 'R-F-016', '160061', 1, '2021-08-21 11:07:04'),
-(22, 'R-F-017', '717171', 1, '2021-08-21 11:07:04'),
-(23, 'R-F-018', '800008', 1, '2021-08-21 11:07:04'),
-(24, 'R-F-019', '975579', 1, '2021-08-21 11:07:04'),
-(25, 'R-F-020', '212021', 1, '2021-08-21 11:07:04'),
+(18, 'R-F-013', '203302', 0, '2021-08-21 11:07:04'),
+(19, 'R-F-014', '142856', 0, '2021-08-21 11:07:04'),
+(20, 'R-F-015', '907560', 0, '2021-08-21 11:07:04'),
+(21, 'R-F-016', '160061', 0, '2021-08-21 11:07:04'),
+(22, 'R-F-017', '717171', 0, '2021-08-21 11:07:04'),
+(23, 'R-F-018', '800008', 0, '2021-08-21 11:07:04'),
+(24, 'R-F-019', '975579', 0, '2021-08-21 11:07:04'),
+(25, 'R-F-020', '212021', 0, '2021-08-21 11:07:04'),
 (26, 'D-M-001', 'd58j', 1, '2021-08-21 11:07:04'),
 (28, 'D-M-003', 'd78d', 1, '2021-08-21 11:07:04'),
 (29, 'D-M-004', 'as56', 1, '2021-08-21 11:07:04'),
@@ -1213,7 +1249,9 @@ CREATE TABLE `patients` (
 --
 
 INSERT INTO `patients` (`AI_ID`, `P_ID`, `Patient_Name`, `Patient_Gender`, `Patient_Age`, `Cell_Number`, `NID`, `NID_Type`, `Ad_Date`, `Time_Stamp`) VALUES
-(105, 'M-12122021-001', 'Test Patient', 'Male', 20, '01982635147', NULL, 'None', '12122021', '2021-12-12 05:15:43');
+(105, 'M-12122021-001', 'Test Patient', 'Male', 20, '01982635147', NULL, 'None', '12122021', '2021-12-12 05:15:43'),
+(106, 'M-27012022-001', 'Log test', 'Male', 20, '01982635147', '1981981', 'None', '27012022', '2022-01-27 12:07:07'),
+(107, 'M-29012022-001', 'Jamil', 'Male', 20, '01982635147', '8488668515', 'None', '29012022', '2022-01-29 14:18:12');
 
 -- --------------------------------------------------------
 
@@ -1246,7 +1284,9 @@ CREATE TABLE `patient_logs` (
 --
 
 INSERT INTO `patient_logs` (`AI_ID`, `P_ID`, `Ap_Date`, `Ap_Time`, `D_ID`, `Basic_Fee`, `Discount`, `Final_Fee`, `Received`, `Changes`, `Payment_Status`, `Treatment_Status`, `Treatment_Date_Time`, `Token`, `Random_code`, `R_ID`, `Time_Stamp`) VALUES
-(9, 'M-12122021-001', '2021-12-12', '16:00:00-20:00:00', 'D-M-001', 1000, 20, 800, 1000, 200, 'Paid', 0, NULL, 1, 249930, 'R-A-007', '2021-12-12 05:15:43');
+(9, 'M-12122021-001', '2021-12-12', '16:00:00-20:00:00', 'D-M-001', 1000, 20, 800, 1000, 200, 'Paid', 0, NULL, 1, 249930, 'R-A-007', '2021-12-12 05:15:43'),
+(10, 'M-27012022-001', '2022-01-27', '16:00:00-20:00:00', 'D-F-038', 800, 0, 800, 1000, 200, 'Paid', 1, NULL, 1, 506800, 'R-A-007', '2022-01-27 12:07:07'),
+(11, 'M-29012022-001', '2022-01-29', '16:00:00-20:00:00', 'D-M-001', 1000, 0, 1000, 1000, 0, 'Paid', 0, NULL, 1, 671163, 'R-A-007', '2022-01-29 14:18:12');
 
 -- --------------------------------------------------------
 
@@ -1388,6 +1428,12 @@ ALTER TABLE `beds`
 -- Indexes for table `bed_invigilators`
 --
 ALTER TABLE `bed_invigilators`
+  ADD PRIMARY KEY (`AI_ID`);
+
+--
+-- Indexes for table `cash_ins`
+--
+ALTER TABLE `cash_ins`
   ADD PRIMARY KEY (`AI_ID`);
 
 --
@@ -1587,6 +1633,12 @@ ALTER TABLE `bed_invigilators`
   MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
+-- AUTO_INCREMENT for table `cash_ins`
+--
+ALTER TABLE `cash_ins`
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=173;
+
+--
 -- AUTO_INCREMENT for table `dental_info`
 --
 ALTER TABLE `dental_info`
@@ -1614,7 +1666,7 @@ ALTER TABLE `doctors`
 -- AUTO_INCREMENT for table `doctor_balance_logs`
 --
 ALTER TABLE `doctor_balance_logs`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- AUTO_INCREMENT for table `doctor_schedules`
@@ -1632,7 +1684,7 @@ ALTER TABLE `emergency_log`
 -- AUTO_INCREMENT for table `hospital_income_log`
 --
 ALTER TABLE `hospital_income_log`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
 
 --
 -- AUTO_INCREMENT for table `logins`
@@ -1710,13 +1762,13 @@ ALTER TABLE `pathology_test_log`
 -- AUTO_INCREMENT for table `patients`
 --
 ALTER TABLE `patients`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
 
 --
 -- AUTO_INCREMENT for table `patient_logs`
 --
 ALTER TABLE `patient_logs`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `physio_log`

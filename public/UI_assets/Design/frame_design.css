@@ -514,6 +514,26 @@
 
 }
 
+@keyframes first_child_indicator_animation{
+
+    0% {
+        background-color: #eeefff;
+    }
+    25% {
+        background-color: #74B498/*rgba(106, 63, 226, 0.842)*/;
+    }
+    50% {
+        background-color: #eeefff;
+    }
+    75% {
+        background-color: #74B498/*rgba(106, 63, 226, 0.842)*/;
+    }
+    100% {
+        background-color: #eeefff;
+    }
+
+}
+
  /* Animation hook */
 .border_indicator_animation {
     border-left: 3px solid #74B498/*rgba(106, 63, 226, 0.842)*/;
@@ -535,6 +555,22 @@
     animation-timing-function: ease-in-out;
     transition: ease-in 300ms;
 } 
+
+.first_child_indicator_animation::after {
+    content:" ";
+    background-color: #74B498/*rgba(106, 63, 226, 0.842)*/;
+    position: absolute;
+    top: 54px;
+    left: 82%;
+    padding: 7px 6.95px;
+    border-radius: 100%;
+    animation-name: first_child_indicator_animation;
+    animation-delay: 500ms;
+    animation-duration: 3000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    transition: ease-in 300ms;
+}
 
 .shade{
     background: repeating-linear-gradient(
@@ -613,4 +649,10 @@
 
 .text_right{
     text-align:right;
+}
+
+.text_link{
+    font-size: 1rem;
+    color:#74B498/*rgb(106, 63, 226)*/;
+    font-weight: bold;
 }

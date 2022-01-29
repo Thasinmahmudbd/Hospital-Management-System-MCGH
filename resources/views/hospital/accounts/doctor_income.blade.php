@@ -50,7 +50,7 @@
 </li>
 
 <li class="list_item">
-    <a href="{{url('/accounts/cash/in/')}}" class="link">
+    <a href="{{url('/accounts/cash/in/'.Session::get('DATE_TODAY'))}}" class="link">
         <i class="link_icons fas fa-cash-register"></i>
         <span class="link_name"> Cash In </span>
     </a>
@@ -128,7 +128,7 @@
 <div id="myLinks" class="mobile_links">
     <a class="mobile_link" href="{{url('/accounts/home/')}}">My Profile</a>
     <a class="mobile_link" href="{{url('/accounts/doctor/income/')}}">Doctors Income</a>
-    <a class="mobile_link" href="{{url('/accounts/cash/in/')}}">Cash In</a>
+    <a class="mobile_link" href="{{url('/accounts/cash/in/'.Session::get('DATE_TODAY'))}}">Cash In</a>
     <a class="mobile_link" href="{{url('/accounts/pay/salary/')}}">Pay Salary</a>
     <a class="mobile_link" href="{{url('/accounts/creditors/')}}">Creditors</a>
     <a class="mobile_link" href="{{url('/accounts/patient/release/')}}">Patient Release</a>
@@ -206,12 +206,10 @@
 
     @foreach($result as $doctor)
     <!--<a href="{{url('/accounts/doctor/income/select/')}}">-->
-    <form class="doctor_list_item" action="{{url('')}}" method="post">
+    <form class="doctor_list_item" action="{{url('/accounts/doctor/income/details/')}}" method="post">
     @csrf
         <input type="hidden" name="d_id" value="{{$doctor->D_ID}}">
         <input type="hidden" name="dr_name" value="{{$doctor->Dr_Name}}">
-        <input type="hidden" name="wallet" value="{{$doctor->Wallet}}">
-        <input type="hidden" name="department" value="{{$doctor->Department}}">
         <button type="submit" name="select_doctor" class="btn capsule">
 
         

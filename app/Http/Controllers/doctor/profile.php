@@ -256,9 +256,11 @@ function set_patient_as_treated(Request $request){
 
     $final_fee = $ID->Final_Fee;
     $commission = $request->session()->get('COMMISSION');
+    $vat = $request->session()->get('VAT');
     $rest = 100-$commission;
     $income = ($rest/100)*$final_fee;
     $hos_commission = ($commission/100)*$final_fee;
+    $gov_vat = ($vat/100)*$final_fee;
 
     # checking current balance.
     $wallet=DB::table('doctor_balance_logs')
@@ -299,6 +301,27 @@ function set_patient_as_treated(Request $request){
     DB::table('doctors')
     ->where('D_ID',$d_id)
     ->update($data);
+
+    $message='Out-door patient bill: '.$final_fee.'. Doctor '.$d_id.' receives: '.$income.'. Hospital income: '.$hos_commission.'.';
+    $todays_date = date("Ymd");
+
+    $hospital_income_logs=array(
+
+        'Message'=>$message,
+        'Debit'=>0,
+        'Credit'=>$final_fee,
+        'Vat'=>$gov_vat,
+        'Service_Charge'=>$hos_commission,
+        'Total_Income'=>$hos_commission,
+        'Credit_Type'=>'Out-door patient',
+        'Entry_Date'=>$todays_date,
+        'Entry_Time'=>date("H:i:s"),
+        'Entry_Year'=>date("Y"),
+        'User_ID'=>$d_id
+
+    );
+
+    DB::table('hospital_income_log')->insert($hospital_income_logs);
 
     $request->session()->flash('msg','Congratulation, list has been updated.');
 

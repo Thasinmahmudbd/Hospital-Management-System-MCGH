@@ -996,7 +996,7 @@ class add_patient extends Controller
         $outdoor['doctor']=DB::table('patient_logs')
         ->where('Time_Stamp','like',$date.'%')
         ->where('R_ID',$r_id)
-        ->where('Treatment_Status',0)
+        /*->where('Treatment_Status',0)*/
         ->orderBy('AI_ID','desc')
         ->get();
 
@@ -1013,7 +1013,7 @@ class add_patient extends Controller
         $outdoor_collection=DB::table('patient_logs')
         ->where('Time_Stamp','like',$date.'%')
         ->where('R_ID',$r_id)
-        ->where('Treatment_Status',0)
+        /*->where('Treatment_Status',0)*/
         ->sum('Final_Fee');
 
         $collection = $collection - $deduction;
@@ -1039,8 +1039,7 @@ class add_patient extends Controller
 #########################
 #### FUNCTION-NO::13.5 ####
 #########################
-# Retrieves data from form;
-# Stores data in 15 sessions.
+# Retrieves data from form.
 
 function filter_summary(Request $request){
 

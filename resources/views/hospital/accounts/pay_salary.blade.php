@@ -50,7 +50,7 @@
 </li>
 
 <li class="list_item">
-    <a href="{{url('/accounts/cash/in/')}}" class="link">
+    <a href="{{url('/accounts/cash/in/'.Session::get('DATE_TODAY'))}}" class="link">
         <i class="link_icons fas fa-cash-register"></i>
         <span class="link_name"> Cash In </span>
     </a>
@@ -128,7 +128,7 @@
 <div id="myLinks" class="mobile_links">
     <a class="mobile_link" href="{{url('/accounts/home/')}}">My Profile</a>
     <a class="mobile_link" href="{{url('/accounts/doctor/income/')}}">Doctors Income</a>
-    <a class="mobile_link" href="{{url('/accounts/cash/in/')}}">Cash In</a>
+    <a class="mobile_link" href="{{url('/accounts/cash/in/'.Session::get('DATE_TODAY'))}}">Cash In</a>
     <a class="mobile_link" href="{{url('/accounts/pay/salary/')}}">Pay Salary</a>
     <a class="mobile_link" href="{{url('/accounts/creditors/')}}">Creditors</a>
     <a class="mobile_link" href="{{url('/accounts/patient/release/')}}">Patient Release</a>

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +22,22 @@ use Illuminate\Support\Facades\Route;
 
 # Log in
 
-Route::view('/','hospital/login');
+Route::get('/',function(Request $request){
+        
+    # Date and day set up.
+    date_default_timezone_set('Asia/Dhaka');
+    $date = date("Y-m-d");
+
+    $timestamp = strtotime($date);
+    $day = date('D', $timestamp);
+
+    $request->session()->put('DATE_TODAY',$date);
+    $request->session()->put('DAY_TODAY',$day);
+
+    # Return to index.
+    return view('hospital/login');
+
+});
 
 Route::post('/admin/login_users','App\Http\Controllers\login\login@login_users');
 
@@ -180,7 +196,7 @@ Route::group(['middleware'=>['receptionAuth']],function() {
     # Redirecting to [FUNCTION-NO::13]---in-controller.
     Route::get('/reception/patient_list/{date}','App\Http\Controllers\reception\add_patient@show_list');
 
-    # Reading data in Patient list page.
+    # filtering data in Patient list page.
     # Redirecting to [FUNCTION-NO::13.5]---in-controller.
     Route::post('/reception/filter/summary/','App\Http\Controllers\reception\add_patient@filter_summary');
 
@@ -655,6 +671,30 @@ Route::group(['middleware'=>['accountantAuth']],function() {
     # Redirecting to [FUNCTION-NO::05]---in-controller.
     Route::post('/accounts/doctor/income/filter/','App\Http\Controllers\accountant\accounts@filter_doctor_income');
 
+    # showing detailed doctor income log.
+    # Redirecting to [FUNCTION-NO::06]---in-controller.
+    Route::post('/accounts/doctor/income/details/','App\Http\Controllers\accountant\accounts@detailed_doctor_income_log');
+
+    # filtering doctor income details page.
+    # Redirecting to [FUNCTION-NO::07]---in-controller.
+    Route::post('/accounts/doctor/income/details/filter/','App\Http\Controllers\accountant\accounts@income_details_filter');
+    
+    ##############################################################################################################################################
+    # Cash in.  [C::accounts.php]
+    ##############################################################################################################################################
+
+    # Reading data in Patient list page.
+    # Redirecting to [FUNCTION-NO::08]---in-controller.
+    Route::get('/accounts/cash/in/{date}','App\Http\Controllers\accountant\accounts@cash_in_list');
+
+    # Filtering data in Patient list page.
+    # Redirecting to [FUNCTION-NO::09]---in-controller.
+    Route::post('/account/filter/cash/in/','App\Http\Controllers\accountant\accounts@filter_cash_in');
+
+    # Submit cash in.
+    # Redirecting to [FUNCTION-NO::10]---in-controller.
+    Route::post('/account/filter/cash/in/cashed/','App\Http\Controllers\accountant\accounts@submit_cash_in');
+
     ##############################################################################################################################################
     # Accounts Edit Profile.  [C::accounts.php]
     ##############################################################################################################################################
@@ -671,7 +711,7 @@ Route::group(['middleware'=>['accountantAuth']],function() {
     Route::view('/accounts/doctor/income/log/','hospital/accounts/doctor_income_details');
     Route::view('/accounts/pay/salary/','hospital/accounts/pay_salary');
     Route::view('/accounts/log/','hospital/accounts/logs');
-    Route::view('/accounts/cash/in/','hospital/accounts/cash_in');
+    /*Route::view('/accounts/cash/in/','hospital/accounts/cash_in');*/
     Route::view('/accounts/creditors/','hospital/accounts/creditors');
     Route::view('/accounts/patient/release/','hospital/accounts/patient_release');
     Route::view('/accounts/release/slips/','hospital/accounts/release_slips');

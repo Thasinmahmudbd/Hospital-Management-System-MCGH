@@ -183,7 +183,7 @@ function show_all_doctors(Request $request){
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: Hello, future me,
-# This will be updated in the future.
+# 
 # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -194,6 +194,7 @@ function show_all_doctors(Request $request){
 #### FUNCTION-NO::05 ####
 #########################
 # Filters doctor income log;
+# Stored data in 1 sessions.
 
 function filter_doctor_income(Request $request){
 
@@ -249,7 +250,282 @@ function filter_doctor_income(Request $request){
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: Hello, future me,
-# This will be updated in the future.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::06 ####
+#########################
+# Shows individual doctor income log;
+# Stored data in 1 sessions.
+
+function detailed_doctor_income_log(Request $request){
+
+    $d_id = $request->input('d_id');
+    $dr_name = $request->input('dr_name');
+
+    $doctor_income['logs']=DB::table('doctor_balance_logs')
+        ->where('D_ID',$d_id)
+        ->orderBy('AI_ID','desc')
+        ->get();
+
+    session(['D_ID' => $d_id]);
+    session(['Dr_Name' => $dr_name]);
+    session(['from' => 'none']);
+
+    # Returning to the view below.
+    return view('hospital/accounts/doctor_income_details',$doctor_income);
+
+}
+
+# End of function detailed_doctor_income_log.               <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::07 ####
+#########################
+# Filters individual doctor income log details;
+# Stored data in 1 sessions.
+
+function income_details_filter(Request $request){
+
+    $d_id = $request->session()->get('D_ID');
+    $dr_name = $request->session()->get('Dr_Name');
+    $from = $request->input('search_from');
+    $to = $request->input('search_to');
+
+    $doctor_income['logs']=DB::table('doctor_balance_logs')
+        ->where('D_ID',$d_id)
+        ->whereBetween('B_Date', [$from, $to])
+        ->orderBy('AI_ID','desc')
+        ->get();
+
+    session(['from' => $from]);
+    session(['to' => $to]);
+
+    # Returning to the view below.
+    return view('hospital/accounts/doctor_income_details',$doctor_income);
+
+}
+
+# End of function income_details_filter.               <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::8 ####
+#########################
+# Calculates individual money collection;
+# Lists all receptionist's cash ins.
+
+function cash_in_list(Request $request, $date){
+
+    # Finding active receptionists.
+    $r_id=DB::table('logins')
+    ->select('Emp_ID')
+    ->where('logins.status','1')
+    ->where('Emp_ID','like','R%')
+    ->get();
+
+    foreach ($r_id as $id) {
+        
+        $collection=DB::table('hospital_income_log')
+        ->where('Time_Stamp','like',$date.'%')
+        ->where('User_ID',$id->Emp_ID)
+        ->sum('Credit');
+
+        $deduction=DB::table('hospital_income_log')
+        ->where('Time_Stamp','like',$date.'%')
+        ->where('User_ID',$id->Emp_ID)
+        ->sum('Debit');
+
+        $outdoor_collection=DB::table('patient_logs')
+        ->where('Time_Stamp','like',$date.'%')
+        ->where('R_ID',$id->Emp_ID)
+        ->sum('Final_Fee');
+
+        $collection = $collection - $deduction;
+        $collection = $collection + $outdoor_collection;
+
+        # Check if log exists on this date.
+        $check=DB::table('cash_ins')
+        ->where('Cash_In_Date',$date)
+        ->where('R_ID',$id->Emp_ID)
+        ->first();
+
+        if($check==null){
+
+            # Inserting data on cash ins.
+            $log=array(
+
+            'R_ID'=>$id->Emp_ID,
+            'Cash_In_Date'=>$date,
+            'Cash_In_Amount'=>$collection
+
+            );
+
+            DB::table('cash_ins')->insert($log);
+
+        }else{
+
+            # Updating data on cash ins.
+            $log=array(
+
+            'Cash_In_Amount'=>$collection
+
+            );
+
+            DB::table('cash_ins')
+            ->where('Cash_In_Date',$date)
+            ->where('R_ID',$id->Emp_ID)
+            ->update($log);
+
+        }
+
+    }
+
+    # Get todays cash in info.
+    $cash_in['log']=DB::table('cash_ins')
+    ->join('receptionists', 'cash_ins.R_ID', '=', 'receptionists.R_ID')
+    ->select('receptionists.R_Name', 'cash_ins.*')
+    ->where('cash_ins.Cash_In_Date',$date)
+    ->get();
+
+    # Returning to the view below.
+    return view('hospital/accounts/cash_in',$cash_in);
+
+}
+
+# End of function cash_in_list.                             <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::9 ####
+#########################
+# Filters all receptionist's cash ins.
+
+function filter_cash_in(Request $request){
+
+    $request->validate([
+
+        'summary_date'=>'required'
+
+    ]);
+    
+    $date = $request->input('summary_date');
+
+    # Redirecting to [FUNCTION-NO::8].
+    return redirect('/accounts/cash/in/'.$date);
+
+}
+
+# End of function filter_cash_in.                           <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me. 
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::10 ####
+#########################
+# Submits cash in.
+
+function submit_cash_in(Request $request){
+
+    $id = $request->input('ai_id');
+    $cashed = $request->input('cashed_amount');
+
+    # Find collected.
+    $collected=DB::table('cash_ins')
+        ->where('AI_ID',$id)
+        ->value('Cash_In_Amount');
+
+    # Find previously cashed.
+    $prev_cashed=DB::table('cash_ins')
+        ->where('AI_ID',$id)
+        ->value('Amount_Received');
+
+    $cashed = $cashed + $prev_cashed;
+
+    # Getting data from form.
+    $data=array(
+
+        'Amount_Received'=>$cashed
+
+    );
+
+    if($collected<$cashed){
+
+        # Session flash message.
+        $msg = 'Total cash-in can not be greater then collected amount.';
+        $request->session()->flash('msg', $msg);
+
+    }elseif($collected>$cashed){
+
+        # Session flash message.
+        $msg = 'Not fully cashed, due remains.';
+        $request->session()->flash('msg', $msg);
+
+        # Updating data on cash ins.
+        DB::table('cash_ins')
+            ->where('AI_ID',$id)
+            ->update($data);
+
+    }else{
+
+        # Session flash message.
+        $msg = 'Cash in successful.';
+        $request->session()->flash('msg', $msg);
+
+        # Updating data on cash ins.
+        DB::table('cash_ins')
+            ->where('AI_ID',$id)
+            ->update($data);
+
+    }
+
+    $date = $request->session()->get('DATE_TODAY');
+
+    # Redirecting to [FUNCTION-NO::8].
+    return redirect('/accounts/cash/in/'.$date);
+
+}
+
+# End of function cash_in_list.                             <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: 
 # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
