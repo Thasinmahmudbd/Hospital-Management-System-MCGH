@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 29, 2022 at 07:20 PM
+-- Generation Time: Mar 23, 2022 at 08:40 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.12
 
@@ -279,7 +279,23 @@ INSERT INTO `cash_ins` (`AI_ID`, `R_ID`, `Cash_In_Date`, `Cash_In_Amount`, `Amou
 (169, 'R-A-007', '2022-01-30', 0, 0, 'Due'),
 (170, 'R-M-001', '2022-01-30', 0, 0, 'Due'),
 (171, 'R-M-003', '2022-01-30', 0, 0, 'Due'),
-(172, 'R-F-012', '2022-01-30', 0, 0, 'Due');
+(172, 'R-F-012', '2022-01-30', 0, 0, 'Due'),
+(173, 'R-A-007', '2022-01-31', 0, 0, 'Due'),
+(174, 'R-M-001', '2022-01-31', 0, 0, 'Due'),
+(175, 'R-M-003', '2022-01-31', 0, 0, 'Due'),
+(176, 'R-F-012', '2022-01-31', 0, 0, 'Due'),
+(177, 'R-A-007', '2022-02-04', 0, 0, 'Due'),
+(178, 'R-M-001', '2022-02-04', 0, 0, 'Due'),
+(179, 'R-M-003', '2022-02-04', 0, 0, 'Due'),
+(180, 'R-F-012', '2022-02-04', 0, 0, 'Due'),
+(181, 'R-A-007', '2022-03-22', 0, 0, 'Due'),
+(182, 'R-M-001', '2022-03-22', 0, 0, 'Due'),
+(183, 'R-M-003', '2022-03-22', 0, 0, 'Due'),
+(184, 'R-F-012', '2022-03-22', 0, 0, 'Due'),
+(185, 'R-A-007', '2022-03-23', 0, 0, 'Due'),
+(186, 'R-M-001', '2022-03-23', 0, 0, 'Due'),
+(187, 'R-M-003', '2022-03-23', 0, 0, 'Due'),
+(188, 'R-F-012', '2022-03-23', 0, 0, 'Due');
 
 -- --------------------------------------------------------
 
@@ -425,12 +441,12 @@ INSERT INTO `doctors` (`AI_ID`, `D_ID`, `Dr_Name`, `Dr_Gender`, `Specialty`, `De
 (38, 'D-M-035', 'Dr A.H.M Mohosin (Sujon)', 'Male', '', 'Pediatrics', NULL, 0, 600, 20, 0, '2021-10-18 15:27:41'),
 (39, 'D-M-036', 'Dr. Md. Shah Alam', 'Male', '', 'Medicine', NULL, 0, 700, 20, 0, '2021-10-18 15:28:14'),
 (40, 'D-F-037', 'Dr Nashid Tabbasum Trena', 'Female', 'Surgeon', 'Dental', NULL, 0, 600, 20, 0, '2021-10-18 15:30:57'),
-(41, 'D-F-038', 'Brig Gen Dr. Sabina Yeasmin', 'Female', '', 'Pediatrics', NULL, 1200, 800, 20, 0, '2021-10-18 15:31:30'),
+(41, 'D-F-038', 'Brig Gen Dr. Sabina Yeasmin', 'Female', '', 'Pediatrics', NULL, 700, 800, 20, 0, '2021-10-18 15:31:30'),
 (42, 'D-F-039', 'Dr Amena Bagum', 'Female', 'Surgeon', 'Gynae', NULL, 0, 600, 20, 0, '2021-10-18 15:32:03'),
 (43, 'D-F-040', 'Lt.Col Dr Kaoser Jahan', 'Female', 'Surgeon', 'Gynae', '', 0, 600, 20, 0, '2021-10-18 15:41:34'),
 (44, 'D-M-002', 'Maj Dr. Mohammad Bayejid', 'Male', 'Medicine', 'Cardiology', NULL, 0, 600, 20, 0, '2021-11-18 10:16:10'),
 (45, 'D-M-041', 'MD. Abul Basher', 'Male', '', 'Physiology', NULL, 250, 0, 0, 0, '2021-12-10 15:29:50'),
-(46, 'D-M-042', 'Lt Col Md. Abdul Mannan', 'Male', '', 'Dental', NULL, 2092.5, 600, 20, 0, '2021-12-10 15:29:50');
+(46, 'D-M-042', 'Lt Col Md. Abdul Mannan', 'Male', '', 'Dental', NULL, 1592.5, 600, 20, 0, '2021-12-10 15:29:50');
 
 -- --------------------------------------------------------
 
@@ -462,7 +478,13 @@ INSERT INTO `doctor_balance_logs` (`AI_ID`, `D_ID`, `B_Date`, `Debit`, `Credit`,
 (77, 'D-M-042', '2021-12-12', 0, 1092.5, 0, 1092.5, 2092.5, 'R-A-007', 0, '2021-12-12 05:26:22'),
 (78, 'D-M-041', '2021-12-12', 0, 250, 0, 250, 250, 'R-A-007', 0, '2021-12-12 05:27:32'),
 (79, 'D-F-038', '2022-01-27', 0, 800, 200, 600, 600, NULL, NULL, '2022-01-27 12:16:25'),
-(80, 'D-F-038', '2022-01-27', 0, 800, 200, 600, 1200, NULL, NULL, '2022-01-27 13:00:59');
+(80, 'D-F-038', '2022-01-27', 0, 800, 200, 600, 1200, NULL, NULL, '2022-01-27 13:00:59'),
+(81, 'D-F-038', '2022-01-31', 100, 0, 0, 0, 1100, 'AC-A-007', 0, '2022-01-31 14:08:54'),
+(82, 'D-F-038', '2022-01-31', 100, 0, 0, 0, 1000, 'AC-A-007', 0, '2022-01-31 14:12:01'),
+(83, 'D-M-042', '2022-01-31', 500, 0, 0, 0, 1592.5, 'AC-A-007', 0, '2022-01-31 19:01:06'),
+(84, 'D-F-038', '2022-03-22', 100, 0, 0, 0, 900, 'AC-A-007', 0, '2022-03-22 12:16:21'),
+(85, 'D-F-038', '2022-03-22', 100, 0, 0, 0, 800, 'AC-A-007', 0, '2022-03-22 12:31:07'),
+(86, 'D-F-038', '2022-03-24', 100, 0, 0, 0, 700, 'AC-A-007', 0, '2022-03-23 19:29:19');
 
 -- --------------------------------------------------------
 
@@ -586,7 +608,23 @@ INSERT INTO `hospital_income_log` (`AI_ID`, `Message`, `Debit`, `Credit`, `Vat`,
 (109, 'Physio services for: M-12122021-001, given by: D-M-041', 0, 500, 0, 250, 250, 'Physio', '2021-12-12', '11:27:32', 2021, 'R-A-007', '2021-12-12 05:27:32'),
 (110, 'Pathology services for: M-12122021-001, referred by: self', 0, 2000, 0, 2000, 2000, 'Pathology', '2021-12-12', '05:31:15', 2021, 'R-A-007', '2021-12-12 05:31:15'),
 (111, 'Pathology services for: M-12122021-001, given by: self, Due payment.', 0, 2720, 0, 2720, 2720, 'Dental', '2021-12-12', '05:32:09', 2021, 'R-A-007', '2021-12-12 05:32:09'),
-(112, 'Out-door patient bill: 800. Doctor D-F-038 receives: 600. Hospital income: 200.', 0, 800, 0, 200, 200, 'Out-door patient', '2022-01-27', '13:00:59', 2022, 'D-F-038', '2022-01-27 13:00:59');
+(112, 'Out-door patient bill: 800. Doctor D-F-038 receives: 600. Hospital income: 200.', 0, 800, 0, 200, 200, 'Out-door patient', '2022-01-27', '13:00:59', 2022, 'D-F-038', '2022-01-27 13:00:59'),
+(113, 'Salary paid to: D-F-038, by: AC-A-007', 100, 0, 0, 0, 0, 'Salary', '2022-01-31', '14:08:54', 2022, 'AC-A-007', '2022-01-31 14:08:54'),
+(114, 'Salary paid to: D-F-038, by: AC-A-007', 100, 0, 0, 0, 0, 'Salary', '2022-01-31', '14:12:01', 2022, 'AC-A-007', '2022-01-31 14:12:01'),
+(115, 'Salary paid to: D-M-042, by: AC-A-007', 500, 0, 0, 0, 0, 'Salary', '2022-01-31', '19:01:06', 2022, 'AC-A-007', '2022-01-31 19:01:06'),
+(116, 'Salary paid to: D-F-038, by: AC-A-007', 100, 0, 0, 0, 0, 'Salary', '2022-03-22', '12:16:21', 2022, 'AC-A-007', '2022-03-22 12:16:21'),
+(117, 'Salary paid to: N-F-004, by: AC-A-007', 100, 0, 0, 0, 0, 'Salary', '2022-03-22', '12:30:35', 2022, 'AC-A-007', '2022-03-22 12:30:35'),
+(118, 'Salary paid to: D-F-038, by: AC-A-007', 100, 0, 0, 0, 0, 'Salary', '2022-03-22', '12:31:07', 2022, 'AC-A-007', '2022-03-22 12:31:07'),
+(119, 'Salary paid to: R-M-003, by: AC-A-007', 1025, 0, 0, 0, 0, 'Salary', '2022-03-23', '17:07:41', 2022, 'AC-A-007', '2022-03-23 17:07:41'),
+(120, 'Salary paid to: R-M-003, by: AC-A-007', 250, 0, 0, 0, 0, 'Salary', '2022-03-23', '17:44:42', 2022, 'AC-A-007', '2022-03-23 17:44:42'),
+(121, 'Salary paid to: AC-A-007, by: AC-A-007', 140, 0, 0, 0, 0, 'Salary', '2022-03-23', '17:46:06', 2022, 'AC-A-007', '2022-03-23 17:46:06'),
+(122, 'Salary paid to: Abdul, by: AC-A-007', 500, 0, 0, 0, 0, 'Salary', '2022-03-24', '18:58:31', 2022, 'AC-A-007', '2022-03-23 18:58:31'),
+(123, 'Salary paid to: halima, by: AC-A-007', 300, 0, 0, 0, 0, 'Salary', '2022-03-24', '19:11:00', 2022, 'AC-A-007', '2022-03-23 19:11:00'),
+(124, 'Salary paid to: D-F-038, by: AC-A-007', 100, 0, 0, 0, 0, 'Salary', '2022-03-24', '19:29:19', 2022, 'AC-A-007', '2022-03-23 19:29:19'),
+(125, 'Salary paid to: N-F-004, by: AC-A-007', 10, 0, 0, 0, 0, 'Salary', '2022-03-24', '19:30:01', 2022, 'AC-A-007', '2022-03-23 19:30:01'),
+(126, 'Salary paid to: R-A-007, by: AC-A-007', 300, 0, 0, 0, 0, 'Salary', '2022-03-24', '19:30:35', 2022, 'AC-A-007', '2022-03-23 19:30:35'),
+(127, 'Salary paid to: AC-A-007, by: AC-A-007', 300, 0, 0, 0, 0, 'Salary', '2022-03-24', '19:31:11', 2022, 'AC-A-007', '2022-03-23 19:31:11'),
+(128, 'Salary paid to: hasan, by: AC-A-007', 550, 0, 0, 0, 0, 'Salary', '2022-03-24', '19:32:04', 2022, 'AC-A-007', '2022-03-23 19:32:04');
 
 -- --------------------------------------------------------
 
@@ -707,7 +745,7 @@ INSERT INTO `nurses` (`AI_ID`, `N_ID`, `N_Name`, `N_Gender`, `N_Image`, `Wallet`
 (1, 'N-F-001', 'Kohinur Akter', 'Female', '', 0, '2021-10-18 14:15:53'),
 (2, 'N-F-002', 'Shanta Mariya', 'Female', '', 0, '2021-10-18 14:17:48'),
 (3, 'N-F-003', 'Kazi Maksuda Akter', 'Female', '', 0, '2021-10-18 14:17:48'),
-(4, 'N-F-004', 'Neshat Akter', 'Female', '', 200, '2021-10-18 14:19:07'),
+(4, 'N-F-004', 'Neshat Akter', 'Female', '', 90, '2021-10-18 14:19:07'),
 (5, 'N-F-005', 'Salma Akter', 'Female', '', 0, '2021-10-18 14:19:07'),
 (6, 'N-F-006', 'Tanjina Akter', 'Female', '', 0, '2021-10-18 14:20:02'),
 (7, 'N-F-007', 'Tithi Podder', 'Female', '', 500, '2021-10-18 14:20:02'),
@@ -734,6 +772,14 @@ CREATE TABLE `nurse_balance_logs` (
   `O_ID` longtext DEFAULT NULL,
   `Timestamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `nurse_balance_logs`
+--
+
+INSERT INTO `nurse_balance_logs` (`AI_ID`, `N_ID`, `B_Date`, `Debit`, `Credit`, `Current_Balance`, `Acc_ID`, `O_ID`, `Timestamp`) VALUES
+(3, 'N-F-004', '2022-03-22', 100, 0, 100, 'AC-A-007', '0', '2022-03-22 12:30:35'),
+(4, 'N-F-004', '2022-03-24', 10, 0, 90, 'AC-A-007', '0', '2022-03-23 19:30:01');
 
 -- --------------------------------------------------------
 
@@ -1391,6 +1437,28 @@ CREATE TABLE `transaction_logs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
+-- Dumping data for table `transaction_logs`
+--
+
+INSERT INTO `transaction_logs` (`AI_ID`, `Acc_ID`, `Emp_ID`, `Log_Type`, `Log_Message`, `Log_Year`, `Log_Amount`, `Log_Genre`, `Log_Date`, `Time_Stamp`) VALUES
+(1, 'AC-A-007', 'D-F-038', 'Debit', 'Salary paid to: D-F-038, by: AC-A-007', 2022, 100, 'Doctor Salary', '2022-01-31', '2022-01-31 14:08:54'),
+(2, 'AC-A-007', 'D-F-038', 'Debit', '100Tk, salary paid to: D-F-038, by: AC-A-007 on 2022-01-31', 2022, 100, 'Doctor Salary', '2022-01-31', '2022-01-31 14:12:01'),
+(3, 'AC-A-007', 'D-M-042', 'Debit', '500Tk, salary paid to: D-M-042, by: AC-A-007 on 2022-01-31', 2022, 500, 'Doctor Salary', '2022-01-31', '2022-01-31 19:01:06'),
+(4, 'AC-A-007', 'D-F-038', 'Debit', '100Tk, salary paid to: D-F-038, by: AC-A-007 on 2022-03-22', 2022, 100, 'Doctor Salary', '2022-03-22', '2022-03-22 12:16:21'),
+(5, 'AC-A-007', 'N-F-004', 'Debit', '100Tk, salary paid to: N-F-004, by: AC-A-007 on 2022-03-22', 2022, 100, 'Nurse Salary', '2022-03-22', '2022-03-22 12:30:35'),
+(6, 'AC-A-007', 'D-F-038', 'Debit', '100Tk, salary paid to: D-F-038, by: AC-A-007 on 2022-03-22', 2022, 100, 'Doctor Salary', '2022-03-22', '2022-03-22 12:31:07'),
+(7, 'AC-A-007', 'R-M-003', 'Debit', '1025Tk, salary paid to: R-M-003, by: AC-A-007 on 2022-03-23', 2022, 1025, 'Reception Salary', '2022-03-23', '2022-03-23 17:07:41'),
+(8, 'AC-A-007', 'R-M-003', 'Debit', '250Tk, salary paid to: R-M-003, by: AC-A-007 on 2022-03-23', 2022, 250, 'Reception Salary', '2022-03-23', '2022-03-23 17:44:42'),
+(9, 'AC-A-007', 'AC-A-007', 'Debit', '140Tk, salary paid to: AC-A-007, by: AC-A-007 on 2022-03-23', 2022, 140, 'Account Salary', '2022-03-23', '2022-03-23 17:46:06'),
+(10, 'AC-A-007', 'Abdul', 'Debit', '500Tk, salary paid to: Abdul, by: AC-A-007 on 2022-03-24', 2022, 500, 'Other Salary', '2022-03-24', '2022-03-23 18:58:31'),
+(11, 'AC-A-007', 'halima', 'Debit', '300Tk, salary paid to: halima, by: AC-A-007 on 2022-03-24', 2022, 300, 'Other Salary', '2022-03-24', '2022-03-23 19:11:00'),
+(12, 'AC-A-007', 'D-F-038', 'Debit', '100Tk, salary paid to: D-F-038, by: AC-A-007 on 2022-03-24', 2022, 100, 'Doctor Salary', '2022-03-24', '2022-03-23 19:29:20'),
+(13, 'AC-A-007', 'N-F-004', 'Debit', '10Tk, salary paid to: N-F-004, by: AC-A-007 on 2022-03-24', 2022, 10, 'Nurse Salary', '2022-03-24', '2022-03-23 19:30:02'),
+(14, 'AC-A-007', 'R-A-007', 'Debit', '300Tk, salary paid to: R-A-007, by: AC-A-007 on 2022-03-24', 2022, 300, 'Reception Salary', '2022-03-24', '2022-03-23 19:30:35'),
+(15, 'AC-A-007', 'AC-A-007', 'Debit', '300Tk, salary paid to: AC-A-007, by: AC-A-007 on 2022-03-24', 2022, 300, 'Account Salary', '2022-03-24', '2022-03-23 19:31:11'),
+(16, 'AC-A-007', 'hasan', 'Debit', '550Tk, salary paid to: hasan, by: AC-A-007 on 2022-03-24', 2022, 550, 'Other Salary', '2022-03-24', '2022-03-23 19:32:04');
+
+--
 -- Indexes for dumped tables
 --
 
@@ -1636,7 +1704,7 @@ ALTER TABLE `bed_invigilators`
 -- AUTO_INCREMENT for table `cash_ins`
 --
 ALTER TABLE `cash_ins`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=173;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=189;
 
 --
 -- AUTO_INCREMENT for table `dental_info`
@@ -1666,7 +1734,7 @@ ALTER TABLE `doctors`
 -- AUTO_INCREMENT for table `doctor_balance_logs`
 --
 ALTER TABLE `doctor_balance_logs`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 --
 -- AUTO_INCREMENT for table `doctor_schedules`
@@ -1684,7 +1752,7 @@ ALTER TABLE `emergency_log`
 -- AUTO_INCREMENT for table `hospital_income_log`
 --
 ALTER TABLE `hospital_income_log`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
 
 --
 -- AUTO_INCREMENT for table `logins`
@@ -1702,7 +1770,7 @@ ALTER TABLE `nurses`
 -- AUTO_INCREMENT for table `nurse_balance_logs`
 --
 ALTER TABLE `nurse_balance_logs`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `others_info`
@@ -1792,7 +1860,7 @@ ALTER TABLE `surgeon_logs`
 -- AUTO_INCREMENT for table `transaction_logs`
 --
 ALTER TABLE `transaction_logs`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

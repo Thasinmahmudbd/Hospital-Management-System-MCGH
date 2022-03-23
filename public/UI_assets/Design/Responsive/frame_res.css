@@ -41,6 +41,26 @@
         grid-gap:20px;
     }
 
+    .one_line_five_item_style_one{
+        grid-template-columns: 1fr;
+        grid-gap:1px;
+    }
+    
+    .one_line_four_item_style_one{
+        grid-template-columns: 1fr;
+        grid-gap:1px;
+    }
+
+    .one_line_four_item_style_two{
+        grid-template-columns: 1fr;
+        grid-gap:1px;
+    }
+
+    .one_line_three_item_style_one{
+        grid-template-columns: 1fr;
+        grid-gap:1px;
+    }
+
 
     /* table */
 

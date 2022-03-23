@@ -16,7 +16,7 @@ class accounts extends Controller
 #### FUNCTION-NO::01 ####
 #########################
 # Sets up required items before loading account home page;
-# Stored data in 8 sessions.
+# Stored data in 11 sessions.
 
 function set_up_home(Request $request){
 
@@ -55,6 +55,7 @@ function set_up_home(Request $request){
 
     $request->session()->put('DATE_TODAY',$date);
     $request->session()->put('DAY_TODAY',$day);
+    session(['pay_salary_person' => 'Doctors']);
 
     # Returning to the view below.
     return view('hospital/accounts/home');
@@ -75,7 +76,7 @@ function set_up_home(Request $request){
 #########################
 #### FUNCTION-NO::02 ####
 #########################
-# update commission limit;
+# Update commission limit;
 # Update will happen on --: TABLE :------ account_variables.
 
 function set_commission(Request $request){
@@ -119,7 +120,7 @@ function set_commission(Request $request){
 #########################
 #### FUNCTION-NO::03 ####
 #########################
-# update vat limit;
+# Update vat limit;
 # Update will happen on --: TABLE :------ account_variables.
 
 function set_vat(Request $request){
@@ -523,6 +524,794 @@ function submit_cash_in(Request $request){
 }
 
 # End of function cash_in_list.                             <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::11 ####
+#########################
+# List all types of employee wallet.
+# Generate payment form.
+
+function pay_salary(Request $request, $person){
+
+    if($person == 'Doctors'){
+
+        $available_data['result']=DB::table('doctors')
+        ->join('logins', 'doctors.D_ID', '=', 'logins.Emp_ID')
+        ->select('doctors.*')
+        ->where('logins.status','1')
+        ->orderBy('doctors.Dr_Name','asc')
+        ->get();
+
+        session(['doctor_salary_filter_type' => 'All']);
+        session(['pay_salary_person' => 'Doctors']);
+
+        # Returning to the view below.
+        return view('hospital/accounts/pay_salary',$available_data);
+
+    }elseif($person == 'Nurses'){
+
+        $available_data['result']=DB::table('nurses')
+        ->join('logins', 'nurses.N_ID', '=', 'logins.Emp_ID')
+        ->select('nurses.*')
+        ->where('logins.status','1')
+        ->orderBy('nurses.N_Name','asc')
+        ->get();
+
+        session(['doctor_salary_filter_type' => 'All']);
+        session(['pay_salary_person' => 'Nurses']);
+
+        # Returning to the view below.
+        return view('hospital/accounts/pay_salary',$available_data);
+
+    }elseif($person == 'Receptionists'){
+
+        $available_data['result']=DB::table('receptionists')
+        ->join('logins', 'receptionists.R_ID', '=', 'logins.Emp_ID')
+        ->select('receptionists.*')
+        ->where('logins.status','1')
+        ->orderBy('receptionists.R_Name','asc')
+        ->get();
+
+        session(['doctor_salary_filter_type' => 'All']);
+        session(['pay_salary_person' => 'Receptionists']);
+
+        # Returning to the view below.
+        return view('hospital/accounts/pay_salary',$available_data);
+
+    }elseif($person == 'Accountants'){
+
+        $available_data['result']=DB::table('accounts')
+        ->join('logins', 'accounts.Acc_ID', '=', 'logins.Emp_ID')
+        ->select('accounts.*')
+        ->where('logins.status','1')
+        ->orderBy('accounts.Acc_Name','asc')
+        ->get();
+
+        session(['doctor_salary_filter_type' => 'All']);
+        session(['pay_salary_person' => 'Accountants']);
+
+        # Returning to the view below.
+        return view('hospital/accounts/pay_salary',$available_data);
+
+    }elseif($person == 'Others'){
+
+        $available_data['result']=DB::table('transaction_logs')
+        ->where('Log_Genre','Other Salary')
+        ->get();
+
+        session(['doctor_salary_filter_type' => 'All']);
+        session(['pay_salary_person' => 'Others']);
+        session(['from' => 'none']);
+
+        # Returning to the view below.
+        return view('hospital/accounts/pay_salary',$available_data);
+
+    }
+
+}
+
+# End of function pay_salary.                               <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::12 ####
+#########################
+# Submits payment.
+
+function pay_salary_submit(Request $request){
+
+    $id = $request->input('wallet_hook');
+    $amount = $request->input('amount');
+    $person = $request->session()->get('pay_salary_person');
+
+    if($amount>0){
+
+        if($person=='Doctors'){
+
+            # Find wallet value.
+            $wallet=DB::table('doctors')
+                ->where('D_ID',$id)
+                ->value('Wallet');
+
+            if($wallet<$amount){
+
+                # Session flash message.
+                $msg = 'Insufficient balance on user wallet.';
+                $request->session()->flash('msg', $msg);
+
+                # Redirecting to [FUNCTION-NO::11].
+                return redirect('/accounts/pay/salary/'.$person);
+
+            }else{
+
+                $wallet = $wallet-$amount;
+
+                # Getting data from form.
+                $data=array(
+                    'Wallet'=>$wallet
+                );
+
+                # Updating data on doctors.
+                DB::table('doctors')
+                ->where('D_ID',$id)
+                ->update($data);
+
+                # Log entry on doctor balance log.
+                $log=array(
+                    'D_ID'=>$id,
+                    'B_Date'=>$request->session()->get('DATE_TODAY'),
+                    'Credit'=>0,
+                    'Debit'=>$amount,
+                    'Commission'=>0,
+                    'Income'=>0,
+                    'Current_Balance'=>$wallet,
+                    'Acc_ID'=>$request->session()->get('ACC_SESSION_ID'),
+                    'O_ID'=>0
+                );
+
+                # Insert balance log.
+                DB::table('doctor_balance_logs')
+                ->insert($log);
+
+                # Generating message.
+                $message='Salary paid to: '.$id.', by: '.$request->session()->get('ACC_SESSION_ID');
+
+                # Log entry on hospital balance log.
+                $hospital_income_logs=array(
+                    'Message'=>$message,
+                    'Debit'=>$amount,
+                    'Credit'=>0,
+                    'Vat'=>0,
+                    'Service_Charge'=>0,
+                    'Total_Income'=>0,
+                    'Credit_Type'=>'Salary',
+                    'Entry_Date'=>$request->session()->get('DATE_TODAY'),
+                    'Entry_Time'=>date("H:i:s"),
+                    'Entry_Year'=>date("Y"),
+                    'User_ID'=>$request->session()->get('ACC_SESSION_ID')
+                );
+
+                # Insert hospital log.
+                DB::table('hospital_income_log')
+                ->insert($hospital_income_logs);
+
+                # Generating message.
+                $message2=$amount.'Tk, salary paid to: '.$id.', by: '.$request->session()->get('ACC_SESSION_ID').' on '.$request->session()->get('DATE_TODAY');
+
+                # Log entry on transaction log.
+                $transaction_log=array(
+                    'Acc_ID'=>$request->session()->get('ACC_SESSION_ID'),
+                    'Emp_ID'=>$id,
+                    'Log_Type'=>'Debit',
+                    'Log_Message'=>$message2,
+                    'Log_Year'=>date("Y"),
+                    'Log_Amount'=>$amount,
+                    'Log_Genre'=>'Doctor Salary',
+                    'Log_Date'=>$request->session()->get('DATE_TODAY')
+                );
+
+                # Insert transaction log.
+                DB::table('transaction_logs')
+                ->insert($transaction_log);
+
+                # Session flash message.
+                $msg = 'Salary payment log Successfully updated';
+                $request->session()->flash('msg', $msg);
+
+                # Redirecting to [FUNCTION-NO::11].
+                return redirect('/accounts/pay/salary/'.$person);
+
+            }
+
+        }elseif($person=='Nurses'){
+
+            # Find wallet value.
+            $wallet=DB::table('nurses')
+                ->where('N_ID',$id)
+                ->value('Wallet');
+
+            if($wallet<$amount){
+
+                # Session flash message.
+                $msg = 'Insufficient balance on user wallet.';
+                $request->session()->flash('msg', $msg);
+
+                # Redirecting to [FUNCTION-NO::11].
+                return redirect('/accounts/pay/salary/'.$person);
+
+            }else{
+
+                $wallet = $wallet-$amount;
+
+                # Getting data from form.
+                $data=array(
+                    'Wallet'=>$wallet
+                );
+
+                # Updating data on nurses.
+                DB::table('nurses')
+                ->where('N_ID',$id)
+                ->update($data);
+
+                # Log entry on nurse balance log.
+                $log=array(
+                    'N_ID'=>$id,
+                    'B_Date'=>$request->session()->get('DATE_TODAY'),
+                    'Credit'=>0,
+                    'Debit'=>$amount,
+                    'Current_Balance'=>$wallet,
+                    'Acc_ID'=>$request->session()->get('ACC_SESSION_ID'),
+                    'O_ID'=>0
+                );
+
+                # Insert balance log.
+                DB::table('nurse_balance_logs')
+                ->insert($log);
+
+                # Generating message.
+                $message='Salary paid to: '.$id.', by: '.$request->session()->get('ACC_SESSION_ID');
+
+                # Log entry on hospital balance log.
+                $hospital_income_logs=array(
+                    'Message'=>$message,
+                    'Debit'=>$amount,
+                    'Credit'=>0,
+                    'Vat'=>0,
+                    'Service_Charge'=>0,
+                    'Total_Income'=>0,
+                    'Credit_Type'=>'Salary',
+                    'Entry_Date'=>$request->session()->get('DATE_TODAY'),
+                    'Entry_Time'=>date("H:i:s"),
+                    'Entry_Year'=>date("Y"),
+                    'User_ID'=>$request->session()->get('ACC_SESSION_ID')
+                );
+
+                # Insert hospital log.
+                DB::table('hospital_income_log')
+                ->insert($hospital_income_logs);
+
+                # Generating message.
+                $message2=$amount.'Tk, salary paid to: '.$id.', by: '.$request->session()->get('ACC_SESSION_ID').' on '.$request->session()->get('DATE_TODAY');
+
+                # Log entry on transaction log.
+                $transaction_log=array(
+                    'Acc_ID'=>$request->session()->get('ACC_SESSION_ID'),
+                    'Emp_ID'=>$id,
+                    'Log_Type'=>'Debit',
+                    'Log_Message'=>$message2,
+                    'Log_Year'=>date("Y"),
+                    'Log_Amount'=>$amount,
+                    'Log_Genre'=>'Nurse Salary',
+                    'Log_Date'=>$request->session()->get('DATE_TODAY')
+                );
+
+                # Insert transaction log.
+                DB::table('transaction_logs')
+                ->insert($transaction_log);
+
+                # Session flash message.
+                $msg = 'Salary payment log Successfully updated';
+                $request->session()->flash('msg', $msg);
+
+                # Redirecting to [FUNCTION-NO::11].
+                return redirect('/accounts/pay/salary/'.$person);
+
+            }
+
+        }elseif($person=='Receptionists' || $person=='Accountants'){
+
+            if($person=='Receptionists'){
+                $salary_grp='Reception Salary';
+            }if($person=='Accountants'){
+                $salary_grp='Account Salary';
+            }
+
+            # Generating message.
+            $message='Salary paid to: '.$id.', by: '.$request->session()->get('ACC_SESSION_ID');
+
+            # Log entry on hospital balance log.
+            $hospital_income_logs=array(
+                'Message'=>$message,
+                'Debit'=>$amount,
+                'Credit'=>0,
+                'Vat'=>0,
+                'Service_Charge'=>0,
+                'Total_Income'=>0,
+                'Credit_Type'=>'Salary',
+                'Entry_Date'=>$request->session()->get('DATE_TODAY'),
+                'Entry_Time'=>date("H:i:s"),
+                'Entry_Year'=>date("Y"),
+                'User_ID'=>$request->session()->get('ACC_SESSION_ID')
+            );
+
+            # Insert hospital log.
+            DB::table('hospital_income_log')
+            ->insert($hospital_income_logs);
+
+            # Generating message.
+            $message2=$amount.'Tk, salary paid to: '.$id.', by: '.$request->session()->get('ACC_SESSION_ID').' on '.$request->session()->get('DATE_TODAY');
+
+            # Log entry on transaction log.
+            $transaction_log=array(
+                'Acc_ID'=>$request->session()->get('ACC_SESSION_ID'),
+                'Emp_ID'=>$id,
+                'Log_Type'=>'Debit',
+                'Log_Message'=>$message2,
+                'Log_Year'=>date("Y"),
+                'Log_Amount'=>$amount,
+                'Log_Genre'=>$salary_grp,
+                'Log_Date'=>$request->session()->get('DATE_TODAY')
+            );
+
+            # Insert transaction log.
+            DB::table('transaction_logs')
+            ->insert($transaction_log);
+
+            # Session flash message.
+            $msg = 'Salary payment log Successfully updated';
+            $request->session()->flash('msg', $msg);
+
+            # Redirecting to [FUNCTION-NO::11].
+            return redirect('/accounts/pay/salary/'.$person);
+
+        }elseif($person=='Others'){
+
+            $name = $request->input('name');
+
+            # Generating message.
+            $message='Salary paid to: '.$name.', by: '.$request->session()->get('ACC_SESSION_ID');
+
+            # Log entry on hospital balance log.
+            $hospital_income_logs=array(
+                'Message'=>$message,
+                'Debit'=>$amount,
+                'Credit'=>0,
+                'Vat'=>0,
+                'Service_Charge'=>0,
+                'Total_Income'=>0,
+                'Credit_Type'=>'Salary',
+                'Entry_Date'=>$request->session()->get('DATE_TODAY'),
+                'Entry_Time'=>date("H:i:s"),
+                'Entry_Year'=>date("Y"),
+                'User_ID'=>$request->session()->get('ACC_SESSION_ID')
+            );
+
+            # Insert hospital log.
+            DB::table('hospital_income_log')
+            ->insert($hospital_income_logs);
+
+            # Generating message.
+            $message2=$amount.'Tk, salary paid to: '.$name.', by: '.$request->session()->get('ACC_SESSION_ID').' on '.$request->session()->get('DATE_TODAY');
+
+            # Log entry on transaction log.
+            $transaction_log=array(
+                'Acc_ID'=>$request->session()->get('ACC_SESSION_ID'),
+                'Emp_ID'=>$name,
+                'Log_Type'=>'Debit',
+                'Log_Message'=>$message2,
+                'Log_Year'=>date("Y"),
+                'Log_Amount'=>$amount,
+                'Log_Genre'=>'Other Salary',
+                'Log_Date'=>$request->session()->get('DATE_TODAY')
+            );
+
+            # Insert transaction log.
+            DB::table('transaction_logs')
+            ->insert($transaction_log);
+
+            # Session flash message.
+            $msg = 'Salary payment log Successfully updated';
+            $request->session()->flash('msg', $msg);
+
+            # Redirecting to [FUNCTION-NO::11].
+            return redirect('/accounts/pay/salary/'.$person);
+
+        }
+
+    }else{
+
+        # Session flash message.
+        $msg = 'Entry must be greater then 0.';
+        $request->session()->flash('msg', $msg);
+
+        # Redirecting to [FUNCTION-NO::11].
+        return redirect('/accounts/pay/salary/'.$person);
+
+    }
+
+    /*# Find previously cashed.
+    $prev_cashed=DB::table('cash_ins')
+        ->where('AI_ID',$id)
+        ->value('Amount_Received');
+
+    $cashed = $cashed + $prev_cashed;
+
+    # Getting data from form.
+    $data=array(
+
+        'Amount_Received'=>$cashed
+
+    );
+
+    if($collected<$cashed){
+
+        # Session flash message.
+        $msg = 'Total cash-in can not be greater then collected amount.';
+        $request->session()->flash('msg', $msg);
+
+    }elseif($collected>$cashed){
+
+        # Session flash message.
+        $msg = 'Not fully cashed, due remains.';
+        $request->session()->flash('msg', $msg);
+
+        # Updating data on cash ins.
+        DB::table('cash_ins')
+            ->where('AI_ID',$id)
+            ->update($data);
+
+    }else{
+
+        # Session flash message.
+        $msg = 'Cash in successful.';
+        $request->session()->flash('msg', $msg);
+
+        # Updating data on cash ins.
+        DB::table('cash_ins')
+            ->where('AI_ID',$id)
+            ->update($data);
+
+    }
+
+    $date = $request->session()->get('DATE_TODAY');
+
+    # Redirecting to [FUNCTION-NO::8].
+    return redirect('/accounts/cash/in/'.$date);*/
+
+}
+
+# End of function pay_salary_submit.                        <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::13 ####
+#########################
+# List all salary transaction log.
+
+function salary_log(Request $request, $id){
+
+    $total=DB::table('transaction_logs')
+    ->where('Emp_ID',$id)
+    ->sum('Log_Amount');
+
+    session(['Salary_log_of_Emp_ID' => $id]);
+
+    $person = $request->session()->get('pay_salary_person');
+
+    if($person=='Doctors'){
+
+        $available_data['result']=DB::table('transaction_logs')
+        ->where('Emp_ID',$id)
+        ->where('Log_Genre','Doctor Salary')
+        ->get();
+
+        $emp_data=DB::table('doctors')
+        ->where('D_ID',$id)
+        ->first();
+
+        $emp_name = $emp_data->Dr_Name;
+
+    }if($person=='Nurses'){
+
+        $available_data['result']=DB::table('transaction_logs')
+        ->where('Emp_ID',$id)
+        ->where('Log_Genre','Nurse Salary')
+        ->get();
+
+        $emp_data=DB::table('nurses')
+        ->where('N_ID',$id)
+        ->first();
+
+        $emp_name = $emp_data->N_Name;
+
+    }if($person=='Receptionists'){
+
+        $available_data['result']=DB::table('transaction_logs')
+        ->where('Emp_ID',$id)
+        ->where('Log_Genre','Reception Salary')
+        ->get();
+
+        $emp_data=DB::table('receptionists')
+        ->where('R_ID',$id)
+        ->first();
+
+        $emp_name = $emp_data->R_Name;
+
+    }if($person=='Accountants'){
+
+        $available_data['result']=DB::table('transaction_logs')
+        ->where('Emp_ID',$id)
+        ->where('Log_Genre','Account Salary')
+        ->get();
+
+        $emp_data=DB::table('accounts')
+        ->where('Acc_ID',$id)
+        ->first();
+
+        $emp_name = $emp_data->Acc_Name;
+
+    }if($person=='Others'){
+
+        $available_data['result']=DB::table('transaction_logs')
+        ->where('Log_Genre','Other Salary')
+        ->get();
+
+        session(['Salary_log_of_Emp_ID' => 'null']);
+
+    }
+
+    session(['Salary_log_of_Emp_Name' => $emp_name]);
+    session(['Salary_Lifetime' => $total]);
+    session(['from' => 'none']);
+
+    # Returning to the view below.
+    return view('hospital/accounts/salary_log',$available_data);
+
+}
+
+# End of function pay_salary.                               <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::14 ####
+#########################
+# Filters salary page.
+
+function pay_salary_search(Request $request){
+
+    $person = $request->input('type');
+    $employee_search_info = $request->input('employee_search_info');
+    
+    if($employee_search_info==null){
+
+        # Redirecting to [FUNCTION-NO::11].
+        return redirect('/accounts/pay/salary/'.$person);
+
+    }elseif($person == 'Doctors' && $employee_search_info!=null){
+
+        $available_data['result']=DB::table('doctors')
+        ->join('logins', 'doctors.D_ID', '=', 'logins.Emp_ID')
+        ->select('doctors.*')
+        ->where('logins.status','1')
+        ->where('doctors.D_ID',$employee_search_info)
+        ->orwhere('doctors.Dr_Name','like','%'.$employee_search_info.'%')
+        ->orderBy('doctors.Dr_Name','asc')
+        ->get();
+
+        session(['doctor_salary_filter_type' => 'All']);
+        session(['pay_salary_person' => 'Doctors']);
+
+        # Returning to the view below.
+        return view('hospital/accounts/pay_salary',$available_data);
+
+    }elseif($person == 'Nurses' && $employee_search_info!=null){
+
+        $available_data['result']=DB::table('nurses')
+        ->join('logins', 'nurses.N_ID', '=', 'logins.Emp_ID')
+        ->select('nurses.*')
+        ->where('logins.status','1')
+        ->where('nurses.N_ID',$employee_search_info)
+        ->orwhere('nurses.N_Name','like','%'.$employee_search_info.'%')
+        ->orderBy('nurses.N_Name','asc')
+        ->get();
+
+        session(['doctor_salary_filter_type' => 'All']);
+        session(['pay_salary_person' => 'Nurses']);
+
+        # Returning to the view below.
+        return view('hospital/accounts/pay_salary',$available_data);
+
+    }elseif($person == 'Receptionists' && $employee_search_info!=null){
+
+        $available_data['result']=DB::table('receptionists')
+        ->join('logins', 'receptionists.R_ID', '=', 'logins.Emp_ID')
+        ->select('receptionists.*')
+        ->where('logins.status','1')
+        ->where('receptionists.R_ID',$employee_search_info)
+        ->orwhere('receptionists.R_Name','like','%'.$employee_search_info.'%')
+        ->orderBy('receptionists.R_Name','asc')
+        ->get();
+
+        session(['doctor_salary_filter_type' => 'All']);
+        session(['pay_salary_person' => 'Receptionists']);
+
+        # Returning to the view below.
+        return view('hospital/accounts/pay_salary',$available_data);
+
+    }elseif($person == 'Accountants' && $employee_search_info!=null){
+
+        $available_data['result']=DB::table('accounts')
+        ->join('logins', 'accounts.Acc_ID', '=', 'logins.Emp_ID')
+        ->select('accounts.*')
+        ->where('logins.status','1')
+        ->where('accounts.Acc_ID',$employee_search_info)
+        ->orwhere('accounts.Acc_Name','like','%'.$employee_search_info.'%')
+        ->orderBy('accounts.Acc_Name','asc')
+        ->get();
+
+        session(['doctor_salary_filter_type' => 'All']);
+        session(['pay_salary_person' => 'Accountants']);
+
+        # Returning to the view below.
+        return view('hospital/accounts/pay_salary',$available_data);
+
+    }elseif($person == 'Others' && $employee_search_info!=null){
+
+        # Redirecting to [FUNCTION-NO::11].
+        return redirect('/accounts/pay/salary/'.$person);
+
+    }
+
+}
+
+# End of function pay_salary.                               <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::15 ####
+#########################
+# Filters individual salary transaction log.
+
+function filter_individual_log(Request $request, $id){
+
+    $from = $request->input('search_from');
+    $to = $request->input('search_to');
+    session(['from' => $from]);
+    session(['to' => $to]);
+
+    $total=DB::table('transaction_logs')
+    ->where('Emp_ID',$id)
+    ->whereBetween('Log_Date', [$from, $to])
+    ->sum('Log_Amount');
+
+    $person = $request->session()->get('pay_salary_person');
+
+    if($person=='Doctors'){
+
+        $available_data['result']=DB::table('transaction_logs')
+        ->where('Emp_ID',$id)
+        ->where('Log_Genre','Doctor Salary')
+        ->whereBetween('Log_Date', [$from, $to])
+        ->get();
+
+        $emp_data=DB::table('doctors')
+        ->where('D_ID',$id)
+        ->first();
+
+        $emp_name = $emp_data->Dr_Name;
+
+    }if($person=='Nurses'){
+
+        $available_data['result']=DB::table('transaction_logs')
+        ->where('Emp_ID',$id)
+        ->where('Log_Genre','Nurse Salary')
+        ->whereBetween('Log_Date', [$from, $to])
+        ->get();
+
+        $emp_data=DB::table('nurses')
+        ->where('N_ID',$id)
+        ->first();
+
+        $emp_name = $emp_data->N_Name;
+
+    }if($person=='Receptionists'){
+
+        $available_data['result']=DB::table('transaction_logs')
+        ->where('Emp_ID',$id)
+        ->where('Log_Genre','Reception Salary')
+        ->whereBetween('Log_Date', [$from, $to])
+        ->get();
+
+        $emp_data=DB::table('receptionists')
+        ->where('R_ID',$id)
+        ->first();
+
+        $emp_name = $emp_data->R_Name;
+
+    }if($person=='Accountants'){
+
+        $available_data['result']=DB::table('transaction_logs')
+        ->where('Emp_ID',$id)
+        ->where('Log_Genre','Account Salary')
+        ->whereBetween('Log_Date', [$from, $to])
+        ->get();
+
+        $emp_data=DB::table('accounts')
+        ->where('Acc_ID',$id)
+        ->first();
+
+        $emp_name = $emp_data->Acc_Name;
+
+    }if($person=='Others'){
+
+        $available_data['result']=DB::table('transaction_logs')
+        ->where('Log_Genre','Other Salary')
+        ->whereBetween('Log_Date', [$from, $to])
+        ->get();
+
+        # Returning to the view below.
+        return view('hospital/accounts/pay_salary',$available_data);
+
+    }if($person!='Others'){
+
+        session(['Salary_log_of_Emp_ID' => $id]);
+        session(['Salary_log_of_Emp_Name' => $emp_name]);
+        session(['Salary_Lifetime' => $total]);
+
+    }
+
+    # Returning to the view below.
+    return view('hospital/accounts/salary_log',$available_data);
+
+}
+
+# End of function pay_salary.                               <-------#
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: 

@@ -57,7 +57,7 @@
 </li>
 
 <li class="list_item">
-    <a href="{{url('/accounts/pay/salary/')}}" class="link">
+    <a href="{{url('/accounts/pay/salary/'.Session::get('pay_salary_person'))}}" class="link">
         <i class="link_icons fas fa-credit-card"></i>
         <span class="link_name"> Pay Salary </span>
     </a>
@@ -129,7 +129,7 @@
     <a class="mobile_link" href="{{url('/accounts/home/')}}">My Profile</a>
     <a class="mobile_link" href="{{url('/accounts/doctor/income/')}}">Doctors Income</a>
     <a class="mobile_link" href="{{url('/accounts/cash/in/'.Session::get('DATE_TODAY'))}}">Cash In</a>
-    <a class="mobile_link" href="{{url('/accounts/pay/salary/')}}">Pay Salary</a>
+    <a class="mobile_link" href="{{url('/accounts/pay/salary/'.Session::get('pay_salary_person'))}}">Pay Salary</a>
     <a class="mobile_link" href="{{url('/accounts/creditors/')}}">Creditors</a>
     <a class="mobile_link" href="{{url('/accounts/patient/release/')}}">Patient Release</a>
     <a class="mobile_link" href="{{url('/accounts/release/slips/')}}">Release Slips</a>

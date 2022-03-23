@@ -313,6 +313,24 @@
     grid-gap:5px;
 }
 
+.one_line_four_item_style_one{
+    display:grid;
+    grid-template-columns: 2fr 4fr 2fr 3fr;
+    grid-gap:5px;
+}
+
+.one_line_four_item_style_two{
+    display:grid;
+    grid-template-columns: 50px 2fr 4fr 3fr;
+    grid-gap:5px;
+}
+
+.one_line_three_item_style_one{
+    display:grid;
+    grid-template-columns: 2fr 4fr 3fr;
+    grid-gap:5px;
+}
+
 /* table */
 
 .frame_table{

@@ -696,6 +696,30 @@ Route::group(['middleware'=>['accountantAuth']],function() {
     Route::post('/account/filter/cash/in/cashed/','App\Http\Controllers\accountant\accounts@submit_cash_in');
 
     ##############################################################################################################################################
+    # Pay salary.  [C::accounts.php]
+    ##############################################################################################################################################
+
+    # Reading all doctor data.
+    # Redirecting to [FUNCTION-NO::11]---in-controller.
+    Route::get('/accounts/pay/salary/{person}','App\Http\Controllers\accountant\accounts@pay_salary');
+
+    # Pays salary to selected doctor.
+    # Redirecting to [FUNCTION-NO::12]---in-controller.
+    Route::post('/accounts/pay/salary/submit/','App\Http\Controllers\accountant\accounts@pay_salary_submit');
+
+    # Shows individual log.
+    # Redirecting to [FUNCTION-NO::13]---in-controller.
+    Route::get('/accounts/salary/log/{id}','App\Http\Controllers\accountant\accounts@salary_log');
+
+    # Filter employee for salary.
+    # Redirecting to [FUNCTION-NO::14]---in-controller.
+    Route::post('/accounts/pay/salary/search','App\Http\Controllers\accountant\accounts@pay_salary_search');
+
+    # Filter individual log.
+    # Redirecting to [FUNCTION-NO::15]---in-controller.
+    Route::post('/accounts/salary/log/filter/{id}','App\Http\Controllers\accountant\accounts@filter_individual_log');
+
+    ##############################################################################################################################################
     # Accounts Edit Profile.  [C::accounts.php]
     ##############################################################################################################################################
     
@@ -709,7 +733,7 @@ Route::group(['middleware'=>['accountantAuth']],function() {
 
     # disposable.
     Route::view('/accounts/doctor/income/log/','hospital/accounts/doctor_income_details');
-    Route::view('/accounts/pay/salary/','hospital/accounts/pay_salary');
+    /*Route::view('/accounts/pay/salary/','hospital/accounts/pay_salary');*/
     Route::view('/accounts/log/','hospital/accounts/logs');
     /*Route::view('/accounts/cash/in/','hospital/accounts/cash_in');*/
     Route::view('/accounts/creditors/','hospital/accounts/creditors');
