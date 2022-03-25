@@ -199,7 +199,7 @@
 
     <!--Session message-->
 
-    @if(session('msg')=='Salary payment log Successfully updated')
+    @if(session('msg')=='Salary payment log Successfully updated.')
 
     <div class="content_container text_center success_msg">{{session('msg')}}</div>
 

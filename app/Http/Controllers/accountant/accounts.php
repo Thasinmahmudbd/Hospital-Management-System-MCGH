@@ -730,7 +730,7 @@ function pay_salary_submit(Request $request){
                 ->insert($transaction_log);
 
                 # Session flash message.
-                $msg = 'Salary payment log Successfully updated';
+                $msg = 'Salary payment log Successfully updated.';
                 $request->session()->flash('msg', $msg);
 
                 # Redirecting to [FUNCTION-NO::11].
@@ -1101,7 +1101,7 @@ function salary_log(Request $request, $id){
 
 }
 
-# End of function pay_salary.                               <-------#
+# End of function salary_log.                               <-------#
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: 
@@ -1203,7 +1203,7 @@ function pay_salary_search(Request $request){
 
 }
 
-# End of function pay_salary.                               <-------#
+# End of function pay_salary_search.                        <-------#
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: 
@@ -1311,7 +1311,199 @@ function filter_individual_log(Request $request, $id){
 
 }
 
-# End of function pay_salary.                               <-------#
+# End of function filter_individual_log.                    <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::16 ####
+#########################
+# Shows all uncredited creditors.
+
+function show_creditors(Request $request){
+
+    $available_data1['result1']=DB::table('bed_invigilators')
+        ->where('Creditor_Status','1')
+        ->get();
+
+    $available_data2['result2']=DB::table('ot_assistant_logs')
+        ->where('Creditor_Status','1')
+        ->get();
+
+    # Returning to the view below.
+    return view('hospital/accounts/creditors',$available_data1,$available_data2);
+
+}
+
+# End of function show_creditors.                           <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::17 ####
+#########################
+# Pays uncredited creditor;
+# Update might happen on --: TABLE :------ bed_invigilators.
+# Update might happen on --: TABLE :------ ot_assistant_logs.
+
+function pay_creditors(Request $request){
+
+    $ai_id = $request->input('ai_id');
+    $payed_amount = $request->input('payed_amount');
+    $table = $request->input('table');
+    $name = $request->input('name');
+
+    # Generating message.
+    $message2=$payed_amount.'Tk, salary paid to: '.$name.', by: '.$request->session()->get('ACC_SESSION_ID').' on '.$request->session()->get('DATE_TODAY');
+
+    # Log entry on transaction log.
+    $transaction_log=array(
+        'Acc_ID'=>$request->session()->get('ACC_SESSION_ID'),
+        'Emp_ID'=>$name,
+        'Log_Type'=>'Debit',
+        'Log_Message'=>$message2,
+        'Log_Year'=>date("Y"),
+        'Log_Amount'=>$payed_amount,
+        'Log_Genre'=>'Creditor',
+        'Log_Date'=>$request->session()->get('DATE_TODAY')
+    );
+
+    $owns=DB::table($table)
+        ->where('AI_ID',$ai_id)
+        ->value('Assistant_Fee');
+
+    if($payed_amount<=0){
+
+        # Session flash message.
+        $msg = 'Invalid amount.';
+        $request->session()->flash('msg', $msg);
+    
+    }elseif($owns>=$payed_amount){
+
+        $previously_payed_amount=DB::table($table)
+        ->where('AI_ID',$ai_id)
+        ->value('Debt_Payed');
+
+        $payed_amount=$payed_amount+$previously_payed_amount;
+
+        # Updating owned amount.
+        if($owns>0){
+
+            $log=array(
+
+                'Debt_Payed'=>$payed_amount
+    
+            );
+
+        }else{
+
+            $log=array(
+
+                'Debt_Payed'=>$payed_amount,
+                'Creditor_Status'=>'0'
+    
+            );
+
+        }
+
+        DB::table($table)
+            ->where('AI_ID',$ai_id)
+            ->update($log);
+        
+        # Insert transaction log.
+        DB::table('transaction_logs')
+            ->insert($transaction_log);
+
+        # Session flash message.
+        $msg = 'Successfully paid creditors.';
+        $request->session()->flash('msg', $msg);
+
+    }elseif($owns<$payed_amount){
+
+        # Session flash message.
+        $msg = 'Sorry, you are trying to overpay.';
+        $request->session()->flash('msg', $msg);
+
+    }
+
+    # Redirecting to [FUNCTION-NO::16].
+    return redirect('/accounts/creditors/');
+
+}
+
+# End of function pay_creditors.                           <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::18 ####
+#########################
+# List all salary transaction log.
+
+function creditor_log(Request $request){
+
+    $available_data['result']=DB::table('transaction_logs')
+        ->where('Log_Genre','Creditor')
+        ->get();
+
+    session(['from' => 'none']);
+
+    # Returning to the view below.
+    return view('hospital/accounts/creditors_log',$available_data);
+
+}
+
+# End of function creditor_log.                             <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::18 ####
+#########################
+# List all salary transaction log.
+
+function creditor_log_filter(Request $request){
+
+    $from = $request->input('search_from');
+    $to = $request->input('search_to');
+    session(['from' => $from]);
+    session(['to' => $to]);
+
+    $available_data['result']=DB::table('transaction_logs')
+        ->where('Log_Genre','Creditor')
+        ->whereBetween('Log_Date', [$from, $to])
+        ->get();
+
+    # Returning to the view below.
+    return view('hospital/accounts/creditors_log',$available_data);
+
+}
+
+# End of function creditor_log.                             <-------#
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: 
