@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 23, 2022 at 08:40 PM
+-- Generation Time: Mar 27, 2022 at 02:06 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.12
 
@@ -121,7 +121,7 @@ CREATE TABLE `admission_logs` (
 --
 
 INSERT INTO `admission_logs` (`A_ID`, `P_ID`, `R_ID`, `B_ID`, `D_ID`, `Pre_Vill`, `Pre_PO`, `Pre_Upa`, `Pre_Dist`, `Per_Vill`, `Per_PO`, `Per_Upa`, `Per_Dist`, `Admission_Date`, `Religion`, `Consultant`, `Emergency_Rel_Add`, `Emergency_Number`, `Ward_Days`, `Cabin_Days`, `Payment_Confirmation`, `OT_Confirmation`, `Package_Confirmation`, `Ligation`, `Third_Seizure`, `Bed_Bill`, `Admission_Fee`, `Paid_Amount`, `Changes`, `Admission_Timestamp`, `Update_Timestamp`, `Update_Date`, `Discount`, `Discharge_Date`) VALUES
-(21, 'M-12122021-001', 'R-A-007', '1', 'D-M-001', 'demo pre village', 'demo pre  po', 'demo pre  upa', 'demo pre  dist', 'demo pre village', 'demo pre  po', 'demo pre  upa', 'demo pre  dist', '2021-12-12', 'demo religion', 'Brig Gen S M Mizanur Rahman', 'demo address', '01985235648', NULL, NULL, NULL, NULL, 'none', 'no', 'no', NULL, 300, 500, 200, '2021-12-12 05:20:51', NULL, NULL, NULL, NULL);
+(21, 'M-12122021-001', 'R-A-007', '1', 'D-M-001', 'demo pre village', 'demo pre  po', 'demo pre  upa', 'demo pre  dist', 'demo pre village', 'demo pre  po', 'demo pre  upa', 'demo pre  dist', '2021-12-12', 'demo religion', 'Brig Gen S M Mizanur Rahman', 'demo address', '01985235648', NULL, NULL, NULL, 1, 'none', 'no', 'no', NULL, 300, 500, 200, '2021-12-12 05:20:51', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -237,6 +237,7 @@ CREATE TABLE `bed_invigilators` (
   `Duty_N_ID` longtext DEFAULT 'None',
   `Assistant_Name` longtext DEFAULT 'None',
   `Assistant_Fee` float DEFAULT 0,
+  `Debt_Payed` float NOT NULL DEFAULT 0,
   `Creditor_Status` int(11) DEFAULT 1,
   `N_ID` longtext NOT NULL,
   `B_ID` longtext NOT NULL,
@@ -247,6 +248,17 @@ CREATE TABLE `bed_invigilators` (
   `Others_Use_Count` float NOT NULL DEFAULT 0,
   `Timestamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `bed_invigilators`
+--
+
+INSERT INTO `bed_invigilators` (`AI_ID`, `A_ID`, `D_ID`, `Duty_N_ID`, `Assistant_Name`, `Assistant_Fee`, `Debt_Payed`, `Creditor_Status`, `N_ID`, `B_ID`, `Visit_Date`, `Visit_Charge`, `Others`, `Others_Fee`, `Others_Use_Count`, `Timestamp`) VALUES
+(16, '21', 'None', 'None', 'Hasan', 100, 89, 1, 'N-A-007', '1', '2022-03-25', 0, 'Anema\r\n', 200, 1, '2022-03-25 03:12:45'),
+(17, '21', 'None', 'None', 'Korim', 100, 0, 1, 'N-A-007', '1', '2022-03-25', 0, 'Anema\r\n', 200, 1, '2022-03-25 03:14:42'),
+(18, '21', 'None', 'None', 'Jakaria', 500, 358, 1, 'N-A-007', '1', '2022-03-25', 0, 'Anema\r\n', 1000, 5, '2022-03-25 03:15:20'),
+(19, '21', 'None', 'None', 'Aklima', 300, 0, 1, 'N-A-007', '1', '2022-03-25', 0, 'Anema\r\n', 600, 3, '2022-03-25 03:16:36'),
+(20, '21', 'None', 'None', 'Mahin', 1000, 0, 1, 'N-A-007', '1', '2022-03-25', 0, 'Anema\r\n', 2000, 10, '2022-03-25 03:18:05');
 
 -- --------------------------------------------------------
 
@@ -295,7 +307,15 @@ INSERT INTO `cash_ins` (`AI_ID`, `R_ID`, `Cash_In_Date`, `Cash_In_Amount`, `Amou
 (185, 'R-A-007', '2022-03-23', 0, 0, 'Due'),
 (186, 'R-M-001', '2022-03-23', 0, 0, 'Due'),
 (187, 'R-M-003', '2022-03-23', 0, 0, 'Due'),
-(188, 'R-F-012', '2022-03-23', 0, 0, 'Due');
+(188, 'R-F-012', '2022-03-23', 0, 0, 'Due'),
+(189, 'R-A-007', '2022-03-24', 0, 0, 'Due'),
+(190, 'R-M-001', '2022-03-24', 0, 0, 'Due'),
+(191, 'R-M-003', '2022-03-24', 0, 0, 'Due'),
+(192, 'R-F-012', '2022-03-24', 0, 0, 'Due'),
+(193, 'R-A-007', '2022-03-25', 0, 0, 'Due'),
+(194, 'R-M-001', '2022-03-25', 0, 0, 'Due'),
+(195, 'R-M-003', '2022-03-25', 0, 0, 'Due'),
+(196, 'R-F-012', '2022-03-25', 0, 0, 'Due');
 
 -- --------------------------------------------------------
 
@@ -413,7 +433,7 @@ CREATE TABLE `doctors` (
 INSERT INTO `doctors` (`AI_ID`, `D_ID`, `Dr_Name`, `Dr_Gender`, `Specialty`, `Department`, `Dr_Image`, `Wallet`, `Basic_Fee`, `Second_Visit_Discount`, `Patient_Cap`, `Time_Stamp`) VALUES
 (1, 'D-M-001', 'Brig Gen S M Mizanur Rahman', 'Male', 'Adviser Spl', 'Medicine test', NULL, 0, 1000, 20, 0, '2021-08-21 10:55:50'),
 (3, 'D-M-003', 'Col Kazi Ashkar Lateef', 'Male', 'Cl Spl', 'Anesthesiology', NULL, 0, 700, 20, 0, '2021-08-21 10:55:50'),
-(4, 'D-M-004', 'Col A K M Asaduzzmaan', 'Male', 'Cl Spl', 'Otolaryngology', NULL, 0, 800, 20, 0, '2021-08-21 10:55:50'),
+(4, 'D-M-004', 'Col A K M Asaduzzmaan', 'Male', 'Cl Spl', 'Otolaryngology', NULL, 9500, 800, 20, 0, '2021-08-21 10:55:50'),
 (5, 'D-M-005', 'Col Imranul Hasan Murad', 'Male', 'Cl Spl', 'Dermatology', NULL, 0, 700, 20, 0, '2021-08-21 10:55:50'),
 (6, 'D-M-006', 'Col Abu Daud Md Shariful Islam', 'Male', 'Cl Spl', 'Surgery', NULL, 0, 700, 20, 0, '2021-08-21 10:55:50'),
 (7, 'D-F-007', 'Lt Col Julia Akter Nira', 'Female', 'Cl Spl', 'Gynae & Obs', NULL, 0, 600, 20, 0, '2021-08-21 10:55:50'),
@@ -484,7 +504,8 @@ INSERT INTO `doctor_balance_logs` (`AI_ID`, `D_ID`, `B_Date`, `Debit`, `Credit`,
 (83, 'D-M-042', '2022-01-31', 500, 0, 0, 0, 1592.5, 'AC-A-007', 0, '2022-01-31 19:01:06'),
 (84, 'D-F-038', '2022-03-22', 100, 0, 0, 0, 900, 'AC-A-007', 0, '2022-03-22 12:16:21'),
 (85, 'D-F-038', '2022-03-22', 100, 0, 0, 0, 800, 'AC-A-007', 0, '2022-03-22 12:31:07'),
-(86, 'D-F-038', '2022-03-24', 100, 0, 0, 0, 700, 'AC-A-007', 0, '2022-03-23 19:29:19');
+(86, 'D-F-038', '2022-03-24', 100, 0, 0, 0, 700, 'AC-A-007', 0, '2022-03-23 19:29:19'),
+(87, 'D-M-004', '2022-03-25', 0, 9500, 0, 9500, 9500, 'OT-A-007', 2, '2022-03-25 03:23:18');
 
 -- --------------------------------------------------------
 
@@ -624,7 +645,12 @@ INSERT INTO `hospital_income_log` (`AI_ID`, `Message`, `Debit`, `Credit`, `Vat`,
 (125, 'Salary paid to: N-F-004, by: AC-A-007', 10, 0, 0, 0, 0, 'Salary', '2022-03-24', '19:30:01', 2022, 'AC-A-007', '2022-03-23 19:30:01'),
 (126, 'Salary paid to: R-A-007, by: AC-A-007', 300, 0, 0, 0, 0, 'Salary', '2022-03-24', '19:30:35', 2022, 'AC-A-007', '2022-03-23 19:30:35'),
 (127, 'Salary paid to: AC-A-007, by: AC-A-007', 300, 0, 0, 0, 0, 'Salary', '2022-03-24', '19:31:11', 2022, 'AC-A-007', '2022-03-23 19:31:11'),
-(128, 'Salary paid to: hasan, by: AC-A-007', 550, 0, 0, 0, 0, 'Salary', '2022-03-24', '19:32:04', 2022, 'AC-A-007', '2022-03-23 19:32:04');
+(128, 'Salary paid to: hasan, by: AC-A-007', 550, 0, 0, 0, 0, 'Salary', '2022-03-24', '19:32:04', 2022, 'AC-A-007', '2022-03-23 19:32:04'),
+(129, 'Anema\r\n fee from patient: M-12122021-001', 0, 100, 0, 100, 100, 'Anema\r\n', '2022-03-25', '03:12:45', 2022, 'N-A-007', '2022-03-25 03:12:45'),
+(130, 'Anema\r\n fee from patient: M-12122021-001', 0, 100, 0, 100, 100, 'Anema\r\n', '2022-03-25', '03:14:42', 2022, 'N-A-007', '2022-03-25 03:14:42'),
+(131, 'Anema\r\n fee from patient: M-12122021-001', 0, 500, 0, 500, 500, 'Anema\r\n', '2022-03-25', '03:15:20', 2022, 'N-A-007', '2022-03-25 03:15:20'),
+(132, 'Anema\r\n fee from patient: M-12122021-001', 0, 300, 0, 300, 300, 'Anema\r\n', '2022-03-25', '03:16:36', 2022, 'N-A-007', '2022-03-25 03:16:36'),
+(133, 'Anema\r\n fee from patient: M-12122021-001', 0, 1000, 0, 1000, 1000, 'Anema\r\n', '2022-03-25', '03:18:05', 2022, 'N-A-007', '2022-03-25 03:18:05');
 
 -- --------------------------------------------------------
 
@@ -824,8 +850,20 @@ CREATE TABLE `ot_assistant_logs` (
   `O_ID` int(11) NOT NULL,
   `Assistant_Name` longtext NOT NULL,
   `Assistant_Fee` int(11) NOT NULL,
+  `Debt_Payed` float NOT NULL DEFAULT 0,
   `Creditor_Status` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `ot_assistant_logs`
+--
+
+INSERT INTO `ot_assistant_logs` (`AI_ID`, `O_ID`, `Assistant_Name`, `Assistant_Fee`, `Debt_Payed`, `Creditor_Status`) VALUES
+(6, 2, 'OT 1', 1000, 0, 1),
+(7, 2, 'OT 2', 550, 0, 1),
+(8, 2, 'OT 3', 10000, 8500, 1),
+(9, 2, 'OT 4', 25, 0, 1),
+(10, 2, 'OT 5', 700, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -853,6 +891,13 @@ CREATE TABLE `ot_logs` (
   `Total` int(11) NOT NULL,
   `Timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `ot_logs`
+--
+
+INSERT INTO `ot_logs` (`O_ID`, `P_ID`, `A_ID`, `D_ID`, `OTO_ID`, `OT_No`, `O_Type`, `Anesthesia_Type`, `O_Date`, `O_Time`, `O_Duration`, `OT_Charge`, `OT_Charge_Discount`, `OT_Charge_Income`, `Others`, `Others_Charges`, `Total`, `Timestamp`) VALUES
+(2, 'M-12122021-001', '21', 'D-M-001', 'OT-A-007', 3, 'demo o type', 'demo a type', '2022-03-30', '14:00:00', '01 hr 00 min', 10000, 500, 9500, 'demo other', 700, 10200, '2022-03-25 03:22:55');
 
 -- --------------------------------------------------------
 
@@ -1417,6 +1462,13 @@ CREATE TABLE `surgeon_logs` (
   `Surgeon_Income` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `surgeon_logs`
+--
+
+INSERT INTO `surgeon_logs` (`AI_ID`, `D_ID`, `O_ID`, `Surgeon_Name`, `Surgeon_Fee`, `Surgeon_Discount`, `Surgeon_Income`) VALUES
+(21, 'D-M-004', '2', 'Col A K M Asaduzzmaan', 10000, 500, 9500);
+
 -- --------------------------------------------------------
 
 --
@@ -1456,7 +1508,13 @@ INSERT INTO `transaction_logs` (`AI_ID`, `Acc_ID`, `Emp_ID`, `Log_Type`, `Log_Me
 (13, 'AC-A-007', 'N-F-004', 'Debit', '10Tk, salary paid to: N-F-004, by: AC-A-007 on 2022-03-24', 2022, 10, 'Nurse Salary', '2022-03-24', '2022-03-23 19:30:02'),
 (14, 'AC-A-007', 'R-A-007', 'Debit', '300Tk, salary paid to: R-A-007, by: AC-A-007 on 2022-03-24', 2022, 300, 'Reception Salary', '2022-03-24', '2022-03-23 19:30:35'),
 (15, 'AC-A-007', 'AC-A-007', 'Debit', '300Tk, salary paid to: AC-A-007, by: AC-A-007 on 2022-03-24', 2022, 300, 'Account Salary', '2022-03-24', '2022-03-23 19:31:11'),
-(16, 'AC-A-007', 'hasan', 'Debit', '550Tk, salary paid to: hasan, by: AC-A-007 on 2022-03-24', 2022, 550, 'Other Salary', '2022-03-24', '2022-03-23 19:32:04');
+(16, 'AC-A-007', 'hasan', 'Debit', '550Tk, salary paid to: hasan, by: AC-A-007 on 2022-03-24', 2022, 550, 'Other Salary', '2022-03-24', '2022-03-23 19:32:04'),
+(20, 'AC-A-007', 'Hasan', 'Debit', '10Tk, salary paid to: Hasan, by: AC-A-007 on 2022-03-25', 2022, 10, 'Creditor', '2022-03-25', '2022-03-25 05:15:15'),
+(21, 'AC-A-007', 'Hasan', 'Debit', '10Tk, salary paid to: Hasan, by: AC-A-007 on 2022-03-25', 2022, 20, 'Creditor', '2022-03-25', '2022-03-25 05:15:20'),
+(22, 'AC-A-007', 'Hasan', 'Debit', '10Tk, salary paid to: Hasan, by: AC-A-007 on 2022-03-25', 2022, 10, 'Creditor', '2022-03-25', '2022-03-25 05:46:12'),
+(23, 'AC-A-007', 'Hasan', 'Debit', '59Tk, salary paid to: Hasan, by: AC-A-007 on 2022-03-25', 2022, 59, 'Creditor', '2022-03-25', '2022-03-25 05:59:56'),
+(24, 'AC-A-007', 'Jakaria', 'Debit', '358Tk, salary paid to: Jakaria, by: AC-A-007 on 2022-03-25', 2022, 358, 'Creditor', '2022-03-25', '2022-03-25 06:00:08'),
+(25, 'AC-A-007', 'OT 3', 'Debit', '8500Tk, salary paid to: OT 3, by: AC-A-007 on 2022-03-25', 2022, 8500, 'Creditor', '2022-03-25', '2022-03-25 06:00:33');
 
 --
 -- Indexes for dumped tables
@@ -1698,13 +1756,13 @@ ALTER TABLE `beds`
 -- AUTO_INCREMENT for table `bed_invigilators`
 --
 ALTER TABLE `bed_invigilators`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `cash_ins`
 --
 ALTER TABLE `cash_ins`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=189;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=197;
 
 --
 -- AUTO_INCREMENT for table `dental_info`
@@ -1734,7 +1792,7 @@ ALTER TABLE `doctors`
 -- AUTO_INCREMENT for table `doctor_balance_logs`
 --
 ALTER TABLE `doctor_balance_logs`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
 
 --
 -- AUTO_INCREMENT for table `doctor_schedules`
@@ -1752,7 +1810,7 @@ ALTER TABLE `emergency_log`
 -- AUTO_INCREMENT for table `hospital_income_log`
 --
 ALTER TABLE `hospital_income_log`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
 
 --
 -- AUTO_INCREMENT for table `logins`
@@ -1782,13 +1840,13 @@ ALTER TABLE `others_info`
 -- AUTO_INCREMENT for table `ot_assistant_logs`
 --
 ALTER TABLE `ot_assistant_logs`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `ot_logs`
 --
 ALTER TABLE `ot_logs`
-  MODIFY `O_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `O_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `ot_nurses_logs`
@@ -1854,13 +1912,13 @@ ALTER TABLE `receptionists`
 -- AUTO_INCREMENT for table `surgeon_logs`
 --
 ALTER TABLE `surgeon_logs`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `transaction_logs`
 --
 ALTER TABLE `transaction_logs`
-  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `AI_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

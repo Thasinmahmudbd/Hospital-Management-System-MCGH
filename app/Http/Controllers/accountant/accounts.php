@@ -1482,9 +1482,9 @@ function creditor_log(Request $request){
 
 
 #########################
-#### FUNCTION-NO::18 ####
+#### FUNCTION-NO::19 ####
 #########################
-# List all salary transaction log.
+# Filter salary transaction log.
 
 function creditor_log_filter(Request $request){
 
@@ -1503,7 +1503,67 @@ function creditor_log_filter(Request $request){
 
 }
 
-# End of function creditor_log.                             <-------#
+# End of function creditor_log_filter.                      <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::20 ####
+#########################
+# List all admitted patients.
+
+function show_all_admitted(Request $request){
+
+    $available_data['result']=DB::table('admission_logs')
+        ->join('patients', 'admission_logs.P_ID', '=', 'patients.P_ID')
+        ->select('patients.Patient_Name','patients.P_ID', 'patients.Cell_Number', 'admission_logs.Admission_Date', 'admission_logs.A_ID')
+        ->orderBy('admission_logs.A_ID','desc')
+        ->get();
+
+    # Returning to the view below.
+    return view('hospital/accounts/admitted_list',$available_data);
+
+}
+
+# End of function show_all_admitted.                        <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::21 ####
+#########################
+# Search all admitted patients.
+
+function search_admitted(Request $request){
+
+    $search_key = $request->input('search_key');
+
+    $available_data['result']=DB::table('admission_logs')
+        ->join('patients', 'admission_logs.P_ID', '=', 'patients.P_ID')
+        ->where('patients.Patient_Name','like','%'.$search_key.'%')
+        ->orwhere('patients.Cell_Number','like','%'.$search_key.'%')
+        ->select('patients.Patient_Name','patients.P_ID', 'patients.Cell_Number', 'admission_logs.Admission_Date', 'admission_logs.A_ID')
+        ->orderBy('admission_logs.A_ID','desc')
+        ->get();
+
+    # Returning to the view below.
+    return view('hospital/accounts/admitted_list',$available_data);
+
+}
+
+# End of function search_admitted.                          <-------#
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: 

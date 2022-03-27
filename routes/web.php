@@ -718,7 +718,6 @@ Route::group(['middleware'=>['accountantAuth']],function() {
     # Filter individual log.
     # Redirecting to [FUNCTION-NO::15]---in-controller.
     Route::post('/accounts/salary/log/filter/{id}','App\Http\Controllers\accountant\accounts@filter_individual_log');
-
     
     ##############################################################################################################################################
     # Creditor.  [C::accounts.php]
@@ -737,8 +736,33 @@ Route::group(['middleware'=>['accountantAuth']],function() {
     Route::get('/account/creditor/log/','App\Http\Controllers\accountant\accounts@creditor_log');
 
     # Filter creditors log.
+    # Redirecting to [FUNCTION-NO::19]---in-controller.
+    Route::post('/accounts/creditors/log/filter/','App\Http\Controllers\accountant\accounts@creditor_log_filter');
+    
+    ##############################################################################################################################################
+    # Patient Release.  [C::accounts.php]
+    ##############################################################################################################################################
+
+    # Reading all admitted patient.
+    # Redirecting to [FUNCTION-NO::20]---in-controller.
+    Route::get('/accounts/patient/release/','App\Http\Controllers\accountant\accounts@show_all_admitted');
+
+    # Viewing creditors log.
+    # Redirecting to [FUNCTION-NO::21]---in-controller.
+    Route::post('/account/patient/release/search','App\Http\Controllers\accountant\accounts@search_admitted');
+
+    # Paying creditors.
+    # Redirecting to [FUNCTION-NO::22]---in-controller.
+    Route::post('/account/release/info/finalization/','App\Http\Controllers\accountant\accounts@release_info_show');
+
+    # Viewing creditors log.
+    # Redirecting to [FUNCTION-NO::18]---in-controller.
+    Route::get('/account/creditor/log/','App\Http\Controllers\accountant\accounts@creditor_log');
+
+    # Filter creditors log.
     # Redirecting to [FUNCTION-NO::18]---in-controller.
     Route::post('/accounts/creditors/log/filter/','App\Http\Controllers\accountant\accounts@creditor_log_filter');
+
 
     ##############################################################################################################################################
     # Accounts Edit Profile.  [C::accounts.php]
@@ -757,8 +781,8 @@ Route::group(['middleware'=>['accountantAuth']],function() {
     /*Route::view('/accounts/pay/salary/','hospital/accounts/pay_salary');*/
     Route::view('/accounts/log/','hospital/accounts/logs');
     /*Route::view('/accounts/cash/in/','hospital/accounts/cash_in');
-    Route::view('/accounts/creditors/','hospital/accounts/creditors');*/
-    Route::view('/accounts/patient/release/','hospital/accounts/patient_release');
+    Route::view('/accounts/creditors/','hospital/accounts/creditors');
+    Route::view('/accounts/patient/release/','hospital/accounts/patient_release');*/
     Route::view('/accounts/release/slips/','hospital/accounts/release_slips');
     Route::view('/accounts/ambulance/','hospital/accounts/ambulance');
     Route::view('/accounts/other/transactions/','hospital/accounts/other_transactions');
