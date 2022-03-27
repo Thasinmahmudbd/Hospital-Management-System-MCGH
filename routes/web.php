@@ -747,13 +747,13 @@ Route::group(['middleware'=>['accountantAuth']],function() {
     # Redirecting to [FUNCTION-NO::20]---in-controller.
     Route::get('/accounts/patient/release/','App\Http\Controllers\accountant\accounts@show_all_admitted');
 
-    # Viewing creditors log.
+    # Searching admitted patient list.
     # Redirecting to [FUNCTION-NO::21]---in-controller.
     Route::post('/account/patient/release/search','App\Http\Controllers\accountant\accounts@search_admitted');
 
-    # Paying creditors.
+    # Show patient details.
     # Redirecting to [FUNCTION-NO::22]---in-controller.
-    Route::post('/account/release/info/finalization/','App\Http\Controllers\accountant\accounts@release_info_show');
+    Route::post('/account/release/patient/details/{a_id}','App\Http\Controllers\accountant\accounts@release_patient_details');
 
     # Viewing creditors log.
     # Redirecting to [FUNCTION-NO::18]---in-controller.

@@ -262,7 +262,7 @@ function filter_doctor_income(Request $request){
 #### FUNCTION-NO::06 ####
 #########################
 # Shows individual doctor income log;
-# Stored data in 1 sessions.
+# Stored data in 3 sessions.
 
 function detailed_doctor_income_log(Request $request){
 
@@ -298,7 +298,7 @@ function detailed_doctor_income_log(Request $request){
 #### FUNCTION-NO::07 ####
 #########################
 # Filters individual doctor income log details;
-# Stored data in 1 sessions.
+# Stored data in 2 sessions.
 
 function income_details_filter(Request $request){
 
@@ -336,7 +336,8 @@ function income_details_filter(Request $request){
 #### FUNCTION-NO::8 ####
 #########################
 # Calculates individual money collection;
-# Lists all receptionist's cash ins.
+# Lists all receptionist's cash ins;
+# Update will happen on --: TABLE :------ cash_ins.
 
 function cash_in_list(Request $request, $date){
 
@@ -460,7 +461,8 @@ function filter_cash_in(Request $request){
 #########################
 #### FUNCTION-NO::10 ####
 #########################
-# Submits cash in.
+# Submits cash in;
+# Update will happen on --: TABLE :------ cash_ins.
 
 function submit_cash_in(Request $request){
 
@@ -537,7 +539,8 @@ function submit_cash_in(Request $request){
 #### FUNCTION-NO::11 ####
 #########################
 # List all types of employee wallet.
-# Generate payment form.
+# Generate payment form;
+# Stored data in 2 sessions.
 
 function pay_salary(Request $request, $person){
 
@@ -631,7 +634,13 @@ function pay_salary(Request $request, $person){
 #########################
 #### FUNCTION-NO::12 ####
 #########################
-# Submits payment.
+# Submits payment;
+# Update will happen on --: TABLE :------ nurses;
+# Update will happen on --: TABLE :------ doctors;
+# Entry will happen on  --: TABLE :------ doctor_balance_logs;
+# Entry will happen on  --: TABLE :------ hospital_income_log;
+# Entry will happen on  --: TABLE :------ transaction_log;
+# Entry will happen on  --: TABLE :------ nurse_balance_logs.
 
 function pay_salary_submit(Request $request){
 
@@ -1018,7 +1027,8 @@ function pay_salary_submit(Request $request){
 #########################
 #### FUNCTION-NO::13 ####
 #########################
-# List all salary transaction log.
+# List all salary transaction log;
+# Stored data in 5 sessions.
 
 function salary_log(Request $request, $id){
 
@@ -1114,7 +1124,8 @@ function salary_log(Request $request, $id){
 #########################
 #### FUNCTION-NO::14 ####
 #########################
-# Filters salary page.
+# Filters salary page;
+# Stored data in 2 sessions.
 
 function pay_salary_search(Request $request){
 
@@ -1216,7 +1227,8 @@ function pay_salary_search(Request $request){
 #########################
 #### FUNCTION-NO::15 ####
 #########################
-# Filters individual salary transaction log.
+# Filters individual salary transaction log;
+# Stored data in 5 sessions.
 
 function filter_individual_log(Request $request, $id){
 
@@ -1456,7 +1468,8 @@ function pay_creditors(Request $request){
 #########################
 #### FUNCTION-NO::18 ####
 #########################
-# List all salary transaction log.
+# List all salary transaction log;
+# Stored data in 1 sessions.
 
 function creditor_log(Request $request){
 
@@ -1484,7 +1497,8 @@ function creditor_log(Request $request){
 #########################
 #### FUNCTION-NO::19 ####
 #########################
-# Filter salary transaction log.
+# Filter salary transaction log;
+# Stored data in 2 sessions.
 
 function creditor_log_filter(Request $request){
 
@@ -1560,6 +1574,83 @@ function search_admitted(Request $request){
 
     # Returning to the view below.
     return view('hospital/accounts/admitted_list',$available_data);
+
+}
+
+# End of function search_admitted.                          <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::22 ####
+#########################
+# Show all data of selected admitted patients.
+
+function release_patient_details(Request $request, $a_id){
+
+    date_default_timezone_set('Asia/Dhaka');
+
+    # getting log data.
+    $log_data=DB::table('admission_logs')
+        ->where('A_ID', $a_id)
+        ->first();
+
+    $b_id = $log_data->B_ID;
+    $p_id = $log_data->P_ID;
+    $d_id = $log_data->D_ID;
+
+    session(['previous_credit' =>  $log_data->Admission_Fee]);
+
+    session(['PACKAGES' => $log_data->Package_Confirmation]);
+    session(['LIGATION' => $log_data->Ligation]);
+    session(['THIRD_SEIZURE' => $log_data->Third_Seizure]);
+    session(['ADMISSION_DATE' => $log_data->Admission_Date]);
+    session(['ADMISSION_TIMESTAMP' => $log_data->Admission_Timestamp]);
+
+    # getting bed info.
+    $bed_data=DB::table('beds')
+        ->where('B_ID', $b_id)
+        ->first();
+
+    session(['BED_NO' => $bed_data->Bed_No]);
+    session(['FLOOR_NO' => $bed_data->Floor_No]);
+    session(['ROOM_NO' => $bed_data->Room_No]);
+    session(['BED_TYPE' => $bed_data->Bed_Type]);
+    session(['QUALITY' => $bed_data->Quality]);
+    session(['NORMAL_PRICING' => $bed_data->Normal_Pricing]);
+    session(['PACKAGE_PRICING' => $bed_data->Package_Pricing]);
+
+    # getting bed info.
+    $patient_data=DB::table('patients')
+        ->where('P_ID', $p_id)
+        ->first();
+
+    session(['P_ID' => $patient_data->P_ID]);
+    session(['PATIENT_NAME' => $patient_data->Patient_Name]);
+    session(['PATIENT_GENDER' => $patient_data->Patient_Gender]);
+    session(['PATIENT_AGE' => $patient_data->Patient_Name]);
+    session(['PATIENT_CELL' => $patient_data->Cell_Number]);
+    session(['PATIENT_NID' => $patient_data->NID]);
+    session(['PATIENT_NID_TYPE' => $patient_data->NID_Type]);
+
+    # getting bed info.
+    $doctor_data=DB::table('doctors')
+        ->where('D_ID', $d_id)
+        ->first();
+
+    session(['DOCTOR_NAME' => $doctor_data->Dr_Name]);
+
+    # Redirecting to [FUNCTION-NO::15].
+    # return redirect('/reception/ward/male');
+
+    # Returning to the view below.
+    return view('hospital/accounts/release_patient_details');
 
 }
 

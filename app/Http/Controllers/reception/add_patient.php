@@ -1722,8 +1722,8 @@ function patient_data_entry_for_admission(Request $request){
 
         $datetime1 = new DateTime($update_date);
         $datetime2 = new DateTime($admission_date);
-        $difference = $datetime1->diff($datetime2); 
-        $days = $difference->d;
+        $difference = $datetime1->diff($datetime2)->format("%a"); 
+        $days = $difference;
 
         # Data update to Table:----admission_logs.
         $admission_fee = $request->input('estimated_bill');

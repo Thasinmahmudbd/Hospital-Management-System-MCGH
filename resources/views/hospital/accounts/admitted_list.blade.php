@@ -222,7 +222,7 @@
 
             <?php $serial = 1; ?>
             @foreach($result as $item)
-            <form action="{{url('/account/release/info/finalization/'.$item->A_ID)}}" method="post" class="span_hidden_bar content_container_bg_less_thin center_element">
+            <form action="{{url('/account/release/patient/details/'.$item->A_ID)}}" method="post" class="span_hidden_bar content_container_bg_less_thin center_element">
             @csrf
 
             <tr class="frame_rows">
@@ -233,6 +233,7 @@
                 <td class="frame_data" data-label="Admission Date">{{$item->Admission_Date}}</td>
                 <td class="frame_action" data-label="Action">
 
+                    <input class="input" type="hidden" name="a_id" value="{{$item->A_ID}}"> 
                     <button class="btn_less" type="submit" name="submit"> 
 
                         <i class="fas fa-check-circle table_btn"></i>
