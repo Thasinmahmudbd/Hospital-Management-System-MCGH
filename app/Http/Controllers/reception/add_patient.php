@@ -1732,12 +1732,22 @@ function patient_data_entry_for_admission(Request $request){
         $ad_fee = $received - $changes;
         $ad_fee_for_admission_log = $ad_fee + $credit;
 
+        # Get previous bed info.
+        $old_bed=DB::table('admission_logs')
+            ->where('A_ID',$a_id)
+            ->value('B_ID');
+
+
         if($bed_type=='Cabin'){
             $Ward_Days = null;
             $Cabin_Days = $days;
+            $Previous_Ward = -1;
+            $Previous_Cabin = $old_bed;
         }if($bed_type=='Ward'){
             $Ward_Days = $days;
             $Cabin_Days = null;
+            $Previous_Ward = $old_bed;
+            $Previous_Cabin = -1;
         }
 
         $admission_logs=array(
@@ -1750,7 +1760,9 @@ function patient_data_entry_for_admission(Request $request){
             'Update_date'=>$update_date,
             'Update_Timestamp'=>date('Y-m-d H:i:s'),
             'Ward_Days'=>$Ward_Days,
-            'Cabin_Days'=>$Cabin_Days
+            'Cabin_Days'=>$Cabin_Days,
+            'Previous_Ward'=>$Previous_Ward,
+            'Previous_Cabin'=>$Previous_Cabin
 
         );
 
@@ -1796,7 +1808,7 @@ function patient_data_entry_for_admission(Request $request){
 
 }
 
-# End of function patient_data_entry_for_doctor_appointment.<-------#
+# End of function patient_data_entry_for_admission.         <-------#
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: Hello, future me.

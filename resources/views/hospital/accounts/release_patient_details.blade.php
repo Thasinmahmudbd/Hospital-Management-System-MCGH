@@ -295,13 +295,13 @@
                 <div class="info">
                     <p class="collected_info">Ward Days</p>
                     <p>:</p>
-                    <input type="text" class="input_less collected_info" name="ward_days">
+                    <input type="text" class="input_less collected_info" value="{{session('WARD_DAY')}}" name="ward_days">
                 </div>
 
                 <div class="info">
                     <p class="collected_info">Cabin Days</p>
                     <p>:</p>
-                    <input type="text" class="input_less collected_info" name="cabin_days">
+                    <input type="text" class="input_less collected_info" value="{{session('CABIN_DAY')}}" name="cabin_days">
                 </div>
 
                 <div class="gap"></div>
@@ -320,34 +320,74 @@
 
                 <p class="section_title">Bill Info</p>
 
+                @if(session('bed_type')=='ward' && session('current_bed_type')=='cabin')
+
                 <div class="info">
                     <p class="collected_info">Ward Bill</p>
                     <p>:</p>
-                    <input type="text" class="input_less collected_info" name="ward_days">
+                    <input type="text" class="input_less collected_info" readonly value="{{session('PRE_BILL')}}" name="ward_days">
                 </div>
 
                 <div class="info">
                     <p class="collected_info">Cabin Bill</p>
                     <p>:</p>
-                    <input type="text" class="input_less collected_info" name="ward_days">
+                    <input type="text" class="input_less collected_info" readonly value="{{session('CUR_BILL')}}" name="ward_days">
                 </div>
+
+                @elseif(session('bed_type')=='cabin' && session('current_bed_type')=='ward')
+
+                <div class="info">
+                    <p class="collected_info">Ward Bill</p>
+                    <p>:</p>
+                    <input type="text" class="input_less collected_info" readonly value="{{session('CUR_BILL')}}" name="ward_days">
+                </div>
+
+                <div class="info">
+                    <p class="collected_info">Cabin Bill</p>
+                    <p>:</p>
+                    <input type="text" class="input_less collected_info" readonly value="{{session('PRE_BILL')}}" name="ward_days">
+                </div>
+
+                @elseif(session('bed_type')=='ward' && session('current_bed_type')=='ward')
+
+                <div class="info">
+                    <p class="collected_info">Ward Bill</p>
+                    <p>:</p>
+                    <input type="text" class="input_less collected_info" readonly value="{{session('PRE_BILL')}}" name="ward_days">
+                </div>
+
+                <div class="info">
+                    <p class="collected_info">Cabin Bill</p>
+                    <p>:</p>
+                    <input type="text" class="input_less collected_info" readonly value="0" name="ward_days">
+                </div>
+
+                @elseif(session('bed_type')=='cabin' && session('current_bed_type')=='cabin')
+
+                <div class="info">
+                    <p class="collected_info">Ward Bill</p>
+                    <p>:</p>
+                    <input type="text" class="input_less collected_info" readonly value="0" name="ward_days">
+                </div>
+
+                <div class="info">
+                    <p class="collected_info">Cabin Bill</p>
+                    <p>:</p>
+                    <input type="text" class="input_less collected_info" readonly value="{{session('PRE_BILL')}}" name="ward_days">
+                </div>
+
+                @endif
 
                 <div class="info">
                     <p class="collected_info">Other Bill</p>
                     <p>:</p>
-                    <input type="text" class="input_less collected_info" name="ward_days">
+                    <input type="text" class="input_less collected_info" readonly name="ward_days">
                 </div>
 
                 <div class="info">
                     <p class="collected_info">Total Bill</p>
                     <p>:</p>
-                    <input type="text" class="input_less collected_info" name="ward_days">
-                </div>
-
-                <div class="info">
-                    <p class="collected_info">Cabin Days</p>
-                    <p>:</p>
-                    <input type="text" class="input_less collected_info" name="cabin_days">
+                    <input type="text" class="input_less collected_info" readonly name="ward_days">
                 </div>
 
             </div>

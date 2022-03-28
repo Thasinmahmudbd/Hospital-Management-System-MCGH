@@ -5,6 +5,8 @@ namespace App\Http\Controllers\accountant;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use DateTime;
 
 class accounts extends Controller
 {
@@ -56,6 +58,8 @@ function set_up_home(Request $request){
     $request->session()->put('DATE_TODAY',$date);
     $request->session()->put('DAY_TODAY',$day);
     session(['pay_salary_person' => 'Doctors']);
+
+    session(['logs_hook' => 'Credit']);
 
     # Returning to the view below.
     return view('hospital/accounts/home');
@@ -1607,11 +1611,26 @@ function release_patient_details(Request $request, $a_id){
 
     session(['previous_credit' =>  $log_data->Admission_Fee]);
 
-    session(['PACKAGES' => $log_data->Package_Confirmation]);
-    session(['LIGATION' => $log_data->Ligation]);
-    session(['THIRD_SEIZURE' => $log_data->Third_Seizure]);
-    session(['ADMISSION_DATE' => $log_data->Admission_Date]);
+    $packages = $log_data->Package_Confirmation;
+    $ligation = $log_data->Ligation;
+    $third_seizure = $log_data->Third_Seizure;
+    $update_date = $log_data->Update_Date;
+    $admission_date = $log_data->Admission_Date;
+
+    session(['PACKAGES' => $packages]);
+    session(['LIGATION' => $ligation]);
+    session(['THIRD_SEIZURE' => $third_seizure]);
+    session(['ADMISSION_DATE' => $admission_date]);
     session(['ADMISSION_TIMESTAMP' => $log_data->Admission_Timestamp]);
+
+    $ward_day = $log_data->Ward_Days;
+    $cabin_day = $log_data->Cabin_Days;
+
+    session(['WARD_DAY' => $ward_day]);
+    session(['CABIN_DAY' => $cabin_day]);
+
+    $pre_ward = $log_data->Previous_Ward;
+    $pre_cabin = $log_data->Previous_Cabin;
 
     # getting bed info.
     $bed_data=DB::table('beds')
@@ -1621,12 +1640,177 @@ function release_patient_details(Request $request, $a_id){
     session(['BED_NO' => $bed_data->Bed_No]);
     session(['FLOOR_NO' => $bed_data->Floor_No]);
     session(['ROOM_NO' => $bed_data->Room_No]);
-    session(['BED_TYPE' => $bed_data->Bed_Type]);
-    session(['QUALITY' => $bed_data->Quality]);
-    session(['NORMAL_PRICING' => $bed_data->Normal_Pricing]);
-    session(['PACKAGE_PRICING' => $bed_data->Package_Pricing]);
 
-    # getting bed info.
+    $current_bed_type = $bed_data->Bed_Type;
+    $current_day_range = $bed_data->Day_Range;
+
+    session(['BED_TYPE' => $current_bed_type]);
+    session(['QUALITY' => $bed_data->Quality]);
+
+    $current_normal_pricing = $bed_data->Normal_Pricing;
+    $current_package_pricing = $bed_data->Package_Pricing;
+
+    # Previous bedding calculations (if any).
+
+    if($pre_ward>0){
+
+        # getting previous bed info.
+        $Pre_bed_data=DB::table('beds')
+            ->where('B_ID', $pre_ward)
+            ->first();
+
+        $normal_pricing = $Pre_bed_data->Normal_Pricing;
+        $package_pricing = $Pre_bed_data->Package_Pricing;
+        $day_range = $Pre_bed_data->Day_Range;
+
+        if($packages!='none'){
+
+            if($ward_day>$day_range){
+                $ward_day = $ward_day-$day_range;
+                $ward_bill = $package_pricing+($ward_day*$normal_pricing);
+            }if($ward_day<=$day_range){
+                $excess_day = $day_range-$ward_day;
+                $ward_bill = $package_pricing+($excess_day*$current_normal_pricing);
+            }
+
+        }else{
+
+            $ward_bill = $ward_day*$normal_pricing;
+
+        }
+
+        session(['PRE_BILL' => $ward_bill]);
+        session(['bed_type' => 'ward']);
+
+        $pre_bed_type = 'Ward';
+
+    }elseif($pre_cabin>0){
+
+        # getting previous bed info.
+        $Pre_bed_data=DB::table('beds')
+            ->where('B_ID', $pre_cabin)
+            ->first();
+
+        $normal_pricing = $Pre_bed_data->Normal_Pricing;
+        $package_pricing = $Pre_bed_data->Package_Pricing;
+        $day_range = $Pre_bed_data->Day_Range;
+
+        if($packages!='none'){
+
+            if($cabin_day>$day_range){
+                $cabin_day = $cabin_day-$day_range;
+                $cabin_bill = $package_pricing+($cabin_day*$normal_pricing);
+            }if($cabin_day<=$day_range){
+                $excess_day = $day_range-$cabin_day;
+                $cabin_bill = $package_pricing+($excess_day*$current_normal_pricing);
+            }
+
+        }else{
+
+            $cabin_bill = $cabin_day*$normal_pricing;
+
+        }
+
+        session(['PRE_BILL' => $cabin_bill]);
+        session(['bed_type' => 'cabin']);
+
+        $pre_bed_type = 'Cabin';
+
+    }
+
+
+
+    # current bedding calculations.
+
+    # Finding number of days.
+    $discharge_date = date("Y-m-d");
+
+    if($discharge_date != $update_date){
+
+        $datetime1 = new DateTime($discharge_date);
+        $datetime2 = new DateTime($update_date);
+        $difference = $datetime1->diff($datetime2)->format("%a"); 
+        $days = $difference;
+
+    }else{
+
+        $days = 1;
+
+    }
+
+    $current_ward_day = $days;
+    $current_cabin_day = $days;
+
+    # length of admission to update
+
+    $datetime3 = new DateTime($update_date);
+    $datetime4 = new DateTime($admission_date);
+    $difference_a_to_u = $datetime3->diff($datetime4)->format("%a"); 
+    $total_days = $difference_a_to_u;
+
+        if($current_bed_type == "Ward"){
+
+            if($packages!='none'){
+    
+                if($total_days>$current_day_range){
+                    $current_ward_day = $days;
+                    $current_ward_bill = $current_ward_day*$current_normal_pricing;
+                }if($total_days<=$current_day_range){
+                    $current_ward_day = ($total_days+$days)-$current_day_range;
+                    $current_ward_bill = $current_ward_day*$current_normal_pricing;
+                }
+    
+            }else{
+    
+                $current_ward_bill = $current_ward_day*$current_normal_pricing;
+    
+            }
+    
+        }if($current_bed_type == "Cabin"){
+
+            if($packages!='none'){
+    
+                if($total_days>$current_day_range){
+                    $current_cabin_day = $days;
+                    $current_cabin_bill = $current_cabin_day*$current_normal_pricing;
+                }if($total_days<=$current_day_range){
+                    $current_cabin_day = ($total_days+$days)-$current_day_range;
+                    $current_cabin_bill = $current_cabin_day*$current_normal_pricing;
+                }
+    
+            }else{
+    
+                $current_cabin_bill = $current_cabin_day*$current_normal_pricing;
+    
+            }
+
+        }if($current_bed_type == $pre_bed_type && $current_bed_type == "Ward"){
+
+            session(['PRE_BILL' => $current_ward_bill+$ward_bill]);
+            session(['bed_type' => 'ward']);
+            session(['WARD_DAY' => $ward_day+$days]);
+
+        }if($current_bed_type == $pre_bed_type && $current_bed_type == "Cabin"){
+
+            session(['PRE_BILL' => $current_cabin_bill+$cabin_bill]);
+            session(['bed_type' => 'cabin']);
+            session(['CABIN_DAY' => $cabin_day+$days]);
+
+        }if($current_bed_type != $pre_bed_type && $current_bed_type == "Ward"){
+
+            session(['CUR_BILL' => $current_ward_bill]);
+            session(['current_bed_type' => 'ward']);
+            session(['WARD_DAY' => $days]);
+
+        }if($current_bed_type != $pre_bed_type && $current_bed_type == "Cabin"){
+
+            session(['CUR_BILL' => $current_cabin_bill]);
+            session(['current_bed_type' => 'cabin']);
+            session(['CABIN_DAY' => $days]);
+
+        }
+
+    # getting patient info.
     $patient_data=DB::table('patients')
         ->where('P_ID', $p_id)
         ->first();
@@ -1655,6 +1839,313 @@ function release_patient_details(Request $request, $a_id){
 }
 
 # End of function search_admitted.                          <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO:: ####
+#########################
+# Submits ambulance log;
+# Entry will happen on  --: TABLE :------ hospital_income_log;
+# Entry will happen on  --: TABLE :------ transaction_log;
+
+function ambulance_log_entry(Request $request){
+
+    $ambulance_info = $request->input('ambulance_info');
+    $transaction_label = $request->input('transaction_label');
+    $amount = $request->input('amount');
+
+    if($amount<0){
+
+        # Session flash message.
+        $msg = 'Amount is smaller then or equal to 0.';
+        $request->session()->flash('msg', $msg);
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/accounts/ambulance/');
+
+    }
+
+    # Generating message.
+    $message='Ambulance transaction: '.$ambulance_info.', amount: '.$amount.' by '.$request->session()->get('ACC_SESSION_ID');
+
+    if($transaction_label == 'Credit'){
+
+        # Log entry on hospital balance log.
+        $hospital_income_logs=array(
+            'Message'=>$message,
+            'Debit'=>0,
+            'Credit'=>$amount,
+            'Vat'=>0,
+            'Service_Charge'=>0,
+            'Total_Income'=>$amount,
+            'Credit_Type'=>'Ambulance',
+            'Entry_Date'=>$request->session()->get('DATE_TODAY'),
+            'Entry_Time'=>date("H:i:s"),
+            'Entry_Year'=>date("Y"),
+            'User_ID'=>$request->session()->get('ACC_SESSION_ID')
+        );
+
+    }if($transaction_label == 'Debit'){
+
+        # Log entry on hospital balance log.
+        $hospital_income_logs=array(
+            'Message'=>$message,
+            'Debit'=>$amount,
+            'Credit'=>0,
+            'Vat'=>0,
+            'Service_Charge'=>0,
+            'Total_Income'=>0,
+            'Credit_Type'=>'Ambulance',
+            'Entry_Date'=>$request->session()->get('DATE_TODAY'),
+            'Entry_Time'=>date("H:i:s"),
+            'Entry_Year'=>date("Y"),
+            'User_ID'=>$request->session()->get('ACC_SESSION_ID')
+        );
+
+    }
+
+    # Insert hospital log.
+    DB::table('hospital_income_log')
+        ->insert($hospital_income_logs);
+
+    # Generating message.
+    $message2=$amount.'Tk, ambulance related transaction: ('.$ambulance_info.'), by: '.$request->session()->get('ACC_SESSION_ID').' on '.$request->session()->get('DATE_TODAY');
+
+    # Log entry on transaction log.
+    $transaction_log=array(
+        'Acc_ID'=>$request->session()->get('ACC_SESSION_ID'),
+        'Emp_ID'=>$ambulance_info,
+        'Log_Type'=>$transaction_label,
+        'Log_Message'=>$message2,
+        'Log_Year'=>date("Y"),
+        'Log_Amount'=>$amount,
+        'Log_Genre'=>'Ambulance',
+        'Log_Date'=>$request->session()->get('DATE_TODAY')
+    );
+
+    # Insert transaction log.
+    DB::table('transaction_logs')
+        ->insert($transaction_log);
+
+    # Session flash message.
+    $msg = 'Ambulance log registered.';
+    $request->session()->flash('msg', $msg);
+
+    # Redirecting to [FUNCTION-NO::].
+    return redirect('/accounts/ambulance/');
+
+}
+
+# End of function ambulance_log_entry.                      <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO:: ####
+#########################
+# Submits others log;
+# Entry will happen on  --: TABLE :------ hospital_income_log;
+# Entry will happen on  --: TABLE :------ transaction_log;
+
+function other_log_entry(Request $request){
+
+    $transaction_message = $request->input('transaction_message');
+    $transaction_label = $request->input('transaction_label');
+    $amount = $request->input('amount');
+
+    if($amount<0){
+
+        # Session flash message.
+        $msg = 'Amount is smaller then or equal to 0.';
+        $request->session()->flash('msg', $msg);
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/accounts/other/transactions');
+
+    }
+
+    # Generating message.
+    $message='Others transaction: '.$transaction_message.', amount: '.$amount.' by '.$request->session()->get('ACC_SESSION_ID');
+
+    if($transaction_label == 'Credit'){
+
+        # Log entry on hospital balance log.
+        $hospital_income_logs=array(
+            'Message'=>$message,
+            'Debit'=>0,
+            'Credit'=>$amount,
+            'Vat'=>0,
+            'Service_Charge'=>0,
+            'Total_Income'=>$amount,
+            'Credit_Type'=>'Others',
+            'Entry_Date'=>$request->session()->get('DATE_TODAY'),
+            'Entry_Time'=>date("H:i:s"),
+            'Entry_Year'=>date("Y"),
+            'User_ID'=>$request->session()->get('ACC_SESSION_ID')
+        );
+
+    }if($transaction_label == 'Debit'){
+
+        # Log entry on hospital balance log.
+        $hospital_income_logs=array(
+            'Message'=>$message,
+            'Debit'=>$amount,
+            'Credit'=>0,
+            'Vat'=>0,
+            'Service_Charge'=>0,
+            'Total_Income'=>0,
+            'Credit_Type'=>'Others',
+            'Entry_Date'=>$request->session()->get('DATE_TODAY'),
+            'Entry_Time'=>date("H:i:s"),
+            'Entry_Year'=>date("Y"),
+            'User_ID'=>$request->session()->get('ACC_SESSION_ID')
+        );
+
+    }
+
+    # Insert hospital log.
+    DB::table('hospital_income_log')
+        ->insert($hospital_income_logs);
+
+    # Generating message.
+    $message2=$amount.'Tk, others transaction: ('.$transaction_message.'), by: '.$request->session()->get('ACC_SESSION_ID').' on '.$request->session()->get('DATE_TODAY');
+
+    # Log entry on transaction log.
+    $transaction_log=array(
+        'Acc_ID'=>$request->session()->get('ACC_SESSION_ID'),
+        'Emp_ID'=>'Others',
+        'Log_Type'=>$transaction_label,
+        'Log_Message'=>$message2,
+        'Log_Year'=>date("Y"),
+        'Log_Amount'=>$amount,
+        'Log_Genre'=>'Others',
+        'Log_Date'=>$request->session()->get('DATE_TODAY')
+    );
+
+    # Insert transaction log.
+    DB::table('transaction_logs')
+        ->insert($transaction_log);
+
+    # Session flash message.
+    $msg = 'Ambulance log registered.';
+    $request->session()->flash('msg', $msg);
+
+    # Redirecting to [FUNCTION-NO::].
+    return redirect('/accounts/other/transactions');
+
+}
+
+# End of function other_log_entry.                          <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO:: ####
+#########################
+# Browsing logs;
+
+function log_browsing(Request $request){
+
+    $logs_hook = $request->session()->get('logs_hook');
+
+    if($logs_hook=='Credit' || $logs_hook=='Debit' || $logs_hook=='Total_Income'){
+
+        $available_data['result']=DB::table('hospital_income_log')
+            ->where($logs_hook,'>','0')
+            ->get();
+
+        session(['tp' => '1']);
+        session(['lg' => $logs_hook]);
+
+    }else{
+
+        $available_data['result']=DB::table('transaction_logs')
+            ->where('Log_Genre',$logs_hook)
+            ->get();
+
+        session(['tp' => '2']);
+
+    }
+
+    # Returning to the view below.
+    return view('hospital/accounts/logs',$available_data);
+
+}
+
+# End of function log_browsing.                             <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO:: ####
+#########################
+# Filtering logs;
+
+function log_filtering(Request $request){
+
+    $from = $request->input('search_from');
+    $to = $request->input('search_to');
+    $logs_hook = $request->input('type');
+    session(['logs_hook' => $logs_hook]);
+
+    if($from==null || $to==null){
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/accounts/log/');
+
+    }
+
+    if($logs_hook=='Credit' || $logs_hook=='Debit' || $logs_hook=='Total_Income'){
+
+        $available_data['result']=DB::table('hospital_income_log')
+            ->where($logs_hook,'>','0')
+            ->whereBetween('Entry_Date', [$from, $to])
+            ->get();
+
+        session(['tp' => '1']);
+
+    }else{
+
+        $available_data['result']=DB::table('transaction_logs')
+            ->where('Log_Genre',$logs_hook)
+            ->whereBetween('Log_Date', [$from, $to])
+            ->get();
+
+        session(['tp' => '2']);
+
+    }
+
+    # Returning to the view below.
+    return view('hospital/accounts/logs',$available_data);
+
+}
+
+# End of function log_filtering.                            <-------#
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: 

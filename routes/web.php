@@ -756,13 +756,48 @@ Route::group(['middleware'=>['accountantAuth']],function() {
     Route::post('/account/release/patient/details/{a_id}','App\Http\Controllers\accountant\accounts@release_patient_details');
 
     # Viewing creditors log.
-    # Redirecting to [FUNCTION-NO::18]---in-controller.
+    # Redirecting to [FUNCTION-NO::]---in-controller.
     Route::get('/account/creditor/log/','App\Http\Controllers\accountant\accounts@creditor_log');
 
     # Filter creditors log.
-    # Redirecting to [FUNCTION-NO::18]---in-controller.
+    # Redirecting to [FUNCTION-NO::]---in-controller.
     Route::post('/accounts/creditors/log/filter/','App\Http\Controllers\accountant\accounts@creditor_log_filter');
 
+    ##############################################################################################################################################
+    # Ambulance.  [C::accounts.php]
+    ##############################################################################################################################################
+
+    # Going to ambulance view.
+    # Redirecting to hospital/accounts/ambulance---in-resources/views/.
+    Route::view('/accounts/ambulance/','hospital/accounts/ambulance');
+
+    # Inserts ambulance log.
+    # Redirecting to [FUNCTION-NO::]---in-controller.
+    Route::post('/account/ambulance/log/entry','App\Http\Controllers\accountant\accounts@ambulance_log_entry');
+
+    ##############################################################################################################################################
+    # Other Transaction.  [C::accounts.php]
+    ##############################################################################################################################################
+
+    # Going to other_transaction view.
+    # Redirecting to hospital/accounts/ambulance---in-resources/views/.
+    Route::view('/accounts/other/transactions','hospital/accounts/other_transaction');
+
+    # Inserts other log.
+    # Redirecting to [FUNCTION-NO::]---in-controller.
+    Route::post('/account/other/log/entry','App\Http\Controllers\accountant\accounts@other_log_entry');
+
+    ##############################################################################################################################################
+    # Log.  [C::accounts.php]
+    ##############################################################################################################################################
+
+    # Going to logs.
+    # Redirecting to [FUNCTION-NO::]---in-controller.
+    Route::get('/accounts/log/','App\Http\Controllers\accountant\accounts@log_browsing');
+
+    # Inserts other log.
+    # Redirecting to [FUNCTION-NO::]---in-controller.
+    Route::post('/account/log/filter','App\Http\Controllers\accountant\accounts@log_filtering');
 
     ##############################################################################################################################################
     # Accounts Edit Profile.  [C::accounts.php]
@@ -778,9 +813,9 @@ Route::group(['middleware'=>['accountantAuth']],function() {
 
     # disposable.
     Route::view('/accounts/doctor/income/log/','hospital/accounts/doctor_income_details');
-    /*Route::view('/accounts/pay/salary/','hospital/accounts/pay_salary');*/
+    /*Route::view('/accounts/pay/salary/','hospital/accounts/pay_salary');
     Route::view('/accounts/log/','hospital/accounts/logs');
-    /*Route::view('/accounts/cash/in/','hospital/accounts/cash_in');
+    Route::view('/accounts/cash/in/','hospital/accounts/cash_in');
     Route::view('/accounts/creditors/','hospital/accounts/creditors');
     Route::view('/accounts/patient/release/','hospital/accounts/patient_release');*/
     Route::view('/accounts/release/slips/','hospital/accounts/release_slips');
