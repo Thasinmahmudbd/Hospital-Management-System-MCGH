@@ -1605,11 +1605,10 @@ function release_patient_details(Request $request, $a_id){
         ->where('A_ID', $a_id)
         ->first();
 
+    # data collection.
     $b_id = $log_data->B_ID;
     $p_id = $log_data->P_ID;
     $d_id = $log_data->D_ID;
-
-    session(['previous_credit' =>  $log_data->Admission_Fee]);
 
     $packages = $log_data->Package_Confirmation;
     $ligation = $log_data->Ligation;
@@ -1617,204 +1616,50 @@ function release_patient_details(Request $request, $a_id){
     $update_date = $log_data->Update_Date;
     $admission_date = $log_data->Admission_Date;
 
+    $ward_day = $log_data->Ward_Days;
+    $cabin_day = $log_data->Cabin_Days;
+
+    $pre_ward = $log_data->Previous_Ward;
+    $pre_cabin = $log_data->Previous_Cabin;
+
+    # session insert.
+    session(['previous_credit' =>  $log_data->Admission_Fee]);
+
     session(['PACKAGES' => $packages]);
     session(['LIGATION' => $ligation]);
     session(['THIRD_SEIZURE' => $third_seizure]);
     session(['ADMISSION_DATE' => $admission_date]);
     session(['ADMISSION_TIMESTAMP' => $log_data->Admission_Timestamp]);
 
-    $ward_day = $log_data->Ward_Days;
-    $cabin_day = $log_data->Cabin_Days;
-
     session(['WARD_DAY' => $ward_day]);
     session(['CABIN_DAY' => $cabin_day]);
 
-    $pre_ward = $log_data->Previous_Ward;
-    $pre_cabin = $log_data->Previous_Cabin;
-
-    # getting bed info.
+    # getting bed data.
     $bed_data=DB::table('beds')
         ->where('B_ID', $b_id)
         ->first();
 
-    session(['BED_NO' => $bed_data->Bed_No]);
-    session(['FLOOR_NO' => $bed_data->Floor_No]);
-    session(['ROOM_NO' => $bed_data->Room_No]);
-
+    # data collection.
     $current_bed_type = $bed_data->Bed_Type;
     $current_day_range = $bed_data->Day_Range;
-
-    session(['BED_TYPE' => $current_bed_type]);
-    session(['QUALITY' => $bed_data->Quality]);
 
     $current_normal_pricing = $bed_data->Normal_Pricing;
     $current_package_pricing = $bed_data->Package_Pricing;
 
-    # Previous bedding calculations (if any).
+    # session insert.
+    session(['BED_NO' => $bed_data->Bed_No]);
+    session(['FLOOR_NO' => $bed_data->Floor_No]);
+    session(['ROOM_NO' => $bed_data->Room_No]);
 
-    if($pre_ward>0){
+    session(['BED_TYPE' => $current_bed_type]);
+    session(['QUALITY' => $bed_data->Quality]);
 
-        # getting previous bed info.
-        $Pre_bed_data=DB::table('beds')
-            ->where('B_ID', $pre_ward)
-            ->first();
-
-        $normal_pricing = $Pre_bed_data->Normal_Pricing;
-        $package_pricing = $Pre_bed_data->Package_Pricing;
-        $day_range = $Pre_bed_data->Day_Range;
-
-        if($packages!='none'){
-
-            if($ward_day>$day_range){
-                $ward_day = $ward_day-$day_range;
-                $ward_bill = $package_pricing+($ward_day*$normal_pricing);
-            }if($ward_day<=$day_range){
-                $excess_day = $day_range-$ward_day;
-                $ward_bill = $package_pricing+($excess_day*$current_normal_pricing);
-            }
-
-        }else{
-
-            $ward_bill = $ward_day*$normal_pricing;
-
-        }
-
-        session(['PRE_BILL' => $ward_bill]);
-        session(['bed_type' => 'ward']);
-
-        $pre_bed_type = 'Ward';
-
-    }elseif($pre_cabin>0){
-
-        # getting previous bed info.
-        $Pre_bed_data=DB::table('beds')
-            ->where('B_ID', $pre_cabin)
-            ->first();
-
-        $normal_pricing = $Pre_bed_data->Normal_Pricing;
-        $package_pricing = $Pre_bed_data->Package_Pricing;
-        $day_range = $Pre_bed_data->Day_Range;
-
-        if($packages!='none'){
-
-            if($cabin_day>$day_range){
-                $cabin_day = $cabin_day-$day_range;
-                $cabin_bill = $package_pricing+($cabin_day*$normal_pricing);
-            }if($cabin_day<=$day_range){
-                $excess_day = $day_range-$cabin_day;
-                $cabin_bill = $package_pricing+($excess_day*$current_normal_pricing);
-            }
-
-        }else{
-
-            $cabin_bill = $cabin_day*$normal_pricing;
-
-        }
-
-        session(['PRE_BILL' => $cabin_bill]);
-        session(['bed_type' => 'cabin']);
-
-        $pre_bed_type = 'Cabin';
-
-    }
-
-
-
-    # current bedding calculations.
-
-    # Finding number of days.
-    $discharge_date = date("Y-m-d");
-
-    if($discharge_date != $update_date){
-
-        $datetime1 = new DateTime($discharge_date);
-        $datetime2 = new DateTime($update_date);
-        $difference = $datetime1->diff($datetime2)->format("%a"); 
-        $days = $difference;
-
-    }else{
-
-        $days = 1;
-
-    }
-
-    $current_ward_day = $days;
-    $current_cabin_day = $days;
-
-    # length of admission to update
-
-    $datetime3 = new DateTime($update_date);
-    $datetime4 = new DateTime($admission_date);
-    $difference_a_to_u = $datetime3->diff($datetime4)->format("%a"); 
-    $total_days = $difference_a_to_u;
-
-        if($current_bed_type == "Ward"){
-
-            if($packages!='none'){
-    
-                if($total_days>$current_day_range){
-                    $current_ward_day = $days;
-                    $current_ward_bill = $current_ward_day*$current_normal_pricing;
-                }if($total_days<=$current_day_range){
-                    $current_ward_day = ($total_days+$days)-$current_day_range;
-                    $current_ward_bill = $current_ward_day*$current_normal_pricing;
-                }
-    
-            }else{
-    
-                $current_ward_bill = $current_ward_day*$current_normal_pricing;
-    
-            }
-    
-        }if($current_bed_type == "Cabin"){
-
-            if($packages!='none'){
-    
-                if($total_days>$current_day_range){
-                    $current_cabin_day = $days;
-                    $current_cabin_bill = $current_cabin_day*$current_normal_pricing;
-                }if($total_days<=$current_day_range){
-                    $current_cabin_day = ($total_days+$days)-$current_day_range;
-                    $current_cabin_bill = $current_cabin_day*$current_normal_pricing;
-                }
-    
-            }else{
-    
-                $current_cabin_bill = $current_cabin_day*$current_normal_pricing;
-    
-            }
-
-        }if($current_bed_type == $pre_bed_type && $current_bed_type == "Ward"){
-
-            session(['PRE_BILL' => $current_ward_bill+$ward_bill]);
-            session(['bed_type' => 'ward']);
-            session(['WARD_DAY' => $ward_day+$days]);
-
-        }if($current_bed_type == $pre_bed_type && $current_bed_type == "Cabin"){
-
-            session(['PRE_BILL' => $current_cabin_bill+$cabin_bill]);
-            session(['bed_type' => 'cabin']);
-            session(['CABIN_DAY' => $cabin_day+$days]);
-
-        }if($current_bed_type != $pre_bed_type && $current_bed_type == "Ward"){
-
-            session(['CUR_BILL' => $current_ward_bill]);
-            session(['current_bed_type' => 'ward']);
-            session(['WARD_DAY' => $days]);
-
-        }if($current_bed_type != $pre_bed_type && $current_bed_type == "Cabin"){
-
-            session(['CUR_BILL' => $current_cabin_bill]);
-            session(['current_bed_type' => 'cabin']);
-            session(['CABIN_DAY' => $days]);
-
-        }
-
-    # getting patient info.
+    # getting patient data.
     $patient_data=DB::table('patients')
         ->where('P_ID', $p_id)
         ->first();
 
+    # session insert.
     session(['P_ID' => $patient_data->P_ID]);
     session(['PATIENT_NAME' => $patient_data->Patient_Name]);
     session(['PATIENT_GENDER' => $patient_data->Patient_Gender]);
@@ -1823,12 +1668,253 @@ function release_patient_details(Request $request, $a_id){
     session(['PATIENT_NID' => $patient_data->NID]);
     session(['PATIENT_NID_TYPE' => $patient_data->NID_Type]);
 
-    # getting bed info.
+    # getting doctor data.
     $doctor_data=DB::table('doctors')
         ->where('D_ID', $d_id)
         ->first();
 
+    # session insert.
     session(['DOCTOR_NAME' => $doctor_data->Dr_Name]);
+
+
+
+    # Finding difference of days (from admission to update).
+    $discharge_date = date("Y-m-d");
+
+    if($update_date != $admission_date){
+
+        $datetime1 = new DateTime($update_date);
+        $datetime2 = new DateTime($admission_date);
+        $difference = $datetime1->diff($datetime2)->format("%a"); 
+        $days_from_admission_to_update = $difference;
+
+    }else{
+
+        $days_from_admission_to_update = 1;
+
+    }
+
+
+
+    # Finding difference of days (from update to discharge).
+    $discharge_date = date("Y-m-d");
+
+    if($discharge_date != $update_date){
+
+        $datetime1 = new DateTime($discharge_date);
+        $datetime2 = new DateTime($update_date);
+        $difference = $datetime1->diff($datetime2)->format("%a"); 
+        $days_from_update_to_discharge = $difference;
+
+    }else{
+
+        $days_from_update_to_discharge = 1;
+
+    }
+
+
+
+    # Finding difference of days (from admission to discharge).
+    $discharge_date = date("Y-m-d");
+
+    if($discharge_date != $admission_date){
+
+        $datetime1 = new DateTime($discharge_date);
+        $datetime2 = new DateTime($admission_date);
+        $difference = $datetime1->diff($datetime2)->format("%a"); 
+        $days_from_admission_to_discharge = $difference;
+
+    }else{
+
+        $days_from_admission_to_discharge = 1;
+
+    }
+
+
+
+    # Calculation of bed bill.
+
+    # If switch doesn't take place.
+    if($update_date==null){
+
+        if($packages!='none'){
+
+            $extra_days = $days_from_admission_to_discharge-$current_day_range;
+            $total_bill = $current_package_pricing+($extra_days*$current_normal_pricing);
+
+            # Stating values and hooks to track.
+            if($current_bed_type == "Ward"){
+                session(['Pre_bed_type' => 'Cabin']);
+                session(['Cur_bed_type' => $current_bed_type]);
+                session(['WARD_DAY' => $days_from_admission_to_discharge]);
+                session(['CABIN_DAY' => '0']);
+                session(['Cabin_Bill' => '0']);
+                session(['Ward_Bill' => $total_bill]);
+            }else{
+                session(['Pre_bed_type' => 'Ward']);
+                session(['Cur_bed_type' => $current_bed_type]);
+                session(['WARD_DAY' => '0']);
+                session(['CABIN_DAY' => $days_from_admission_to_discharge]);
+                session(['Ward_Bill' => '0']);
+                session(['Cabin_Bill' => $total_bill]);;
+            }
+            session(['Total_Bill' => $total_bill]);
+
+        }else{
+
+            $total_bill = $days_from_admission_to_discharge*$current_normal_pricing;
+
+            session(['Total_Bill' => $total_bill]);
+
+        }
+
+    # If switch takes place.
+    # Calculation of pre bed bill.
+    }else{
+
+        if($packages!='none'){
+
+            # If previously was in ward.
+            if($pre_ward>0){
+
+                # getting previous bed info.
+                $Pre_bed_data=DB::table('beds')
+                ->where('B_ID', $pre_ward)
+                ->first();
+
+                $pre_normal_pricing = $Pre_bed_data->Normal_Pricing;
+                $pre_package_pricing = $Pre_bed_data->Package_Pricing;
+                $pre_day_range = $Pre_bed_data->Day_Range;
+
+                if($pre_day_range<$ward_day){
+                    $extra_days = $ward_day-$pre_day_range;
+                    $pre_bill = $pre_package_pricing+($extra_days*$pre_normal_pricing);
+                }else{
+                    $pre_bill = $pre_package_pricing;
+                }
+
+                $pre_bed_type = "Ward";
+
+            # If previously was in cabin.
+            }else{
+
+                # getting previous bed info.
+                $Pre_bed_data=DB::table('beds')
+                ->where('B_ID', $pre_cabin)
+                ->first();
+
+                $pre_normal_pricing = $Pre_bed_data->Normal_Pricing;
+                $pre_package_pricing = $Pre_bed_data->Package_Pricing;
+                $pre_day_range = $Pre_bed_data->Day_Range;
+
+                if($pre_day_range<$cabin_day){
+                    $extra_days = $cabin_day-$pre_day_range;
+                    $pre_bill = $pre_package_pricing+($extra_days*$pre_normal_pricing);
+                }else{
+                    $pre_bill = $pre_package_pricing;
+                }
+
+                $pre_bed_type = "Cabin";
+
+            }
+
+        }else{
+
+            if($pre_ward>0){
+
+                # getting previous bed info.
+                $Pre_bed_data=DB::table('beds')
+                ->where('B_ID', $pre_ward)
+                ->first();
+
+                $pre_normal_pricing = $Pre_bed_data->Normal_Pricing;
+                $pre_bill = $ward_day*$pre_normal_pricing;
+
+                $pre_bed_type = "Ward";
+
+            }else{
+
+                # getting previous bed info.
+                $Pre_bed_data=DB::table('beds')
+                ->where('B_ID', $pre_cabin)
+                ->first();
+
+                $pre_normal_pricing = $Pre_bed_data->Normal_Pricing;
+                $pre_bill = $cabin_day*$pre_normal_pricing;
+
+                $pre_bed_type = "Cabin";
+
+            }
+
+        }
+
+
+
+        # Calculation of current bed bill.
+        $cur_bill = $days_from_update_to_discharge*$current_normal_pricing;
+
+        # If currently is in ward.
+        if($current_bed_type == 'Ward'){
+
+            
+
+        # If currently is in cabin.
+        }else{
+
+            
+
+        }
+        
+    }
+
+    # Stating values and hooks to track.
+    if($update_date!=null){
+
+            $total_bill = $pre_bill + $cur_bill;
+            session(['Total_Bill' => $total_bill]);
+
+        if($current_bed_type == $pre_bed_type && $current_bed_type == "Ward"){
+
+            $total_ward_days = $ward_day+$days_from_update_to_discharge;
+            session(['Cabin_Bill' => '0']);
+            session(['Ward_Bill' => $total_bill]);
+            session(['Pre_bed_type' => 'Ward']);
+            session(['Cur_bed_type' => 'Ward']);
+            session(['WARD_DAY' => $total_ward_days]);
+            session(['CABIN_DAY' => '0']);
+
+        }if($current_bed_type == $pre_bed_type && $current_bed_type == "Cabin"){
+
+            $total_cabin_days = $cabin_day+$days_from_update_to_discharge;
+            session(['Ward_Bill' => '0']);
+            session(['Cabin_Bill' => $total_bill]);
+            session(['Pre_bed_type' => 'Cabin']);
+            session(['Cur_bed_type' => 'Cabin']);
+            session(['WARD_DAY' => '0']);
+            session(['CABIN_DAY' => $total_cabin_days]);
+
+        }if($current_bed_type != $pre_bed_type && $current_bed_type == "Ward"){
+
+            session(['Cabin_Bill' => $pre_bill]);
+            session(['Ward_Bill' => $cur_bill]);
+            session(['Pre_bed_type' => 'Cabin']);
+            session(['Cur_bed_type' => 'Ward']);
+            session(['WARD_DAY' => $days_from_update_to_discharge]);
+            session(['CABIN_DAY' => $cabin_day]);
+
+        }if($current_bed_type != $pre_bed_type && $current_bed_type == "Cabin"){
+
+            session(['Ward_Bill' => $pre_bill]);
+            session(['Cabin_Bill' => $cur_bill]);
+            session(['Pre_bed_type' => 'Ward']);
+            session(['Cur_bed_type' => 'Cabin']);
+            session(['WARD_DAY' => $ward_day]);
+            session(['CABIN_DAY' => $days_from_update_to_discharge]);
+
+        }
+
+    }
+
 
     # Redirecting to [FUNCTION-NO::15].
     # return redirect('/reception/ward/male');
@@ -1838,7 +1924,7 @@ function release_patient_details(Request $request, $a_id){
 
 }
 
-# End of function search_admitted.                          <-------#
+# End of function release_patient_details.                  <-------#
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: 

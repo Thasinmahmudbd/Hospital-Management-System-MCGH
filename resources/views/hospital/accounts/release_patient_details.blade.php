@@ -320,63 +320,17 @@
 
                 <p class="section_title">Bill Info</p>
 
-                @if(session('bed_type')=='ward' && session('current_bed_type')=='cabin')
-
                 <div class="info">
                     <p class="collected_info">Ward Bill</p>
                     <p>:</p>
-                    <input type="text" class="input_less collected_info" readonly value="{{session('PRE_BILL')}}" name="ward_days">
+                    <input type="text" class="input_less collected_info" readonly value="{{session('Ward_Bill')}}" name="ward_days">
                 </div>
 
                 <div class="info">
                     <p class="collected_info">Cabin Bill</p>
                     <p>:</p>
-                    <input type="text" class="input_less collected_info" readonly value="{{session('CUR_BILL')}}" name="ward_days">
+                    <input type="text" class="input_less collected_info" readonly value="{{session('Cabin_Bill')}}" name="ward_days">
                 </div>
-
-                @elseif(session('bed_type')=='cabin' && session('current_bed_type')=='ward')
-
-                <div class="info">
-                    <p class="collected_info">Ward Bill</p>
-                    <p>:</p>
-                    <input type="text" class="input_less collected_info" readonly value="{{session('CUR_BILL')}}" name="ward_days">
-                </div>
-
-                <div class="info">
-                    <p class="collected_info">Cabin Bill</p>
-                    <p>:</p>
-                    <input type="text" class="input_less collected_info" readonly value="{{session('PRE_BILL')}}" name="ward_days">
-                </div>
-
-                @elseif(session('bed_type')=='ward' && session('current_bed_type')=='ward')
-
-                <div class="info">
-                    <p class="collected_info">Ward Bill</p>
-                    <p>:</p>
-                    <input type="text" class="input_less collected_info" readonly value="{{session('PRE_BILL')}}" name="ward_days">
-                </div>
-
-                <div class="info">
-                    <p class="collected_info">Cabin Bill</p>
-                    <p>:</p>
-                    <input type="text" class="input_less collected_info" readonly value="0" name="ward_days">
-                </div>
-
-                @elseif(session('bed_type')=='cabin' && session('current_bed_type')=='cabin')
-
-                <div class="info">
-                    <p class="collected_info">Ward Bill</p>
-                    <p>:</p>
-                    <input type="text" class="input_less collected_info" readonly value="0" name="ward_days">
-                </div>
-
-                <div class="info">
-                    <p class="collected_info">Cabin Bill</p>
-                    <p>:</p>
-                    <input type="text" class="input_less collected_info" readonly value="{{session('PRE_BILL')}}" name="ward_days">
-                </div>
-
-                @endif
 
                 <div class="info">
                     <p class="collected_info">Other Bill</p>

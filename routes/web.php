@@ -812,15 +812,15 @@ Route::group(['middleware'=>['accountantAuth']],function() {
     Route::post('/accounts/save_edit/','App\Http\Controllers\accountant\accounts@edit_profile');
 
     # disposable.
-    Route::view('/accounts/doctor/income/log/','hospital/accounts/doctor_income_details');
-    /*Route::view('/accounts/pay/salary/','hospital/accounts/pay_salary');
+    /*Route::view('/accounts/doctor/income/log/','hospital/accounts/doctor_income_details');
+    Route::view('/accounts/pay/salary/','hospital/accounts/pay_salary');
     Route::view('/accounts/log/','hospital/accounts/logs');
     Route::view('/accounts/cash/in/','hospital/accounts/cash_in');
     Route::view('/accounts/creditors/','hospital/accounts/creditors');
-    Route::view('/accounts/patient/release/','hospital/accounts/patient_release');*/
+    Route::view('/accounts/patient/release/','hospital/accounts/patient_release');
     Route::view('/accounts/release/slips/','hospital/accounts/release_slips');
     Route::view('/accounts/ambulance/','hospital/accounts/ambulance');
-    Route::view('/accounts/other/transactions/','hospital/accounts/other_transactions');
+    Route::view('/accounts/other/transactions/','hospital/accounts/other_transactions');*/
 
 
 
