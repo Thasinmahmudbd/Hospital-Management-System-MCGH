@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>invoice</title>
+<title>OT Bill</title>
 <style>
 
 .invoice{
@@ -84,7 +84,7 @@ table{
         <tr >
             <td style="line-height:1.5;">
 
-                <p style="font-size:35px; margin:0px;">ময়নামতি ক্যান্টনম্যান্ট জেনারেল হসপিটাল</p>
+                <p style="font-size:35px; margin:0px;">ময়নামতি ক্যান্টনমেন্ট জেনারেল হাসপাতাল</p>
                 <p style="font-size:28px; margin:0px;">MAYNAMATI CANTONMENT GENERAL HOSPITAL</p>
                 <p style="font-size:25px; margin:0px;">টিপরা বাজার,কুমিল্লা সেনানিবাস</p>
                 <p style="font-size:20px ;background-color:#04AA6D; color:#fff;">মোবাইল-০১৭৩০-০৮৭৯৩৯,মোবাইল-০১৭৩০-০৮৭৯৪৯ ,ফোন ০৮১-৬০-৭,বর্ধিত-সামরিক ৩৫৩৬,বেসামরিক ৭২৭০৭</p>
@@ -102,7 +102,7 @@ table{
     <table style="width:100%;margin-top: 20px;font-size: 20px;">
 
         <tr>
-            <td rowspan="3"style="width:70%"></td>
+            <td rowspan="3"style="width:70%"> OT Release slip:</td>
             <td style="width:30%">Timestamp: {{Session::get('ot_timestamp')}}</td>
         </tr>
 
@@ -150,11 +150,11 @@ table{
 
             <tr>
                 <th class= "OT_Expences" style="width:70%; text-align:left; font-weight:normal;">OT Charge</th>
-                <td class= "OT_Expences" style="width:30%; text-align:center;">{{Session::get('o_charge_income')}}</td>
+                <td class= "OT_Expences" style="width:30%; text-align:right;">{{Session::get('o_charge_income')}}</td>
             </tr>
             <tr>
                 <th class= "OT_Expences" style="text-align:left; font-weight:normal;">OT Other Charge</th>
-                <td class= "OT_Expences" style="text-align:center;">{{Session::get('other_charges')}}</td>
+                <td class= "OT_Expences" style="text-align:right;">{{Session::get('other_charges')}}</td>
             </tr>
 
     </table> <!--OT Expences end--> 
@@ -175,12 +175,13 @@ table{
                 <th class= "OT_Expences" style="width:30%"> Charges</th>
             </tr>
 
+            <?php $serial = 1; ?>
             @foreach($chosen_surgeons as $list)
 
             <tr>
-                <td class= "OT_Expences" style="text-align:center;">1.</td>
+                <td class= "OT_Expences" style="text-align:center;"><?php echo $serial; $serial++; ?></td>
                 <td class= "OT_Expences">{{$list->Surgeon_Name}}</td>
-                <td class= "OT_Expences" style="text-align:center;">{{$list->Surgeon_Income}}</td>
+                <td class= "OT_Expences" style="text-align:right;">{{$list->Surgeon_Income}}</td>
             </tr>
 
             @endforeach
@@ -203,17 +204,18 @@ table{
                 <th class= "OT_Expences" style="width:30%"> Charges</th>
             </tr>
 
+            <?php $serial = 1; ?>
             @foreach($chosen_anesthesiologist as $list)
 
             <tr>
-                <td class= "OT_Expences" style="text-align:center;">1.</td>
+                <td class= "OT_Expences" style="text-align:center;"><?php echo $serial; $serial++; ?></td>
                 <td class= "OT_Expences">{{$list->Anesthesiologist_Name}}</td>
-                <td class= "OT_Expences" style="text-align:center;">{{$list->Anesthesiologist_Income}}</td>
+                <td class= "OT_Expences" style="text-align:right;">{{$list->Anesthesiologist_Income}}</td>
             </tr>
             
             @endforeach
 
-    </table><!--Anaesthesiologist Expences start-->
+    </table><!--Anesthesiologist Expences start-->
 
 
     <div class="gap"></div>
@@ -230,12 +232,13 @@ table{
                 <th class= "OT_Expences" style="width:30%"> Charges</th>
             </tr>
 
+            <?php $serial = 1; ?>
             @foreach($chosen_nurses as $list)
 
             <tr>
-                <td class= "OT_Expences" style="text-align:center;">1.</td>
+                <td class= "OT_Expences" style="text-align:center;"><?php echo $serial; $serial++; ?></td>
                 <td class= "OT_Expences">{{$list->Nurse_Name}}</td>
-                <td class= "OT_Expences" style="text-align:center;">{{$list->Nurse_Fee}}</td>
+                <td class= "OT_Expences" style="text-align:right;">{{$list->Nurse_Fee}}</td>
             </tr>
 
             @endforeach
@@ -257,20 +260,21 @@ table{
                 <th class= "OT_Expences" style="width:30%"> Charges</th>
             </tr>
 
+            <?php $serial = 1; ?>
             @foreach($chosen_assistant as $list)
 
             <tr>
-                <td class= "OT_Expences" style="text-align:center;">1.</td>
+                <td class= "OT_Expences" style="text-align:center;"><?php echo $serial; $serial++; ?></td>
                 <td class= "OT_Expences">{{$list->Assistant_Name}}</td>
-                <td class= "OT_Expences" style="text-align:center;">{{$list->Assistant_Fee}}</td>
+                <td class= "OT_Expences" style="text-align:right;">{{$list->Assistant_Fee}}</td>
             </tr>
 
             @endforeach
 
             <tr>
                 <td ></td>
-                <td ></td>
-                <td class= "OT_Expences">Total:</td>
+                <td style="text-align:right; font-weight:bold; padding-right:10px; font-size:18px;">Total</td>
+                <td class= "OT_Expences" style="text-align:right;">{{Session::get('total_of_ot_slip')}}</td>
             </tr>
 
     </table><!--Assistant Expences end-->
@@ -300,7 +304,7 @@ table{
     <table class="m_invoic">
 
         <tr>
-            <td>ময়নামতি ক্যান্টনম্যান্ট জেনারেল হসপিটাল সেবায় অনন্য</td>
+            <td>ময়নামতি ক্যান্টনমেন্ট জেনারেল হাসপাতাল সেবায় অনন্য</td>
         </tr>
 
     </table>

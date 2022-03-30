@@ -208,7 +208,7 @@
 
     <span></span>
         
-        <p><b>{{session('logs_hook')}} Logs</b></p>
+        <p><b>{{session('logs_hook')}} Logs, Sum: {{session('total_of_data')}}</b></p>
 
     <span></span>
 

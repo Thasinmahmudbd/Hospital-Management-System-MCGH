@@ -133,17 +133,6 @@
 
 
 
-        <!--Session message-->
-
-        @if(session('msg')=='Please assign an appointment time.')
-
-            <div class="content_container text_center warning_msg">{{session('msg')}}</div> 
-
-        @elseif(session('msg')=='Appointment Canceled.')
-
-            <div class="content_container text_center warning_msg">{{session('msg')}}</div>
-
-        @endif
 
 
 
@@ -235,7 +224,7 @@
                             <p>:</p>
                             <p class="collected_info">{{Session::get('LIGATION')}}</p>
 
-                            <p class="collected_info">Third Seizure</p>
+                            <p class="collected_info">3rd Seizure</p>
                             <p>:</p>
                             <p class="collected_info">{{Session::get('THIRD_SEIZURE')}}</p>
 
@@ -283,36 +272,21 @@
 
 
 
+        <!--Session message-->
+
+        @if(session('msg')=='0 deduction done.')
+
+            <div class="content_container text_center warning_msg">{{session('msg')}}</div> 
+
+        @elseif(session('msg')=='Deduction impossible.')
+
+            <div class="content_container text_center warning_msg">{{session('msg')}}</div>
+
+        @endif
+
+
+
         <div class="doctor_form patient_and_doctor_info_one_is_to_one">
-
-            <!-- Bed Counts -->
-
-            <form action="{{url('/reception/emergency/data/entry/')}}" method="post" class="content_container_bg_less">
-            @csrf
-
-                <p class="section_title">Bed Counts</p>
-
-                <div class="info">
-                    <p class="collected_info">Ward Days</p>
-                    <p>:</p>
-                    <input type="text" class="input_less collected_info" value="{{session('WARD_DAY')}}" name="ward_days">
-                </div>
-
-                <div class="info">
-                    <p class="collected_info">Cabin Days</p>
-                    <p>:</p>
-                    <input type="text" class="input_less collected_info" value="{{session('CABIN_DAY')}}" name="cabin_days">
-                </div>
-
-                <div class="gap"></div>
-
-                <div class="info">
-                    <span class="collected_info"></span>
-                    <p></p>
-                    <input type="submit" class="btn form_btn" name="Change" value="Change">
-                </div>
-
-            </form>
 
             <!-- Bill Info -->
 
@@ -323,69 +297,184 @@
                 <div class="info">
                     <p class="collected_info">Ward Bill</p>
                     <p>:</p>
-                    <input type="text" class="input_less collected_info" readonly value="{{session('Ward_Bill')}}" name="ward_days">
+                    <input type="text" class="input_less collected_info" readonly value="{{session('Ward_Bill')}}" name="ward_bill">
                 </div>
 
                 <div class="info">
                     <p class="collected_info">Cabin Bill</p>
                     <p>:</p>
-                    <input type="text" class="input_less collected_info" readonly value="{{session('Cabin_Bill')}}" name="ward_days">
+                    <input type="text" class="input_less collected_info" readonly value="{{session('Cabin_Bill')}}" name="cabin_bill">
+                </div>
+
+                <div class="info">
+                    <p class="collected_info">Ligation Bill</p>
+                    <p>:</p>
+                    <input type="text" class="input_less collected_info" readonly value="{{session('Ligation_Bill')}}" name="ligation_bill">
+                </div>
+
+                <div class="info">
+                    <p class="collected_info">3rd Seizure Bill</p>
+                    <p>:</p>
+                    <input type="text" class="input_less collected_info" readonly value="{{session('Third_Seizure_Bill')}}" name="third_seizure_bill">
+                </div>
+
+                <div class="info">
+                    <p class="collected_info">OT Bill</p>
+                    <p>:</p>
+                    <input type="text" class="input_less collected_info" readonly value="{{session('ot_charge')}}" name="ot_charge">
+                </div>
+
+                <div class="info">
+                    <p class="collected_info">Surgeon Bill</p>
+                    <p>:</p>
+                    <input type="text" class="input_less collected_info" readonly value="{{session('ot_surgeon_bill')}}" name="ot_surgeon_bill">
+                </div>
+
+                <div class="info">
+                    <p class="collected_info">Anesthesia Bill</p>
+                    <p>:</p>
+                    <input type="text" class="input_less collected_info" readonly value="{{session('ot_anesthesiologist_bill')}}" name="ot_anesthesiologist_bill">
+                </div>
+
+                <div class="info">
+                    <p class="collected_info">Nurses Bill</p>
+                    <p>:</p>
+                    <input type="text" class="input_less collected_info" readonly value="{{session('ot_nurses_bill')}}" name="ot_nurses_bill">
+                </div>
+
+                <div class="info">
+                    <p class="collected_info">Assistant Bill</p>
+                    <p>:</p>
+                    <input type="text" class="input_less collected_info" readonly value="{{session('ot_assistant_bill')}}" name="ot_assistant_bill">
                 </div>
 
                 <div class="info">
                     <p class="collected_info">Other Bill</p>
                     <p>:</p>
-                    <input type="text" class="input_less collected_info" readonly name="ward_days">
+                    <input type="text" class="input_less collected_info" readonly value="{{session('b_i_others')}}" name="b_i_others">
+                </div>
+
+                <div class="info">
+                    <p class="collected_info">Visiting Bill</p>
+                    <p>:</p>
+                    <input type="text" class="input_less collected_info" readonly value="{{session('b_i_visits')}}" name="b_i_visits">
                 </div>
 
                 <div class="info">
                     <p class="collected_info">Total Bill</p>
                     <p>:</p>
-                    <input type="text" class="input_less collected_info" readonly name="ward_days">
+                    <input type="text" class="input_less collected_info" readonly id="fee" value="{{session('Ward_Bill')+session('Cabin_Bill')+session('Ligation_Bill')+session('Third_Seizure_Bill')+session('ot_charge')+session('ot_surgeon_bill')+session('ot_anesthesiologist_bill')+session('ot_nurses_bill')+session('ot_assistant_bill')+session('b_i_others')+session('b_i_visits')}}"name="total_bill">
                 </div>
 
             </div>
 
-            <!-- Billing -->
+            <div>
 
-            <form action="{{url('/reception/emergency/data/entry/')}}" method="post" class="content_container_bg_less">
-            @csrf
+                <!-- Bed Counts -->
 
-                <p class="section_title">Billing</p>
+                <form action="{{url('/account/release/patient/details/edit/'.session('a_id'))}}" method="post" class="content_container_bg_less">
+                @csrf
 
-                <div class="info">
-                    <p class="collected_info">Estimated Bill</p>
-                    <p>:</p>
-                    <input type="text" class="input_less collected_info" name="ward_days">
-                </div>
+                    <p><span class="section_title">Bed Counts</span> --------------------------------------------- Deduct if necessary.</p>
 
-                <div class="info">
-                    <p class="collected_info">Discount</p>
-                    <p>:</p>
-                    <input type="text" class="input_less collected_info" name="cabin_days">
-                </div>
+                    <div class="info">
+                        <p class="collected_info">Ward Days</p>
+                        <p>:</p>
+                        <div class="patient_form_element_three_is_to_one">
+                            <input type="text" class="input_less collected_info" value="{{session('WARD_DAY')}}" readonly>
+                            <input type="text" class="input collected_info text_center" value="0" name="ward_tk_eduction">
+                        </div>
+                    </div>
 
-                <div class="info">
-                    <p class="collected_info">Received</p>
-                    <p>:</p>
-                    <input type="text" class="input_less collected_info" name="ward_days">
-                </div>
+                    <div class="info">
+                        <p class="collected_info">Cabin Days</p>
+                        <p>:</p>
+                        <div class="patient_form_element_three_is_to_one">
+                            <input type="text" class="input_less collected_info" value="{{session('CABIN_DAY')}}" readonly>
+                            <input type="text" class="input collected_info text_center" value="0"  name="cabin_tk_eduction">
+                        </div>
+                    </div>
 
-                <div class="info">
-                    <p class="collected_info">Change</p>
-                    <p>:</p>
-                    <input type="text" class="input_less collected_info" name="cabin_days">
-                </div>
+                    <div class="gap"></div>
 
-                <div class="gap"></div>
+                    <!--Hidden inputs-->
+                    <input type="hidden" name="Ward_Bill" value="{{session('Ward_Bill')}}">
+                    <input type="hidden" name="Cabin_Bill" value="{{session('Cabin_Bill')}}">
 
-                <div class="info">
-                    <span class="collected_info"></span>
-                    <p></p>
-                    <input type="submit" class="btn form_btn" name="Release" value="Release">
-                </div>
+                    <div class="info">
+                        <span class="collected_info"></span>
+                        <p></p>
+                        <div class="patient_form_element_one_is_to_one">
+                            <a class="btn form_btn text_center" href="{{url('/account/release/patient/details/'.session('a_id'))}}">Reset</a>
+                            <input type="submit" class="btn form_btn" name="Change" value="Change">
+                        </div>
+                    </div>
 
-            </form>
+                </form>
+
+                <!-- Billing -->
+
+                <form action="{{url('/account/release/')}}" method="post" class="content_container_bg_less">
+                @csrf
+
+                    <p class="section_title">Billing</p>
+
+                    <div class="info">
+                        <p class="collected_info">Estimated Bill</p>
+                        <p>:</p>
+                        <input type="text" class="input_less collected_info" name="estimate" id="estimate" readonly>
+                    </div>
+
+                    <div class="info">
+                        <p class="collected_info">Discount</p>
+                        <p>:</p>
+                        <input type="text" class="input_less collected_info" name="discount" value="0" id="disc" oninput="calcDisc()">
+                    </div>
+
+                    <div class="info">
+                        <p class="collected_info">Received</p>
+                        <p>:</p>
+                        <input type="text" class="input_less collected_info" name="received" oninput="calcAppointmentFee()" id="r2" value="0" required>
+                    </div>
+
+                    <div class="info">
+                        <p class="collected_info">Change</p>
+                        <p>:</p>
+                        <input type="text" class="input_less collected_info" name="change" id="c2" value="0" required>
+                    </div>
+
+                    <!--Hidden inputs-->
+                    <input type="hidden" value="{{session('a_id')}}" name="a_id">
+
+                    <input type="hidden" value="{{session('Ward_Bill')}}" name="Ward_Bill">
+                    <input type="hidden" value="{{session('Cabin_Bill')}}" name="Cabin_Bill">
+                    <input type="hidden" value="{{session('Ligation_Bill')}}" name="Ligation_Bill">
+                    <input type="hidden" value="{{session('Third_Seizure_Bill')}}" name="Third_Seizure_Bill">
+                    <input type="hidden" value="{{session('ot_charge')}}" name="ot_charge">
+                    <input type="hidden" value="{{session('ot_surgeon_bill')}}" name="ot_surgeon_bill">
+                    <input type="hidden" value="{{session('ot_anesthesiologist_bill')}}" name="ot_anesthesiologist_bill">
+                    <input type="hidden" value="{{session('ot_nurses_bill')}}" name="ot_nurses_bill">
+                    <input type="hidden" value="{{session('ot_assistant_bill')}}" name="ot_assistant_bill">
+                    <input type="hidden" value="{{session('b_i_others')}}" name="b_i_others">
+                    <input type="hidden" value="{{session('b_i_visits')}}" name="b_i_visits">
+                    <input type="hidden" value="{{session('Ward_Bill')+session('Cabin_Bill')+session('Ligation_Bill')+session('Third_Seizure_Bill')+session('ot_charge')+session('ot_surgeon_bill')+session('ot_anesthesiologist_bill')+session('ot_nurses_bill')+session('ot_assistant_bill')+session('b_i_others')+session('b_i_visits')}}" name="total_bill">
+
+                    <input type="hidden" value="{{session('WARD_DAY')}}" name="Ward_Days">
+                    <input type="hidden" value="{{session('CABIN_DAY')}}" name="Cabin_Days">
+
+                    <input type="hidden" value="{{session('CABIN_DAY')}}" name="Cabin_Days">
+
+                    <div class="gap"></div>
+
+                    <div class="info">
+                        <span class="collected_info"></span>
+                        <p></p>
+                        <input type="submit" class="btn form_btn" name="Release" value="Release">
+                    </div>
+
+                </form>
+
+            </div>
 
         </div>
 

@@ -696,6 +696,65 @@ function invoice_search_er(Request $request){
 #########################
 #### FUNCTION-NO::0 ####
 #########################
+# Search printable patient invoices [er];
+# Stored data in 1 session;
+# Joins table :-
+# -----: TABLE :------ ot_logs,
+# -----: TABLE :------ patients,
+# -----: TABLE :------ admission_logs.
+# -----: TABLE :------ doctors.
+
+function invoice_search_release_slips(Request $request){
+
+    $request->validate([
+
+        'old_patient_search_info'=>'required'
+
+    ]);
+
+    $old_patient_search_info = $request->input('old_patient_search_info');
+
+    # Show searched patients.
+    $search['result']=DB::table('ot_logs')
+    ->join('patients', 'ot_logs.P_ID', '=', 'patients.P_ID')
+    ->join('doctors', 'ot_logs.D_ID', '=', 'doctors.D_ID')
+    ->join('admission_logs', 'ot_logs.A_ID', '=', 'admission_logs.A_ID')
+    ->select('patients.Patient_Name', 'patients.Cell_Number', 'patients.P_ID', 'doctors.D_ID', 'doctors.Dr_Name', 'doctors.Dr_Gender', 'doctors.Specialty', 'doctors.Department', 'ot_logs.O_ID', 'ot_logs.O_Type', 'admission_logs.A_ID', 'admission_logs.Admission_Date', 'admission_logs.Discharge_Date')
+    ->orwhere('patients.P_ID','like',$old_patient_search_info)
+    ->orwhere('patients.Cell_Number','like','%'.$old_patient_search_info.'%')
+    ->orwhere('doctors.Dr_Name','like','%'.$old_patient_search_info.'%')
+    ->orwhere('ot_logs.O_Type','like','%'.$old_patient_search_info.'%')
+    ->orderBy('ot_logs.A_ID','desc')
+    ->get();
+
+    $request->session()->put('INVOICE','1');
+    $request->session()->put('SEARCH_RESULT','1');
+
+    if(count($search['result']) == 0){
+
+        $request->session()->put('SEARCH_RESULT','0');
+
+    }
+
+    # Returning to the view below.
+    return view('hospital/accounts/invoice_generator_list_release_slips',$search);
+
+}
+
+# End of function invoice_search_er.                    <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
 # Collect data for invoice;
 # Stores data in 20 sessions;
 
@@ -1233,6 +1292,267 @@ function collect_ot_bill_invoice_data(Request $request, $o_id){
 # This will change.
 # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Shows printable patient invoices [ot bill and admission releases];
+# Stored data in 1 session;
+# Joins table :-
+# -----: TABLE :------ ot_logs,
+# -----: TABLE :------ patients,
+# -----: TABLE :------ admission_ogs.
+# -----: TABLE :------ doctors.
+
+function invoice_list_account(Request $request){
+
+    date_default_timezone_set('Asia/Dhaka');
+    $date = date("Y-m-d");
+    $request->session()->put('DATE_TODAY',$date);
+
+    # check hook
+    $hook=DB::table('ot_logs')
+    ->join('admission_logs', 'ot_logs.A_ID', '=', 'admission_logs.A_ID')
+    ->select('ot_logs.A_ID', 'admission_logs.Payment_Confirmation')
+    ->where('admission_logs.Payment_Confirmation','!=',null)
+    ->value('admission_logs.Payment_Confirmation');
+
+    if(empty(!$hook)){
+
+        # Show all bills.
+        $all['all']=DB::table('admission_logs')
+        ->join('patients', 'admission_logs.P_ID', '=', 'patients.P_ID')
+        ->join('doctors', 'admission_logs.D_ID', '=', 'doctors.D_ID')
+        ->select('patients.Patient_Name', 'patients.Cell_Number', 'patients.P_ID', 'doctors.D_ID', 'doctors.Dr_Name', 'doctors.Dr_Gender', 'doctors.Specialty', 'doctors.Department', 'admission_logs.A_ID', 'admission_logs.Admission_Date', 'admission_logs.Discharge_Date', 'admission_logs.Payment_Confirmation')
+        ->where('admission_logs.Payment_Confirmation','!=',null)
+        ->orderBy('admission_logs.A_ID','desc')
+        ->get();
+
+        $request->session()->put('ot_related_hook','no');
+
+    }else{
+
+        # Show all bills.
+        $all['all']=DB::table('ot_logs')
+        ->join('patients', 'ot_logs.P_ID', '=', 'patients.P_ID')
+        ->join('doctors', 'ot_logs.D_ID', '=', 'doctors.D_ID')
+        ->join('admission_logs', 'ot_logs.A_ID', '=', 'admission_logs.A_ID')
+        ->select('patients.Patient_Name', 'patients.Cell_Number', 'patients.P_ID', 'doctors.D_ID', 'doctors.Dr_Name', 'doctors.Dr_Gender', 'doctors.Specialty', 'doctors.Department', 'ot_logs.O_ID', 'ot_logs.O_Type', 'admission_logs.A_ID', 'admission_logs.Admission_Date', 'admission_logs.Discharge_Date', 'admission_logs.Payment_Confirmation')
+        ->where('admission_logs.Payment_Confirmation','!=',null)
+        ->orderBy('admission_logs.A_ID','desc')
+        ->get();
+
+        $request->session()->put('ot_related_hook','yes');
+
+    }
+
+    $request->session()->put('INVOICE','0');
+
+    # Returning to the view below.
+    return view('hospital/accounts/invoice_generator_list_release_slips', $all);
+
+}
+
+# End of function invoice_list_account.                     <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Collect data for invoice;
+# Stores data in 10 sessions.
+
+function collect_accounts_release_slips_data_ot(Request $request, $o_id){
+
+    # Gather data.
+    $data_ot_logs=DB::table('ot_logs')
+    ->where('O_ID',$o_id)
+    ->first();
+
+    $p_id = $data_ot_logs->P_ID;
+    $a_id = $data_ot_logs->A_ID;
+    $OT_Charge_Income = $data_ot_logs->OT_Charge_Income;
+    $Others_Charges = $data_ot_logs->Others_Charges;
+
+    # Gather data.
+    $data_admission_logs=DB::table('admission_logs')
+    ->where('A_ID',$a_id)
+    ->first();
+
+    $b_id = $data_admission_logs->B_ID;
+
+    # Gather data.
+    $data_bed_logs=DB::table('beds')
+    ->where('B_ID',$b_id)
+    ->first();
+
+    # Gather data.
+    $data_patients=DB::table('patients')
+    ->where('P_ID',$p_id)
+    ->first();
+
+    # Store in session.
+    session(['oId' => $o_id]);
+    session(['pId' => $p_id]);
+    session(['pName' => $data_patients->Patient_Name]);
+
+    session(['bed_no' => $data_bed_logs->Bed_No]);
+
+    session(['o_type' => $data_ot_logs->O_Type]);
+    session(['o_duration' => $data_ot_logs->O_Duration]);
+    session(['o_time' => $data_ot_logs->O_Time]);
+    session(['o_data' => $data_ot_logs->O_Date]);
+    session(['o_charge_income' => $OT_Charge_Income]);
+    session(['other_charges' => $Others_Charges]);
+
+    session(['a_type' => $data_ot_logs->Anesthesia_Type]);
+
+    session(['ot_timestamp' => $data_ot_logs->Timestamp]);
+
+    # total calculation
+        $tot_of_surgeon_cost=DB::table('surgeon_logs')
+            ->where('O_ID', $o_id)
+            ->sum('Surgeon_Income');
+
+        $tot_of_anesthesiologist_cost=DB::table('anesthesiologist_logs')
+            ->where('O_ID', $o_id)
+            ->sum('Anesthesiologist_Income');
+
+        $tot_of_nurses_cost=DB::table('ot_nurses_logs')
+            ->where('O_ID', $o_id)
+            ->sum('Nurse_Fee');
+
+        $tot_of_assistant_cost=DB::table('ot_assistant_logs')
+            ->where('O_ID', $o_id)
+            ->sum('Assistant_Fee');
+
+        $tots = $OT_Charge_Income+$Others_Charges+$tot_of_surgeon_cost+$tot_of_anesthesiologist_cost+$tot_of_nurses_cost+$tot_of_assistant_cost;
+
+        session(['total_of_ot_slip' => $tots]);
+
+    # Redirecting to [FUNCTION-NO::0].
+    return redirect('/accounts/generate/release/slips/ot/copy');
+
+}
+
+# End of function collect_ot_bill_invoice_data.             <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# This will change.
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Collect data for invoice;
+# Stores data in 10 sessions.
+
+function collect_accounts_release_slips_data_admission(Request $request, $a_id){
+
+    session(['aid' => $a_id]);
+
+    # Gather data.
+    $data_release_log=DB::table('release_logs')
+    ->where('A_ID',$a_id)
+    ->first();
+
+    $Ward_Bill = $data_release_log->Ward_Bill;
+    $Cabin_Bill = $data_release_log->Cabin_Bill;
+    $Ligation_Bill = $data_release_log->Ligation_Bill;
+    $Third_Seizure_Bill = $data_release_log->Third_Seizure_Bill;
+    $Other_Bill = $data_release_log->Other_Bill;
+    $Visiting_Bill = $data_release_log->Visiting_Bill;
+    $Total_Bill = $data_release_log->Total_Bill;
+    $Estimate = $data_release_log->Estimate;
+    $Discount = $data_release_log->Discount;
+    $Received = $data_release_log->Received;
+    $Changes = $data_release_log->Changes;
+
+    session(['Ward_Bill' => $Ward_Bill]);
+    session(['Cabin_Bill' => $Cabin_Bill]);
+    session(['Ligation_Bill' => $Ligation_Bill]);
+    session(['Third_Seizure_Bill' => $Third_Seizure_Bill]);
+    session(['Other_Bill' => $Other_Bill]);
+    session(['Visiting_Bill' => $Visiting_Bill]);
+    session(['Total_Bill' => $Total_Bill]);
+    session(['Estimate' => $Estimate]);
+    session(['Discount' => $Discount]);
+    session(['Received' => $Received]);
+    session(['Changes' => $Changes]);
+
+    # Gather data.
+    $data_admission_logs=DB::table('admission_logs')
+    ->where('A_ID',$a_id)
+    ->first();
+
+    $p_id = $data_admission_logs->P_ID;
+    $b_id = $data_admission_logs->B_ID;
+    $d_id = $data_admission_logs->D_ID;
+    $Admission_Date = $data_admission_logs->Admission_Timestamp;
+    $Discharge_Date = $data_admission_logs->Discharge_Timestamp;
+
+    session(['Admission_Date' => $Admission_Date]);
+    session(['Discharge_Date' => $Discharge_Date]);
+
+
+    # Gather data.
+    $data_bed_logs=DB::table('beds')
+    ->where('B_ID',$b_id)
+    ->first();
+
+    # Gather data.
+    $data_patients=DB::table('patients')
+    ->where('P_ID',$p_id)
+    ->first();
+
+    # Gather data.
+    $data_doctors=DB::table('doctors')
+    ->where('D_ID',$d_id)
+    ->first();
+
+    /*# Gather data.
+    $data_ot_logs=DB::table('ot_logs')
+    ->where('A_ID',$a_id)
+    ->first();*/
+
+    # Store in session.
+    session(['pId' => $data_patients->P_ID]);
+    session(['pName' => $data_patients->Patient_Name]);
+    session(['drName' => $data_doctors->Dr_Name]);
+    session(['bed_no' => $data_bed_logs->Bed_No]);
+
+    # Redirecting to [FUNCTION-NO::0].
+    return redirect('/accounts/generate/release/slips/admission/copy');
+
+}
+
+# End of function collect_ot_bill_invoice_data.             <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# This will change.
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
 
 
 

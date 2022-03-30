@@ -659,6 +659,10 @@ Route::group(['middleware'=>['accountantAuth']],function() {
     # Redirecting to [FUNCTION-NO::03]---in-controller.
     Route::post('/update/vat/','App\Http\Controllers\accountant\accounts@set_vat');
 
+    # setting variables.
+    # Redirecting to [FUNCTION-NO::03.5]---in-controller.
+    Route::post('/update/variable/{hook}','App\Http\Controllers\accountant\accounts@set_var');
+
     ##############################################################################################################################################
     # Doctors income.  [C::accounts.php]
     ##############################################################################################################################################
@@ -753,15 +757,128 @@ Route::group(['middleware'=>['accountantAuth']],function() {
 
     # Show patient details.
     # Redirecting to [FUNCTION-NO::22]---in-controller.
-    Route::post('/account/release/patient/details/{a_id}','App\Http\Controllers\accountant\accounts@release_patient_details');
+    Route::get('/account/release/patient/details/{a_id}','App\Http\Controllers\accountant\accounts@release_patient_details');
 
-    # Viewing creditors log.
-    # Redirecting to [FUNCTION-NO::]---in-controller.
-    Route::get('/account/creditor/log/','App\Http\Controllers\accountant\accounts@creditor_log');
+    # Change auto calculated details.
+    # Redirecting to [FUNCTION-NO::23]---in-controller.
+    Route::post('/account/release/patient/details/edit/{a_id}','App\Http\Controllers\accountant\accounts@edit_release_patient_details');
 
-    # Filter creditors log.
+    # Releases patient by saving log.
+    # Redirecting to [FUNCTION-NO::24]---in-controller.
+    Route::post('/account/release/','App\Http\Controllers\accountant\accounts@release_patient');
+
+    ##############################################################################################################################################
+    # Invoice.  [C::invoice.php]
+    ##############################################################################################################################################
+
+    # Reading data in Invoice generator [accounts] page.
     # Redirecting to [FUNCTION-NO::]---in-controller.
-    Route::post('/accounts/creditors/log/filter/','App\Http\Controllers\accountant\accounts@creditor_log_filter');
+    Route::get('/accounts/release/slips/','App\Http\Controllers\generate\invoice@invoice_list_account');
+
+    # Searching data in Invoice generator [accounts] page.
+    # Redirecting to [FUNCTION-NO::]---in-controller.
+    Route::post('/accounts/find_patient/by_search/invoice/release/slips/','App\Http\Controllers\generate\invoice@invoice_search_release_slips');
+
+    # Generate invoice. [ot copy]
+    # Redirecting to [FUNCTION-NO::]---in-controller.
+    Route::get('/accounts/collect/ot/release/slips/{o_id}', 'App\Http\Controllers\generate\invoice@collect_accounts_release_slips_data_ot');
+
+    # Generate invoice. [admission copy]
+    # Redirecting to [FUNCTION-NO::]---in-controller.
+    Route::get('/accounts/collect/admission/release/slips/{a_id}', 'App\Http\Controllers\generate\invoice@collect_accounts_release_slips_data_admission');
+
+    Route::get('/accounts/generate/release/slips/ot/copy',function(){
+
+        $o_id = Session::get('oId');
+        
+        $chosen_surgeons=DB::table('surgeon_logs')
+            ->where('O_ID', $o_id)
+            ->orderBy('AI_ID','asc')
+            ->get();
+
+        $chosen_anesthesiologist=DB::table('anesthesiologist_logs')
+            ->where('O_ID', $o_id)
+            ->orderBy('AI_ID','asc')
+            ->get();
+
+        $chosen_nurses=DB::table('ot_nurses_logs')
+            ->where('O_ID', $o_id)
+            ->orderBy('AI_ID','asc')
+            ->get();
+
+        $chosen_assistant=DB::table('ot_assistant_logs')
+            ->where('O_ID', $o_id)
+            ->orderBy('AI_ID','asc')
+            ->get();
+
+
+        $pdf = PDF::loadView('hospital.invoice.ot_bill', compact('chosen_surgeons','chosen_anesthesiologist','chosen_nurses','chosen_assistant'));
+
+        $file_name = 'ID: '.Session::get('pId').'.pdf';
+
+        $pdf->setOption('page-size','a4');
+        $pdf->setOption('orientation','portrait');
+
+        return $pdf->stream($file_name);
+
+        # Returning to the view below.
+        return view('hospital/invoice/ot_bill', compact('chosen_surgeons','chosen_anesthesiologist','chosen_nurses','chosen_assistant'));
+
+    });
+
+    Route::get('/accounts/generate/release/slips/admission/copy',function(){
+        $a_id = Session::get('aid');
+        
+        # Show all invigilator.
+        $invigilator=DB::table('bed_invigilators')
+            ->join('doctors', 'bed_invigilators.D_ID', '=', 'doctors.D_ID')
+            ->select('bed_invigilators.Visit_Charge', 'doctors.Dr_Name', 'bed_invigilators.A_ID', 'bed_invigilators.AI_ID')
+            ->where('bed_invigilators.A_ID',$a_id)
+            ->orderBy('bed_invigilators.AI_ID','desc')
+            ->get();
+
+        # Show all services.
+        $others=DB::table('bed_invigilators')
+            ->where('Others','!=','none')
+            ->where('A_ID',$a_id)
+            ->orderBy('AI_ID','desc')
+            ->get();
+
+        $pdf = PDF::loadView('hospital.invoice.release_slip', compact('invigilator','others'));
+
+        $file_name = 'ID: '.Session::get('pId').'.pdf';
+
+        $pdf->setOption('page-size','a4');
+        $pdf->setOption('orientation','portrait');
+
+        return $pdf->stream($file_name);
+
+        # Returning to the view below.
+        return view('hospital/invoice/release_slip', compact('invigilator','others'));
+
+    });
+
+    # toggles hook session
+    Route::get('/accounts/toggle/hook/yes',function(Request $request){
+
+        # Show all bills.
+        $all['all']=DB::table('ot_logs')
+        ->join('patients', 'ot_logs.P_ID', '=', 'patients.P_ID')
+        ->join('doctors', 'ot_logs.D_ID', '=', 'doctors.D_ID')
+        ->join('admission_logs', 'ot_logs.A_ID', '=', 'admission_logs.A_ID')
+        ->select('patients.Patient_Name', 'patients.Cell_Number', 'patients.P_ID', 'doctors.D_ID', 'doctors.Dr_Name', 'doctors.Dr_Gender', 'doctors.Specialty', 'doctors.Department', 'ot_logs.O_ID', 'ot_logs.O_Type', 'admission_logs.A_ID', 'admission_logs.Admission_Date', 'admission_logs.Discharge_Date', 'admission_logs.Payment_Confirmation')
+        ->where('admission_logs.Payment_Confirmation','!=',null)
+        ->orderBy('admission_logs.A_ID','desc')
+        ->get();
+
+        $request->session()->put('ot_related_hook','yes');
+        $request->session()->put('INVOICE','0');
+
+        # Returning to the view below.
+        return view('hospital/accounts/invoice_generator_list_release_slips', $all);
+
+    });
+
 
     ##############################################################################################################################################
     # Ambulance.  [C::accounts.php]
@@ -819,8 +936,8 @@ Route::group(['middleware'=>['accountantAuth']],function() {
     Route::view('/accounts/creditors/','hospital/accounts/creditors');
     Route::view('/accounts/patient/release/','hospital/accounts/patient_release');
     Route::view('/accounts/release/slips/','hospital/accounts/release_slips');
-    Route::view('/accounts/ambulance/','hospital/accounts/ambulance');
-    Route::view('/accounts/other/transactions/','hospital/accounts/other_transactions');*/
+    Route::view('/accounts/ambulance/','hospital/accounts/ambulance');*/
+    Route::view('/accounts/other/transactions/','hospital/accounts/other_transactions');
 
 
 

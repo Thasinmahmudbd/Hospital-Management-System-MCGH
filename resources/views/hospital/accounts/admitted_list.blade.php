@@ -222,7 +222,7 @@
 
             <?php $serial = 1; ?>
             @foreach($result as $item)
-            <form action="{{url('/account/release/patient/details/'.$item->A_ID)}}" method="post" class="span_hidden_bar content_container_bg_less_thin center_element">
+            <form action="{{url('/account/release/patient/details/'.$item->A_ID)}}" method="get" class="span_hidden_bar content_container_bg_less_thin center_element">
             @csrf
 
             <tr class="frame_rows">

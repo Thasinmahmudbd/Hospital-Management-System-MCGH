@@ -253,11 +253,11 @@
 
                 <div class="patient_and_doctor_info_one_is_to_one">
 
-                    <div id="donutchart" style="width: 500px; height: 300px;" class="content_container_bg_less"></div>
+                    <!--<div id="donutchart" style="width: 500px; height: 300px;" class="content_container_bg_less"></div>-->
 
                     <div>
 
-                        <div class="content_container_thin title_bar_purple">Accounts setup</div>
+                        <div class="content_container_thin title_bar_purple">Accounts Setup</div>
 
                         <div class="options">
 
@@ -300,6 +300,156 @@
                         </div>
 
                     </div>
+
+                    
+
+                    <div>
+
+                        <div class="content_container_thin title_bar_purple">Variable Setup</div>
+
+                        <div class="">
+
+                            <form action="{{url('/update/variable/'.'Invigilator_Fee')}}" method="post" class="option_container">
+                            @csrf
+
+                                <span></span>
+
+                                <div class="option_label_btn_bar">
+
+                                    <div class="patient_form_element_one_is_to_one">
+                                        <label for="value" class="content_container_bg_less_thin text_right">Invigilator Fee</label>
+                                        <input class="content_container_bg_less_thin text_center center_element input" type="tel" name="value" value="{{Session::get('Invigilator_Fee')}}" placeholder="%" required>
+                                    </div>
+                                    <button type="submit" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-check-square log_out_btn"></i></button>
+
+                                </div>
+
+                            </form>
+
+                            <form action="{{url('/update/variable/'.'Emergency_Fee')}}" method="post" class="option_container">
+                            @csrf
+
+                                <span></span>
+
+                                <div class="option_label_btn_bar">
+
+                                    <div class="patient_form_element_one_is_to_one">
+                                        <label for="value" class="content_container_bg_less_thin text_right">Emergency Fee</label>
+                                        <input class="content_container_bg_less_thin text_center center_element input" type="tel" name="value" value="{{Session::get('Emergency_Fee')}}" placeholder="%" required>
+                                    </div>
+                                    <button type="submit" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-check-square log_out_btn"></i></button>
+
+                                </div>
+
+                            </form>
+
+                            <form action="{{url('/update/variable/'.'ER_Hospital_Percentage')}}" method="post" class="option_container">
+                            @csrf
+
+                                <span></span>
+
+                                <div class="option_label_btn_bar">
+
+                                    <div class="patient_form_element_one_is_to_one">
+                                        <label for="value" class="content_container_bg_less_thin text_right">ER Hospital Percentage</label>
+                                        <input class="content_container_bg_less_thin text_center center_element input" type="tel" name="value" value="{{Session::get('ER_Hospital_Percentage')}}" placeholder="%" required>
+                                    </div>
+                                    <button type="submit" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-check-square log_out_btn"></i></button>
+
+                                </div>
+
+                            </form>
+
+                            <form action="{{url('/update/variable/'.'Dental_Hospital_Percentage')}}" method="post" class="option_container">
+                            @csrf
+
+                                <span></span>
+
+                                <div class="option_label_btn_bar">
+
+                                    <div class="patient_form_element_one_is_to_one">
+                                        <label for="value" class="content_container_bg_less_thin text_right">Dental Hospital Percentage</label>
+                                        <input class="content_container_bg_less_thin text_center center_element input" type="tel" name="value" value="{{Session::get('Dental_Hospital_Percentage')}}" placeholder="%" required>
+                                    </div>
+                                    <button type="submit" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-check-square log_out_btn"></i></button>
+
+                                </div>
+
+                            </form>
+
+                            <form action="{{url('/update/variable/'.'Pathology_Hospital_Percentage')}}" method="post" class="option_container">
+                            @csrf
+
+                                <span></span>
+
+                                <div class="option_label_btn_bar">
+
+                                    <div class="patient_form_element_one_is_to_one">
+                                        <label for="value" class="content_container_bg_less_thin text_right">Pathology Hospital Percentage</label>
+                                        <input class="content_container_bg_less_thin text_center center_element input" type="tel" name="value" value="{{Session::get('Pathology_Hospital_Percentage')}}" placeholder="%" required>
+                                    </div>
+                                    <button type="submit" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-check-square log_out_btn"></i></button>
+
+                                </div>
+
+                            </form>
+
+                            <form action="{{url('/update/variable/'.'Physio_Hospital_Percentage')}}" method="post" class="option_container">
+                            @csrf
+
+                                <span></span>
+
+                                <div class="option_label_btn_bar">
+
+                                    <div class="patient_form_element_one_is_to_one">
+                                        <label for="value" class="content_container_bg_less_thin text_right">Physio Hospital Percentage</label>
+                                        <input class="content_container_bg_less_thin text_center center_element input" type="tel" name="value" value="{{Session::get('Physio_Hospital_Percentage')}}" placeholder="%" required>
+                                    </div>
+                                    <button type="submit" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-check-square log_out_btn"></i></button>
+
+                                </div>
+
+                            </form>
+
+                            <form action="{{url('/update/variable/'.'Ligation')}}" method="post" class="option_container">
+                            @csrf
+
+                                <span></span>
+
+                                <div class="option_label_btn_bar">
+
+                                    <div class="patient_form_element_one_is_to_one">
+                                        <label for="value" class="content_container_bg_less_thin text_right">Ligation</label>
+                                        <input class="content_container_bg_less_thin text_center center_element input" type="tel" name="value" value="{{Session::get('Ligation')}}" placeholder="0" required>
+                                    </div>
+                                    <button type="submit" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-check-square log_out_btn"></i></button>
+
+                                </div>
+
+                            </form>
+
+                            <form action="{{url('/update/variable/'.'Third_Seizure')}}" method="post" class="option_container">
+                            @csrf
+
+                                <span></span>
+
+                                <div class="option_label_btn_bar">
+
+                                    <div class="patient_form_element_one_is_to_one">
+                                        <label for="value" class="content_container_bg_less_thin text_right">Third Seizure</label>
+                                        <input class="content_container_bg_less_thin text_center center_element input" type="tel" name="value" value="{{Session::get('Third_Seizure')}}" placeholder="0" required>
+                                    </div>
+                                    <button type="submit" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-check-square log_out_btn"></i></button>
+
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+
                 
                 </div>
 

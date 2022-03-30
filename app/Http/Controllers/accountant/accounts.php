@@ -40,9 +40,25 @@ function set_up_home(Request $request){
 
     $vat = $acc_var->Vat;
     $commission = $acc_var->Commission;
+    $invigilator_fee = $acc_var->Invigilator_Fee;
+    $emergency_fee = $acc_var->Emergency_Fee;
+    $er_hospital_percentage = $acc_var->ER_Hospital_Percentage;
+    $dental_hospital_percentage = $acc_var->Dental_Hospital_Percentage;
+    $pathology_hospital_percentage = $acc_var->Pathology_Hospital_Percentage;
+    $physio_hospital_percentage = $acc_var->Physio_Hospital_Percentage;
+    $ligation = $acc_var->Ligation;
+    $third_seizure = $acc_var->Third_Seizure;
 
     session(['VAT' => $vat]);
     session(['COMMISSION' => $commission]);
+    session(['Invigilator_Fee' => $invigilator_fee]);
+    session(['Emergency_Fee' => $emergency_fee]);
+    session(['ER_Hospital_Percentage' => $er_hospital_percentage]);
+    session(['Dental_Hospital_Percentage' => $dental_hospital_percentage]);
+    session(['Pathology_Hospital_Percentage' => $pathology_hospital_percentage]);
+    session(['Physio_Hospital_Percentage' => $physio_hospital_percentage]);
+    session(['Ligation' => $ligation]);
+    session(['Third_Seizure' => $third_seizure]);
 
     $rest = 100-($vat+$commission);
 
@@ -142,6 +158,50 @@ function set_vat(Request $request){
     $data=array(
 
         'Vat'=>$request->input('vat'),
+        'Updater'=>$acc_id,
+        'Update_Date'=>$request->session()->get('DATE_TODAY')
+
+    );
+
+    DB::table('account_variables')->update($data);
+
+    # Redirecting to [FUNCTION-NO::01].
+    return redirect('/accounts/home/');
+
+}
+
+# End of function set_vat.                                  <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #set_var
+
+
+
+
+#########################
+### FUNCTION-NO::03.5 ###
+#########################
+# Update vat limit;
+# Update will happen on --: TABLE :------ account_variables.
+
+function set_var(Request $request, $hook){
+
+    $acc_id = $request->session()->get('ACC_SESSION_ID');
+    
+    # validating data from form.
+    $request->validate([
+
+        'value'=>'required'
+
+    ]);
+
+    # Getting data from form.
+    $data=array(
+
+        $hook=>$request->input('value'),
         'Updater'=>$acc_id,
         'Update_Date'=>$request->session()->get('DATE_TODAY')
 
@@ -1540,7 +1600,8 @@ function show_all_admitted(Request $request){
 
     $available_data['result']=DB::table('admission_logs')
         ->join('patients', 'admission_logs.P_ID', '=', 'patients.P_ID')
-        ->select('patients.Patient_Name','patients.P_ID', 'patients.Cell_Number', 'admission_logs.Admission_Date', 'admission_logs.A_ID')
+        ->select('patients.Patient_Name','patients.P_ID', 'patients.Cell_Number', 'admission_logs.Admission_Date', 'admission_logs.A_ID', 'admission_logs.Payment_Confirmation')
+        ->where('admission_logs.Payment_Confirmation',null)
         ->orderBy('admission_logs.A_ID','desc')
         ->get();
 
@@ -1570,7 +1631,7 @@ function search_admitted(Request $request){
 
     $available_data['result']=DB::table('admission_logs')
         ->join('patients', 'admission_logs.P_ID', '=', 'patients.P_ID')
-        ->where('patients.Patient_Name','like','%'.$search_key.'%')
+        ->where('patients.P_ID','like','%'.$search_key.'%')
         ->orwhere('patients.Cell_Number','like','%'.$search_key.'%')
         ->select('patients.Patient_Name','patients.P_ID', 'patients.Cell_Number', 'admission_logs.Admission_Date', 'admission_logs.A_ID')
         ->orderBy('admission_logs.A_ID','desc')
@@ -1599,6 +1660,7 @@ function search_admitted(Request $request){
 function release_patient_details(Request $request, $a_id){
 
     date_default_timezone_set('Asia/Dhaka');
+    session(['a_id' => $a_id]);
 
     # getting log data.
     $log_data=DB::table('admission_logs')
@@ -1740,7 +1802,11 @@ function release_patient_details(Request $request, $a_id){
         if($packages!='none'){
 
             $extra_days = $days_from_admission_to_discharge-$current_day_range;
-            $total_bill = $current_package_pricing+($extra_days*$current_normal_pricing);
+            if($extra_days<0){
+                $total_bill = $current_package_pricing;
+            }else{
+                $total_bill = $current_package_pricing+($extra_days*$current_normal_pricing);
+            }
 
             # Stating values and hooks to track.
             if($current_bed_type == "Ward"){
@@ -1756,7 +1822,7 @@ function release_patient_details(Request $request, $a_id){
                 session(['WARD_DAY' => '0']);
                 session(['CABIN_DAY' => $days_from_admission_to_discharge]);
                 session(['Ward_Bill' => '0']);
-                session(['Cabin_Bill' => $total_bill]);;
+                session(['Cabin_Bill' => $total_bill]);
             }
             session(['Total_Bill' => $total_bill]);
 
@@ -1764,6 +1830,22 @@ function release_patient_details(Request $request, $a_id){
 
             $total_bill = $days_from_admission_to_discharge*$current_normal_pricing;
 
+            # Stating values and hooks to track.
+            if($current_bed_type == "Ward"){
+                session(['Pre_bed_type' => 'Cabin']);
+                session(['Cur_bed_type' => $current_bed_type]);
+                session(['WARD_DAY' => $days_from_admission_to_discharge]);
+                session(['CABIN_DAY' => '0']);
+                session(['Cabin_Bill' => '0']);
+                session(['Ward_Bill' => $total_bill]);
+            }else{
+                session(['Pre_bed_type' => 'Ward']);
+                session(['Cur_bed_type' => $current_bed_type]);
+                session(['WARD_DAY' => '0']);
+                session(['CABIN_DAY' => $days_from_admission_to_discharge]);
+                session(['Ward_Bill' => '0']);
+                session(['Cabin_Bill' => $total_bill]);
+            }
             session(['Total_Bill' => $total_bill]);
 
         }
@@ -1916,6 +1998,108 @@ function release_patient_details(Request $request, $a_id){
     }
 
 
+
+
+    # calculating ligation and third seizure bill (if any)
+
+    # ligation
+    if($ligation=='yes'){
+
+        $ligation_bill=$request->session()->get('Ligation');
+        session(['Ligation_Bill' => $ligation_bill]);
+
+    }else{
+
+        session(['Ligation_Bill' => '0']);
+
+    }
+
+    # third_seizure
+    if($third_seizure=='yes'){
+
+        $third_seizure_bill=$request->session()->get('Third_Seizure');
+        session(['Third_Seizure_Bill' => $third_seizure_bill]);
+
+    }else{
+
+        session(['Third_Seizure_Bill' => '0']);
+
+    }
+
+
+
+    # calculating ot related bill
+
+    # getting ot data.
+    $ot_data_existence=DB::table('ot_logs')
+        ->where('A_ID', $a_id)
+        ->value('O_ID');
+
+    if($ot_data_existence!=null){
+
+        # getting ot data.
+        $ot_data=DB::table('ot_logs')
+            ->where('A_ID', $a_id)
+            ->first();
+
+        # data collection.
+        $o_id = $ot_data->O_ID;
+        $ot_total = $ot_data->Total;
+
+        # ot included bills
+        $ot_surgeon_bill=DB::table('surgeon_logs')
+            ->where('O_ID', $o_id)
+            ->sum('Surgeon_Income');
+
+        $ot_anesthesiologist_bill=DB::table('anesthesiologist_logs')
+            ->where('O_ID', $o_id)
+            ->sum('Anesthesiologist_Income');
+
+        $ot_nurses_bill=DB::table('ot_nurses_logs')
+            ->where('O_ID', $o_id)
+            ->sum('Nurse_Fee');
+
+        $ot_assistant_bill=DB::table('ot_assistant_logs')
+            ->where('O_ID', $o_id)
+            ->sum('Assistant_Fee');
+
+
+        # session insert.
+        session(['ot_charge' => $ot_total]);
+        session(['ot_surgeon_bill' => $ot_surgeon_bill]);
+        session(['ot_anesthesiologist_bill' => $ot_anesthesiologist_bill]);
+        session(['ot_nurses_bill' => $ot_nurses_bill]);
+        session(['ot_assistant_bill' => $ot_assistant_bill]);
+
+    }else{
+
+        # session insert.
+        session(['ot_charge' => '0']);
+        session(['ot_surgeon_bill' => '0']);
+        session(['ot_anesthesiologist_bill' => '0']);
+        session(['ot_nurses_bill' => '0']);
+        session(['ot_assistant_bill' => '0']);
+
+    }
+
+
+
+    # calculating other related bill
+
+    # getting others fee.
+    $b_i_others=DB::table('bed_invigilators')
+    ->where('A_ID', $a_id)
+    ->sum('Others_Fee');
+
+    # getting visit fee.
+    $b_i_visits=DB::table('bed_invigilators')
+    ->where('A_ID', $a_id)
+    ->sum('Visit_Charge');
+
+    # session insert.
+    session(['b_i_others' => $b_i_others]);
+    session(['b_i_visits' => $b_i_visits]);
+
     # Redirecting to [FUNCTION-NO::15].
     # return redirect('/reception/ward/male');
 
@@ -1925,6 +2109,185 @@ function release_patient_details(Request $request, $a_id){
 }
 
 # End of function release_patient_details.                  <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::23 ####
+#########################
+# Edit data of selected admitted patients.
+
+function edit_release_patient_details(Request $request, $a_id){
+
+    $ward_tk_eduction = $request->input('ward_tk_eduction');
+    $cabin_tk_eduction = $request->input('cabin_tk_eduction');
+
+    $Ward_Bill = $request->input('Ward_Bill');
+    $Cabin_Bill = $request->input('Cabin_Bill');
+
+    if($ward_tk_eduction<0 || $cabin_tk_eduction<0){
+
+        # Session flash message.
+        $msg = 'Deduction impossible.';
+        $request->session()->flash('msg', $msg);
+
+        # Redirecting to [FUNCTION-NO::22].
+        return redirect('/account/release/patient/details/'.$a_id);
+
+    }else{
+
+        if($ward_tk_eduction == 0){
+
+            $Ward_Bill = $Ward_Bill - $ward_tk_eduction;
+            session(['Ward_Bill' => $Ward_Bill]);
+
+        }if($cabin_tk_eduction == 0){
+
+            $Cabin_Bill = $Cabin_Bill - $cabin_tk_eduction;
+            session(['Cabin_Bill' => $Cabin_Bill]);
+
+        }if($cabin_tk_eduction >= 0 && $ward_tk_eduction >= 0){
+
+            $Ward_Bill = $Ward_Bill - $ward_tk_eduction;
+            $Cabin_Bill = $Cabin_Bill - $cabin_tk_eduction;
+
+            session(['Ward_Bill' => $Ward_Bill]);
+            session(['Cabin_Bill' => $Cabin_Bill]);
+
+        }
+
+    }
+
+    # Returning to the view below.
+    return view('hospital/accounts/release_patient_details');
+
+}
+
+# End of function edit_release_patient_details.             <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #release_patient
+
+
+
+
+#########################
+#### FUNCTION-NO::24 ####
+#########################
+# Release patient;
+# Entry will happen on  --: TABLE :------ hospital_income_log;
+# Entry will happen on  --: TABLE :------ release_logs;
+# Update will happen on --: TABLE :------ admission_logs
+
+function release_patient(Request $request){
+
+    $a_id = $request->input('a_id');
+
+    $Ward_Bill = $request->input('Ward_Bill');
+    $Cabin_Bill = $request->input('Cabin_Bill');
+    $Ligation_Bill = $request->input('Ligation_Bill');
+    $Third_Seizure_Bill = $request->input('Third_Seizure_Bill');
+    $ot_charge = $request->input('ot_charge');
+    $ot_surgeon_bill = $request->input('ot_surgeon_bill');
+    $ot_anesthesiologist_bill = $request->input('ot_anesthesiologist_bill');
+    $ot_nurses_bill = $request->input('ot_nurses_bill');
+    $ot_assistant_bill = $request->input('ot_assistant_bill');
+    $b_i_others = $request->input('b_i_others');
+    $b_i_visits = $request->input('b_i_visits');
+    $total_bill = $request->input('total_bill');
+
+    $Ward_Days = $request->input('Ward_Days');
+    $Cabin_Days = $request->input('Cabin_Days');
+
+    $after_discount = $request->input('estimate');
+    $discount = $request->input('discount');
+    $received = $request->input('received');
+    $change = $request->input('change');
+
+    $Confirmation_msg = 'Total: '.$total_bill.', after discount ('.$discount.')% paid: .'.$after_discount;
+
+
+    # Generating message.
+    $message='Patient release and collected Bed bills: '.$Ward_Bill+$Cabin_Bill.', OT charge: '.$ot_charge.'. By: '.$request->session()->get('ACC_SESSION_ID');
+
+    # Log entry on hospital balance log.
+    $hospital_income_logs=array(
+        'Message'=>$message,
+        'Debit'=>0,
+        'Credit'=>$Ward_Bill+$Cabin_Bill+$ot_charge,
+        'Vat'=>0,
+        'Service_Charge'=>0,
+        'Total_Income'=>$Ward_Bill+$Cabin_Bill+$ot_charge,
+        'Credit_Type'=>'Patient release',
+        'Entry_Date'=>$request->session()->get('DATE_TODAY'),
+        'Entry_Time'=>date("H:i:s"),
+        'Entry_Year'=>date("Y"),
+        'User_ID'=>$request->session()->get('ACC_SESSION_ID')
+    );
+
+    # Insert hospital log.
+    DB::table('hospital_income_log')
+        ->insert($hospital_income_logs);
+
+    # Log update on admission table.
+    $admission_update=array(
+        'Ward_Days'=>$Ward_Days,
+        'Cabin_Days'=>$Cabin_Days,
+        'Payment_Confirmation'=>$Confirmation_msg,
+        'Bed_Bill'=>$Ward_Bill+$Cabin_Bill,
+        'Discount'=>$discount,
+        'Discharge_Date'=>$request->session()->get('DATE_TODAY'),
+        'Discharge_Timestamp'=>date('Y-m-d H:i:s')
+    );
+
+    # Update admission log.
+    DB::table('admission_logs')
+        ->where('A_ID',$a_id)
+        ->update($admission_update);
+
+    # Log entry on release log.
+    $release_logs=array(
+        'A_ID'=>$a_id,
+        'Ward_Bill'=>$Ward_Bill,
+        'Cabin_Bill'=>$Cabin_Bill,
+        'Ligation_Bill'=>$Ligation_Bill,
+        'Third_Seizure_Bill'=>$Third_Seizure_Bill,
+        'OT_Bill'=>$ot_charge,
+        'Surgeon_Bill'=>$ot_surgeon_bill,
+        'Anesthesia_Bill'=>$ot_anesthesiologist_bill,
+        'Nurses_Bill'=>$ot_nurses_bill,
+        'Assistant_Bill'=>$ot_assistant_bill,
+        'Other_Bill'=>$b_i_others,
+        'Visiting_Bill'=>$b_i_visits,
+        'Total_Bill'=>$total_bill,
+        'Discount'=>$discount,
+        'Estimate'=>$after_discount,
+        'Received'=>$received,
+        'Changes'=>$change
+    );
+
+    # Insert hospital log.
+    DB::table('release_logs')
+        ->insert($release_logs);
+
+    # Session flash message.
+    $msg = 'Patient released successfully.';
+    $request->session()->flash('msg', $msg);
+
+    # Redirecting to [FUNCTION-NO::].
+    return redirect('/accounts/release/slips/');
+
+}
+
+# End of function release_patient.                        <-------#
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: 
@@ -2159,8 +2522,13 @@ function log_browsing(Request $request){
             ->where($logs_hook,'>','0')
             ->get();
 
+        $total_of_data=DB::table('hospital_income_log')
+            ->where($logs_hook,'>','0')
+            ->sum($logs_hook);
+
         session(['tp' => '1']);
         session(['lg' => $logs_hook]);
+        session(['total_of_data' => $total_of_data]);
 
     }else{
 
@@ -2168,7 +2536,12 @@ function log_browsing(Request $request){
             ->where('Log_Genre',$logs_hook)
             ->get();
 
+        $total_of_data=DB::table('transaction_logs')
+            ->where('Log_Genre',$logs_hook)
+            ->sum('Log_Amount');
+
         session(['tp' => '2']);
+        session(['total_of_data' => $total_of_data]);
 
     }
 
@@ -2213,7 +2586,13 @@ function log_filtering(Request $request){
             ->whereBetween('Entry_Date', [$from, $to])
             ->get();
 
+        $total_of_data=DB::table('hospital_income_log')
+            ->where($logs_hook,'>','0')
+            ->whereBetween('Entry_Date', [$from, $to])
+            ->sum($logs_hook);
+
         session(['tp' => '1']);
+        session(['total_of_data' => $total_of_data]);
 
     }else{
 
@@ -2222,7 +2601,13 @@ function log_filtering(Request $request){
             ->whereBetween('Log_Date', [$from, $to])
             ->get();
 
+        $total_of_data=DB::table('transaction_logs')
+            ->where('Log_Genre',$logs_hook)
+            ->whereBetween('Log_Date', [$from, $to])
+            ->sum('Log_Amount');
+
         session(['tp' => '2']);
+        session(['total_of_data' => $total_of_data]);
 
     }
 

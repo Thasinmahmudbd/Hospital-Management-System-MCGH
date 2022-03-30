@@ -96,6 +96,11 @@
     grid-gap:16px;
 }
 
+.grid_free_two_col{
+    grid-column-start: 0;
+    grid-column-end: 2;
+}
+
 
 
 /* doctor's list */
