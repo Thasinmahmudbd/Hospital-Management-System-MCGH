@@ -1243,3 +1243,50 @@ Route::group(['middleware'=>['nurseAuth']],function() {
 
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+# Admin [CONTROLLER::admin.php], [MIDDLEWARE::AdminLoginAuth.php].
+Route::group(['middleware'=>['adminAuth']],function() {
+
+    ##############################################################################################################################################
+    # Admin Profile.  [C::admin.php]
+    ##############################################################################################################################################
+
+    # Going to home with home set-up.
+    # Redirecting to [FUNCTION-NO::01]---in-controller.
+    Route::get('/admin/home/','App\Http\Controllers\admin\admin@set_up_home');
+
+    # setting commission limit.
+    # Redirecting to [FUNCTION-NO::02]---in-controller.
+    #Route::post('/update/commission/','App\Http\Controllers\accountant\accounts@set_commission');
+
+    # setting vat limit.
+    # Redirecting to [FUNCTION-NO::03]---in-controller.
+    #Route::post('/update/vat/','App\Http\Controllers\accountant\accounts@set_vat');
+
+    # setting variables.
+    # Redirecting to [FUNCTION-NO::03.5]---in-controller.
+    #Route::post('/update/variable/{hook}','App\Http\Controllers\accountant\accounts@set_var');
+
+
+
+
+
+
+
+
+
+
+
+
+});

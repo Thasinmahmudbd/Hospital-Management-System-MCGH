@@ -63,6 +63,10 @@ class Kernel extends HttpKernel
         'nurseAuth' => [
             \App\Http\Middleware\NurseLoginAuth::class,
         ],
+
+        'adminAuth' => [
+            \App\Http\Middleware\AdminLoginAuth::class,
+        ],
     ];
 
     /**

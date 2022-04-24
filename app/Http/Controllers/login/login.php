@@ -31,6 +31,8 @@ class login extends Controller
 
                     $request->session()->forget('NRS_SESSION_ID');
 
+                    $request->session()->forget('ADMIN_SESSION_ID');
+
                     $request->session()->put('REC_SESSION_ID',$result[0]->Emp_ID);
 
                     return redirect('/reception/home/');
@@ -45,6 +47,8 @@ class login extends Controller
                     $request->session()->forget('OTO_SESSION_ID');
 
                     $request->session()->forget('NRS_SESSION_ID');
+
+                    $request->session()->forget('ADMIN_SESSION_ID');
 
                     $request->session()->put('DOC_SESSION_ID',$result[0]->Emp_ID);
 
@@ -61,6 +65,8 @@ class login extends Controller
 
                     $request->session()->forget('NRS_SESSION_ID');
 
+                    $request->session()->forget('ADMIN_SESSION_ID');
+
                     $request->session()->put('ACC_SESSION_ID',$result[0]->Emp_ID);
 
                     return redirect('/accounts/home/');
@@ -75,6 +81,8 @@ class login extends Controller
                     $request->session()->forget('ACC_SESSION_ID');
 
                     $request->session()->forget('NRS_SESSION_ID');
+
+                    $request->session()->forget('ADMIN_SESSION_ID');
 
                     $request->session()->put('OTO_SESSION_ID',$result[0]->Emp_ID);
 
@@ -91,9 +99,28 @@ class login extends Controller
 
                     $request->session()->forget('OTO_SESSION_ID');
 
+                    $request->session()->forget('ADMIN_SESSION_ID');
+
                     $request->session()->put('NRS_SESSION_ID',$result[0]->Emp_ID);
 
                     return redirect('/nurse/home/');
+                }
+
+                if($token=='AD' || $token=='ad'){
+
+                    $request->session()->forget('REC_SESSION_ID');
+
+                    $request->session()->forget('DOC_SESSION_ID');
+
+                    $request->session()->forget('ACC_SESSION_ID');
+
+                    $request->session()->forget('OTO_SESSION_ID');
+
+                    $request->session()->forget('NRS_SESSION_ID');
+
+                    $request->session()->put('ADMIN_SESSION_ID',$result[0]->Emp_ID);
+
+                    return redirect('/admin/home/');
                 }
 
 

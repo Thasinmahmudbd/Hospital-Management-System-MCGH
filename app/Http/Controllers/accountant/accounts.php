@@ -18,7 +18,7 @@ class accounts extends Controller
 #### FUNCTION-NO::01 ####
 #########################
 # Sets up required items before loading account home page;
-# Stored data in 11 sessions.
+# Stored data in 21 sessions.
 
 function set_up_home(Request $request){
 

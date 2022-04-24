@@ -674,3 +674,24 @@
     color:#74B498/*rgb(106, 63, 226)*/;
     font-weight: bold;
 }
+
+
+/* admin */
+
+.dashboard_grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    align-items: center;
+}
+
+.dashboard_panels{
+    display: grid;
+    grid-template-columns: 1fr 40px 40px 40px 40px;
+    gap: 10px;
+    align-items: center;
+}
+
+.disBlock{
+    align-self: start;
+}
