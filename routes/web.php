@@ -912,7 +912,7 @@ Route::group(['middleware'=>['accountantAuth']],function() {
     # Redirecting to [FUNCTION-NO::]---in-controller.
     Route::get('/accounts/log/','App\Http\Controllers\accountant\accounts@log_browsing');
 
-    # Inserts other log.
+    # Filters logs.
     # Redirecting to [FUNCTION-NO::]---in-controller.
     Route::post('/account/log/filter','App\Http\Controllers\accountant\accounts@log_filtering');
 
@@ -1277,6 +1277,18 @@ Route::group(['middleware'=>['adminAuth']],function() {
     # setting variables.
     # Redirecting to [FUNCTION-NO::03.5]---in-controller.
     #Route::post('/update/variable/{hook}','App\Http\Controllers\accountant\accounts@set_var');
+
+    ##############################################################################################################################################
+    # Logs.  [C::accounts.php]
+    ##############################################################################################################################################
+
+    # Going to logs.
+    # Redirecting to [FUNCTION-NO::]---in-controller.
+    Route::get('/admin/log/','App\Http\Controllers\accountant\accounts@log_browsing');
+
+    # Filters logs.
+    # Redirecting to [FUNCTION-NO::]---in-controller.
+    Route::post('/admin/log/filter','App\Http\Controllers\accountant\accounts@log_filtering');
 
 
 

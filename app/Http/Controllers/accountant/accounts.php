@@ -18,7 +18,7 @@ class accounts extends Controller
 #### FUNCTION-NO::01 ####
 #########################
 # Sets up required items before loading account home page;
-# Stored data in 21 sessions.
+# Stored data in 22 sessions.
 
 function set_up_home(Request $request){
 
@@ -76,6 +76,8 @@ function set_up_home(Request $request){
     session(['pay_salary_person' => 'Doctors']);
 
     session(['logs_hook' => 'Credit']);
+
+    $request->session()->put('log_access_type','accounts');
 
     # Returning to the view below.
     return view('hospital/accounts/home');
@@ -2545,8 +2547,20 @@ function log_browsing(Request $request){
 
     }
 
-    # Returning to the view below.
-    return view('hospital/accounts/logs',$available_data);
+    // check log access type
+    $log_access_type = $request->session()->get('log_access_type');
+
+    if($log_access_type=="accounts"){
+
+        # Returning to the view below.
+        return view('hospital/accounts/logs',$available_data);
+
+    }else{
+
+        # Returning to the view below.
+        return view('hospital/admin/logs',$available_data);
+
+    }
 
 }
 
@@ -2570,12 +2584,23 @@ function log_filtering(Request $request){
     $from = $request->input('search_from');
     $to = $request->input('search_to');
     $logs_hook = $request->input('type');
+    $log_access_type = $request->session()->get('log_access_type');
     session(['logs_hook' => $logs_hook]);
 
     if($from==null || $to==null){
 
-        # Redirecting to [FUNCTION-NO::].
-        return redirect('/accounts/log/');
+        // check log access type
+        if($log_access_type=="accounts"){
+
+            # Redirecting to [FUNCTION-NO::].
+            return redirect('/accounts/log/');
+    
+        }else{
+    
+            # Redirecting to [FUNCTION-NO::].
+            return redirect('/admin/log/');
+    
+        }
 
     }
 
@@ -2611,8 +2636,18 @@ function log_filtering(Request $request){
 
     }
 
-    # Returning to the view below.
-    return view('hospital/accounts/logs',$available_data);
+    // check log access type
+    if($log_access_type=="accounts"){
+
+        # Returning to the view below.
+        return view('hospital/accounts/logs',$available_data);
+
+    }else{
+
+        # Returning to the view below.
+        return view('hospital/admin/logs',$available_data);
+
+    }
 
 }
 

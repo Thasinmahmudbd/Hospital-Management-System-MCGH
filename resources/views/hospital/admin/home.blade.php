@@ -35,9 +35,16 @@
 @section('links')
 
 <li class="link_item">
-    <a href="{{url('/accounts/home/')}}" class="link">
-        <i class="link_icons fas fa-user-md"></i>
+    <a href="{{url('/admin/home/')}}" class="link">
+        <i class="link_icons fas fa-th"></i>
         <span class="link_name"> Dashboard </span>
+    </a>
+</li>
+
+<li class="link_item">
+    <a href="{{url('/admin/log/')}}" class="link">
+        <i class="link_icons fas fa-clipboard-list"></i>
+        <span class="link_name"> Logs </span>
     </a>
 </li>
 
@@ -55,7 +62,8 @@
 @section('mobile_links')
 
 <div id="myLinks" class="mobile_links">
-    <a class="mobile_link" href="{{url('/accounts/home/')}}">Dashboard</a>
+    <a class="mobile_link" href="{{url('/admin/home/')}}">Dashboard</a>
+    <a class="mobile_link" href="{{url('/admin/log/')}}">Logs</a>
 </div>
 
 @endsection
@@ -177,7 +185,20 @@
 
                     </div>
 
-                <div>
+                </div>
+
+
+
+                <div class="purple_line"></div>
+                <div class="gap"></div>
+
+
+
+                <div class="content_container_bg_less_thin disBlock">
+                    <b>Registered Patient Count</b>
+                    <p>Outdoor patients  :------ </p>
+                    <p>Admitted patients :----- </p>
+                </div>
 
 
 

@@ -17,7 +17,7 @@ class admin extends Controller
 #### FUNCTION-NO::01 ####
 #########################
 # Sets up required items before loading admin home page;
-# Stored data in 19 sessions.
+# Stored data in 20 sessions.
 
 function set_up_home(Request $request){
 
@@ -72,6 +72,8 @@ function set_up_home(Request $request){
 
     $request->session()->put('DATE_TODAY',$date);
     $request->session()->put('DAY_TODAY',$day);
+
+    $request->session()->put('log_access_type','admin');
 
     # Returning to the view below.
     return view('hospital/admin/home');
