@@ -87,4 +87,46 @@ function set_up_home(Request $request){
 # This will be updated in the future.
 # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::02 ####
+#########################
+# Shows doctor list.
+
+function doctor_list_browse(Request $request){
+
+    $available_data['result']=DB::table('doctors')
+        ->join('logins', 'doctors.D_ID', '=', 'logins.Emp_ID')
+        ->select('doctors.*','logins.status')
+        ->orderBy('doctors.AI_ID','asc')
+        ->get();
+
+    $request->session()->put('INVOICE','0');
+
+    # Returning to the view below.
+    return view('hospital/admin/doctor_list', $available_data);
+
+}
+
+# End of function doctor_list_browse.                       <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+
+
+
+
+
+
+
 }

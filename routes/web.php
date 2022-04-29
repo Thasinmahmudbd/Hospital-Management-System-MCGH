@@ -1290,6 +1290,22 @@ Route::group(['middleware'=>['adminAuth']],function() {
     # Redirecting to [FUNCTION-NO::]---in-controller.
     Route::post('/admin/log/filter','App\Http\Controllers\accountant\accounts@log_filtering');
 
+    ##############################################################################################################################################
+    # Doctors.  [C::admin.php]
+    ##############################################################################################################################################
+
+    # Going to doctor's list.
+    # Redirecting to [FUNCTION-NO::02]---in-controller.
+    Route::get('/admin/doctor/list','App\Http\Controllers\admin\admin@doctor_list_browse');
+
+    # Registering new doctor.
+    # Redirecting to [FUNCTION-NO::03]---in-controller.
+    Route::post('/admin/doctor/add','App\Http\Controllers\admin\admin@doctor_insert');
+
+    # Searching doctor.
+    # Redirecting to [FUNCTION-NO::04]---in-controller.
+    Route::post('/admin/doctor/search','App\Http\Controllers\admin\admin@doctor_search');
+
 
 
 

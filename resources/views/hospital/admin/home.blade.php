@@ -48,6 +48,13 @@
     </a>
 </li>
 
+<li class="link_item">
+    <a href="{{url('/admin/doctor/list')}}" class="link">
+        <i class="link_icons fas fa-user-md"></i>
+        <span class="link_name"> Doctors </span>
+    </a>
+</li>
+
 @endsection
 
 <!--------------------link end---------------------->
@@ -64,6 +71,7 @@
 <div id="myLinks" class="mobile_links">
     <a class="mobile_link" href="{{url('/admin/home/')}}">Dashboard</a>
     <a class="mobile_link" href="{{url('/admin/log/')}}">Logs</a>
+    <a class="mobile_link" href="{{url('/admin/doctor/list')}}">Doctors</a>
 </div>
 
 @endsection
@@ -101,8 +109,8 @@
 
                         <div class="dashboard_panels">
                             <p class="content_container_white_thin text_left">Doctors: </p>
-                            <div type="submit" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-eye log_out_btn text_center"></i></div>
-                            <div type="submit" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-plus log_out_btn text_center"></i></div>
+                            <a href="{{url('/admin/doctor/list')}}" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-eye log_out_btn text_center"></i></a>
+                            <a href="{{url('/admin/doctor/add')}}" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-plus log_out_btn text_center"></i></a>
                         </div>
 
                         <div class="dashboard_panels">
