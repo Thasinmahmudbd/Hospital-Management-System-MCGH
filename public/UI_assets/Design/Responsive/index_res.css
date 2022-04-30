@@ -15,6 +15,15 @@
         margin-bottom:15vh;
     }
 
+    .landing_page_art{
+        pointer-events: none;
+    }
+
+    .text_box_container{
+        left:50px;
+        right:50px;
+    }
+
 }
 
 /* for mobile width = 500px */
@@ -29,6 +38,10 @@
     .footer{
         font-size: .8rem;
         padding:10px;
+    }
+
+    .landing_page_art{
+        opacity: 0;
     }
 
 }

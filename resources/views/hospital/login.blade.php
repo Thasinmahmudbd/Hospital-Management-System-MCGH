@@ -39,16 +39,47 @@
 </head>
 
 
-<body>
+<body class="login_slider">
 
-    <h1 class="text">Moynamoti Cantonment General Hospital, Web Portal.</h1>
+    <span class="fader"></span>
+
+    <h1 class="text">Mainamati Cantonment General Hospital, Web Portal.</h1>
 
     <div class="landing_page_container">
 
         <!--art-->
         <div class="landing_page_art">
 
-            <img src="{{url('UI_assets/Media/Images/Template_Images/hospital/HOSPITAL.png')}}" alt="" width="100%">
+            <img class="clip_art" src="{{url('UI_assets/Media/Images/Template_Images/hospital/HOSPITAL.png')}}" alt="" width="100%">
+
+            <div class="text_box_container">
+
+                <h1 class="text_box_header">Login requirements</h1>
+
+                <p class="text_box">To login insert your <b>Unique ID</b> & <b>Password</b>. If you don't have one contact with an admin to get registered in the system.</p>
+
+                <br>
+
+                <h2 class="text_box_header2">Common questions</h2>
+
+                <p class="text_box"><b class="Q">Q</b> I am a registered user, so why does it say <b class="alert">Account Deactivated</b> when I try to log in?</p>
+
+                <p class="text_box"><b class="A">A</b> It seems you are blocked from using the system. Contact the admin to get a better understanding of the situation.</p>
+
+                <p class="text_box"><b class="Q">Q</b> Should I share my password with another employee?</p>
+
+                <p class="text_box"><b class="A">A</b> Sharing your login information is highly risky & will cause you trouble in the future.</p>
+
+                <br>
+
+                <h2 class="text_box_header2">Disadvantages of sharing passwords</h2>
+
+                <ul>
+                    <li class="text_list">Password repetition is the use of the same password for separate accounts.</li>
+                    <li class="text_list">Sharing a repeated password increases your danger of becoming a victim of identity theft.</li>
+                </ul>
+
+            </div>
 
         </div>
 

@@ -14,6 +14,63 @@ body{
 .landing_page_art{
     align-self: center;
     justify-self: center;
+    position: relative;
+}
+
+.clip_art{
+    opacity: 0;
+}
+
+.text_box_container{
+    position: absolute;
+    top: 170px;
+    left:200px;
+}
+
+.text_box_header{
+    color: #fff;
+    font-size: 1.5rem;
+    text-align: right;
+    border-bottom: 2px solid #fff;
+}
+
+.text_box_header2{
+    color: #fff;
+    font-size: 1.2rem;
+    text-align: left;
+}
+
+.text_box{
+    color: #fff;
+    font-size: 1rem;
+    text-align: justify;
+}
+
+.text_list{
+    color: #fff;
+    font-size: 1rem;
+    text-align: left;
+    list-style-position: inside;
+    margin-left: 20px;
+}
+
+.alert{
+    background-color: rgba(233, 53, 53, 0.76);
+    color: #fff;
+}
+
+.Q{
+    background-color: #beae1b;
+    padding: 0px 5px;
+    color: #fff;
+    border-radius: 50%;
+}
+
+.A{
+    background-color: #1cbf88;
+    padding: 0px 5px;
+    color: #fff;
+    border-radius: 50%;
 }
 
 .login_form{
@@ -45,4 +102,105 @@ body{
     background-color: #5C8D89;/*rgb(106, 63, 226);*/
     padding:16px;
     width:100%;
+}
+
+/* slider */
+
+.login_slider{
+    background-image: url(../../Media/Images/Template_Images/system/slider/1.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    object-fit: cover;
+    animation-name: slide;
+    animation-iteration-count: infinite;
+    animation-duration: 20000ms;
+}
+
+@keyframes slide{
+    0%{
+        background-image: url(../../Media/Images/Template_Images/system/slider/1.jpg);
+    }
+
+    25%{
+        background-image: url(../../Media/Images/Template_Images/system/slider/2.jpg);
+    }
+
+    50%{
+        background-image: url(../../Media/Images/Template_Images/system/slider/3.jpg);
+    }
+
+    75%{
+        background-image: url(../../Media/Images/Template_Images/system/slider/4.jpg);
+    }
+
+    100%{
+        background-image: url(../../Media/Images/Template_Images/system/slider/1.jpg);
+    }
+}
+
+.fader::after{
+    content:"";
+    background-color: #5C8D89;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    z-index: -2;
+    animation-name: fade;
+    animation-iteration-count: infinite;
+    animation-duration: 20000ms;
+    transition: 300ms ease-in-out;
+}
+
+@keyframes fade{
+    0%{
+        opacity: 0;
+        transition: 300ms ease-in-out;
+    }
+    10%{
+        opacity: 1;
+        transition: 300ms ease-in-out;
+    }
+
+    25%{
+        opacity: 0;
+        transition: 300ms ease-in-out;
+    }
+    35%{
+        opacity: 1;
+        transition: 300ms ease-in-out;
+    }
+
+    50%{
+        opacity: 0;
+        transition: 300ms ease-in-out;
+    }
+    60%{
+        opacity: 1;
+        transition: 300ms ease-in-out;
+    }
+
+    75%{
+        opacity: 0;
+        transition: 300ms ease-in-out;
+    }
+    85%{
+        opacity: 1;
+        transition: 300ms ease-in-out;
+    }
+
+    100%{
+        opacity: 0;
+        transition: 300ms ease-in-out;
+    }
+}
+
+
+.fader::before{
+    content:"";
+    background-color: #000000a5;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    z-index: -1;
 }
