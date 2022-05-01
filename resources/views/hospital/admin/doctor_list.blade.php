@@ -150,25 +150,25 @@
 
                         @if($list->status=='1')
                         <td class="frame_action" data-label="Action">
-                            <a target="blank" href="{{url('/admin/doctor/block'.$list->AI_ID)}}">
+                            <a href="{{url('/admin/account/block/'.$list->D_ID)}}">
                                 <i class="table_btn_red fas fa-pause-circle"></i>
                             </a>
                         </td>
                         @else
                         <td class="frame_action" data-label="Action">
-                            <a target="blank" href="{{url('/admin/doctor/unblock'.$list->AI_ID)}}">
+                            <a href="{{url('/admin/account/unblock/'.$list->D_ID)}}">
                                 <i class="table_btn fas fa-play-circle"></i>
                             </a>
                         </td>
                         @endif
 
                         <td class="frame_action" data-label="Action">
-                            <a target="blank" href="{{url('/admin/doctor/edit'.$list->AI_ID)}}">
+                            <a href="{{url('/admin/doctor/edit'.$list->AI_ID)}}">
                                 <i class="fas fa-pen table_btn_yellow"></i>
                             </a>
                         </td>
                         <td class="frame_action" data-label="Action">
-                            <a target="blank" href="{{url('/admin/doctor/delete'.$list->AI_ID)}}">
+                            <a href="{{url('/admin/doctor/delete'.$list->AI_ID)}}">
                                 <i class="fas fa-minus-circle table_btn_red"></i>
                             </a>
                         </td>
@@ -253,25 +253,25 @@
 
                         @if($list->status=='1')
                         <td class="frame_action" data-label="Action">
-                            <a target="blank" href="{{url('/admin/doctor/block'.$list->AI_ID)}}">
+                            <a href="{{url('/admin/account/block/'.$list->D_ID)}}">
                                 <i class="table_btn_red fas fa-pause-circle"></i>
                             </a>
                         </td>
                         @else
                         <td class="frame_action" data-label="Action">
-                            <a target="blank" href="{{url('/admin/doctor/unblock'.$list->AI_ID)}}">
+                            <a href="{{url('/admin/account/unblock/'.$list->D_ID)}}">
                                 <i class="table_btn fas fa-play-circle"></i>
                             </a>
                         </td>
                         @endif
 
                         <td class="frame_action" data-label="Action">
-                            <a target="blank" href="{{url('/admin/doctor/edit'.$list->AI_ID)}}">
+                            <a href="{{url('/admin/doctor/edit'.$list->AI_ID)}}">
                                 <i class="fas fa-pen table_btn_yellow"></i>
                             </a>
                         </td>
                         <td class="frame_action" data-label="Action">
-                            <a target="blank" href="{{url('/admin/doctor/delete'.$list->AI_ID)}}">
+                            <a href="{{url('/admin/doctor/delete'.$list->AI_ID)}}">
                                 <i class="fas fa-minus-circle table_btn_red"></i>
                             </a>
                         </td>

@@ -17,6 +17,7 @@
     <!--global design-->
     <link rel="stylesheet" href="{{ asset('UI_assets/Design/Global/global_design.css') }}">
     <link rel="stylesheet" href="{{ asset('UI_assets/Design/Global/form_design.css') }}">
+    <link rel="stylesheet" href="{{ asset('UI_assets/Design/Global/graph_design.css') }}">
 
     <!--basic design-->
     <link rel="stylesheet" href="{{ asset('UI_assets/Design/Basic/reception_design.css') }}">
@@ -36,6 +37,7 @@
     <script src="{{ asset('UI_assets/Javascript/triggerClick.js') }}"></script>
     <script src="{{ asset('UI_assets/Javascript/calc.js') }}"></script>
     <script src="{{ asset('UI_assets/Javascript/autoFill.js') }}"></script>
+    <script src="{{ asset('UI_assets/Javascript/swapFields.js') }}"></script>
 	<script src="{{ asset('UI_assets/Javascript/fontawesome.min.js') }}"></script>
     
     <script type="text/javascript">

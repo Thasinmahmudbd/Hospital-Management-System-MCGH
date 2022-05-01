@@ -1,0 +1,94 @@
+.graph{
+    display:grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1rem;
+    padding: 10px 16px 16px 16px;
+    margin-bottom:16px;
+    border-radius: 0%;
+    position: relative;
+}
+
+.graph_bar_title{
+    background-color: #eeefff;
+    text-align: center;
+}
+
+.graph_bar{
+    display:grid;
+    grid-template-rows: repeat(10, 1fr);
+    height: 150px;
+    margin: 5px 20px;
+}
+
+.graph_bar_sec{
+    height: 10px;
+    width: 50%;
+    margin: auto;
+    margin-bottom: 5px;
+}
+
+.graph_bar_sec:nth-child(1){
+    background-color: #5C8D89;
+}
+
+.graph_bar_sec:nth-child(2){
+    background-color: #5c8d89e9;
+}
+
+.graph_bar_sec:nth-child(3){
+    background-color: #5c8d89de;
+}
+
+.graph_bar_sec:nth-child(4){
+    background-color: #5c8d89d3;
+}
+
+.graph_bar_sec:nth-child(5){
+    background-color: #5c8d89c7;
+}
+
+.graph_bar_sec:nth-child(6){
+    background-color: #5c8d89be;
+}
+
+.graph_bar_sec:nth-child(7){
+    background-color: #5c8d89b0;
+}
+
+.graph_bar_sec:nth-child(8){
+    background-color: #5c8d89a2;
+}
+
+.graph_bar_sec:nth-child(9){
+    background-color: #5c8d8995;
+}
+
+.graph_bar_sec:nth-child(10){
+    background-color: #5c8d8986;
+}
+
+.graph_bar_sec_dud{
+    height: 10px;
+    width: 50%;
+    margin: auto;
+    margin-bottom: 5px;
+    background-color: #eeefff;
+}
+
+.popMsg{
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: max-content;
+    background-color: #5C8D89;
+    color: #fff;
+    font-size: .8rem;
+    font-weight: bold;
+    padding: .5rem;
+    z-index: 5;
+    display: none;
+}
+
+.popMsgContainer:hover .popMsg{
+    display: block;
+}

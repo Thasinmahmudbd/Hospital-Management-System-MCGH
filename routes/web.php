@@ -1291,21 +1291,36 @@ Route::group(['middleware'=>['adminAuth']],function() {
     Route::post('/admin/log/filter','App\Http\Controllers\accountant\accounts@log_filtering');
 
     ##############################################################################################################################################
+    # Account block/unblock.  [C::admin.php]
+    ##############################################################################################################################################
+
+    # Block account.
+    # Redirecting to [FUNCTION-NO::02]---in-controller.
+    Route::get('/admin/account/block/{emp_id}','App\Http\Controllers\admin\admin@block_account');
+
+    # Unblock account.
+    # Redirecting to [FUNCTION-NO::03]---in-controller.
+    Route::get('/admin/account/unblock/{emp_id}','App\Http\Controllers\admin\admin@unblock_account');
+
+    ##############################################################################################################################################
+    # Employee add form.  [C::admin.php]
+    ##############################################################################################################################################
+
+    # Going to insert new employee info form view.
+    # Redirecting to [FUNCTION-NO::04]---in-controller.
+    Route::get('/admin/doctor/add','App\Http\Controllers\admin\admin@employee_add_form');
+
+    ##############################################################################################################################################
     # Doctors.  [C::admin.php]
     ##############################################################################################################################################
 
     # Going to doctor's list.
-    # Redirecting to [FUNCTION-NO::02]---in-controller.
+    # Redirecting to [FUNCTION-NO::05]---in-controller.
     Route::get('/admin/doctor/list','App\Http\Controllers\admin\admin@doctor_list_browse');
 
-    # Registering new doctor.
-    # Redirecting to [FUNCTION-NO::03]---in-controller.
-    Route::post('/admin/doctor/add','App\Http\Controllers\admin\admin@doctor_insert');
-
     # Searching doctor.
-    # Redirecting to [FUNCTION-NO::04]---in-controller.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
     Route::post('/admin/doctor/search','App\Http\Controllers\admin\admin@doctor_search');
-
 
 
 

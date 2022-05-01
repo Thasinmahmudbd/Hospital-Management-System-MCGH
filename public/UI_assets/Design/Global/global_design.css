@@ -119,3 +119,21 @@ p{
     background-color: #383b3b;
 }
 
+.redTxt{
+    background-color:rgba(230, 20, 20, 0.76);
+    color: #fff;
+    padding: 0px 5px;
+}
+
+.greenTxt{
+    background-color:rgba(9, 163, 43, 0.76);
+    color: #fff;
+    padding: 0px 5px;
+}
+
+.yellowTxt{
+    background-color:rgba(222, 148, 10, 0.76);
+    color: #fff;
+    padding: 0px 5px;
+}
+
