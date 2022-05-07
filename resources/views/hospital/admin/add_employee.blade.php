@@ -70,7 +70,7 @@
 
                 <!--admit patients-->
 
-                <form action="{{url('/reception/submit_admit_patient_info')}}" class="patient_info_form" method="post">
+                <form action="{{url('/admin/employee/add')}}" class="patient_info_form" method="post">
                 @csrf
 
                     <p>Basic Info</p>
@@ -79,10 +79,21 @@
 
                         <div class="patient_form_element_one_is_to_one">
 
-                            <div class="patient_form_element">
+                            <div class="patient_form_element_three_is_to_one">
 
-                                <label for="pre_village" class="label">Name</label>
-                                <input type="text" class="input" name="name" required>
+                                <div class="patient_form_element">
+
+                                    <label for="name" class="label">Name</label>
+                                    <input type="text" class="input" name="name" required>
+
+                                </div>
+
+                                <div class="patient_form_element">
+
+                                    <label for="pass" class="label">Password</label>
+                                    <input type="password" class="input" name="password" value="" required>
+
+                                </div>
 
                             </div>
 
@@ -133,7 +144,7 @@
                                         
                                     <div class="patient_form_element_one_is_to_btn">
 
-                                        <select name="specialty" id="specialty" class="input" required>
+                                        <select name="specialty" id="specialty" class="input">
                                             @foreach($specialty as $list)
                                             <option value="{{$list->Specialty}}">{{$list->Specialty}}</option>    
                                             @endforeach
@@ -165,7 +176,7 @@
                                         
                                     <div class="patient_form_element_one_is_to_btn">
 
-                                        <select name="department" id="department" class="input" required>
+                                        <select name="department" id="department" class="input">
                                             @foreach($department as $list)
                                             <option value="{{$list->Department}}">{{$list->Department}}</option>    
                                             @endforeach
@@ -219,7 +230,7 @@
 
                     <div class="patient_form_element">
 
-                        <input type="submit" class="btn patient_form_btn form_btn"  value="Select Consultant" name="select_consultant">
+                        <input type="submit" class="btn patient_form_btn form_btn"  value="Enlist Employee" name="submit">
 
                     </div>
 

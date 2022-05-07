@@ -1308,14 +1308,18 @@ Route::group(['middleware'=>['adminAuth']],function() {
 
     # Going to insert new employee info form view.
     # Redirecting to [FUNCTION-NO::04]---in-controller.
-    Route::get('/admin/doctor/add','App\Http\Controllers\admin\admin@employee_add_form');
+    Route::get('/admin/employee/add/form','App\Http\Controllers\admin\admin@employee_add_form');
+
+    # Going to insert new employee info form view.
+    # Redirecting to [FUNCTION-NO::]---in-controller.
+    Route::post('/admin/employee/add','App\Http\Controllers\admin\admin@employee_add');
 
     ##############################################################################################################################################
     # Doctors.  [C::admin.php]
     ##############################################################################################################################################
 
     # Going to doctor's list.
-    # Redirecting to [FUNCTION-NO::05]---in-controller.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
     Route::get('/admin/doctor/list','App\Http\Controllers\admin\admin@doctor_list_browse');
 
     # Searching doctor.

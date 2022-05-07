@@ -915,7 +915,208 @@ function employee_add_form(Request $request){
 
 
 #########################
-#### FUNCTION-NO::05 ####
+#### FUNCTION-NO::0 ####
+#########################
+# Generates necessary data for employee registration.
+
+function employee_add(Request $request){
+
+    $ad_id = $request->session()->get('ADMIN_SESSION_ID');
+
+    $name = $request->input('name');
+    $password = $request->input('password');
+    $gender = $request->input('gender');
+    $first_part = $request->input('employee');
+    $table = $first_part;
+
+        /* Employee id generator */
+
+        $current_count = DB::table($first_part)->orderBy('AI_ID','desc')->first();
+
+        if($current_count==null){
+            $third_part = 1;
+        }else{
+
+            if($first_part == 'doctors'){
+                $current_count_array = explode('-',$current_count->D_ID);
+            }elseif($first_part == 'nurses'){
+                $current_count_array = explode('-',$current_count->N_ID);
+            }elseif($first_part == 'accounts'){
+                $current_count_array = explode('-',$current_count->Acc_ID);
+            }elseif($first_part == 'receptionists'){
+                $current_count_array = explode('-',$current_count->R_ID);
+            }elseif($first_part == 'ot_operator'){
+                $current_count_array = explode('-',$current_count->OTO_ID);
+            }
+
+            $third_part = end($current_count_array);
+            $third_part++;
+        }
+            
+        if($first_part == 'doctors'){
+            $first_part = 'D';
+
+            $specialty = $request->input('specialty');
+            $department = $request->input('department');
+            $basic_fee = $request->input('basic_fee');
+            $discount = $request->input('discount');
+
+            $type = "doctor";
+
+        }elseif($first_part == 'nurses'){
+            $first_part = 'N';
+            $type = "nurse";
+
+        }elseif($first_part == 'accounts'){
+            $first_part = 'AC';
+            $type = "accountant";
+
+        }elseif($first_part == 'receptionists'){
+            $first_part = 'R';
+            $type = "receptionist";
+
+        }elseif($first_part == 'ot_operator'){
+            $first_part = 'OT';
+            $type = "ot operator";
+
+        }
+
+        $second_part = $gender;
+
+        if($second_part == 'Male'){
+            $second_part = 'M';
+        }elseif($second_part == 'Female'){
+            $second_part = 'F';
+        }elseif($second_part == 'Others'){
+            $second_part = 'O';
+        }
+
+        $ID = "$first_part"."-"."$second_part"."-".str_pad($third_part,3,"0",STR_PAD_LEFT);
+
+        /* Employee id generator end */
+
+        if($table == 'doctors'){
+        
+            $entry=array(
+
+                'D_ID'=>$ID,
+                'Dr_Name'=>$name,
+                'Dr_Gender'=>$gender,
+                'Specialty'=>$specialty,
+                'Department'=>$department,
+                'Basic_Fee'=>$basic_fee,
+                'Second_Visit_Discount'=>$discount
+
+            );
+
+            $entry2=array(
+
+                'D_ID'=>$ID,
+                'F'=>"16:00:00",
+                'T'=>"20:00:00",
+                'Sat'=>'A',
+                'Sun'=>'A',
+                'Mon'=>'A',
+                'Tue'=>'A',
+                'Wed'=>'A',
+                'Thu'=>'A',
+                'Fri'=>'A'
+
+            );
+
+            DB::table($table)->insert($entry);
+
+            DB::table('doctor_schedules')->insert($entry2);
+        
+        }if($table == 'nurses'){
+        
+            $entry=array(
+
+                'N_ID'=>$ID,
+                'N_Name'=>$name,
+                'N_Gender'=>$gender
+
+            );
+
+            DB::table($table)->insert($entry);
+
+        }if($table == 'accounts'){
+        
+            $entry=array(
+
+                'Acc_ID'=>$ID,
+                'Acc_Name'=>$name,
+                'Acc_Gender'=>$gender
+
+            );
+
+            DB::table($table)->insert($entry);
+
+        }if($table == 'receptionists'){
+        
+            $entry=array(
+
+                'R_ID'=>$ID,
+                'R_Name'=>$name,
+                'R_Gender'=>$gender
+
+            );
+
+            DB::table($table)->insert($entry);
+
+        }if($table == 'ot_operator'){
+        
+            $entry=array(
+
+                'OTO_ID'=>$ID,
+                'OTO_Name'=>$name,
+                'OTO_Gender'=>$gender
+
+            );
+
+            DB::table($table)->insert($entry);
+
+        }
+
+        $entry3=array(
+
+            'Emp_ID'=>$ID,
+            'Log_Password'=>$password,
+            'status'=>'1'
+
+        );
+
+        DB::table('logins')->insert($entry3);
+
+        $msg = "New ".$type." registered, ID: ".$ID.", name: ".$name.", & assigned password: ".$password.".";
+
+        $entry4=array(
+
+            'Ad_ID'=>$ad_id,
+            'Log'=>$msg
+
+        );
+
+        DB::table('admin_activity_log')->insert($entry4);
+
+    # Redirecting to [FUNCTION-NO::01].
+    return redirect('/admin/home/');
+
+}
+
+# End of function employee_add.                             <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
 #########################
 # Shows doctor list.
 

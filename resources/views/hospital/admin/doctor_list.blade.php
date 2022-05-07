@@ -72,7 +72,7 @@
 
                     <div class="content_nav">
         
-                        <a href="{{url('/admin/doctor/add')}}" class="content_nav_link">Register a new doctor</a>
+                        <a href="{{url('/admin/employee/add/form')}}" class="content_nav_link">Register a new doctor</a>
 
                     </div>
 

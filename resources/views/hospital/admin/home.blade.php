@@ -122,7 +122,7 @@
                         <div class="dashboard_panels">
                             <p class="content_container_white_thin text_left">Doctors: <b class="greenTxt">{{Session::get('doctor_active')}}</b> <b class="redTxt">{{Session::get('doctor_inactive')}}</b></p>
                             <a href="{{url('/admin/doctor/list')}}" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-eye log_out_btn text_center"></i></a>
-                            <a href="{{url('/admin/doctor/add')}}" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-plus log_out_btn text_center"></i></a>
+                            <a href="{{url('/admin/employee/add/form')}}" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-plus log_out_btn text_center"></i></a>
                         </div>
 
                         <div class="dashboard_panels">
