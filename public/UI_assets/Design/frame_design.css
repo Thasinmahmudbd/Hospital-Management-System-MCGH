@@ -695,3 +695,57 @@
 .disBlock{
     align-self: start;
 }
+
+.activity_log{
+    width: 500px;
+    position: fixed;
+    top: 48px;
+    right: -600px;
+    height: 100vh;
+    overflow-y: auto;
+    background-color: #fff;
+    padding: .5rem;
+    box-shadow: -5px 0px 20px -5px #3b3838;
+    transition: 300ms ease-out;
+}
+
+.activity_log_nav{
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
+    padding: .5rem;
+}
+
+.log_right_nav{
+    display: flex;
+    flex-direction: row-reverse;
+    gap: .5rem;
+}
+
+.log_left_nav{
+    display: flex;
+    flex-direction: row;
+    gap: .5rem;
+}
+
+.activity_log_nav_btns a{
+    padding: 0px;
+    color: #5C8D89;
+    align-content: center;
+    justify-content: center;
+}
+
+.activity_log_nav_btns a:hover{
+    color: #74B498;
+}
+
+.activity_log_text{
+    padding: .5rem;
+}
+
+.activity_log_text:nth-child(even){
+    background-color: #eeefff;
+}
+
+.activity_log_text:nth-child(odd){
+    background-color: #fff;
+}

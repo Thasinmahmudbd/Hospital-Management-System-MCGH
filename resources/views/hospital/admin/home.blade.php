@@ -55,6 +55,20 @@
     </a>
 </li>
 
+<li class="link_item disNone" id="slideIn">
+    <a onclick="slideIn();" href="#" class="link">
+        <i class="link_icons fas fa-caret-square-right"></i>
+        <span class="link_name"> Activity Log </span>
+    </a>
+</li>
+
+<li class="link_item" id="slideOut">
+    <a onclick="slideOut();" href="#" class="link">
+        <i class="link_icons fas fa-caret-square-left"></i>
+        <span class="link_name"> Activity Log </span>
+    </a>
+</li>
+
 @endsection
 
 <!--------------------link end---------------------->
@@ -72,6 +86,8 @@
     <a class="mobile_link" href="{{url('/admin/home/')}}">Dashboard</a>
     <a class="mobile_link" href="{{url('/admin/log/')}}">Logs</a>
     <a class="mobile_link" href="{{url('/admin/doctor/list')}}">Doctors</a>
+    <a class="mobile_link disNone" onclick="slideIn();" href="#" id="slideIn">Activity Log</a>
+    <a class="mobile_link" onclick="slideOut();" href="#" id="slideOut">Activity Log</a>
 </div>
 
 @endsection
@@ -773,6 +789,67 @@
                         </div>
                         <span class="popMsg">December <br> Total income: {{Session::get('total_income_dec')}} tk <br> Percentage: ({{Session::get('total_income_dec_per')}})%</span>
                     </div>
+                </div>
+
+
+
+
+
+
+                <div class="activity_log" id="slideOutUser">
+
+                    <div class="activity_log_nav">
+
+                        <div class="activity_log_nav_btns log_left_nav text_center">
+                            <a class="text_center" onclick="slideIn();" href="#"><i class="fas fa-chevron-circle-right"></i></a>
+                        </div>
+
+                        <p class="text_center"><b>Activity Log - User</b></p>
+
+                        <div class="activity_log_nav_btns log_right_nav text_center">
+                            <a class="text_center" onclick="slideOutGlobal();" href="#"><i class="fas fa-globe"></i></a>
+                        </div>
+
+                    </div>
+
+                    <div class="purple_line"></div>
+
+                    @foreach($user as $list)
+                    <p class="activity_log_text">{{$list->Log}} <sub>[{{$list->Time_Stamp}}]</sub></p>
+                    @endforeach
+
+                </div>
+
+
+
+
+
+
+
+
+
+                <div class="activity_log" id="slideOutGlobal">
+
+                    <div class="activity_log_nav">
+
+                        <div class="activity_log_nav_btns log_left_nav text_center">
+                            <a class="text_center" onclick="slideIn();" href="#"><i class="fas fa-chevron-circle-right"></i></a>
+                        </div>
+
+                        <p class="text_center"><b>Activity Log - Global</b></p>
+
+                        <div class="activity_log_nav_btns log_right_nav text_center">
+                            <a class="text_center" onclick="slideOutUser();" href="#"><i class="fas fa-user-circle"></i></a>
+                        </div>
+
+                    </div>
+
+                    <div class="purple_line"></div>
+
+                    @foreach($global as $list)
+                    <p class="activity_log_text">{{$list->Log}} <sub>[{{$list->Ad_ID}}, {{$list->Time_Stamp}}]</sub></p>
+                    @endforeach
+
                 </div>
 
 

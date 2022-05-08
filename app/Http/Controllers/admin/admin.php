@@ -76,6 +76,15 @@ function set_up_home(Request $request){
 
     $request->session()->put('log_access_type','admin');
 
+    $user['user']=DB::table('admin_activity_log')
+        ->where('Ad_ID',$ad_id)
+        ->orderBy('AI_ID','desc')
+        ->get();
+
+    $global['global']=DB::table('admin_activity_log')
+        ->orderBy('AI_ID','desc')
+        ->get();
+
     ################################################################################
     ################################################################################
 
@@ -796,7 +805,7 @@ function set_up_home(Request $request){
 
 
     # Returning to the view below.
-    return view('hospital/admin/home');
+    return view('hospital/admin/home',$global,$user);
 
 }
 
