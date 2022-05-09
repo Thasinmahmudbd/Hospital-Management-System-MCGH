@@ -828,18 +828,45 @@ function set_up_home(Request $request){
 
 function block_account(Request $request, $emp_id){
 
-    # Log update on admission table.
+    $ad_id = $request->session()->get('ADMIN_SESSION_ID');
+
     $status=array(
         'status'=>0
     );
 
-    # Update admission log.
+    # Update status.
     DB::table('logins')
         ->where('Emp_ID',$emp_id)
         ->update($status);
 
-    # Redirecting to [FUNCTION-NO::05].
-    return redirect('/admin/doctor/list');
+    # Update activity log.
+    $msg = "Blocked user ".$emp_id.".";
+
+    $entry=array(
+
+        'Ad_ID'=>$ad_id,
+        'Log'=>$msg
+
+    );
+
+    DB::table('admin_activity_log')->insert($entry);
+
+    # Redirecting.
+    $empListType = $request->session()->get('empListType');
+
+    if($empListType == "doctors"){
+        # Redirecting to [FUNCTION-NO::0].
+        return redirect('/admin/doctor/list');
+    }if($empListType == "accounts"){
+        # Redirecting to [FUNCTION-NO::0].
+        return redirect('/admin/accountant/list');
+    }if($empListType == "nurses"){
+        # Redirecting to [FUNCTION-NO::0].
+        return redirect('/admin/nurse/list');
+    }if($empListType == "ot_operator"){
+        # Redirecting to [FUNCTION-NO::0].
+        return redirect('/admin/ot/list');
+    }
 
 }
 
@@ -862,18 +889,45 @@ function block_account(Request $request, $emp_id){
 
 function unblock_account(Request $request, $emp_id){
 
-    # Log update on admission table.
+    $ad_id = $request->session()->get('ADMIN_SESSION_ID');
+
     $status=array(
         'status'=>1
     );
 
-    # Update admission log.
+    # Update status.
     DB::table('logins')
         ->where('Emp_ID',$emp_id)
         ->update($status);
 
-    # Redirecting to [FUNCTION-NO::05].
-    return redirect('/admin/doctor/list');
+    # Update activity log.
+    $msg = "Unblocked user ".$emp_id.".";
+
+    $entry=array(
+
+        'Ad_ID'=>$ad_id,
+        'Log'=>$msg
+
+    );
+
+    DB::table('admin_activity_log')->insert($entry);
+
+    # Redirecting.
+    $empListType = $request->session()->get('empListType');
+
+    if($empListType == "doctors"){
+        # Redirecting to [FUNCTION-NO::0].
+        return redirect('/admin/doctor/list');
+    }if($empListType == "accounts"){
+        # Redirecting to [FUNCTION-NO::0].
+        return redirect('/admin/accountant/list');
+    }if($empListType == "nurses"){
+        # Redirecting to [FUNCTION-NO::0].
+        return redirect('/admin/nurse/list');
+    }if($empListType == "ot_operator"){
+        # Redirecting to [FUNCTION-NO::0].
+        return redirect('/admin/ot/list');
+    }
 
 }
 
@@ -1127,7 +1181,8 @@ function employee_add(Request $request){
 #########################
 #### FUNCTION-NO::0 ####
 #########################
-# Shows doctor list.
+# Shows doctor list;
+# Stored data in 2 sessions.
 
 function doctor_list_browse(Request $request){
 
@@ -1138,6 +1193,7 @@ function doctor_list_browse(Request $request){
         ->get();
 
     $request->session()->put('INVOICE','0');
+    $request->session()->put('empListType','doctors');
 
     # Returning to the view below.
     return view('hospital/admin/doctor_list', $available_data);
@@ -1155,6 +1211,298 @@ function doctor_list_browse(Request $request){
 
 
 
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Search doctor list;
+# Stored data in 2 sessions.
+
+function doctor_list_search(Request $request){
+
+    $request->validate([
+
+        'search_info'=>'required'
+
+    ]);
+
+    $search_info = $request->input('search_info');
+
+    $available_data['result']=DB::table('doctors')
+        ->join('logins', 'doctors.D_ID', '=', 'logins.Emp_ID')
+        ->select('doctors.*','logins.status')
+        ->where('doctors.D_ID','like',$search_info)
+        ->orwhere('doctors.Department','like','%'.$search_info.'%')
+        ->orwhere('doctors.Dr_Name','like','%'.$search_info.'%')
+        ->orderBy('doctors.AI_ID','asc')
+        ->get();
+
+    $request->session()->put('INVOICE','1');
+    $request->session()->put('SEARCH_RESULT','1');
+
+    if(count($available_data['result']) == 0){
+
+        $request->session()->put('SEARCH_RESULT','0');
+
+    }
+
+    # Returning to the view below.
+    return view('hospital/admin/doctor_list', $available_data);
+
+}
+
+# End of function doctor_list_search.                       <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Shows accountant list;
+# Stored data in 2 sessions.
+
+function accountant_list_browse(Request $request){
+
+    $available_data['result']=DB::table('accounts')
+        ->join('logins', 'accounts.Acc_ID', '=', 'logins.Emp_ID')
+        ->select('accounts.*','logins.status')
+        ->orderBy('accounts.AI_ID','asc')
+        ->get();
+
+    $request->session()->put('INVOICE','0');
+    $request->session()->put('empListType','accounts');
+
+    # Returning to the view below.
+    return view('hospital/admin/accountant_list', $available_data);
+
+}
+
+# End of function accountant_list_browse.                   <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Search accountant list;
+# Stored data in 2 sessions.
+
+function accountant_list_search(Request $request){
+
+    $request->validate([
+
+        'search_info'=>'required'
+
+    ]);
+
+    $search_info = $request->input('search_info');
+
+    $available_data['result']=DB::table('accounts')
+        ->join('logins', 'accounts.Acc_ID', '=', 'logins.Emp_ID')
+        ->select('accounts.*','logins.status')
+        ->where('accounts.Acc_ID','like',$search_info)
+        ->orwhere('accounts.Acc_Name','like','%'.$search_info.'%')
+        ->orderBy('accounts.AI_ID','asc')
+        ->get();
+
+    $request->session()->put('INVOICE','1');
+    $request->session()->put('SEARCH_RESULT','1');
+
+    if(count($available_data['result']) == 0){
+
+        $request->session()->put('SEARCH_RESULT','0');
+
+    }
+
+    # Returning to the view below.
+    return view('hospital/admin/accountant_list', $available_data);
+
+}
+
+# End of function accountant_list_search.                   <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Shows nurse list;
+# Stored data in 2 sessions.
+
+function nurse_list_browse(Request $request){
+
+    $available_data['result']=DB::table('nurses')
+        ->join('logins', 'nurses.N_ID', '=', 'logins.Emp_ID')
+        ->select('nurses.*','logins.status')
+        ->orderBy('nurses.AI_ID','asc')
+        ->get();
+
+    $request->session()->put('INVOICE','0');
+    $request->session()->put('empListType','nurses');
+
+    # Returning to the view below.
+    return view('hospital/admin/nurse_list', $available_data);
+
+}
+
+# End of function nurse_list_browse.                   <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Search nurse list;
+# Stored data in 2 sessions.
+
+function nurse_list_search(Request $request){
+
+    $request->validate([
+
+        'search_info'=>'required'
+
+    ]);
+
+    $search_info = $request->input('search_info');
+
+    $available_data['result']=DB::table('nurses')
+        ->join('logins', 'nurses.N_ID', '=', 'logins.Emp_ID')
+        ->select('nurses.*','logins.status')
+        ->where('nurses.N_ID','like',$search_info)
+        ->orwhere('nurses.N_Name','like','%'.$search_info.'%')
+        ->orderBy('nurses.AI_ID','asc')
+        ->get();
+
+    $request->session()->put('INVOICE','1');
+    $request->session()->put('SEARCH_RESULT','1');
+
+    if(count($available_data['result']) == 0){
+
+        $request->session()->put('SEARCH_RESULT','0');
+
+    }
+
+    # Returning to the view below.
+    return view('hospital/admin/nurse_list', $available_data);
+
+}
+
+# End of function nurse_list_search.                   <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Shows ot list;
+# Stored data in 2 sessions.
+
+function ot_list_browse(Request $request){
+
+    $available_data['result']=DB::table('ot_operator')
+        ->join('logins', 'ot_operator.OTO_ID', '=', 'logins.Emp_ID')
+        ->select('ot_operator.*','logins.status')
+        ->orderBy('ot_operator.AI_ID','asc')
+        ->get();
+
+    $request->session()->put('INVOICE','0');
+    $request->session()->put('empListType','ot_operator');
+
+    # Returning to the view below.
+    return view('hospital/admin/ot_list', $available_data);
+
+}
+
+# End of function ot_list_browse.                   <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Search nurse list;
+# Stored data in 2 sessions.
+
+function ot_list_search(Request $request){
+
+    $request->validate([
+
+        'search_info'=>'required'
+
+    ]);
+
+    $search_info = $request->input('search_info');
+
+    $available_data['result']=DB::table('ot_operator')
+        ->join('logins', 'ot_operator.OTO_ID', '=', 'logins.Emp_ID')
+        ->select('ot_operator.*','logins.status')
+        ->where('ot_operator.OTO_ID','like',$search_info)
+        ->orwhere('ot_operator.OTO_Name','like','%'.$search_info.'%')
+        ->orderBy('ot_operator.AI_ID','asc')
+        ->get();
+
+    $request->session()->put('INVOICE','1');
+    $request->session()->put('SEARCH_RESULT','1');
+
+    if(count($available_data['result']) == 0){
+
+        $request->session()->put('SEARCH_RESULT','0');
+
+    }
+
+    # Returning to the view below.
+    return view('hospital/admin/ot_list', $available_data);
+
+}
+
+# End of function nurse_list_search.                   <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 

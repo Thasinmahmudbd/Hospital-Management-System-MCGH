@@ -96,18 +96,18 @@
 
                     <div class="content_nav">
         
-                        <a href="{{url('/admin/employee/add/form')}}" class="content_nav_link">Register a new doctor</a>
+                        <a href="{{url('/admin/employee/add/form')}}" class="content_nav_link">Register a new OT operator</a>
 
                     </div>
 
-                    <!--Search bar to search doctor-->
+                    <!--Search bar to search ot-->
 
-                    <form action="{{url('/admin/doctor/search')}}" method="post" class="content_container_white_super_thin center_self">
+                    <form action="{{url('/admin/ot/search')}}" method="post" class="content_container_white_super_thin center_self">
                     @csrf
 
                         <div class="patient_form_element_three_is_to_one">
 
-                            <input type="text" class="input" name="search_info" placeholder="Enter full ID, name or department." required>
+                            <input type="text" class="input" name="search_info" placeholder="Enter full ID or name." required>
                             <button type="submit" class="btn form_btn" name="search_old_patient">Search</button>
 
                         </div>
@@ -141,14 +141,9 @@
 
                     <tr class="frame_header">
                         <th width="5%" class="frame_header_item">S/N</th>
-                        <th width="5%" class="frame_header_item">ID</th>
-                        <th width="25%" class="frame_header_item">Name</th>
-                        <th width="5%" class="frame_header_item">Gender</th>
-                        <th width="10%" class="frame_header_item">Specialty</th>
-                        <th width="15%" class="frame_header_item">Department</th>
-                        <th width="10%" class="frame_header_item">Wallet</th>
-                        <th width="5%" class="frame_header_item">Fees</th>
-                        <th width="5%" class="frame_header_item">Discount</th>
+                        <th width="15%" class="frame_header_item">ID</th>
+                        <th width="50%" class="frame_header_item">Name</th>
+                        <th width="15%" class="frame_header_item">Gender</th>
                         @if(Session::get('status')=='red')
                         <th width="5%" class="frame_header_item">Status</th>
                         @else
@@ -167,50 +162,32 @@
                         <tr class="frame_rows">
                             <td class="frame_data" data-label="S/N"><?php echo $serial; $serial++; ?></td>
 
-                            <td class="frame_data" data-label="ID">{{$list->D_ID}}</td>
+                            <td class="frame_data" data-label="ID">{{$list->OTO_ID}}</td>
 
                             <td class="frame_data" data-label="Name">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_name" value="{{$list->Dr_Name}}">
+                                <input type="text" class="input_less_2 textFix" name="edit_name" value="{{$list->OTO_Name}}">
                             </td>
 
                             <td class="frame_data" data-label="Gender">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_gender" value="{{$list->Dr_Gender}}">
-                            </td>
-
-                            <td class="frame_data" data-label="Specialty">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_specialty" value="{{$list->Specialty}}">
-                            </td>
-
-                            <td class="frame_data" data-label="Department">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_dept" value="{{$list->Department}}">
-                            </td>
-
-                            <td class="frame_data" data-label="wallet">{{$list->Wallet}}</td>
-
-                            <td class="frame_data" data-label="Fees">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_fee" value="{{$list->Basic_Fee}}">
-                            </td>
-
-                            <td class="frame_data" data-label="Discount">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_discount" value="{{$list->Second_Visit_Discount}}">
+                                <input type="text" class="input_less_2 textFix" name="edit_gender" value="{{$list->OTO_Gender}}">
                             </td>
 
                             @if($list->status=='1')
                             <td class="frame_action" data-label="Action">
-                                <a href="{{url('/admin/account/block/'.$list->D_ID)}}">
+                                <a href="{{url('/admin/account/block/'.$list->OTO_ID)}}">
                                     <i class="table_btn_red fas fa-pause-circle"></i>
                                 </a>
                             </td>
                             @else
                             <td class="frame_action" data-label="Action">
-                                <a href="{{url('/admin/account/unblock/'.$list->D_ID)}}">
+                                <a href="{{url('/admin/account/unblock/'.$list->OTO_ID)}}">
                                     <i class="table_btn fas fa-play-circle"></i>
                                 </a>
                             </td>
                             @endif
 
-                            <input type="hidden" name="edit_id" value="{{$list->D_ID}}">
-                            <input type="hidden" name="personal" value="doctors">
+                            <input type="hidden" name="edit_id" value="{{$list->OTO_ID}}">
+                            <input type="hidden" name="personal" value="accounts">
 
                             <td class="frame_action" data-label="Action">
                                 <button type="submit" class="btn transparent" name="edit">
@@ -219,7 +196,7 @@
                             </td>
 
                             <td class="frame_action" data-label="Action">
-                                <a href="{{url('/admin/doctor/delete'.$list->AI_ID)}}">
+                                <a href="{{url('/admin/ot/delete'.$list->AI_ID)}}">
                                     <i class="fas fa-minus-circle table_btn_red"></i>
                                 </a>
                             </td>
@@ -263,7 +240,7 @@
 
                     <span></span>
                         
-                    <p><b>All Doctors</b></p>
+                    <p><b>All Accountants</b></p>
 
                     <span></span>
 
@@ -273,14 +250,9 @@
 
                     <tr class="frame_header">
                         <th width="5%" class="frame_header_item">S/N</th>
-                        <th width="5%" class="frame_header_item">ID</th>
-                        <th width="25%" class="frame_header_item">Name</th>
-                        <th width="5%" class="frame_header_item">Gender</th>
-                        <th width="10%" class="frame_header_item">Specialty</th>
-                        <th width="15%" class="frame_header_item">Department</th>
-                        <th width="10%" class="frame_header_item">Wallet</th>
-                        <th width="5%" class="frame_header_item">Fees</th>
-                        <th width="5%" class="frame_header_item">Discount</th>
+                        <th width="15%" class="frame_header_item">ID</th>
+                        <th width="50%" class="frame_header_item">Name</th>
+                        <th width="15%" class="frame_header_item">Gender</th>
                         @if(Session::get('status')=='red')
                         <th width="5%" class="frame_header_item">Status</th>
                         @else
@@ -299,50 +271,32 @@
                         <tr class="frame_rows">
                             <td class="frame_data" data-label="S/N"><?php echo $serial; $serial++; ?></td>
 
-                            <td class="frame_data" data-label="ID">{{$list->D_ID}}</td>
+                            <td class="frame_data" data-label="ID">{{$list->OTO_ID}}</td>
 
                             <td class="frame_data" data-label="Name">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_name" value="{{$list->Dr_Name}}">
+                                <input type="text" class="input_less_2 textFix" name="edit_name" value="{{$list->OTO_Name}}">
                             </td>
 
                             <td class="frame_data" data-label="Gender">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_gender" value="{{$list->Dr_Gender}}">
-                            </td>
-
-                            <td class="frame_data" data-label="Specialty">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_specialty" value="{{$list->Specialty}}">
-                            </td>
-
-                            <td class="frame_data" data-label="Department">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_dept" value="{{$list->Department}}">
-                            </td>
-
-                            <td class="frame_data" data-label="wallet">{{$list->Wallet}}</td>
-
-                            <td class="frame_data" data-label="Fees">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_fee" value="{{$list->Basic_Fee}}">
-                            </td>
-
-                            <td class="frame_data" data-label="Discount">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_discount" value="{{$list->Second_Visit_Discount}}">
+                                <input type="text" class="input_less_2 textFix" name="edit_gender" value="{{$list->OTO_Gender}}">
                             </td>
 
                             @if($list->status=='1')
                             <td class="frame_action" data-label="Action">
-                                <a href="{{url('/admin/account/block/'.$list->D_ID)}}">
+                                <a href="{{url('/admin/account/block/'.$list->OTO_ID)}}">
                                     <i class="table_btn_red fas fa-pause-circle"></i>
                                 </a>
                             </td>
                             @else
                             <td class="frame_action" data-label="Action">
-                                <a href="{{url('/admin/account/unblock/'.$list->D_ID)}}">
+                                <a href="{{url('/admin/account/unblock/'.$list->OTO_ID)}}">
                                     <i class="table_btn fas fa-play-circle"></i>
                                 </a>
                             </td>
                             @endif
 
-                            <input type="hidden" name="edit_id" value="{{$list->D_ID}}">
-                            <input type="hidden" name="personal" value="doctors">
+                            <input type="hidden" name="edit_id" value="{{$list->OTO_ID}}">
+                            <input type="hidden" name="personal" value="accounts">
 
                             <td class="frame_action" data-label="Action">
                                 <button type="submit" class="btn transparent" name="edit">
@@ -351,7 +305,7 @@
                             </td>
 
                             <td class="frame_action" data-label="Action">
-                                <a href="{{url('/admin/doctor/delete'.$list->AI_ID)}}">
+                                <a href="{{url('/admin/ot/delete'.$list->AI_ID)}}">
                                     <i class="fas fa-minus-circle table_btn_red"></i>
                                 </a>
                             </td>

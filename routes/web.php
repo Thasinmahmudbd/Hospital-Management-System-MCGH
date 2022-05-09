@@ -1324,7 +1324,43 @@ Route::group(['middleware'=>['adminAuth']],function() {
 
     # Searching doctor.
     # Redirecting to [FUNCTION-NO::0]---in-controller.
-    Route::post('/admin/doctor/search','App\Http\Controllers\admin\admin@doctor_search');
+    Route::post('/admin/doctor/search','App\Http\Controllers\admin\admin@doctor_list_search');
+
+    ##############################################################################################################################################
+    # Accounts.  [C::admin.php]
+    ##############################################################################################################################################
+
+    # Going to accountant's list.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::get('/admin/accountant/list','App\Http\Controllers\admin\admin@accountant_list_browse');
+
+    # Searching accountant.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::post('/admin/accountant/search','App\Http\Controllers\admin\admin@accountant_list_search');
+
+    ##############################################################################################################################################
+    # Nurses.  [C::admin.php]
+    ##############################################################################################################################################
+
+    # Going to nurse's list.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::get('/admin/nurse/list','App\Http\Controllers\admin\admin@nurse_list_browse');
+
+    # Searching nurse.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::post('/admin/nurse/search','App\Http\Controllers\admin\admin@nurse_list_search');
+
+    ##############################################################################################################################################
+    # OT.  [C::admin.php]
+    ##############################################################################################################################################
+
+    # Going to ot's list.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::get('/admin/ot/list','App\Http\Controllers\admin\admin@ot_list_browse');
+
+    # Searching ot.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::post('/admin/ot/search','App\Http\Controllers\admin\admin@ot_list_search');
 
 
 

@@ -41,6 +41,20 @@
     </a>
 </li>
 
+<li class="link_item disNone" id="slideIn">
+    <a onclick="slideIn();" href="#" class="link">
+        <i class="link_icons fas fa-caret-square-right"></i>
+        <span class="link_name"> Activity Log </span>
+    </a>
+</li>
+
+<li class="link_item" id="slideOut">
+    <a onclick="slideOut();" href="#" class="link">
+        <i class="link_icons fas fa-caret-square-left"></i>
+        <span class="link_name"> Activity Log </span>
+    </a>
+</li>
+
 <li class="link_item">
     <a href="{{url('/admin/log/')}}" class="link">
         <i class="link_icons fas fa-clipboard-list"></i>
@@ -55,17 +69,24 @@
     </a>
 </li>
 
-<li class="link_item disNone" id="slideIn">
-    <a onclick="slideIn();" href="#" class="link">
-        <i class="link_icons fas fa-caret-square-right"></i>
-        <span class="link_name"> Activity Log </span>
+<li class="link_item">
+    <a href="{{url('/admin/accountant/list')}}" class="link">
+        <i class="link_icons fas fa-user-tie"></i>
+        <span class="link_name"> Accountants </span>
     </a>
 </li>
 
-<li class="link_item" id="slideOut">
-    <a onclick="slideOut();" href="#" class="link">
-        <i class="link_icons fas fa-caret-square-left"></i>
-        <span class="link_name"> Activity Log </span>
+<li class="link_item">
+    <a href="{{url('/admin/nurse/list')}}" class="link">
+        <i class="link_icons fas fa-user-nurse"></i>
+        <span class="link_name"> Nurses </span>
+    </a>
+</li>
+
+<li class="link_item">
+    <a href="{{url('/admin/ot/list')}}" class="link">
+        <i class="link_icons fas fa-user"></i>
+        <span class="link_name"> OT Operators </span>
     </a>
 </li>
 
@@ -84,10 +105,13 @@
 
 <div id="myLinks" class="mobile_links">
     <a class="mobile_link" href="{{url('/admin/home/')}}">Dashboard</a>
-    <a class="mobile_link" href="{{url('/admin/log/')}}">Logs</a>
-    <a class="mobile_link" href="{{url('/admin/doctor/list')}}">Doctors</a>
     <a class="mobile_link disNone" onclick="slideIn();" href="#" id="slideIn">Activity Log</a>
     <a class="mobile_link" onclick="slideOut();" href="#" id="slideOut">Activity Log</a>
+    <a class="mobile_link" href="{{url('/admin/log/')}}">Logs</a>
+    <a class="mobile_link" href="{{url('/admin/doctor/list')}}">Doctors</a>
+    <a class="mobile_link" href="{{url('/admin/accountant/list')}}">Accountants</a>
+    <a class="mobile_link" href="{{url('/admin/nurse/list')}}">Nurses</a>
+    <a class="mobile_link" href="{{url('/admin/ot/list')}}">OT Operators</a>
 </div>
 
 @endsection
@@ -143,20 +167,20 @@
 
                         <div class="dashboard_panels">
                             <p class="content_container_white_thin text_left">Accountants: <b class="greenTxt">{{Session::get('accounts_active')}}</b> <b class="redTxt">{{Session::get('accounts_inactive')}}</b></p>
-                            <div type="submit" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-eye log_out_btn text_center"></i></div>
-                            <div type="submit" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-plus log_out_btn text_center"></i></div>
+                            <a href="{{url('/admin/accountant/list')}}" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-eye log_out_btn text_center"></i></a>
+                            <a href="{{url('/admin/employee/add/form')}}" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-plus log_out_btn text_center"></i></a>
                         </div>
 
                         <div class="dashboard_panels">
                             <p class="content_container_white_thin text_left">Nurses: <b class="greenTxt">{{Session::get('nurse_active')}}</b> <b class="redTxt">{{Session::get('nurse_inactive')}}</b></p>
-                            <div type="submit" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-eye log_out_btn text_center"></i></div>
-                            <div type="submit" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-plus log_out_btn text_center"></i></div>
+                            <a href="{{url('/admin/nurse/list')}}" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-eye log_out_btn text_center"></i></a>
+                            <a href="{{url('/admin/employee/add/form')}}" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-plus log_out_btn text_center"></i></a>
                         </div>
 
                         <div class="dashboard_panels">
                             <p class="content_container_white_thin text_left">OT Operators: <b class="greenTxt">{{Session::get('ot_active')}}</b> <b class="redTxt">{{Session::get('ot_inactive')}}</b></p>
-                            <div type="submit" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-eye log_out_btn text_center"></i></div>
-                            <div type="submit" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-plus log_out_btn text_center"></i></div>
+                            <a href="{{url('/admin/ot/list')}}" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-eye log_out_btn text_center"></i></a>
+                            <a href="{{url('/admin/employee/add/form')}}" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-plus log_out_btn text_center"></i></a>
                         </div>
 
                     </div>

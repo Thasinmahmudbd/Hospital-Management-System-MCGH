@@ -85,6 +85,30 @@
     text-align: center;
 }
 
+.input_less_2{
+    background-color: transparent;
+    border:2px solid transparent;
+    padding:4px;
+    border-radius: 0px;
+    text-align: center;
+}
+
+.input:focus-within{
+    outline: 2px solid #5C8D89;
+}
+
+.input_less:focus-within{
+    outline: 2px solid #5C8D89;
+}
+
+.input_less_2:focus-within{
+    outline: 2px solid #5C8D89;
+}
+
+.input_fix{
+    width: inherit;
+}
+
 .flexible{
     width:100%;
     border: none;
@@ -132,4 +156,8 @@
     margin-left: .5rem;
     border-radius: 5px;
     font-weight: bold;
+}
+
+.transparent{
+    background-color: transparent;
 }
