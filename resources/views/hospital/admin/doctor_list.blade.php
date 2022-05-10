@@ -42,6 +42,13 @@
 </li>
 
 <li class="link_item">
+    <a href="{{url('/admin/receptionist/list')}}" class="link">
+        <i class="link_icons fas fa-user"></i>
+        <span class="link_name"> Receptionists </span>
+    </a>
+</li>
+
+<li class="link_item">
     <a href="{{url('/admin/nurse/list')}}" class="link">
         <i class="link_icons fas fa-user-nurse"></i>
         <span class="link_name"> Nurses </span>
@@ -73,6 +80,7 @@
     <a class="mobile_link" href="{{url('/admin/log/')}}">Logs</a>
     <a class="mobile_link" href="{{url('/admin/doctor/list')}}">Doctors</a>
     <a class="mobile_link" href="{{url('/admin/accountant/list')}}">Accountants</a>
+    <a class="mobile_link" href="{{url('/admin/receptionist/list')}}">Receptionists</a>
     <a class="mobile_link" href="{{url('/admin/nurse/list')}}">Nurses</a>
     <a class="mobile_link" href="{{url('/admin/ot/list')}}">OT Operators</a>
 </div>
@@ -115,6 +123,19 @@
                     </form>
 
                 </div>
+
+
+                <!--Session message-->
+
+                @if(session('msgHook')=='edit')
+
+                    <div class="content_container_bg_less_thin text_center alert_msg">{{session('msg')}}</div>
+
+                @elseif(session('msgHook')=='delete')
+
+                    <div class="content_container_bg_less_thin text_center warning_msg">{{session('msg')}}</div>
+
+                @endif
 
 
 
@@ -161,7 +182,7 @@
                     <?php $serial = 1; ?>
                     @foreach($result as $list)
 
-                    <form action="{{url('/admin/info/edit'.$list->AI_ID)}}" method="post" class="content_container_white_super_thin center_self">
+                    <form action="{{url('/admin/info/edit/'.$list->AI_ID)}}" method="post" class="content_container_white_super_thin center_self">
                     @csrf
 
                         <tr class="frame_rows">
@@ -219,7 +240,7 @@
                             </td>
 
                             <td class="frame_action" data-label="Action">
-                                <a href="{{url('/admin/doctor/delete'.$list->AI_ID)}}">
+                                <a href="{{url('/admin/employee/delete/'.$list->AI_ID.'/doctors/'.$list->D_ID)}}">
                                     <i class="fas fa-minus-circle table_btn_red"></i>
                                 </a>
                             </td>
@@ -293,7 +314,7 @@
                     <?php $serial = 1; ?>
                     @foreach($result as $list)
 
-                    <form action="{{url('/admin/info/edit'.$list->AI_ID)}}" method="post" class="content_container_white_super_thin center_self">
+                    <form action="{{url('/admin/info/edit/'.$list->AI_ID)}}" method="post" class="content_container_white_super_thin center_self">
                     @csrf
 
                         <tr class="frame_rows">
@@ -351,7 +372,7 @@
                             </td>
 
                             <td class="frame_action" data-label="Action">
-                                <a href="{{url('/admin/doctor/delete'.$list->AI_ID)}}">
+                                <a href="{{url('/admin/employee/delete/'.$list->AI_ID.'/doctors/'.$list->D_ID)}}">
                                     <i class="fas fa-minus-circle table_btn_red"></i>
                                 </a>
                             </td>
@@ -363,6 +384,24 @@
 
                 </table>
 
+            @endif
+
+
+
+            @if(Session::get('modal')=='on')
+            <div class="modal">
+                <p class="modal_title">Notice</p>
+
+                <div class="modal_body">
+                    <p>Warning: This is a destructive & irreversible action.</p>
+                    <p>Do you want to proceed anyway?</p>
+                    <div class="gap"></div>
+                    <div class="modal_btn">
+                        <a class="modal_yes" href="{{url('/admin/confirm/delete')}}">Yes</a>
+                        <a class="modal_no" href="{{url('/admin/cancel/delete')}}">No</a>
+                    </div>
+                </div>
+            </div>
             @endif
 
 

@@ -77,6 +77,13 @@
 </li>
 
 <li class="link_item">
+    <a href="{{url('/admin/receptionist/list')}}" class="link">
+        <i class="link_icons fas fa-user"></i>
+        <span class="link_name"> Receptionists </span>
+    </a>
+</li>
+
+<li class="link_item">
     <a href="{{url('/admin/nurse/list')}}" class="link">
         <i class="link_icons fas fa-user-nurse"></i>
         <span class="link_name"> Nurses </span>
@@ -110,6 +117,7 @@
     <a class="mobile_link" href="{{url('/admin/log/')}}">Logs</a>
     <a class="mobile_link" href="{{url('/admin/doctor/list')}}">Doctors</a>
     <a class="mobile_link" href="{{url('/admin/accountant/list')}}">Accountants</a>
+    <a class="mobile_link" href="{{url('/admin/receptionist/list')}}">Receptionists</a>
     <a class="mobile_link" href="{{url('/admin/nurse/list')}}">Nurses</a>
     <a class="mobile_link" href="{{url('/admin/ot/list')}}">OT Operators</a>
 </div>
@@ -168,6 +176,12 @@
                         <div class="dashboard_panels">
                             <p class="content_container_white_thin text_left">Accountants: <b class="greenTxt">{{Session::get('accounts_active')}}</b> <b class="redTxt">{{Session::get('accounts_inactive')}}</b></p>
                             <a href="{{url('/admin/accountant/list')}}" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-eye log_out_btn text_center"></i></a>
+                            <a href="{{url('/admin/employee/add/form')}}" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-plus log_out_btn text_center"></i></a>
+                        </div>
+
+                        <div class="dashboard_panels">
+                            <p class="content_container_white_thin text_left">Reception: <b class="greenTxt">{{Session::get('receptionists_active')}}</b> <b class="redTxt">{{Session::get('receptionists_inactive')}}</b></p>
+                            <a href="{{url('/admin/receptionist/list')}}" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-eye log_out_btn text_center"></i></a>
                             <a href="{{url('/admin/employee/add/form')}}" class="content_container_bg_less_thin btn form_btn"><i class="fas fa-plus log_out_btn text_center"></i></a>
                         </div>
 

@@ -1339,6 +1339,18 @@ Route::group(['middleware'=>['adminAuth']],function() {
     Route::post('/admin/accountant/search','App\Http\Controllers\admin\admin@accountant_list_search');
 
     ##############################################################################################################################################
+    # Receptionists.  [C::admin.php]
+    ##############################################################################################################################################
+
+    # Going to receptionist's list.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::get('/admin/receptionist/list','App\Http\Controllers\admin\admin@receptionist_list_browse');
+
+    # Searching receptionist.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::post('/admin/receptionist/search','App\Http\Controllers\admin\admin@receptionist_list_search');
+
+    ##############################################################################################################################################
     # Nurses.  [C::admin.php]
     ##############################################################################################################################################
 
@@ -1361,6 +1373,32 @@ Route::group(['middleware'=>['adminAuth']],function() {
     # Searching ot.
     # Redirecting to [FUNCTION-NO::0]---in-controller.
     Route::post('/admin/ot/search','App\Http\Controllers\admin\admin@ot_list_search');
+
+    ##############################################################################################################################################
+    # Edit employee list.  [C::admin.php]
+    ##############################################################################################################################################
+
+    # Edits selected employee info.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::post('/admin/info/edit/{id}','App\Http\Controllers\admin\admin@edit_employee_list');
+
+    ##############################################################################################################################################
+    # Delete from employee list.  [C::admin.php]
+    ##############################################################################################################################################
+
+    # Opens modal.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::get('/admin/employee/delete/{id}/{emp}/{id2}','App\Http\Controllers\admin\admin@open_modal');
+
+    # Close modal.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::get('/admin/cancel/delete','App\Http\Controllers\admin\admin@close_modal');
+
+    # Delete selected account.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::get('/admin/confirm/delete','App\Http\Controllers\admin\admin@delete_employee');
+
+
 
 
 

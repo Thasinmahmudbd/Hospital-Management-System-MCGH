@@ -62,6 +62,7 @@ function set_up_home(Request $request){
     $rest = 100-($vat+$commission);
 
     session(['REST' => $rest]);
+    session(['modal' => 'off']);
 
     # Date and day set up.
     date_default_timezone_set('Asia/Dhaka');
@@ -132,6 +133,21 @@ function set_up_home(Request $request){
         ->count('Emp_ID');
 
     $request->session()->put('accounts_inactive',$accounts_inactive);
+
+    # Receptionist count
+    $receptionists_active=DB::table('logins')
+        ->where('Emp_ID','like','R_'.'%')
+        ->where('status','1')
+        ->count('Emp_ID');
+
+    $request->session()->put('receptionists_active',$receptionists_active);
+
+    $receptionists_inactive=DB::table('logins')
+        ->where('Emp_ID','like','R_'.'%')
+        ->where('status','0')
+        ->count('Emp_ID');
+
+    $request->session()->put('receptionists_inactive',$receptionists_inactive);
 
     # OT count
     $ot_active=DB::table('logins')
@@ -866,6 +882,9 @@ function block_account(Request $request, $emp_id){
     }if($empListType == "ot_operator"){
         # Redirecting to [FUNCTION-NO::0].
         return redirect('/admin/ot/list');
+    }if($empListType == "receptionists"){
+        # Redirecting to [FUNCTION-NO::0].
+        return redirect('/admin/receptionist/list');
     }
 
 }
@@ -927,6 +946,9 @@ function unblock_account(Request $request, $emp_id){
     }if($empListType == "ot_operator"){
         # Redirecting to [FUNCTION-NO::0].
         return redirect('/admin/ot/list');
+    }if($empListType == "receptionists"){
+        # Redirecting to [FUNCTION-NO::0].
+        return redirect('/admin/receptionist/list');
     }
 
 }
@@ -980,7 +1002,7 @@ function employee_add_form(Request $request){
 #########################
 #### FUNCTION-NO::0 ####
 #########################
-# Generates necessary data for employee registration.
+# Adds new employee.
 
 function employee_add(Request $request){
 
@@ -1162,8 +1184,33 @@ function employee_add(Request $request){
 
         DB::table('admin_activity_log')->insert($entry4);
 
-    # Redirecting to [FUNCTION-NO::01].
-    return redirect('/admin/home/');
+    # Personal check redirect.
+    if($table=="doctors"){
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/doctor/list');
+
+    }if($table=="nurses"){
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/nurse/list');
+
+    }if($table=="accounts"){
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/accountant/list');
+
+    }if($table=="ot_operator"){
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/ot/list');
+
+    }if($table=="receptionist"){
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/receptionist/list');
+
+    }
 
 }
 
@@ -1461,7 +1508,7 @@ function ot_list_browse(Request $request){
 #########################
 #### FUNCTION-NO::0 ####
 #########################
-# Search nurse list;
+# Search ot list;
 # Stored data in 2 sessions.
 
 function ot_list_search(Request $request){
@@ -1505,6 +1552,450 @@ function ot_list_search(Request $request){
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Shows receptionist list;
+# Stored data in 2 sessions.
+
+function receptionist_list_browse(Request $request){
+
+    $available_data['result']=DB::table('receptionists')
+        ->join('logins', 'receptionists.R_ID', '=', 'logins.Emp_ID')
+        ->select('receptionists.*','logins.status')
+        ->orderBy('receptionists.AI_ID','asc')
+        ->get();
+
+    $request->session()->put('INVOICE','0');
+    $request->session()->put('empListType','receptionists');
+
+    # Returning to the view below.
+    return view('hospital/admin/receptionist_list', $available_data);
+
+}
+
+# End of function receptionist_list_browse.                   <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Search receptionist list;
+# Stored data in 2 sessions.
+
+function receptionist_list_search(Request $request){
+
+    $request->validate([
+
+        'search_info'=>'required'
+
+    ]);
+
+    $search_info = $request->input('search_info');
+
+    $available_data['result']=DB::table('receptionists')
+        ->join('logins', 'receptionists.R_ID', '=', 'logins.Emp_ID')
+        ->select('receptionists.*','logins.status')
+        ->where('receptionists.R_ID','like',$search_info)
+        ->orwhere('receptionists.R_Name','like','%'.$search_info.'%')
+        ->orderBy('receptionists.AI_ID','asc')
+        ->get();
+
+    $request->session()->put('INVOICE','1');
+    $request->session()->put('SEARCH_RESULT','1');
+
+    if(count($available_data['result']) == 0){
+
+        $request->session()->put('SEARCH_RESULT','0');
+
+    }
+
+    # Returning to the view below.
+    return view('hospital/admin/receptionist_list', $available_data);
+
+}
+
+# End of function receptionist_list_search.                 <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Search nurse list;
+# Stored data in 2 sessions;
+# Update might happen on --: TABLE :------ doctors;
+# Update might happen on --: TABLE :------ nurses;
+# Update might happen on --: TABLE :------ accounts;
+# Update might happen on --: TABLE :------ receptionist;
+# Update might happen on --: TABLE :------ ot_operator;
+# Entry will happen on   --: TABLE :------ admin_activity_log.
+
+function edit_employee_list(Request $request, $id){
+
+    $ad_id = $request->session()->get('ADMIN_SESSION_ID');
+    $personal = $request->input('personal');
+    $basic_fee = $request->input('edit_fee');
+    $emp_id = $request->input('edit_id');
+    $second_visit = $request->input('edit_discount');
+    #$discount = 100-((100*$second_visit)/1000);
+
+    # Activity log.
+    $msg = 'Updated info of '.$emp_id.'.';
+
+    $log=array(
+
+        'Ad_ID'=>$ad_id,
+        'Log'=>$msg
+
+    );
+
+    DB::table('admin_activity_log')->insert($log);
+
+    # Personal check and Info update.
+    if($personal=="doctors"){
+
+        $entry=array(
+
+            'Dr_Name'=>$request->input('edit_name'),
+            'Dr_Gender'=>$request->input('edit_gender'),
+            'Specialty'=>$request->input('edit_specialty'),
+            'Department'=>$request->input('edit_dept'),
+            'Basic_Fee'=>$basic_fee,
+            'Second_Visit_Discount'=>$second_visit
+
+        );
+
+        DB::table($personal)
+            ->where('AI_ID',$id)
+            ->update($entry);
+
+        # Session flash message.
+        $msg = 'Updated info of doctor '.$emp_id.'.';
+        $request->session()->flash('msg', $msg);
+        $request->session()->flash('msgHook', 'edit');
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/doctor/list');
+
+    }if($personal=="nurses"){
+
+        $entry=array(
+
+            'N_Name'=>$request->input('edit_name'),
+            'N_Gender'=>$request->input('edit_gender'),
+
+        );
+
+        DB::table($personal)
+            ->where('AI_ID',$id)
+            ->update($entry);
+
+        # Session flash message.
+        $msg = 'Updated info of nurse '.$emp_id.'.';
+        $request->session()->flash('msg', $msg);
+        $request->session()->flash('msgHook', 'edit');
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/nurse/list');
+
+    }if($personal=="receptionists"){
+
+        $entry=array(
+
+            'R_Name'=>$request->input('edit_name'),
+            'R_Gender'=>$request->input('edit_gender'),
+
+        );
+
+        DB::table($personal)
+            ->where('AI_ID',$id)
+            ->update($entry);
+
+        # Session flash message.
+        $msg = 'Updated info of receptionist '.$emp_id.'.';
+        $request->session()->flash('msg', $msg);
+        $request->session()->flash('msgHook', 'edit');
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/receptionist/list');
+
+    }if($personal=="accounts"){
+
+        $entry=array(
+
+            'Acc_Name'=>$request->input('edit_name'),
+            'Acc_Gender'=>$request->input('edit_gender'),
+
+        );
+
+        DB::table($personal)
+            ->where('AI_ID',$id)
+            ->update($entry);
+
+        # Session flash message.
+        $msg = 'Updated info of accountant '.$emp_id.'.';
+        $request->session()->flash('msg', $msg);
+        $request->session()->flash('msgHook', 'edit');
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/accountant/list');
+
+    }if($personal=="ot_operator"){
+
+        $entry=array(
+
+            'OTO_Name'=>$request->input('edit_name'),
+            'OTO_Gender'=>$request->input('edit_gender'),
+
+        );
+
+        DB::table($personal)
+            ->where('AI_ID',$id)
+            ->update($entry);
+
+        # Session flash message.
+        $msg = 'Updated info of ot operator '.$emp_id.'.';
+        $request->session()->flash('msg', $msg);
+        $request->session()->flash('msgHook', 'edit');
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/ot/list');
+
+    }
+
+}
+
+# End of function edit_employee_list.                       <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO:: ####
+#########################
+# Opens modal;
+# Stored data in 4 sessions..
+
+function open_modal(Request $request, $id, $emp, $id2){
+
+    $request->session()->put('emp_del_id',$id);
+    $request->session()->put('emp_del_id2',$id2);
+    $request->session()->put('emp_del_type',$emp);
+    $request->session()->put('modal','on');
+
+    # Personal check redirect.
+    if($emp=="doctors"){
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/doctor/list');
+
+    }if($emp=="nurses"){
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/nurse/list');
+
+    }if($emp=="accounts"){
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/accountant/list');
+
+    }if($emp=="receptionists"){
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/receptionist/list');
+
+    }if($emp=="ot_operator"){
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/ot/list');
+
+    }
+
+}
+
+# End of function open_modal.                               <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO:: ####
+#########################
+# Closes modal;
+# Removes data from 3 sessions.
+# Stored data in 1 sessions.
+
+function close_modal(Request $request){
+
+    $emp = $request->session()->get('emp_del_type');
+    $request->session()->forget('emp_del_id');
+    $request->session()->forget('emp_del_id2');
+    $request->session()->put('modal','off');
+
+    # Personal check redirect.
+    if($emp=="doctors"){
+
+        $request->session()->forget('emp_del_type');
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/doctor/list');
+
+    }if($emp=="nurses"){
+
+        $request->session()->forget('emp_del_type');
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/nurse/list');
+
+    }if($emp=="accounts"){
+
+        $request->session()->forget('emp_del_type');
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/accountant/list');
+
+    }if($emp=="receptionists"){
+
+        $request->session()->forget('emp_del_type');
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/receptionist/list');
+
+    }if($emp=="ot_operator"){
+
+        $request->session()->forget('emp_del_type');
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/ot/list');
+
+    }
+
+}
+
+# End of function open_modal.                               <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO:: ####
+#########################
+# Deletes employee;
+# Delete might happen on --: TABLE :------ doctors;
+# Delete might happen on --: TABLE :------ nurses;
+# Delete might happen on --: TABLE :------ accounts;
+# Delete might happen on --: TABLE :------ ot_operator;
+# Delete will happen on  --: TABLE :------ logins;
+# Entry will happen on   --: TABLE :------ admin_activity_log.
+
+function delete_employee(Request $request){
+
+    $id = $request->session()->get('emp_del_id');
+    $id2 = $request->session()->get('emp_del_id2');
+    $emp = $request->session()->get('emp_del_type');
+    $ad_id = $request->session()->get('ADMIN_SESSION_ID');
+    $request->session()->put('modal','off');
+
+    # Delete employee.
+    DB::table($emp)
+        ->where('AI_ID', $id)
+        ->delete();
+
+    # Delete login.
+    DB::table('logins')
+        ->where('Emp_ID', $id2)
+        ->delete();
+
+    # Activity log.
+    $msg = 'Deleted account of '.$id2.'. All data permanently lost.';
+
+    $log=array(
+
+        'Ad_ID'=>$ad_id,
+        'Log'=>$msg
+
+    );
+
+    DB::table('admin_activity_log')->insert($log);
+
+    # Session flash message.
+    $msg = 'Account deleted.';
+    $request->session()->flash('msg', $msg);
+    $request->session()->flash('msgHook', 'delete');
+
+    # Personal check redirect.
+    if($emp=="doctors"){
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/doctor/list');
+
+    }if($emp=="nurses"){
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/nurse/list');
+
+    }if($emp=="accounts"){
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/accountant/list');
+
+    }if($emp=="receptionists"){
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/receptionist/list');
+
+    }if($emp=="ot_operator"){
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/ot/list');
+
+    }
+
+}
+
+# End of function delete_employee.                          <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 

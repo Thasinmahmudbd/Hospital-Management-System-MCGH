@@ -682,12 +682,15 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 1rem;
+    padding: .5rem;
     align-items: center;
+    overflow-y: scroll;
+    height: 330px;
 }
 
 .dashboard_panels{
     display: grid;
-    grid-template-columns: 1fr 40px 40px 40px 40px;
+    grid-template-columns: 1fr 40px 40px 40px;
     gap: 10px;
     align-items: center;
 }
@@ -701,7 +704,7 @@
     position: fixed;
     top: 48px;
     right: -600px;
-    height: 100vh;
+    height: calc(100vh - 48px);
     overflow-y: auto;
     background-color: #fff;
     padding: .5rem;
@@ -748,4 +751,75 @@
 
 .activity_log_text:nth-child(odd){
     background-color: #fff;
+}
+
+.activity_log_text:last-child{
+    padding-bottom: 200px;
+}
+
+/* modal */
+
+.modal{
+    display: block;
+    position: fixed;
+    z-index: 10;
+    top: calc(50% - 70px);
+    left: calc(50% - 180px);
+    box-shadow: 0px 0px 20px -5px #3b3838;
+}
+
+.modal_title{
+    background-color: #74B498;
+    color: #fff;
+    font-weight: bold;
+    padding: .5rem;
+    text-align: center;
+}
+
+.modal_body{
+    background-color: #fff;
+    padding: 1rem;
+}
+
+.modal_yes{
+    color: #74B498;
+    padding: 0px 5px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.modal_yes:hover{
+    background-color: #74B498;
+    color: #fff;
+}
+
+.modal_no{
+    color: rgba(233, 53, 53, 0.76);
+    padding: 0px 5px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.modal_no:hover{
+    background-color: rgba(233, 53, 53, 0.76);
+    color: #fff;
+}
+
+.modal_btn{
+    display: grid;
+    width: 50%;
+    margin: auto;
+    grid-template-columns: 1fr 1fr;
+    align-self: center;
+}
+
+.modal::after{
+    content:"";
+    position: fixed;
+    z-index: -1;
+    background-color: #fffeeea5;
+    width: 100vw;
+    height: 100vh;
+    top: 0px;
+    left: 0px;
 }

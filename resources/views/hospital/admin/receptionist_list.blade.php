@@ -2,7 +2,7 @@
 
 @section('page_title','MCGH Portal')
 
-@section('page_type',"Nurse's List")
+@section('page_type',"Receptionist's List")
 
 
 
@@ -104,13 +104,13 @@
 
                     <div class="content_nav">
         
-                        <a href="{{url('/admin/employee/add/form')}}" class="content_nav_link">Register a new nurse</a>
+                        <a href="{{url('/admin/employee/add/form')}}" class="content_nav_link">Register a new receptionist</a>
 
                     </div>
 
                     <!--Search bar to search doctor-->
 
-                    <form action="{{url('/admin/nurse/search')}}" method="post" class="content_container_white_super_thin center_self">
+                    <form action="{{url('/admin/receptionist/search')}}" method="post" class="content_container_white_super_thin center_self">
                     @csrf
 
                         <div class="patient_form_element_three_is_to_one">
@@ -164,9 +164,8 @@
                     <tr class="frame_header">
                         <th width="5%" class="frame_header_item">S/N</th>
                         <th width="15%" class="frame_header_item">ID</th>
-                        <th width="35%" class="frame_header_item">Name</th>
+                        <th width="50%" class="frame_header_item">Name</th>
                         <th width="15%" class="frame_header_item">Gender</th>
-                        <th width="15%" class="frame_header_item">Wallet</th>
 
                         @if(Session::get('status')=='red')
                         <th width="5%" class="frame_header_item">Status</th>
@@ -186,34 +185,32 @@
                         <tr class="frame_rows">
                             <td class="frame_data" data-label="S/N"><?php echo $serial; $serial++; ?></td>
 
-                            <td class="frame_data" data-label="ID">{{$list->N_ID}}</td>
+                            <td class="frame_data" data-label="ID">{{$list->R_ID}}</td>
 
                             <td class="frame_data" data-label="Name">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_name" value="{{$list->N_Name}}">
+                                <input type="text" class="input_less_2 flexible textFix" name="edit_name" value="{{$list->R_Name}}">
                             </td>
 
                             <td class="frame_data" data-label="Gender">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_gender" value="{{$list->N_Gender}}">
+                                <input type="text" class="input_less_2 flexible textFix" name="edit_gender" value="{{$list->R_Gender}}">
                             </td>
-
-                            <td class="frame_data" data-label="wallet">{{$list->Wallet}}</td>
 
                             @if($list->status=='1')
                             <td class="frame_action" data-label="Action">
-                                <a href="{{url('/admin/account/block/'.$list->N_ID)}}">
+                                <a href="{{url('/admin/account/block/'.$list->R_ID)}}">
                                     <i class="table_btn_red fas fa-pause-circle"></i>
                                 </a>
                             </td>
                             @else
                             <td class="frame_action" data-label="Action">
-                                <a href="{{url('/admin/account/unblock/'.$list->N_ID)}}">
+                                <a href="{{url('/admin/account/unblock/'.$list->R_ID)}}">
                                     <i class="table_btn fas fa-play-circle"></i>
                                 </a>
                             </td>
                             @endif
 
-                            <input type="hidden" name="edit_id" value="{{$list->N_ID}}">
-                            <input type="hidden" name="personal" value="nurses">
+                            <input type="hidden" name="edit_id" value="{{$list->R_ID}}">
+                            <input type="hidden" name="personal" value="receptionists">
 
                             <td class="frame_action" data-label="Action">
                                 <button type="submit" class="btn transparent" name="edit">
@@ -222,7 +219,7 @@
                             </td>
 
                             <td class="frame_action" data-label="Action">
-                                <a href="{{url('/admin/employee/delete/'.$list->AI_ID.'/nurses/'.$list->N_ID)}}">
+                                <a href="{{url('/admin/employee/delete/'.$list->AI_ID.'/receptionists/'.$list->R_ID)}}">
                                     <i class="fas fa-minus-circle table_btn_red"></i>
                                 </a>
                             </td>
@@ -266,7 +263,7 @@
 
                     <span></span>
                         
-                    <p><b>All Nurses</b></p>
+                    <p><b>All Receptionists</b></p>
 
                     <span></span>
 
@@ -277,9 +274,8 @@
                     <tr class="frame_header">
                         <th width="5%" class="frame_header_item">S/N</th>
                         <th width="15%" class="frame_header_item">ID</th>
-                        <th width="35%" class="frame_header_item">Name</th>
+                        <th width="50%" class="frame_header_item">Name</th>
                         <th width="15%" class="frame_header_item">Gender</th>
-                        <th width="15%" class="frame_header_item">Wallet</th>
 
                         @if(Session::get('status')=='red')
                         <th width="5%" class="frame_header_item">Status</th>
@@ -299,34 +295,32 @@
                         <tr class="frame_rows">
                             <td class="frame_data" data-label="S/N"><?php echo $serial; $serial++; ?></td>
 
-                            <td class="frame_data" data-label="ID">{{$list->N_ID}}</td>
+                            <td class="frame_data" data-label="ID">{{$list->R_ID}}</td>
 
                             <td class="frame_data" data-label="Name">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_name" value="{{$list->N_Name}}">
+                                <input type="text" class="input_less_2 flexible textFix" name="edit_name" value="{{$list->R_Name}}">
                             </td>
 
                             <td class="frame_data" data-label="Gender">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_gender" value="{{$list->N_Gender}}">
+                                <input type="text" class="input_less_2 flexible textFix" name="edit_gender" value="{{$list->R_Gender}}">
                             </td>
-
-                            <td class="frame_data" data-label="wallet">{{$list->Wallet}}</td>
 
                             @if($list->status=='1')
                             <td class="frame_action" data-label="Action">
-                                <a href="{{url('/admin/account/block/'.$list->N_ID)}}">
+                                <a href="{{url('/admin/account/block/'.$list->R_ID)}}">
                                     <i class="table_btn_red fas fa-pause-circle"></i>
                                 </a>
                             </td>
                             @else
                             <td class="frame_action" data-label="Action">
-                                <a href="{{url('/admin/account/unblock/'.$list->N_ID)}}">
+                                <a href="{{url('/admin/account/unblock/'.$list->R_ID)}}">
                                     <i class="table_btn fas fa-play-circle"></i>
                                 </a>
                             </td>
                             @endif
 
-                            <input type="hidden" name="edit_id" value="{{$list->N_ID}}">
-                            <input type="hidden" name="personal" value="nurses">
+                            <input type="hidden" name="edit_id" value="{{$list->R_ID}}">
+                            <input type="hidden" name="personal" value="receptionists">
 
                             <td class="frame_action" data-label="Action">
                                 <button type="submit" class="btn transparent" name="edit">
@@ -335,7 +329,7 @@
                             </td>
 
                             <td class="frame_action" data-label="Action">
-                                <a href="{{url('/admin/employee/delete/'.$list->AI_ID.'/nurses/'.$list->N_ID)}}">
+                                <a href="{{url('/admin/employee/delete/'.$list->AI_ID.'/receptionists/'.$list->R_ID)}}">
                                     <i class="fas fa-minus-circle table_btn_red"></i>
                                 </a>
                             </td>
