@@ -2000,5 +2000,202 @@ function delete_employee(Request $request){
 
 
 
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Shows other service list.
+
+function show_services(Request $request){
+
+    $available_data['result']=DB::table('others_info')
+        ->orderBy('AI_ID','desc')
+        ->get();
+
+    # Returning to the view below.
+    return view('hospital/admin/other_service_list', $available_data);
+
+}
+
+# End of function show_services.                            <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Edits other service list;
+# Update will happen on --: TABLE :------ ot_operator;
+# Entry will happen on  --: TABLE :------ admin_activity_log..
+
+function edit_services(Request $request){
+
+    $ad_id = $request->session()->get('ADMIN_SESSION_ID');
+    $id = $request->input('edit_id');
+    $name = $request->input('edit_name');
+
+    $Total = $request->input('edit_total');
+    $Hospital = $request->input('edit_hospital');
+    $DMO = $request->input('edit_dmo');
+    $Nurse = $request->input('edit_nurse');
+    $Assistant = $request->input('edit_assistant');
+
+    $sum = $Hospital+$DMO+$Nurse+$Assistant;
+
+    if($Total == $sum){
+
+        $entry=array(
+
+            'Other_Name'=>$name,
+            'Unit'=>$request->input('edit_unit'),
+            'Total'=>$Total,
+            'Hospital'=>$Hospital,
+            'DMO'=>$DMO,
+            'Nurse'=>$Nurse,
+            'Assistant'=>$Assistant
+
+        );
+
+        DB::table('others_info')
+            ->where('AI_ID',$id)
+            ->update($entry);
+
+        # Session flash message.
+        $msg = 'Service updated.';
+        $request->session()->flash('msg', $msg);
+        $request->session()->flash('msgHook', 'edit');
+
+        # Activity log.
+        $log=array(
+
+            'Ad_ID'=>$ad_id,
+            'Log'=>$msg
+
+        );
+
+        DB::table('admin_activity_log')->insert($log);
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/show/services');
+
+    }else{
+
+        # Session flash message.
+        $msg = 'The summation of hospital('.$Hospital.'), dmo('.$DMO.'), nurse('.$Nurse.'), assistant('.$Assistant.') is '.$sum.' which is not equal total('.$Total.').';
+        $request->session()->flash('msg', $msg);
+        $request->session()->flash('msgHook', 'delete');
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/show/services');
+
+    }
+
+}
+
+# End of function edit_services.                            <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Adds other service;
+# Entry will happen on --: TABLE :------ ot_operator;
+# Entry will happen on --: TABLE :------ admin_activity_log..
+
+function add_services(Request $request){
+
+    $ad_id = $request->session()->get('ADMIN_SESSION_ID');
+    $name = $request->input('add_name');
+
+    $Total = $request->input('add_total');
+    $Hospital = $request->input('add_hospital');
+    $DMO = $request->input('add_dmo');
+    $Nurse = $request->input('add_nurse');
+    $Assistant = $request->input('add_assistant');
+
+    $sum = $Hospital+$DMO+$Nurse+$Assistant;
+
+    if($Total == $sum){
+
+        $entry=array(
+
+            'Other_Name'=>$name,
+            'Unit'=>$request->input('add_unit'),
+            'Total'=>$Total,
+            'Hospital'=>$Hospital,
+            'DMO'=>$DMO,
+            'Nurse'=>$Nurse,
+            'Assistant'=>$Assistant
+
+        );
+
+        DB::table('others_info')
+            ->insert($entry);
+
+        # Session flash message.
+        $msg = 'New service ('.$name.') was added.';
+        $request->session()->flash('msg', $msg);
+        $request->session()->flash('msgHook', 'add');
+
+        # Activity log.
+        $log=array(
+
+            'Ad_ID'=>$ad_id,
+            'Log'=>$msg
+
+        );
+
+        DB::table('admin_activity_log')->insert($log);
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/show/services');
+
+    }else{
+
+        # Session flash message.
+        $msg = 'The summation of hospital('.$Hospital.'), dmo('.$DMO.'), nurse('.$Nurse.'), assistant('.$Assistant.') is '.$sum.' which is not equal total('.$Total.').';
+        $request->session()->flash('msg', $msg);
+        $request->session()->flash('msgHook', 'delete');
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/show/services');
+
+    }
+
+}
+
+# End of function add_services.                            <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

@@ -1398,8 +1398,21 @@ Route::group(['middleware'=>['adminAuth']],function() {
     # Redirecting to [FUNCTION-NO::0]---in-controller.
     Route::get('/admin/confirm/delete','App\Http\Controllers\admin\admin@delete_employee');
 
+    ##############################################################################################################################################
+    # Other services.  [C::admin.php]
+    ##############################################################################################################################################
 
+    # Shows other services.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::get('/admin/show/services','App\Http\Controllers\admin\admin@show_services');
 
+    # Edits other services.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::post('/admin/edit/services','App\Http\Controllers\admin\admin@edit_services');
+
+    # Adds other services.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::post('/admin/add/services','App\Http\Controllers\admin\admin@add_services');
 
 
 

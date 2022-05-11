@@ -39,6 +39,7 @@
     <script src="{{ asset('UI_assets/Javascript/autoFill.js') }}"></script>
     <script src="{{ asset('UI_assets/Javascript/swapFields.js') }}"></script>
     <script src="{{ asset('UI_assets/Javascript/sideBar.js') }}"></script>
+    <script src="{{ asset('UI_assets/Javascript/toggles.js') }}"></script>
 	<script src="{{ asset('UI_assets/Javascript/fontawesome.min.js') }}"></script>
     
     <script type="text/javascript">

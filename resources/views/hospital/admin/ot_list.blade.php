@@ -28,39 +28,52 @@
 </li>
 
 <li class="link_item">
-    <a href="{{url('/admin/doctor/list')}}" class="link">
-        <i class="link_icons fas fa-user-md"></i>
-        <span class="link_name"> Doctors </span>
+    <a href="#" class="link" onclick="toggleSubLinkContainer()">
+        <i class="link_icons fas fa-users"></i>
+        <span class="link_name"> Employees </span>
     </a>
 </li>
 
-<li class="link_item">
-    <a href="{{url('/admin/accountant/list')}}" class="link">
-        <i class="link_icons fas fa-user-tie"></i>
-        <span class="link_name"> Accountants </span>
-    </a>
-</li>
+<div class="sub_link_item disNone" id="subLinkContainer">
 
-<li class="link_item">
-    <a href="{{url('/admin/receptionist/list')}}" class="link">
-        <i class="link_icons fas fa-user"></i>
-        <span class="link_name"> Receptionists </span>
-    </a>
-</li>
+    <li class="link_item">
+        <a href="{{url('/admin/doctor/list')}}" class="link2">
+            <i class="link_icons fas fa-user-md"></i>
+            <span class="link_name"> Doctors </span>
+        </a>
+    </li>
 
-<li class="link_item">
-    <a href="{{url('/admin/nurse/list')}}" class="link">
-        <i class="link_icons fas fa-user-nurse"></i>
-        <span class="link_name"> Nurses </span>
-    </a>
-</li>
+    <li class="link_item">
+        <a href="{{url('/admin/accountant/list')}}" class="link2">
+            <i class="link_icons fas fa-user-tie"></i>
+            <span class="link_name"> Accountants </span>
+        </a>
+    </li>
 
-<li class="link_item">
-    <a href="{{url('/admin/ot/list')}}" class="link">
-        <i class="link_icons fas fa-user"></i>
-        <span class="link_name"> OT Operators </span>
-    </a>
-</li>
+    <li class="link_item">
+        <a href="{{url('/admin/receptionist/list')}}" class="link2">
+            <i class="link_icons fas fa-user"></i>
+            <span class="link_name"> Receptionists </span>
+        </a>
+    </li>
+
+    <li class="link_item">
+        <a href="{{url('/admin/nurse/list')}}" class="link2">
+            <i class="link_icons fas fa-user-nurse"></i>
+            <span class="link_name"> Nurses </span>
+        </a>
+    </li>
+
+    <li class="link_item">
+        <a href="{{url('/admin/ot/list')}}" class="link2">
+            <i class="link_icons fas fa-user"></i>
+            <span class="link_name"> OT Operators </span>
+        </a>
+    </li>
+
+</div>
+
+
 
 @endsection
 
@@ -77,6 +90,8 @@
 
 <div id="myLinks" class="mobile_links">
     <a class="mobile_link" href="{{url('/admin/home/')}}">Dashboard</a>
+    <a class="mobile_link disNone" onclick="slideIn();" href="#" id="slideIn">Activity Log</a>
+    <a class="mobile_link" onclick="slideOut();" href="#" id="slideOut">Activity Log</a>
     <a class="mobile_link" href="{{url('/admin/log/')}}">Logs</a>
     <a class="mobile_link" href="{{url('/admin/doctor/list')}}">Doctors</a>
     <a class="mobile_link" href="{{url('/admin/accountant/list')}}">Accountants</a>
