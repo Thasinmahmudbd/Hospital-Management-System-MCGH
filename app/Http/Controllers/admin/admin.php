@@ -1800,7 +1800,7 @@ function edit_employee_list(Request $request, $id){
 # Opens modal;
 # Stored data in 4 sessions..
 
-function open_modal(Request $request, $id, $emp, $id2){
+function open_modal_employee(Request $request, $id, $emp, $id2){
 
     $request->session()->put('emp_del_id',$id);
     $request->session()->put('emp_del_id2',$id2);
@@ -1837,7 +1837,7 @@ function open_modal(Request $request, $id, $emp, $id2){
 
 }
 
-# End of function open_modal.                               <-------#
+# End of function open_modal_employee.                               <-------#
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: Hello, future me.
@@ -1855,7 +1855,7 @@ function open_modal(Request $request, $id, $emp, $id2){
 # Removes data from 3 sessions.
 # Stored data in 1 sessions.
 
-function close_modal(Request $request){
+function close_modal_employee(Request $request){
 
     $emp = $request->session()->get('emp_del_type');
     $request->session()->forget('emp_del_id');
@@ -1902,7 +1902,7 @@ function close_modal(Request $request){
 
 }
 
-# End of function open_modal.                               <-------#
+# End of function open_modal_employee.                               <-------#
                                                                     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Note: Hello, future me.
@@ -2188,6 +2188,113 @@ function add_services(Request $request){
 
 
 
+
+#########################
+#### FUNCTION-NO:: ####
+#########################
+# Opens modal;
+# Stored data in 3 sessions.
+
+function open_modal_services(Request $request, $id, $name){
+
+    $request->session()->put('ser_del_id',$id);
+    $request->session()->put('ser_del_name',$name);
+    $request->session()->put('modal','on');
+
+    # Redirecting to [FUNCTION-NO::].
+    return redirect('/admin/show/services');
+
+
+}
+
+# End of function open_modal_services.                      <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO:: ####
+#########################
+# Closes modal;
+# Removes data from 2 sessions.
+# Stored data in 1 sessions.
+
+function close_modal_services(Request $request){
+
+    $request->session()->forget('ser_del_id');
+    $request->session()->forget('ser_del_name');
+    $request->session()->put('modal','off');
+
+    # Redirecting to [FUNCTION-NO::].
+    return redirect('/admin/show/services');
+
+
+}
+
+# End of function close_modal_services.                     <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO:: ####
+#########################
+# Deletes service;
+# Delete will happen on  --: TABLE :------ others_info;
+# Entry will happen on   --: TABLE :------ admin_activity_log.
+
+function delete_services(Request $request){
+
+    $id = $request->session()->get('ser_del_id');
+    $name = $request->session()->get('ser_del_name');
+    $ad_id = $request->session()->get('ADMIN_SESSION_ID');
+    $request->session()->put('modal','off');
+
+    # Delete employee.
+    DB::table('others_info')
+        ->where('AI_ID', $id)
+        ->delete();
+
+    # Activity log.
+    $msg = 'Deleted service: '.$name.'. All data permanently lost.';
+
+    $log=array(
+
+        'Ad_ID'=>$ad_id,
+        'Log'=>$msg
+
+    );
+
+    DB::table('admin_activity_log')->insert($log);
+
+    # Session flash message.
+    $request->session()->flash('msg', $msg);
+    $request->session()->flash('msgHook', 'delete');
+
+    # Redirecting to [FUNCTION-NO::].
+    return redirect('/admin/show/services');
+
+}
+
+# End of function delete_services.                          <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 

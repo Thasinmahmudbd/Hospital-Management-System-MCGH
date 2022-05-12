@@ -1388,11 +1388,11 @@ Route::group(['middleware'=>['adminAuth']],function() {
 
     # Opens modal.
     # Redirecting to [FUNCTION-NO::0]---in-controller.
-    Route::get('/admin/employee/delete/{id}/{emp}/{id2}','App\Http\Controllers\admin\admin@open_modal');
+    Route::get('/admin/employee/delete/{id}/{emp}/{id2}','App\Http\Controllers\admin\admin@open_modal_employee');
 
     # Close modal.
     # Redirecting to [FUNCTION-NO::0]---in-controller.
-    Route::get('/admin/cancel/delete','App\Http\Controllers\admin\admin@close_modal');
+    Route::get('/admin/cancel/delete','App\Http\Controllers\admin\admin@close_modal_employee');
 
     # Delete selected account.
     # Redirecting to [FUNCTION-NO::0]---in-controller.
@@ -1414,7 +1414,17 @@ Route::group(['middleware'=>['adminAuth']],function() {
     # Redirecting to [FUNCTION-NO::0]---in-controller.
     Route::post('/admin/add/services','App\Http\Controllers\admin\admin@add_services');
 
+    # Opens modal.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::get('/admin/delete/services/{id}/{name}','App\Http\Controllers\admin\admin@open_modal_services');
 
+    # Closes modal.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::get('/admin/cancel/service/delete','App\Http\Controllers\admin\admin@close_modal_services');
+
+    # Delete selected service.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::get('/admin/confirm/service/delete','App\Http\Controllers\admin\admin@delete_services');
 
 
 

@@ -166,23 +166,23 @@
                             </td>
 
                             <td width="10%" class="frame_data" data-label="Total">
-                                <input type="number" min="0" class="input_less_2 flexible textFix" name="add_total" placeholder="0" required>
+                                <input type="number" min="0" class="input_less_2 flexible textFix" name="add_total" value="0" required>
                             </td>
 
                             <td width="10%" class="frame_data" data-label="Hospital">
-                                <input type="number" min="0" class="input_less_2 flexible textFix" name="add_hospital" placeholder="0" required>
+                                <input type="number" min="0" class="input_less_2 flexible textFix" name="add_hospital" value="0" required>
                             </td>
 
                             <td width="10%" class="frame_data" data-label="DMO">
-                                <input type="number" min="0" class="input_less_2 flexible textFix" name="add_dmo" placeholder="0" required>
+                                <input type="number" min="0" class="input_less_2 flexible textFix" name="add_dmo" value="0" required>
                             </td>
 
                             <td width="10%" class="frame_data" data-label="Nurse">
-                                <input type="number" min="0" class="input_less_2 flexible textFix" name="add_nurse" placeholder="0" required>
+                                <input type="number" min="0" class="input_less_2 flexible textFix" name="add_nurse" value="0" required>
                             </td>
 
                             <td width="10%" class="frame_data" data-label="Assistant">
-                                <input type="number" min="0" class="input_less_2 flexible textFix" name="add_assistant" placeholder="0" required>
+                                <input type="number" min="0" class="input_less_2 flexible textFix" name="add_assistant" value="0" required>
                             </td>
 
                             <td width="5%" class="frame_action" data-label="Action">
@@ -286,7 +286,7 @@
                             </td>
 
                             <td width="5%" class="frame_action" data-label="Action">
-                                <a href="{{url('/admin/delete/services/'.$list->AI_ID)}}">
+                                <a href="{{url('/admin/delete/services/'.$list->AI_ID.'/'.$list->Other_Name)}}">
                                     <i class="fas fa-minus-circle table_btn_red"></i>
                                 </a>
                             </td>
