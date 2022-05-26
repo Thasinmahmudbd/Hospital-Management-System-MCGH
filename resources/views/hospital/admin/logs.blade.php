@@ -56,6 +56,20 @@
     </a>
 </li>
 
+<li class="link_item">
+    <a href="#" class="link" onclick="toggleSubLinkContainer2()">
+        <i class="link_icons fas fa-procedures"></i>
+        <span class="link_name"> Wards </span>
+    </a>
+</li>
+
+<li class="link_item">
+    <a href="#" class="link" onclick="toggleSubLinkContainer3()">
+        <i class="link_icons fas fa-procedures"></i>
+        <span class="link_name"> Cabins </span>
+    </a>
+</li>
+
 <div class="sub_link_item disNone" id="subLinkContainer">
 
     <li class="link_item">
@@ -95,6 +109,71 @@
 
 </div>
 
+<div class="sub_link_item disNone" id="subLinkContainer2">
+
+    <li class="link_item">
+        <a href="{{url('/admin/bed/list/'.'Ward'.'/'.'Male')}}" class="link2">
+            <i class="link_icons fas fa-male"></i>
+            <span class="link_name"> Male </span>
+        </a>
+    </li>
+
+    <li class="link_item">
+        <a href="{{url('/admin/bed/list/'.'Ward'.'/'.'Female')}}" class="link2">
+            <i class="link_icons fas fa-female"></i>
+            <span class="link_name"> Female </span>
+        </a>
+    </li>
+
+    <li class="link_item">
+        <a href="{{url('/admin/bed/list/'.'Ward'.'/'.'Child')}}" class="link2">
+            <i class="link_icons fas fa-child"></i>
+            <span class="link_name"> Child </span>
+        </a>
+    </li>
+
+    <li class="link_item">
+        <a href="{{url('/admin/bed/list/'.'Ward'.'/'.'Maternity')}}" class="link2">
+            <i class="link_icons fas fa-baby"></i>
+            <span class="link_name"> Maternity </span>
+        </a>
+    </li>
+
+</div>
+
+<div class="sub_link_item disNone" id="subLinkContainer3">
+
+    <li class="link_item">
+        <a href="{{url('/admin/bed/list/'.'Cabin'.'/'.'Normal')}}" class="link2">
+            <i class="link_icons fas fa-bed"></i>
+            <span class="link_name"> Normal </span>
+        </a>
+    </li>
+
+    <li class="link_item">
+        <a href="{{url('/admin/bed/list/'.'Cabin'.'/'.'AC')}}" class="link2">
+            <i class="link_icons fas fa-wind"></i>
+            <span class="link_name"> AC </span>
+        </a>
+    </li>
+
+    <li class="link_item">
+        <a href="{{url('/admin/bed/list/'.'Cabin'.'/'.'Double AC')}}" class="link2">
+            <i class="link_icons fas fa-snowflake"></i>
+            <span class="link_name"> Double AC </span>
+        </a>
+    </li>
+
+</div>
+
+<li class="link_item">
+    <a href="{{url('/admin/show/services')}}" class="link">
+        <i class="link_icons fas fa-stethoscope"></i>
+        <span class="link_name"> Other Services </span>
+    </a>
+</li>
+
+
 
 
 @endsection
@@ -112,14 +191,13 @@
 
 <div id="myLinks" class="mobile_links">
     <a class="mobile_link" href="{{url('/admin/home/')}}">Dashboard</a>
-    <a class="mobile_link disNone" onclick="slideIn();" href="#" id="slideIn">Activity Log</a>
-    <a class="mobile_link" onclick="slideOut();" href="#" id="slideOut">Activity Log</a>
     <a class="mobile_link" href="{{url('/admin/log/')}}">Logs</a>
     <a class="mobile_link" href="{{url('/admin/doctor/list')}}">Doctors</a>
     <a class="mobile_link" href="{{url('/admin/accountant/list')}}">Accountants</a>
     <a class="mobile_link" href="{{url('/admin/receptionist/list')}}">Receptionists</a>
     <a class="mobile_link" href="{{url('/admin/nurse/list')}}">Nurses</a>
     <a class="mobile_link" href="{{url('/admin/ot/list')}}">OT Operators</a>
+    <a class="mobile_link" href="{{url('/admin/show/services')}}">Other Services</a>
 </div>
 
 @endsection

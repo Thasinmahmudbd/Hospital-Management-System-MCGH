@@ -1310,7 +1310,7 @@ Route::group(['middleware'=>['adminAuth']],function() {
     # Redirecting to [FUNCTION-NO::04]---in-controller.
     Route::get('/admin/employee/add/form','App\Http\Controllers\admin\admin@employee_add_form');
 
-    # Going to insert new employee info form view.
+    # Going to insert new employee.
     # Redirecting to [FUNCTION-NO::]---in-controller.
     Route::post('/admin/employee/add','App\Http\Controllers\admin\admin@employee_add');
 
@@ -1425,6 +1425,43 @@ Route::group(['middleware'=>['adminAuth']],function() {
     # Delete selected service.
     # Redirecting to [FUNCTION-NO::0]---in-controller.
     Route::get('/admin/confirm/service/delete','App\Http\Controllers\admin\admin@delete_services');
+
+    ##############################################################################################################################################
+    # Beds.  [C::admin.php]
+    ##############################################################################################################################################
+
+    # Going to bed's list.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::get('/admin/bed/list/{type}/{quality}','App\Http\Controllers\admin\admin@bed_list_browse');
+
+    # Going to insert new bed info form view.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::get('/admin/bed/add/form/{type}/{quality}','App\Http\Controllers\admin\admin@bed_add_form');
+
+    # Adds new beds.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::post('/admin/bed/add','App\Http\Controllers\admin\admin@bed_add');
+
+    # Edits selected bed info.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::post('/admin/bed/info/edit/{id}','App\Http\Controllers\admin\admin@edit_bed_list');
+
+    ##############################################################################################################################################
+    # Delete from beds list.  [C::admin.php]
+    ##############################################################################################################################################
+
+    # Opens modal.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::get('/admin/bed/delete/{id}/{bed_no}/{quality}/{bed_type}/{conf}','App\Http\Controllers\admin\admin@open_modal_bed');
+
+    # Close modal.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::get('/admin/cancel/bed/delete','App\Http\Controllers\admin\admin@close_modal_bed');
+
+    # Delete selected bed.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::get('/admin/confirm/bed/delete','App\Http\Controllers\admin\admin@delete_bed');
+
 
 
 

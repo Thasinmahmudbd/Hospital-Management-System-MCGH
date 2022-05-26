@@ -94,6 +94,8 @@
                         {{ Session::get('OTO_NAME') }}
                     @elseif(Session::get('NRS_SESSION_ID'))
                         {{ Session::get('N_NAME') }}
+                    @elseif(Session::get('ADMIN_SESSION_ID'))
+                        {{ Session::get('ADMIN_NAME') }}
                     @endif
                 
                     <br>(
@@ -108,6 +110,8 @@
                         {{ Session::get('OTO_SESSION_ID') }}
                     @elseif(Session::get('NRS_SESSION_ID'))
                         {{ Session::get('NRS_SESSION_ID') }}
+                    @elseif(Session::get('ADMIN_SESSION_ID'))
+                        {{ Session::get('ADMIN_SESSION_ID') }}
                     @endif
 
                     )

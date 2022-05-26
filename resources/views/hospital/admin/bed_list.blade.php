@@ -2,7 +2,7 @@
 
 @section('page_title','MCGH Portal')
 
-@section('page_type',"Nurse's List")
+@section('page_type',"Bed List")
 
 
 
@@ -197,26 +197,13 @@
 
                     <div class="content_nav">
         
-                        <a href="{{url('/admin/employee/add/form')}}" class="content_nav_link">Register a new nurse</a>
+                        <a href="{{url('/admin/bed/add/form/'.session('type').'/'.session('quality'))}}" class="content_nav_link">Register a new bed</a>
 
                     </div>
 
-                    <!--Search bar to search doctor-->
-
-                    <form action="{{url('/admin/nurse/search')}}" method="post" class="content_container_white_super_thin center_self">
-                    @csrf
-
-                        <div class="patient_form_element_three_is_to_one">
-
-                            <input type="text" class="input" name="search_info" placeholder="Enter full ID or name." required>
-                            <button type="submit" class="btn form_btn" name="search_old_patient">Search</button>
-
-                        </div>
-
-                    </form>
+                    <span></span>
 
                 </div>
-
 
 
                 <!--Session message-->
@@ -229,124 +216,16 @@
 
                     <div class="content_container_bg_less_thin text_center warning_msg">{{session('msg')}}</div>
 
-                @endif
+                @elseif(session('msgHook')=='entry')
 
-
-
-            @if(Session::get('INVOICE')=='1')
-
-                @if(Session::get('SEARCH_RESULT')=='1')
-
-                <div class="purple_line"></div>
-                <div class="gap"></div>
-
-                <!--Showing todays patients-->
-
-                <div class="content_container_bg_less_thin">
-
-                    <span></span>
-                        
-                    <p><b>Search Result</b></p>
-
-                    <span></span>
-
-                </div>
-
-                <table class="frame_table">
-
-                    <tr class="frame_header">
-                        <th width="5%" class="frame_header_item">S/N</th>
-                        <th width="15%" class="frame_header_item">ID</th>
-                        <th width="35%" class="frame_header_item">Name</th>
-                        <th width="15%" class="frame_header_item">Gender</th>
-                        <th width="15%" class="frame_header_item">Wallet</th>
-
-                        @if(Session::get('status')=='red')
-                        <th width="5%" class="frame_header_item">Status</th>
-                        @else
-                        <th width="5%" class="frame_header_item">Status</th>
-                        @endif
-                        <th width="5%" class="frame_header_item">Edit</th>
-                        <th width="5%" class="frame_header_item">Delete</th>
-                    </tr>
-
-                    <?php $serial = 1; ?>
-                    @foreach($result as $list)
-
-                    <form action="{{url('/admin/info/edit/'.$list->AI_ID)}}" method="post" class="content_container_white_super_thin center_self">
-                    @csrf
-
-                        <tr class="frame_rows">
-                            <td class="frame_data" data-label="S/N"><?php echo $serial; $serial++; ?></td>
-
-                            <td class="frame_data" data-label="ID">{{$list->N_ID}}</td>
-
-                            <td class="frame_data" data-label="Name">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_name" value="{{$list->N_Name}}">
-                            </td>
-
-                            <td class="frame_data" data-label="Gender">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_gender" value="{{$list->N_Gender}}">
-                            </td>
-
-                            <td class="frame_data" data-label="wallet">{{$list->Wallet}}</td>
-
-                            @if($list->status=='1')
-                            <td class="frame_action" data-label="Action">
-                                <a href="{{url('/admin/account/block/'.$list->N_ID)}}">
-                                    <i class="table_btn_red fas fa-pause-circle"></i>
-                                </a>
-                            </td>
-                            @else
-                            <td class="frame_action" data-label="Action">
-                                <a href="{{url('/admin/account/unblock/'.$list->N_ID)}}">
-                                    <i class="table_btn fas fa-play-circle"></i>
-                                </a>
-                            </td>
-                            @endif
-
-                            <input type="hidden" name="edit_id" value="{{$list->N_ID}}">
-                            <input type="hidden" name="personal" value="nurses">
-
-                            <td class="frame_action" data-label="Action">
-                                <button type="submit" class="btn transparent" name="edit">
-                                    <i class="fas fa-pen table_btn_yellow"></i>
-                                </button>
-                            </td>
-
-                            <td class="frame_action" data-label="Action">
-                                <a href="{{url('/admin/employee/delete/'.$list->AI_ID.'/nurses/'.$list->N_ID)}}">
-                                    <i class="fas fa-minus-circle table_btn_red"></i>
-                                </a>
-                            </td>
-                        </tr>
-
-                    </form>
-
-                    @endforeach
-
-                </table>
-
-
-
-                <div class="gap"></div>
-
-                @else
-
-                <div class="purple_line"></div>
-                <div class="gap"></div>
-
-                <div class="warning_msg content_container_bg_less_thin">
-
-                    <p class="text_center">No one here.</p>
-
-                </div>
+                    <div class="content_container_bg_less_thin text_center success_msg">{{session('msg')}}</div>
 
                 @endif
 
 
 
-            @elseif(Session::get('INVOICE')=='0')
+
+
 
 
                 <div class="purple_line"></div>
@@ -359,7 +238,7 @@
 
                     <span></span>
                         
-                    <p><b>All Nurses</b></p>
+                    <p><b>{{session('quality')}} {{session('type')}}</b></p>
 
                     <span></span>
 
@@ -369,16 +248,18 @@
 
                     <tr class="frame_header">
                         <th width="5%" class="frame_header_item">S/N</th>
-                        <th width="15%" class="frame_header_item">ID</th>
-                        <th width="35%" class="frame_header_item">Name</th>
-                        <th width="15%" class="frame_header_item">Gender</th>
-                        <th width="15%" class="frame_header_item">Wallet</th>
-
-                        @if(Session::get('status')=='red')
+                        <th width="10%" class="frame_header_item">Bed</th>
+                        <th width="5%" class="frame_header_item">Floor</th>
+                        <th width="5%" class="frame_header_item">Room</th>
+                        <th width="10%" class="frame_header_item">Type</th>
+                        <th width="10%" class="frame_header_item">Quality</th>
+                        <th width="10%" class="frame_header_item">Location</th>
+                        <th width="10%" class="frame_header_item">Package</th>
+                        <th width="5%" class="frame_header_item">Normal Fee</th>
+                        <th width="5%" class="frame_header_item">Package Fee</th>
+                        <th width="5%" class="frame_header_item">Package Day</th>
+                        <th width="5%" class="frame_header_item">Admission Fee</th>
                         <th width="5%" class="frame_header_item">Status</th>
-                        @else
-                        <th width="5%" class="frame_header_item">Status</th>
-                        @endif
                         <th width="5%" class="frame_header_item">Edit</th>
                         <th width="5%" class="frame_header_item">Delete</th>
                     </tr>
@@ -386,40 +267,65 @@
                     <?php $serial = 1; ?>
                     @foreach($result as $list)
 
-                    <form action="{{url('/admin/info/edit/'.$list->AI_ID)}}" method="post" class="content_container_white_super_thin center_self">
+                    <form action="{{url('/admin/bed/info/edit/'.$list->B_ID)}}" method="post" class="content_container_white_super_thin center_self">
                     @csrf
 
                         <tr class="frame_rows">
                             <td class="frame_data" data-label="S/N"><?php echo $serial; $serial++; ?></td>
 
-                            <td class="frame_data" data-label="ID">{{$list->N_ID}}</td>
-
-                            <td class="frame_data" data-label="Name">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_name" value="{{$list->N_Name}}">
+                            <td class="frame_data" data-label="Bed">
+                                <input type="text" class="input_less_2 flexible textFix" name="bed" value="{{$list->Bed_No}}">
                             </td>
 
-                            <td class="frame_data" data-label="Gender">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_gender" value="{{$list->N_Gender}}">
+                            <td class="frame_data" data-label="Floor">
+                                <input type="text" class="input_less_2 flexible textFix" name="floor" value="{{$list->Floor_No}}">
                             </td>
 
-                            <td class="frame_data" data-label="wallet">{{$list->Wallet}}</td>
+                            <td class="frame_data" data-label="Room">
+                                <input type="text" class="input_less_2 flexible textFix" name="room" value="{{$list->Room_No}}">
+                            </td>
 
-                            @if($list->status=='1')
+                            <td class="frame_data" data-label="Type">
+                                <input type="text" class="input_less_2 flexible textFix" name="type" value="{{$list->Bed_Type}}">
+                            </td>
+
+                            <td class="frame_data" data-label="Quality">
+                                <input type="text" class="input_less_2 flexible textFix" name="quality" value="{{$list->Quality}}">
+                            </td>
+
+                            <td class="frame_data" data-label="Location">
+                                <input type="text" class="input_less_2 flexible textFix" name="location" value="{{$list->B_Location}}">
+                            </td>
+
+                            <td class="frame_data" data-label="Package">
+                                <input type="text" class="input_less_2 flexible textFix" name="package" value="{{$list->Package_Name}}">
+                            </td>
+
+                            <td class="frame_data" data-label="Normal Fee">
+                                <input type="text" class="input_less_2 flexible textFix" name="normal_fee" value="{{$list->Normal_Pricing}}">
+                            </td>
+
+                            <td class="frame_data" data-label="Package Fee">
+                                <input type="text" class="input_less_2 flexible textFix" name="package_fee" value="{{$list->Package_Pricing}}">
+                            </td>
+
+                            <td class="frame_data" data-label="Package Day">
+                                <input type="text" class="input_less_2 flexible textFix" name="range" value="{{$list->Day_Range}}">
+                            </td>
+
+                            <td class="frame_data" data-label="Admission Fee">
+                                <input type="text" class="input_less_2 flexible textFix" name="admission" value="{{$list->Admission_Fee}}">
+                            </td>
+
+                            @if($list->Confirmation=='1')
                             <td class="frame_action" data-label="Action">
-                                <a href="{{url('/admin/account/block/'.$list->N_ID)}}">
-                                    <i class="table_btn_red fas fa-pause-circle"></i>
-                                </a>
+                                <i class="table_btn_red far fa-circle"></i>
                             </td>
                             @else
                             <td class="frame_action" data-label="Action">
-                                <a href="{{url('/admin/account/unblock/'.$list->N_ID)}}">
-                                    <i class="table_btn fas fa-play-circle"></i>
-                                </a>
+                                <i class="table_btn far fa-circle"></i>
                             </td>
                             @endif
-
-                            <input type="hidden" name="edit_id" value="{{$list->N_ID}}">
-                            <input type="hidden" name="personal" value="nurses">
 
                             <td class="frame_action" data-label="Action">
                                 <button type="submit" class="btn transparent" name="edit">
@@ -428,7 +334,7 @@
                             </td>
 
                             <td class="frame_action" data-label="Action">
-                                <a href="{{url('/admin/employee/delete/'.$list->AI_ID.'/nurses/'.$list->N_ID)}}">
+                                <a href="{{url('/admin/bed/delete/'.$list->B_ID.'/'.$list->Bed_No.'/'.$list->Quality.'/'.$list->Bed_Type.'/'.$list->Confirmation)}}">
                                     <i class="fas fa-minus-circle table_btn_red"></i>
                                 </a>
                             </td>
@@ -439,8 +345,6 @@
                     @endforeach
 
                 </table>
-
-            @endif
 
 
 
@@ -453,12 +357,16 @@
                     <p>Do you want to proceed anyway?</p>
                     <div class="gap"></div>
                     <div class="modal_btn">
-                        <a class="modal_yes" href="{{url('/admin/confirm/delete')}}">Yes</a>
-                        <a class="modal_no" href="{{url('/admin/cancel/delete')}}">No</a>
+                        <a class="modal_yes" href="{{url('/admin/confirm/bed/delete')}}">Yes</a>
+                        <a class="modal_no" href="{{url('/admin/cancel/bed/delete')}}">No</a>
                     </div>
                 </div>
             </div>
             @endif
+
+
+
+
 
 
 

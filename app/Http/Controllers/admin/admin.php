@@ -2299,8 +2299,327 @@ function delete_services(Request $request){
 
 
 
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Shows bed list;
+# Stored data in 2 sessions.
+
+function bed_list_browse(Request $request, $type, $quality){
+
+    $available_data['result']=DB::table('beds')
+        ->where('Quality',$quality)
+        ->where('Bed_Type',$type)
+        ->orderBy('B_ID','asc')
+        ->get();
+
+    $request->session()->put('quality',$quality);
+    $request->session()->put('type',$type);
+
+    # Returning to the view below.
+    return view('hospital/admin/bed_list', $available_data);
+
+}
+
+# End of function ward_list_browse.                         <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Generates necessary data for bed registration;
+# Stored data in 1 sessions.
+
+function bed_add_form(Request $request, $type, $quality){
+
+    $request->session()->put('type',$type);
+    $request->session()->put('quality',$quality);
+
+    # Returning to the view below.
+    return view('hospital/admin/add_beds');
+
+}
+
+# End of function bed_add_form.                             <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Adds new bed.
+
+function bed_add(Request $request){
+
+    $ad_id = $request->session()->get('ADMIN_SESSION_ID');
+
+    $Bed_No = $request->input('bed');
+    $Bed_Type = $request->input('type');
+    $Quality = $request->input('quality');
+
+
+    $entry=array(
+
+        'Bed_No' => $Bed_No,
+        'Floor_No' => $request->input('floor'),
+        'Room_No' => $request->input('room'),
+        'Bed_Type' => $Bed_Type,
+        'Quality' => $Quality,
+        'B_Location' => $request->input('location'),
+        'Package_Name' => $request->input('package'),
+        'Normal_Pricing' => $request->input('normal_pricing'),
+        'Package_Pricing' => $request->input('package_pricing'),
+        'Day_Range' => $request->input('range'),
+        'Admission_Fee' => $request->input('admission')
+
+    );
+
+    DB::table('beds')->insert($entry);
+
+
+    $msg = "New ".$Quality." ".$Bed_Type." added, bed no: ".$Bed_No.".";
+
+    $entry2=array(
+
+        'Ad_ID'=>$ad_id,
+        'Log'=>$msg
+
+    );
+
+    DB::table('admin_activity_log')->insert($entry2);
+
+    # Session flash message.
+    $request->session()->flash('msg', $msg);
+    $request->session()->flash('msgHook', 'entry');
+
+    # Redirecting to [FUNCTION-NO::].
+    return redirect('/admin/bed/list/'.$Bed_Type.'/'.$Quality);
+
+}
+
+# End of function bed_add.                                  <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Edits bed ID;
+# Stored data in 2 sessions;
+# Update might happen on --: TABLE :------ bed;
+# Entry will happen on   --: TABLE :------ admin_activity_log.
+
+function edit_bed_list(Request $request, $id){
+
+    $ad_id = $request->session()->get('ADMIN_SESSION_ID');
+
+    $Bed_No = $request->input('bed');
+    $Bed_Type = $request->input('type');
+    $Quality = $request->input('quality');
+
+    # Activity log.
+    $msg = "Updated ".$Quality." ".$Bed_Type.", bed no: ".$Bed_No.".";
+
+    $log=array(
+
+        'Ad_ID'=>$ad_id,
+        'Log'=>$msg
+
+    );
+
+    DB::table('admin_activity_log')->insert($log);
+
+    # Update beds.
+    $entry=array(
+
+        'Bed_No' => $Bed_No,
+        'Floor_No' => $request->input('floor'),
+        'Room_No' => $request->input('room'),
+        'Bed_Type' => $Bed_Type,
+        'Quality' => $Quality,
+        'B_Location' => $request->input('location'),
+        'Package_Name' => $request->input('package'),
+        'Normal_Pricing' => $request->input('normal_pricing'),
+        'Package_Pricing' => $request->input('package_pricing'),
+        'Day_Range' => $request->input('range'),
+        'Admission_Fee' => $request->input('admission')
+
+    );
+
+    DB::table('beds')
+        ->where('B_ID',$id)
+        ->update($entry);
+
+    # Session flash message.
+    $request->session()->flash('msg', $msg);
+    $request->session()->flash('msgHook', 'edit');
+
+    # Redirecting to [FUNCTION-NO::].
+    return redirect('/admin/bed/list/'.$Bed_Type.'/'.$Quality);
+
+}
+
+# End of function edit_bed_list.                            <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO:: ####
+#########################
+# Opens modal;
+# Stored data in 6 sessions.
+
+function open_modal_bed(Request $request, $id, $bed_no, $quality, $bed_type, $conf){
+
+    $request->session()->put('bed_del_id',$id);
+    $request->session()->put('bed_del_no',$bed_no);
+    $request->session()->put('bed_del_quality',$quality);
+    $request->session()->put('bed_del_type',$bed_type);
+    $request->session()->put('bed_del_conf',$conf);
+    $request->session()->put('modal','on');
+
+    # Redirecting to [FUNCTION-NO::].
+    return redirect('/admin/bed/list/'.$bed_type.'/'.$quality);
+
+
+}
+
+# End of function open_modal_bed.                           <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO:: ####
+#########################
+# Closes modal;
+# Removes data from 5 sessions.
+# Stored data in 1 sessions.
+
+function close_modal_bed(Request $request){
+
+    $Quality = $request->session()->get('bed_del_quality');
+    $Bed_Type = $request->session()->get('bed_del_type');
+
+    $request->session()->forget('bed_del_id');
+    $request->session()->forget('bed_del_no');
+    $request->session()->forget('bed_del_quality');
+    $request->session()->forget('bed_del_type');
+    $request->session()->forget('bed_del_conf');
+    $request->session()->put('modal','off');
+
+    # Redirecting to [FUNCTION-NO::].
+    return redirect('/admin/bed/list/'.$Bed_Type.'/'.$Quality);
+
+
+}
+
+# End of function close_modal_bed.                          <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO:: ####
+#########################
+# Deletes bed;
+# Delete will happen on  --: TABLE :------ beds;
+# Entry will happen on   --: TABLE :------ admin_activity_log.
+
+function delete_bed(Request $request){
+
+    $id = $request->session()->get('bed_del_id');
+    $bed_no = $request->session()->get('bed_del_no');
+    $Quality = $request->session()->get('bed_del_quality');
+    $Bed_Type = $request->session()->get('bed_del_type');
+    $ad_id = $request->session()->get('ADMIN_SESSION_ID');
+    $conf = $request->session()->get('bed_del_conf');
+    $request->session()->put('modal','off'); 
+
+    # Delete employee.
+    DB::table('beds')
+        ->where('B_ID', $id)
+        ->where('Confirmation', '0')
+        ->delete();
+
+    if($conf == 0){
+
+        # Activity log.
+        $msg = "Deleted ".$Quality." ".$Bed_Type.", bed no: ".$bed_no.".";
+
+        $log=array(
+
+            'Ad_ID'=>$ad_id,
+            'Log'=>$msg
+
+        );
+
+        DB::table('admin_activity_log')->insert($log);
+
+        # Session flash message.
+        $request->session()->flash('msg', $msg);
+        $request->session()->flash('msgHook', 'delete');
+
+    }else{
+
+        $request->session()->flash('msg', 'The bed is currently occupied.');
+        $request->session()->flash('msgHook', 'edit');
+
+    }
+
+    # Redirecting to [FUNCTION-NO::].
+    return redirect('/admin/bed/list/'.$Bed_Type.'/'.$Quality);
+
+}
+
+# End of function delete_bed.                               <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 
