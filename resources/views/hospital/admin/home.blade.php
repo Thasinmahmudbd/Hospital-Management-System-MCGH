@@ -120,6 +120,13 @@
         </a>
     </li>
 
+    <li class="link_item">
+        <a href="{{url('/admin/admin/list')}}" class="link2">
+            <i class="link_icons fas fa-user-shield"></i>
+            <span class="link_name"> Admin </span>
+        </a>
+    </li>
+
 </div>
 
 <div class="sub_link_item disNone" id="subLinkContainer2">
@@ -186,6 +193,13 @@
     </a>
 </li>
 
+<li class="link_item">
+    <a href="{{url('/admin/edit/profile')}}" class="link">
+        <i class="link_icons fas fa-user-edit"></i>
+        <span class="link_name"> Edit Profile </span>
+    </a>
+</li>
+
 
 
 
@@ -212,7 +226,9 @@
     <a class="mobile_link" href="{{url('/admin/receptionist/list')}}">Receptionists</a>
     <a class="mobile_link" href="{{url('/admin/nurse/list')}}">Nurses</a>
     <a class="mobile_link" href="{{url('/admin/ot/list')}}">OT Operators</a>
+    <a class="mobile_link" href="{{url('/admin/admin/list')}}">Admin</a>
     <a class="mobile_link" href="{{url('/admin/show/services')}}">Other Services</a>
+    <a class="mobile_link" href="{{url('/admin/edit/profile')}}">Edit Profile</a>
 </div>
 
 @endsection

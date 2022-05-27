@@ -1462,6 +1462,57 @@ Route::group(['middleware'=>['adminAuth']],function() {
     # Redirecting to [FUNCTION-NO::0]---in-controller.
     Route::get('/admin/confirm/bed/delete','App\Http\Controllers\admin\admin@delete_bed');
 
+    ##############################################################################################################################################
+    # Admin list and add.  [C::admin.php]
+    ##############################################################################################################################################
+
+    # Shows admin list.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::get('/admin/admin/list','App\Http\Controllers\admin\admin@admin_list');
+
+    # Adds admin.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::post('/admin/admin/add','App\Http\Controllers\admin\admin@admin_add');
+
+    ##############################################################################################################################################
+    # Delete from admin list.  [C::admin.php]
+    ##############################################################################################################################################
+
+    # Opens modal.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::get('/admin/admin/delete/{ad_id}/{ai_id}','App\Http\Controllers\admin\admin@open_modal_admin');
+
+    # Close modal.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::get('/admin/cancel/admin/delete','App\Http\Controllers\admin\admin@close_modal_admin');
+
+    # Delete selected admin.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::get('/admin/confirm/admin/delete','App\Http\Controllers\admin\admin@delete_admin');
+
+    ##############################################################################################################################################
+    # Admin list edit.  [C::admin.php]
+    ##############################################################################################################################################
+
+    # Edits admin list.
+    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    Route::post('/admin/admin/edit/{id}','App\Http\Controllers\admin\admin@edit_admin_list');
+
+    ##############################################################################################################################################
+    # Admin Edit Profile.  [C::admin.php]
+    ##############################################################################################################################################
+    
+    # Going to edit_profile view.
+    # Redirecting to hospital/admin/edit_profile---in-resources/views/.
+    Route::view('/admin/edit/profile','hospital/admin/edit_profile');
+
+    # Update profile.
+    # Redirecting to [FUNCTION-NO::]---in-controller.
+    Route::post('/admin/save_edit/','App\Http\Controllers\admin\admin@edit_profile');
+
+
+
+
 
 
 

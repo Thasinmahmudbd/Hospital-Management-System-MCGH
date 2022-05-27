@@ -885,6 +885,9 @@ function block_account(Request $request, $emp_id){
     }if($empListType == "receptionists"){
         # Redirecting to [FUNCTION-NO::0].
         return redirect('/admin/receptionist/list');
+    }if($empListType == "admin"){
+        # Redirecting to [FUNCTION-NO::0].
+        return redirect('/admin/admin/list');
     }
 
 }
@@ -949,6 +952,9 @@ function unblock_account(Request $request, $emp_id){
     }if($empListType == "receptionists"){
         # Redirecting to [FUNCTION-NO::0].
         return redirect('/admin/receptionist/list');
+    }if($empListType == "admin"){
+        # Redirecting to [FUNCTION-NO::0].
+        return redirect('/admin/admin/list');
     }
 
 }
@@ -2528,7 +2534,7 @@ function open_modal_bed(Request $request, $id, $bed_no, $quality, $bed_type, $co
 #### FUNCTION-NO:: ####
 #########################
 # Closes modal;
-# Removes data from 5 sessions.
+# Removes data from 5 sessions;
 # Stored data in 1 sessions.
 
 function close_modal_bed(Request $request){
@@ -2620,6 +2626,367 @@ function delete_bed(Request $request){
 # 
 # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Shows admin list;
+# Stored data in 1 sessions.
+
+function admin_list(Request $request){
+
+    $available_data['result']=DB::table('admin')
+        ->join('logins', 'admin.Ad_ID', '=', 'logins.Emp_ID')
+        ->select('admin.*','logins.status')
+        ->orderBy('admin.AI_ID','asc')
+        ->get();
+
+    $request->session()->put('empListType','admin');
+
+    # Returning to the view below.
+    return view('hospital/admin/admin_list', $available_data);
+
+}
+
+# End of function admin_list.                               <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Adds new admin;
+# Entry will happen on   --: TABLE :------ admin
+# Entry will happen on   --: TABLE :------ admin_activity_log.
+
+function admin_add(Request $request){
+
+    $ad_id = $request->session()->get('ADMIN_SESSION_ID');
+
+    $name = $request->input('name');
+    $password = $request->input('password');
+    $gender = $request->input('gender');
+
+        /* Admin id generator */
+
+        $current_count = DB::table('admin')->orderBy('AI_ID','desc')->first();
+
+        if($current_count==null){
+            $third_part = 1;
+        }else{
+            $current_count_array = explode('-',$current_count->Ad_ID);
+            $third_part = end($current_count_array);
+            $third_part++;
+        }
+            
+        $first_part = 'Ad';
+
+        if($gender == 'Male'){
+            $second_part = 'M';
+        }elseif($gender == 'Female'){
+            $second_part = 'F';
+        }elseif($gender == 'Others'){
+            $second_part = 'O';
+        }
+
+        $ID = "$first_part"."-"."$second_part"."-".str_pad($third_part,3,"0",STR_PAD_LEFT);
+
+        /* Employee id generator end */
+
+        $entry=array(
+
+            'Ad_ID'=>$ID,
+            'Ad_Name'=>$name,
+            'Ad_Gender'=>$gender
+
+        );
+
+        DB::table('admin')->insert($entry);
+
+        $entry2=array(
+
+            'Emp_ID'=>$ID,
+            'Log_Password'=>$password,
+            'status'=>'1'
+
+        );
+
+        DB::table('logins')->insert($entry2);
+
+        $msg = "New admin registered, ID: ".$ID.", name: ".$name.", & assigned password: ".$password.".";
+
+        $entry3=array(
+
+            'Ad_ID'=>$ad_id,
+            'Log'=>$msg
+
+        );
+
+        DB::table('admin_activity_log')->insert($entry3);
+
+        # Session flash message.
+        $request->session()->flash('msg', $msg);
+        $request->session()->flash('msgHook', 'entry');
+
+        # Redirecting to [FUNCTION-NO::].
+        return redirect('/admin/admin/list');
+
+}
+
+# End of function admin_add.                                <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO:: ####
+#########################
+# Opens modal;
+# Stored data in 3 sessions.
+
+function open_modal_admin(Request $request, $ad_id, $id){
+
+    $request->session()->put('ad_del_ad_id',$ad_id);
+    $request->session()->put('ad_del_id',$id);
+    $request->session()->put('modal','on');
+
+    # Redirecting to [FUNCTION-NO::].
+    return redirect('/admin/admin/list');
+
+
+}
+
+# End of function open_modal_admin.                      <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO:: ####
+#########################
+# Closes modal;
+# Removes data from 2 sessions.
+# Stored data in 1 sessions.
+
+function close_modal_admin(Request $request){
+
+    $request->session()->forget('ad_del_ad_id');
+    $request->session()->forget('ad_del_id');
+    $request->session()->put('modal','off');
+
+    # Redirecting to [FUNCTION-NO::].
+    return redirect('/admin/admin/list');
+
+
+}
+
+# End of function close_modal_admin.                     <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO:: ####
+#########################
+# Deletes admin;
+# Delete will happen on --: TABLE :------ admin;
+# Delete will happen on  --: TABLE :------ logins;
+# Entry will happen on   --: TABLE :------ admin_activity_log.
+
+function delete_admin(Request $request){
+
+    $id = $request->session()->get('ad_del_id');
+    $id2 = $request->session()->get('ad_del_ad_id');
+    $ad_id = $request->session()->get('ADMIN_SESSION_ID');
+    $request->session()->put('modal','off');
+
+    # Delete admin.
+    DB::table('admin')
+        ->where('AI_ID', $id)
+        ->delete();
+
+    # Delete login.
+    DB::table('logins')
+        ->where('Emp_ID', $id2)
+        ->delete();
+
+    # Activity log.
+    $msg = 'Deleted account of '.$id2.'. All data permanently lost.';
+
+    $log=array(
+
+        'Ad_ID'=>$ad_id,
+        'Log'=>$msg
+
+    );
+
+    DB::table('admin_activity_log')->insert($log);
+
+    # Session flash message.
+    $msg = 'Account deleted.';
+    $request->session()->flash('msg', $msg);
+    $request->session()->flash('msgHook', 'delete');
+
+
+    # Redirecting to [FUNCTION-NO::].
+    return redirect('/admin/admin/list');
+
+}
+
+# End of function delete_admin.                             <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::0 ####
+#########################
+# Updates admin list;
+# Update will happen on --: TABLE :------ admin;
+# Entry will happen on   --: TABLE :------ admin_activity_log.
+
+function edit_admin_list(Request $request, $id){
+
+    $ad_id = $request->session()->get('ADMIN_SESSION_ID');
+    $emp_id = $request->input('edit_id');
+
+    # Activity log.
+    $msg = 'Updated info of '.$emp_id.'.';
+
+    $log=array(
+
+        'Ad_ID'=>$ad_id,
+        'Log'=>$msg
+
+    );
+
+    DB::table('admin_activity_log')->insert($log);
+
+    $entry=array(
+
+        'Ad_Name'=>$request->input('edit_name'),
+        'Ad_Gender'=>$request->input('edit_gender')
+
+    );
+
+    DB::table('admin')
+        ->where('AI_ID',$id)
+        ->update($entry);
+
+    # Session flash message.
+    $msg = 'Updated info of doctor '.$emp_id.'.';
+    $request->session()->flash('msg', $msg);
+    $request->session()->flash('msgHook', 'edit');
+
+    # Redirecting to [FUNCTION-NO::].
+    return redirect('/admin/admin/list');
+
+}
+
+# End of function edit_admin_list.                          <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO:: ####
+#########################
+# Edit admin profile;
+# Update will happen on --: TABLE :------ admin.
+
+function edit_profile(Request $request){
+
+    $ad_id = $request->session()->get('ADMIN_SESSION_ID');
+    
+    # validating data from form.
+    $request->validate([
+
+        'ad_name'=>'required',
+        'ad_email'=>'required',
+        'ad_phone'=>'required',
+        'profile_photo'=>'image|dimensions:ratio=1/1|mimes:jpg,jpeg,png|dimensions:min_width=200,min_height=200,max_width=600,max_height=600|max:2048'
+
+    ]);
+
+    # Getting data from form.
+    $data=array(
+
+        'Ad_Name'=>$request->input('ad_name'),
+        'Ad_Email'=>$request->input('ad_email'),
+        'Ad_Phone'=>$request->input('ad_phone')
+        
+    );
+
+    if($request->hasfile('profile_photo')){
+
+        $image=$request->file('profile_photo');
+        $ext=$image->extension();
+        $file=$ad_id.'.'.$ext;
+        $image->storeAs('/public/admin_profile_pictures',$file);
+
+        $data['Ad_Image']=$file;
+
+    }
+
+    DB::table('admin')->where('Ad_ID',$ad_id)->update($data);
+    
+    $request->session()->flash('msg','Profile updated successfully.');
+
+    # Redirecting to [FUNCTION-NO::].
+    return redirect('/admin/home/');
+
+}
+
+# End of function edit_profile.                             <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# This function might get an update in the future.
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
 
 
 
