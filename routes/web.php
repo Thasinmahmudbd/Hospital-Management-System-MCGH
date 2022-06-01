@@ -58,7 +58,9 @@ Route::get('/logout', function () {
 
 
 
+# Change pass.
 
+Route::post('/password/change','App\Http\Controllers\login\login@change_pass');
 
 
 

@@ -156,6 +156,22 @@
             <!--frame right side middle-->
             <div class="right_side_middle">
 
+            <!--Session message-->
+
+            @if(session('msgHook')=='edit')
+
+            <div class="content_container_bg_less_thin text_center alert_msg">{{session('msg')}}</div>
+
+            @elseif(session('msgHook')=='delete')
+
+            <div class="content_container_bg_less_thin text_center warning_msg">{{session('msg')}}</div>
+
+            @elseif(session('msgHook')=='entry')
+
+            <div class="content_container_bg_less_thin text_center success_msg">{{session('msg')}}</div>
+
+            @endif
+
 <!-----------------------content---------------------->
 
 
@@ -164,7 +180,51 @@
 
 <!--------------------content end---------------------->
 
-            </div>
+
+                <a href="#" class="half_hidden_btn" onclick="closePassChange()" id="closePassChanger"><i class="fas fa-ellipsis-h title_bar_purple"></i></a>
+
+                <a href="#" class="half_hidden_btn" onclick="openPassChange()" id="openPassChanger"><i class="fas fa-ellipsis-h title_bar_purple"></i></a>
+
+                <div class="half_hidden_portion security_background" id="passChanger">  
+
+                    <div class="rounded_photo_width_is_to_rest">
+
+                        <p class="content_container_bg_less collected_info text_center">Password</p>
+
+                        <form class="security content_container_bg_less" action="{{url('/password/change')}}" method="post">
+                        @csrf
+
+                            <input type="password" placeholder="Old Password" name="old_pass" class="collected_info input text_center" required>
+
+                            <input type="password" placeholder="New Password" name="new_pass" class="collected_info input text_center" required>
+
+                            <input type="password" placeholder="Confirm Password" name="confirm_pass" class="collected_info input text_center" required>
+
+                            @if(Session::get('REC_SESSION_ID'))
+                                <input type="hidden" name="user_id" value="{{Session::get('REC_SESSION_ID')}}">
+                            @elseif(Session::get('DOC_SESSION_ID'))
+                                <input type="hidden" name="user_id" value="{{Session::get('DOC_SESSION_ID')}}">
+                            @elseif(Session::get('ACC_SESSION_ID'))
+                                <input type="hidden" name="user_id" value="{{Session::get('ACC_SESSION_ID')}}">
+                            @elseif(Session::get('OTO_SESSION_ID'))
+                                <input type="hidden" name="user_id" value="{{Session::get('OTO_SESSION_ID')}}">
+                            @elseif(Session::get('NRS_SESSION_ID'))
+                                <input type="hidden" name="user_id" value="{{Session::get('NRS_SESSION_ID')}}">
+                            @elseif(Session::get('ADMIN_SESSION_ID'))
+                                <input type="hidden" name="user_id" value="{{Session::get('ADMIN_SESSION_ID')}}">
+                            @endif
+
+                            <button type="submit" class="btn_less">
+                                <i class="fas fa-fingerprint log_out_btn purple_icon"></i>
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div> 
 
         </div>
 

@@ -8,6 +8,15 @@ use Illuminate\Http\Request;
 
 class login extends Controller
 {
+
+
+
+
+    #########################
+    #### FUNCTION-NO::01 ####
+    #########################
+    # Logins user;
+
     function login_users(Request $request){
         $user_id=$request->input('user_id');
         $password=$request->input('password');
@@ -135,4 +144,127 @@ class login extends Controller
         }
 
     }
+
+    # End of function login_users.                              <-------#
+                                                                        #
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+    # Note: Hello, future me,
+    # 
+    # 
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+
+
+
+
+
+    #########################
+    #### FUNCTION-NO::02 ####
+    #########################
+    # Edits password;
+    # Update will happen on --: TABLE :------ logins.
+
+    function change_pass(Request $request){
+
+        $user_id=$request->input('user_id');
+        $old_pass=$request->input('old_pass');
+        $new_pass=$request->input('new_pass');
+        $confirm_pass=$request->input('confirm_pass');
+
+        $result=DB::table('logins')->where('Emp_ID',$user_id)->first();
+
+        if($result->Log_Password == $old_pass){
+
+            if($new_pass == $confirm_pass){
+
+                # Getting data from form.
+                $data=array(
+
+                    'Log_Password'=>$new_pass
+                    
+                );
+
+                DB::table('logins')->where('Emp_ID',$user_id)->update($data);
+
+                # Session flash message.
+                $msg = 'Password successfully changed.';
+                $request->session()->flash('msg', $msg);
+                $request->session()->flash('msgHook', 'entry');
+
+                $token_array = explode('-',$user_id);
+                $token = current($token_array);
+                
+                if($token=='R' || $token=='r'){ return redirect('/reception/home/'); }
+                if($token=='D' || $token=='d'){ return redirect('/doctor/home/'); }
+                if($token=='AC' || $token=='ac'){ return redirect('/accounts/home/');}
+                if($token=='OT' || $token=='ot'){return redirect('/ot/home/');}
+                if($token=='N' || $token=='n'){ return redirect('/nurse/home/'); }
+                if($token=='AD' || $token=='ad'){ return redirect('/admin/home/'); }
+
+            }else{
+
+                # Session flash message.
+                $msg = 'Please confirm new password.';
+                $request->session()->flash('msg', $msg);
+                $request->session()->flash('msgHook', 'edit');
+
+                $token_array = explode('-',$user_id);
+                $token = current($token_array);
+
+                if($token=='R' || $token=='r'){ return redirect('/reception/home/'); }
+                if($token=='D' || $token=='d'){ return redirect('/doctor/home/'); }
+                if($token=='AC' || $token=='ac'){ return redirect('/accounts/home/');}
+                if($token=='OT' || $token=='ot'){return redirect('/ot/home/');}
+                if($token=='N' || $token=='n'){ return redirect('/nurse/home/'); }
+                if($token=='AD' || $token=='ad'){ return redirect('/admin/home/'); }
+
+            }
+
+        }else{
+
+            # Session flash message.
+            $msg = 'Wrong password.';
+            $request->session()->flash('msg', $msg);
+            $request->session()->flash('msgHook', 'delete');
+
+            $token_array = explode('-',$user_id);
+            $token = current($token_array);
+
+            if($token=='R' || $token=='r'){ return redirect('/reception/home/'); }
+            if($token=='D' || $token=='d'){ return redirect('/doctor/home/'); }
+            if($token=='AC' || $token=='ac'){ return redirect('/accounts/home/');}
+            if($token=='OT' || $token=='ot'){return redirect('/ot/home/');}
+            if($token=='N' || $token=='n'){ return redirect('/nurse/home/'); }
+            if($token=='AD' || $token=='ad'){ return redirect('/admin/home/'); }
+
+        }
+
+    }
+
+    # End of function change_pass.                              <-------#
+                                                                        #
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+    # Note: Hello, future me.
+    # 
+    # 
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 }

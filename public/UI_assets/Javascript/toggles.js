@@ -57,3 +57,23 @@ function toggleSubLinkContainer3() {
         element1.style.transition = "300ms ease-in";
     }
 } 
+
+function openPassChange() {
+    var modal = document.getElementById("passChanger");
+    var openBtn = document.getElementById("openPassChanger");
+    var closeBtn = document.getElementById("closePassChanger");
+
+    modal.style.display = "grid";
+    openBtn.style.display = "none";
+    closeBtn.style.display = "block";
+}
+
+function closePassChange() {
+    var modal = document.getElementById("passChanger");
+    var openBtn = document.getElementById("openPassChanger");
+    var closeBtn = document.getElementById("closePassChanger");
+
+    modal.style.display = "none";
+    openBtn.style.display = "block";
+    closeBtn.style.display = "none";
+}

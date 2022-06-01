@@ -818,6 +818,17 @@
     padding-bottom: 200px;
 }
 
+.security{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 30px;
+    gap: 1rem;
+}
+
+.security_background{
+    background-color: #eeefff;
+    padding: 1rem;
+}
+
 /* modal */
 
 .modal{
@@ -883,4 +894,36 @@
     height: 100vh;
     top: 0px;
     left: 0px;
+}
+
+
+/* pass changer */
+
+.half_hidden_portion{
+    width: calc(100% - 332px);
+    position: fixed;
+    bottom: -10px;
+    right: 0px;
+    z-index: 1;
+    display: none;
+    box-shadow: 5px 0px 20px -5px #3b3838;
+}
+
+.half_hidden_portion::after{
+    content: "";
+    position: fixed;
+    z-index: -1;
+    background-color: #fffeeea5;
+    width: calc(100% - 300px);
+    height: 100vh;
+    top: 0px;
+    right: 0px;
+}
+
+.half_hidden_btn{
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    z-index: 10;
+    cursor: pointer;
 }
