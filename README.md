@@ -17,8 +17,17 @@ The institution using this software is [Mainamati Cantonment General Hospital](h
 
 <p><img src="https://lh5.googleusercontent.com/B_UXYhpXlGyn3Ed9eT5zTl1NeZPYS6pxzZlAS4Uqn2kgD3CbtfA1eJDtiXVdsvOA=w1080-k-no" width="32%"><img style="padding:0% 1.5%;" src="https://lh3.googleusercontent.com/p/AF1QipP8HOFErQl22QY9GBeINIEN8YnLxroSVEkOagTk=s1600-w400" width="32%"><img src="https://lh3.googleusercontent.com/p/AF1QipNpC-MTFS4WAjVmnrop7uvhHPo63nXJv6ojJlmk=s1600-w400" width="32%"></p>
 
-<div style="display:grid; grid-template-columns: 1fr 1fr;">
-<a href="https://goo.gl/maps/ebSYf71tfHrybSoHA" target="_blank"><img src="https://rawcdn.githack.com/Thasinmahmudbd/project-media/7b95d423735b73db7f17a57127a37826af724f20/MCGH/map%20resized.gif" width="400"></a><span style="padding:0px 20px;"><strong>Location:</strong><br> Tipara Bazar, Mainamati. <br>Cumilla cantonment.<br> Cumilla.</span></div>
+<div style="display:flex; flex-direction: row; margin: 0;">
+    <a href="https://goo.gl/maps/ebSYf71tfHrybSoHA" target="_blank">
+        <img src="https://rawcdn.githack.com/Thasinmahmudbd/project-media/7b95d423735b73db7f17a57127a37826af724f20/MCGH/map%20resized.gif" width="400">
+    </a>
+    <p style="padding:0px 20px;">
+        <br><b>Location:</b>
+        <br>Tipara Bazar, Mainamati. 
+        <br>Cumilla cantonment.
+        <br>Cumilla.
+    </p>
+</div>
 
 <br>
 
