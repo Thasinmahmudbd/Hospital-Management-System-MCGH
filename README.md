@@ -18,7 +18,7 @@ The institution using this software is [Mainamati Cantonment General Hospital](h
 <p><img src="https://lh5.googleusercontent.com/B_UXYhpXlGyn3Ed9eT5zTl1NeZPYS6pxzZlAS4Uqn2kgD3CbtfA1eJDtiXVdsvOA=w1080-k-no" width="32%"><img style="padding:0% 1.5%;" src="https://lh3.googleusercontent.com/p/AF1QipP8HOFErQl22QY9GBeINIEN8YnLxroSVEkOagTk=s1600-w400" width="32%"><img src="https://lh3.googleusercontent.com/p/AF1QipNpC-MTFS4WAjVmnrop7uvhHPo63nXJv6ojJlmk=s1600-w400" width="32%"></p>
 
 <p style="display:flex;">
-<a href="https://goo.gl/maps/ebSYf71tfHrybSoHA" target="_blank"><img src="https://rawcdn.githack.com/Thasinmahmudbd/project-media/3bbfb2709262722c3a0e69cd6daa62008aaa2570/MCGH/map.gif" width="400"></a><span style="padding:0px 20px;"><strong>Location:</strong><br> Tipara Bazar, Mainamati. <br>Cumilla cantonment.<br> Cumilla.</span></p>
+<a href="https://goo.gl/maps/ebSYf71tfHrybSoHA" target="_blank"><img src="https://rawcdn.githack.com/Thasinmahmudbd/project-media/7b95d423735b73db7f17a57127a37826af724f20/MCGH/map%20resized.gif" width="400"></a><span style="padding:0px 20px;"><strong>Location:</strong><br> Tipara Bazar, Mainamati. <br>Cumilla cantonment.<br> Cumilla.</span></p>
 
 <br>
 
@@ -40,7 +40,7 @@ Each module dealt with one or more user types.
 
 User authentication was a big challenge in this project since I had to authenticate different types of accounts using the same login page. We also had to manage the user access as well thru the whole software. 
 
-<img src="https://rawcdn.githack.com/Thasinmahmudbd/project-media/2372b06c6d20f57442a02ab77dc3cf34aabd1282/MCGH/user%20login.gif" width="100%">
+<img src="https://rawcdn.githack.com/Thasinmahmudbd/project-media/7b95d423735b73db7f17a57127a37826af724f20/MCGH/user%20login%20resized.gif" width="100%">
 
 This was much easier because of the Laravel framework and it's built in middleware and routing settings.
 
@@ -123,7 +123,7 @@ I've covered all the features in the video overview of [Module 02](https://www.y
 
 Nurse end will deal with the admitted patients from reception end. This has a moderate amount of functions and does a lot of patent data tracking.
 
-<img src="https://rawcdn.githack.com/Thasinmahmudbd/project-media/2372b06c6d20f57442a02ab77dc3cf34aabd1282/MCGH/nurse%20end.gif" width="100%">
+<img src="https://rawcdn.githack.com/Thasinmahmudbd/project-media/7b95d423735b73db7f17a57127a37826af724f20/MCGH/nurse%20end%20resized.gif" width="100%">
 
 ## Actions
 
@@ -141,7 +141,7 @@ I've covered all the features in the video overview of [Module 02](https://www.y
 
 Accounts is the second most feature heavy portion after admin. Everything related to transactions is tracked by this portion.
 
-<img src="https://rawcdn.githack.com/Thasinmahmudbd/project-media/2372b06c6d20f57442a02ab77dc3cf34aabd1282/MCGH/accountant%20end.gif" width="100%">
+<img src="https://rawcdn.githack.com/Thasinmahmudbd/project-media/7b95d423735b73db7f17a57127a37826af724f20/MCGH/accountant%20end%20resized.gif" width="100%">
 
 ## Actions
 
@@ -166,7 +166,7 @@ I've covered all the features in the video overview of [Module 04](https://www.y
 
 This has authority over the whole system. So It is packed with functionality. 
 
-<img src="https://rawcdn.githack.com/Thasinmahmudbd/project-media/2372b06c6d20f57442a02ab77dc3cf34aabd1282/MCGH/admin%20end.gif" width="100%">
+<img src="https://rawcdn.githack.com/Thasinmahmudbd/project-media/336156a16ab31b86f24d59fdfb1f165b52174e15/MCGH/admin%20end%20resized.gif" width="100%">
 
 ## Actions
 
