@@ -1285,11 +1285,11 @@ Route::group(['middleware'=>['adminAuth']],function() {
     ##############################################################################################################################################
 
     # Going to logs.
-    # Redirecting to [FUNCTION-NO::]---in-controller.
+    # Redirecting to [FUNCTION-NO::27]---in-controller.
     Route::get('/admin/log/','App\Http\Controllers\accountant\accounts@log_browsing');
 
     # Filters logs.
-    # Redirecting to [FUNCTION-NO::]---in-controller.
+    # Redirecting to [FUNCTION-NO::28]---in-controller.
     Route::post('/admin/log/filter','App\Http\Controllers\accountant\accounts@log_filtering');
 
     ##############################################################################################################################################
@@ -1313,7 +1313,7 @@ Route::group(['middleware'=>['adminAuth']],function() {
     Route::get('/admin/employee/add/form','App\Http\Controllers\admin\admin@employee_add_form');
 
     # Going to insert new employee.
-    # Redirecting to [FUNCTION-NO::]---in-controller.
+    # Redirecting to [FUNCTION-NO::5]---in-controller.
     Route::post('/admin/employee/add','App\Http\Controllers\admin\admin@employee_add');
 
     ##############################################################################################################################################
@@ -1321,11 +1321,11 @@ Route::group(['middleware'=>['adminAuth']],function() {
     ##############################################################################################################################################
 
     # Going to doctor's list.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::06]---in-controller.
     Route::get('/admin/doctor/list','App\Http\Controllers\admin\admin@doctor_list_browse');
 
     # Searching doctor.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::07]---in-controller.
     Route::post('/admin/doctor/search','App\Http\Controllers\admin\admin@doctor_list_search');
 
     ##############################################################################################################################################
@@ -1333,11 +1333,11 @@ Route::group(['middleware'=>['adminAuth']],function() {
     ##############################################################################################################################################
 
     # Going to accountant's list.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::08]---in-controller.
     Route::get('/admin/accountant/list','App\Http\Controllers\admin\admin@accountant_list_browse');
 
     # Searching accountant.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::09]---in-controller.
     Route::post('/admin/accountant/search','App\Http\Controllers\admin\admin@accountant_list_search');
 
     ##############################################################################################################################################
@@ -1345,11 +1345,11 @@ Route::group(['middleware'=>['adminAuth']],function() {
     ##############################################################################################################################################
 
     # Going to receptionist's list.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::14]---in-controller.
     Route::get('/admin/receptionist/list','App\Http\Controllers\admin\admin@receptionist_list_browse');
 
     # Searching receptionist.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::15]---in-controller.
     Route::post('/admin/receptionist/search','App\Http\Controllers\admin\admin@receptionist_list_search');
 
     ##############################################################################################################################################
@@ -1357,11 +1357,11 @@ Route::group(['middleware'=>['adminAuth']],function() {
     ##############################################################################################################################################
 
     # Going to nurse's list.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::10]---in-controller.
     Route::get('/admin/nurse/list','App\Http\Controllers\admin\admin@nurse_list_browse');
 
     # Searching nurse.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::11]---in-controller.
     Route::post('/admin/nurse/search','App\Http\Controllers\admin\admin@nurse_list_search');
 
     ##############################################################################################################################################
@@ -1369,11 +1369,11 @@ Route::group(['middleware'=>['adminAuth']],function() {
     ##############################################################################################################################################
 
     # Going to ot's list.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::12]---in-controller.
     Route::get('/admin/ot/list','App\Http\Controllers\admin\admin@ot_list_browse');
 
     # Searching ot.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::13]---in-controller.
     Route::post('/admin/ot/search','App\Http\Controllers\admin\admin@ot_list_search');
 
     ##############################################################################################################################################
@@ -1381,7 +1381,7 @@ Route::group(['middleware'=>['adminAuth']],function() {
     ##############################################################################################################################################
 
     # Edits selected employee info.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::16]---in-controller.
     Route::post('/admin/info/edit/{id}','App\Http\Controllers\admin\admin@edit_employee_list');
 
     ##############################################################################################################################################
@@ -1389,15 +1389,15 @@ Route::group(['middleware'=>['adminAuth']],function() {
     ##############################################################################################################################################
 
     # Opens modal.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::17]---in-controller.
     Route::get('/admin/employee/delete/{id}/{emp}/{id2}','App\Http\Controllers\admin\admin@open_modal_employee');
 
     # Close modal.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::18]---in-controller.
     Route::get('/admin/cancel/delete','App\Http\Controllers\admin\admin@close_modal_employee');
 
     # Delete selected account.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::19]---in-controller.
     Route::get('/admin/confirm/delete','App\Http\Controllers\admin\admin@delete_employee');
 
     ##############################################################################################################################################
@@ -1405,27 +1405,27 @@ Route::group(['middleware'=>['adminAuth']],function() {
     ##############################################################################################################################################
 
     # Shows other services.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::20]---in-controller.
     Route::get('/admin/show/services','App\Http\Controllers\admin\admin@show_services');
 
     # Edits other services.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::21]---in-controller.
     Route::post('/admin/edit/services','App\Http\Controllers\admin\admin@edit_services');
 
     # Adds other services.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::22]---in-controller.
     Route::post('/admin/add/services','App\Http\Controllers\admin\admin@add_services');
 
     # Opens modal.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::23]---in-controller.
     Route::get('/admin/delete/services/{id}/{name}','App\Http\Controllers\admin\admin@open_modal_services');
 
     # Closes modal.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::24]---in-controller.
     Route::get('/admin/cancel/service/delete','App\Http\Controllers\admin\admin@close_modal_services');
 
     # Delete selected service.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::25]---in-controller.
     Route::get('/admin/confirm/service/delete','App\Http\Controllers\admin\admin@delete_services');
 
     ##############################################################################################################################################
@@ -1433,19 +1433,19 @@ Route::group(['middleware'=>['adminAuth']],function() {
     ##############################################################################################################################################
 
     # Going to bed's list.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::26]---in-controller.
     Route::get('/admin/bed/list/{type}/{quality}','App\Http\Controllers\admin\admin@bed_list_browse');
 
     # Going to insert new bed info form view.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::27]---in-controller.
     Route::get('/admin/bed/add/form/{type}/{quality}','App\Http\Controllers\admin\admin@bed_add_form');
 
     # Adds new beds.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::28]---in-controller.
     Route::post('/admin/bed/add','App\Http\Controllers\admin\admin@bed_add');
 
     # Edits selected bed info.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::29]---in-controller.
     Route::post('/admin/bed/info/edit/{id}','App\Http\Controllers\admin\admin@edit_bed_list');
 
     ##############################################################################################################################################
@@ -1453,15 +1453,15 @@ Route::group(['middleware'=>['adminAuth']],function() {
     ##############################################################################################################################################
 
     # Opens modal.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::30]---in-controller.
     Route::get('/admin/bed/delete/{id}/{bed_no}/{quality}/{bed_type}/{conf}','App\Http\Controllers\admin\admin@open_modal_bed');
 
     # Close modal.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::31]---in-controller.
     Route::get('/admin/cancel/bed/delete','App\Http\Controllers\admin\admin@close_modal_bed');
 
     # Delete selected bed.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::32]---in-controller.
     Route::get('/admin/confirm/bed/delete','App\Http\Controllers\admin\admin@delete_bed');
 
     ##############################################################################################################################################
@@ -1469,11 +1469,11 @@ Route::group(['middleware'=>['adminAuth']],function() {
     ##############################################################################################################################################
 
     # Shows admin list.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::33]---in-controller.
     Route::get('/admin/admin/list','App\Http\Controllers\admin\admin@admin_list');
 
     # Adds admin.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::34]---in-controller.
     Route::post('/admin/admin/add','App\Http\Controllers\admin\admin@admin_add');
 
     ##############################################################################################################################################
@@ -1481,15 +1481,15 @@ Route::group(['middleware'=>['adminAuth']],function() {
     ##############################################################################################################################################
 
     # Opens modal.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::35]---in-controller.
     Route::get('/admin/admin/delete/{ad_id}/{ai_id}','App\Http\Controllers\admin\admin@open_modal_admin');
 
     # Close modal.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::36]---in-controller.
     Route::get('/admin/cancel/admin/delete','App\Http\Controllers\admin\admin@close_modal_admin');
 
     # Delete selected admin.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::37]---in-controller.
     Route::get('/admin/confirm/admin/delete','App\Http\Controllers\admin\admin@delete_admin');
 
     ##############################################################################################################################################
@@ -1497,7 +1497,7 @@ Route::group(['middleware'=>['adminAuth']],function() {
     ##############################################################################################################################################
 
     # Edits admin list.
-    # Redirecting to [FUNCTION-NO::0]---in-controller.
+    # Redirecting to [FUNCTION-NO::38]---in-controller.
     Route::post('/admin/admin/edit/{id}','App\Http\Controllers\admin\admin@edit_admin_list');
 
     ##############################################################################################################################################
@@ -1509,8 +1509,48 @@ Route::group(['middleware'=>['adminAuth']],function() {
     Route::view('/admin/edit/profile','hospital/admin/edit_profile');
 
     # Update profile.
-    # Redirecting to [FUNCTION-NO::]---in-controller.
+    # Redirecting to [FUNCTION-NO::39]---in-controller.
     Route::post('/admin/save_edit/','App\Http\Controllers\admin\admin@edit_profile');
+
+    ##############################################################################################################################################
+    # Tests.  [C::admin.php]
+    ##############################################################################################################################################
+
+    # Shows other services.
+    # Redirecting to [FUNCTION-NO::40]---in-controller.
+    Route::get('/admin/test/list/{Hook}','App\Http\Controllers\admin\admin@show_tests');
+
+    # Edits other services.
+    # Redirecting to [FUNCTION-NO::41]---in-controller.
+    Route::post('/admin/edit/tests','App\Http\Controllers\admin\admin@edit_tests');
+
+    # Adds other services.
+    # Redirecting to [FUNCTION-NO::42]---in-controller.
+    Route::post('/admin/add/tests','App\Http\Controllers\admin\admin@add_tests');
+
+    # Opens modal.
+    # Redirecting to [FUNCTION-NO::43]---in-controller.
+    Route::get('/admin/delete/test/{id}/{name}','App\Http\Controllers\admin\admin@open_modal_tests');
+
+    # Closes modal.
+    # Redirecting to [FUNCTION-NO::44]---in-controller.
+    Route::get('/admin/cancel/test/delete','App\Http\Controllers\admin\admin@close_modal_tests');
+
+    # Delete selected service.
+    # Redirecting to [FUNCTION-NO::45]---in-controller.
+    Route::get('/admin/confirm/test/delete','App\Http\Controllers\admin\admin@delete_tests');
+
+    ##############################################################################################################################################
+    # Tests block/unblock.  [C::admin.php]
+    ##############################################################################################################################################
+
+    # Block test.
+    # Redirecting to [FUNCTION-NO::46]---in-controller.
+    Route::get('/admin/test/block/{id}/{name}','App\Http\Controllers\admin\admin@block_test');
+
+    # Unblock test.
+    # Redirecting to [FUNCTION-NO::47]---in-controller.
+    Route::get('/admin/test/unblock/{id}/{name}','App\Http\Controllers\admin\admin@unblock_test');
 
 
 

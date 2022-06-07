@@ -871,22 +871,22 @@ function block_account(Request $request, $emp_id){
     $empListType = $request->session()->get('empListType');
 
     if($empListType == "doctors"){
-        # Redirecting to [FUNCTION-NO::0].
+        # Redirecting to [FUNCTION-NO::06].
         return redirect('/admin/doctor/list');
     }if($empListType == "accounts"){
-        # Redirecting to [FUNCTION-NO::0].
+        # Redirecting to [FUNCTION-NO::08].
         return redirect('/admin/accountant/list');
     }if($empListType == "nurses"){
-        # Redirecting to [FUNCTION-NO::0].
+        # Redirecting to [FUNCTION-NO::10].
         return redirect('/admin/nurse/list');
     }if($empListType == "ot_operator"){
-        # Redirecting to [FUNCTION-NO::0].
+        # Redirecting to [FUNCTION-NO::12].
         return redirect('/admin/ot/list');
     }if($empListType == "receptionists"){
-        # Redirecting to [FUNCTION-NO::0].
+        # Redirecting to [FUNCTION-NO::14].
         return redirect('/admin/receptionist/list');
     }if($empListType == "admin"){
-        # Redirecting to [FUNCTION-NO::0].
+        # Redirecting to [FUNCTION-NO::33].
         return redirect('/admin/admin/list');
     }
 
@@ -938,22 +938,22 @@ function unblock_account(Request $request, $emp_id){
     $empListType = $request->session()->get('empListType');
 
     if($empListType == "doctors"){
-        # Redirecting to [FUNCTION-NO::0].
+        # Redirecting to [FUNCTION-NO::06].
         return redirect('/admin/doctor/list');
     }if($empListType == "accounts"){
-        # Redirecting to [FUNCTION-NO::0].
+        # Redirecting to [FUNCTION-NO::08].
         return redirect('/admin/accountant/list');
     }if($empListType == "nurses"){
-        # Redirecting to [FUNCTION-NO::0].
+        # Redirecting to [FUNCTION-NO::10].
         return redirect('/admin/nurse/list');
     }if($empListType == "ot_operator"){
-        # Redirecting to [FUNCTION-NO::0].
+        # Redirecting to [FUNCTION-NO::12].
         return redirect('/admin/ot/list');
     }if($empListType == "receptionists"){
-        # Redirecting to [FUNCTION-NO::0].
+        # Redirecting to [FUNCTION-NO::14].
         return redirect('/admin/receptionist/list');
     }if($empListType == "admin"){
-        # Redirecting to [FUNCTION-NO::0].
+        # Redirecting to [FUNCTION-NO::33].
         return redirect('/admin/admin/list');
     }
 
@@ -1006,7 +1006,7 @@ function employee_add_form(Request $request){
 
 
 #########################
-#### FUNCTION-NO::0 ####
+#### FUNCTION-NO::05 ####
 #########################
 # Adds new employee.
 
@@ -1193,27 +1193,27 @@ function employee_add(Request $request){
     # Personal check redirect.
     if($table=="doctors"){
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::06].
         return redirect('/admin/doctor/list');
 
     }if($table=="nurses"){
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::10].
         return redirect('/admin/nurse/list');
 
     }if($table=="accounts"){
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::08].
         return redirect('/admin/accountant/list');
 
     }if($table=="ot_operator"){
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::12].
         return redirect('/admin/ot/list');
 
     }if($table=="receptionist"){
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::14].
         return redirect('/admin/receptionist/list');
 
     }
@@ -1232,7 +1232,7 @@ function employee_add(Request $request){
 
 
 #########################
-#### FUNCTION-NO::0 ####
+#### FUNCTION-NO::06 ####
 #########################
 # Shows doctor list;
 # Stored data in 2 sessions.
@@ -1265,7 +1265,7 @@ function doctor_list_browse(Request $request){
 
 
 #########################
-#### FUNCTION-NO::0 ####
+#### FUNCTION-NO::07 ####
 #########################
 # Search doctor list;
 # Stored data in 2 sessions.
@@ -1315,7 +1315,7 @@ function doctor_list_search(Request $request){
 
 
 #########################
-#### FUNCTION-NO::0 ####
+#### FUNCTION-NO::08 ####
 #########################
 # Shows accountant list;
 # Stored data in 2 sessions.
@@ -1348,7 +1348,7 @@ function accountant_list_browse(Request $request){
 
 
 #########################
-#### FUNCTION-NO::0 ####
+#### FUNCTION-NO::09 ####
 #########################
 # Search accountant list;
 # Stored data in 2 sessions.
@@ -1397,7 +1397,7 @@ function accountant_list_search(Request $request){
 
 
 #########################
-#### FUNCTION-NO::0 ####
+#### FUNCTION-NO::10 ####
 #########################
 # Shows nurse list;
 # Stored data in 2 sessions.
@@ -1430,7 +1430,7 @@ function nurse_list_browse(Request $request){
 
 
 #########################
-#### FUNCTION-NO::0 ####
+#### FUNCTION-NO::11 ####
 #########################
 # Search nurse list;
 # Stored data in 2 sessions.
@@ -1479,7 +1479,7 @@ function nurse_list_search(Request $request){
 
 
 #########################
-#### FUNCTION-NO::0 ####
+#### FUNCTION-NO::12 ####
 #########################
 # Shows ot list;
 # Stored data in 2 sessions.
@@ -1512,7 +1512,7 @@ function ot_list_browse(Request $request){
 
 
 #########################
-#### FUNCTION-NO::0 ####
+#### FUNCTION-NO::13 ####
 #########################
 # Search ot list;
 # Stored data in 2 sessions.
@@ -1561,7 +1561,7 @@ function ot_list_search(Request $request){
 
 
 #########################
-#### FUNCTION-NO::0 ####
+#### FUNCTION-NO::14 ####
 #########################
 # Shows receptionist list;
 # Stored data in 2 sessions.
@@ -1594,7 +1594,7 @@ function receptionist_list_browse(Request $request){
 
 
 #########################
-#### FUNCTION-NO::0 ####
+#### FUNCTION-NO::15 ####
 #########################
 # Search receptionist list;
 # Stored data in 2 sessions.
@@ -1643,7 +1643,7 @@ function receptionist_list_search(Request $request){
 
 
 #########################
-#### FUNCTION-NO::0 ####
+#### FUNCTION-NO::16 ####
 #########################
 # Search nurse list;
 # Stored data in 2 sessions;
@@ -1698,7 +1698,7 @@ function edit_employee_list(Request $request, $id){
         $request->session()->flash('msg', $msg);
         $request->session()->flash('msgHook', 'edit');
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::06].
         return redirect('/admin/doctor/list');
 
     }if($personal=="nurses"){
@@ -1719,7 +1719,7 @@ function edit_employee_list(Request $request, $id){
         $request->session()->flash('msg', $msg);
         $request->session()->flash('msgHook', 'edit');
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::10].
         return redirect('/admin/nurse/list');
 
     }if($personal=="receptionists"){
@@ -1740,7 +1740,7 @@ function edit_employee_list(Request $request, $id){
         $request->session()->flash('msg', $msg);
         $request->session()->flash('msgHook', 'edit');
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::14].
         return redirect('/admin/receptionist/list');
 
     }if($personal=="accounts"){
@@ -1761,7 +1761,7 @@ function edit_employee_list(Request $request, $id){
         $request->session()->flash('msg', $msg);
         $request->session()->flash('msgHook', 'edit');
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::08].
         return redirect('/admin/accountant/list');
 
     }if($personal=="ot_operator"){
@@ -1782,7 +1782,7 @@ function edit_employee_list(Request $request, $id){
         $request->session()->flash('msg', $msg);
         $request->session()->flash('msgHook', 'edit');
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::12].
         return redirect('/admin/ot/list');
 
     }
@@ -1801,7 +1801,7 @@ function edit_employee_list(Request $request, $id){
 
 
 #########################
-#### FUNCTION-NO:: ####
+#### FUNCTION-NO::17 ####
 #########################
 # Opens modal;
 # Stored data in 4 sessions..
@@ -1816,27 +1816,27 @@ function open_modal_employee(Request $request, $id, $emp, $id2){
     # Personal check redirect.
     if($emp=="doctors"){
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::06].
         return redirect('/admin/doctor/list');
 
     }if($emp=="nurses"){
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::10].
         return redirect('/admin/nurse/list');
 
     }if($emp=="accounts"){
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::08].
         return redirect('/admin/accountant/list');
 
     }if($emp=="receptionists"){
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::14].
         return redirect('/admin/receptionist/list');
 
     }if($emp=="ot_operator"){
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::12].
         return redirect('/admin/ot/list');
 
     }
@@ -1855,7 +1855,7 @@ function open_modal_employee(Request $request, $id, $emp, $id2){
 
 
 #########################
-#### FUNCTION-NO:: ####
+#### FUNCTION-NO::18 ####
 #########################
 # Closes modal;
 # Removes data from 3 sessions.
@@ -1873,35 +1873,35 @@ function close_modal_employee(Request $request){
 
         $request->session()->forget('emp_del_type');
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::06].
         return redirect('/admin/doctor/list');
 
     }if($emp=="nurses"){
 
         $request->session()->forget('emp_del_type');
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::10].
         return redirect('/admin/nurse/list');
 
     }if($emp=="accounts"){
 
         $request->session()->forget('emp_del_type');
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::08].
         return redirect('/admin/accountant/list');
 
     }if($emp=="receptionists"){
 
         $request->session()->forget('emp_del_type');
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::14].
         return redirect('/admin/receptionist/list');
 
     }if($emp=="ot_operator"){
 
         $request->session()->forget('emp_del_type');
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::12].
         return redirect('/admin/ot/list');
 
     }
@@ -1920,7 +1920,7 @@ function close_modal_employee(Request $request){
 
 
 #########################
-#### FUNCTION-NO:: ####
+#### FUNCTION-NO::19 ####
 #########################
 # Deletes employee;
 # Delete might happen on --: TABLE :------ doctors;
@@ -1968,27 +1968,27 @@ function delete_employee(Request $request){
     # Personal check redirect.
     if($emp=="doctors"){
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::06].
         return redirect('/admin/doctor/list');
 
     }if($emp=="nurses"){
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::10].
         return redirect('/admin/nurse/list');
 
     }if($emp=="accounts"){
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::08].
         return redirect('/admin/accountant/list');
 
     }if($emp=="receptionists"){
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::14].
         return redirect('/admin/receptionist/list');
 
     }if($emp=="ot_operator"){
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::12].
         return redirect('/admin/ot/list');
 
     }
@@ -2007,7 +2007,7 @@ function delete_employee(Request $request){
 
 
 #########################
-#### FUNCTION-NO::0 ####
+#### FUNCTION-NO::20 ####
 #########################
 # Shows other service list.
 
@@ -2034,7 +2034,7 @@ function show_services(Request $request){
 
 
 #########################
-#### FUNCTION-NO::0 ####
+#### FUNCTION-NO::21 ####
 #########################
 # Edits other service list;
 # Update will happen on --: TABLE :------ ot_operator;
@@ -2087,7 +2087,7 @@ function edit_services(Request $request){
 
         DB::table('admin_activity_log')->insert($log);
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::20].
         return redirect('/admin/show/services');
 
     }else{
@@ -2097,7 +2097,7 @@ function edit_services(Request $request){
         $request->session()->flash('msg', $msg);
         $request->session()->flash('msgHook', 'delete');
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::20].
         return redirect('/admin/show/services');
 
     }
@@ -2116,7 +2116,7 @@ function edit_services(Request $request){
 
 
 #########################
-#### FUNCTION-NO::0 ####
+#### FUNCTION-NO::22 ####
 #########################
 # Adds other service;
 # Entry will happen on --: TABLE :------ ot_operator;
@@ -2167,7 +2167,7 @@ function add_services(Request $request){
 
         DB::table('admin_activity_log')->insert($log);
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::20].
         return redirect('/admin/show/services');
 
     }else{
@@ -2177,7 +2177,7 @@ function add_services(Request $request){
         $request->session()->flash('msg', $msg);
         $request->session()->flash('msgHook', 'delete');
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::20].
         return redirect('/admin/show/services');
 
     }
@@ -2196,7 +2196,7 @@ function add_services(Request $request){
 
 
 #########################
-#### FUNCTION-NO:: ####
+#### FUNCTION-NO::23 ####
 #########################
 # Opens modal;
 # Stored data in 3 sessions.
@@ -2207,7 +2207,7 @@ function open_modal_services(Request $request, $id, $name){
     $request->session()->put('ser_del_name',$name);
     $request->session()->put('modal','on');
 
-    # Redirecting to [FUNCTION-NO::].
+    # Redirecting to [FUNCTION-NO::20].
     return redirect('/admin/show/services');
 
 
@@ -2225,7 +2225,7 @@ function open_modal_services(Request $request, $id, $name){
 
 
 #########################
-#### FUNCTION-NO:: ####
+#### FUNCTION-NO::24 ####
 #########################
 # Closes modal;
 # Removes data from 2 sessions.
@@ -2237,7 +2237,7 @@ function close_modal_services(Request $request){
     $request->session()->forget('ser_del_name');
     $request->session()->put('modal','off');
 
-    # Redirecting to [FUNCTION-NO::].
+    # Redirecting to [FUNCTION-NO::20].
     return redirect('/admin/show/services');
 
 
@@ -2255,7 +2255,7 @@ function close_modal_services(Request $request){
 
 
 #########################
-#### FUNCTION-NO:: ####
+#### FUNCTION-NO::25 ####
 #########################
 # Deletes service;
 # Delete will happen on  --: TABLE :------ others_info;
@@ -2289,7 +2289,7 @@ function delete_services(Request $request){
     $request->session()->flash('msg', $msg);
     $request->session()->flash('msgHook', 'delete');
 
-    # Redirecting to [FUNCTION-NO::].
+    # Redirecting to [FUNCTION-NO::20].
     return redirect('/admin/show/services');
 
 }
@@ -2306,7 +2306,7 @@ function delete_services(Request $request){
 
 
 #########################
-#### FUNCTION-NO::0 ####
+#### FUNCTION-NO::26 ####
 #########################
 # Shows bed list;
 # Stored data in 2 sessions.
@@ -2339,7 +2339,7 @@ function bed_list_browse(Request $request, $type, $quality){
 
 
 #########################
-#### FUNCTION-NO::0 ####
+#### FUNCTION-NO::27 ####
 #########################
 # Generates necessary data for bed registration;
 # Stored data in 1 sessions.
@@ -2366,7 +2366,7 @@ function bed_add_form(Request $request, $type, $quality){
 
 
 #########################
-#### FUNCTION-NO::0 ####
+#### FUNCTION-NO::28 ####
 #########################
 # Adds new bed.
 
@@ -2413,7 +2413,7 @@ function bed_add(Request $request){
     $request->session()->flash('msg', $msg);
     $request->session()->flash('msgHook', 'entry');
 
-    # Redirecting to [FUNCTION-NO::].
+    # Redirecting to [FUNCTION-NO::26].
     return redirect('/admin/bed/list/'.$Bed_Type.'/'.$Quality);
 
 }
@@ -2430,7 +2430,7 @@ function bed_add(Request $request){
 
 
 #########################
-#### FUNCTION-NO::0 ####
+#### FUNCTION-NO::29 ####
 #########################
 # Edits bed ID;
 # Stored data in 2 sessions;
@@ -2482,7 +2482,7 @@ function edit_bed_list(Request $request, $id){
     $request->session()->flash('msg', $msg);
     $request->session()->flash('msgHook', 'edit');
 
-    # Redirecting to [FUNCTION-NO::].
+    # Redirecting to [FUNCTION-NO::26].
     return redirect('/admin/bed/list/'.$Bed_Type.'/'.$Quality);
 
 }
@@ -2499,7 +2499,7 @@ function edit_bed_list(Request $request, $id){
 
 
 #########################
-#### FUNCTION-NO:: ####
+#### FUNCTION-NO::30 ####
 #########################
 # Opens modal;
 # Stored data in 6 sessions.
@@ -2513,7 +2513,7 @@ function open_modal_bed(Request $request, $id, $bed_no, $quality, $bed_type, $co
     $request->session()->put('bed_del_conf',$conf);
     $request->session()->put('modal','on');
 
-    # Redirecting to [FUNCTION-NO::].
+    # Redirecting to [FUNCTION-NO::26].
     return redirect('/admin/bed/list/'.$bed_type.'/'.$quality);
 
 
@@ -2531,7 +2531,7 @@ function open_modal_bed(Request $request, $id, $bed_no, $quality, $bed_type, $co
 
 
 #########################
-#### FUNCTION-NO:: ####
+#### FUNCTION-NO::31 ####
 #########################
 # Closes modal;
 # Removes data from 5 sessions;
@@ -2549,7 +2549,7 @@ function close_modal_bed(Request $request){
     $request->session()->forget('bed_del_conf');
     $request->session()->put('modal','off');
 
-    # Redirecting to [FUNCTION-NO::].
+    # Redirecting to [FUNCTION-NO::26].
     return redirect('/admin/bed/list/'.$Bed_Type.'/'.$Quality);
 
 
@@ -2567,7 +2567,7 @@ function close_modal_bed(Request $request){
 
 
 #########################
-#### FUNCTION-NO:: ####
+#### FUNCTION-NO::32 ####
 #########################
 # Deletes bed;
 # Delete will happen on  --: TABLE :------ beds;
@@ -2614,7 +2614,7 @@ function delete_bed(Request $request){
 
     }
 
-    # Redirecting to [FUNCTION-NO::].
+    # Redirecting to [FUNCTION-NO::26].
     return redirect('/admin/bed/list/'.$Bed_Type.'/'.$Quality);
 
 }
@@ -2631,7 +2631,7 @@ function delete_bed(Request $request){
 
 
 #########################
-#### FUNCTION-NO::0 ####
+#### FUNCTION-NO::33 ####
 #########################
 # Shows admin list;
 # Stored data in 1 sessions.
@@ -2663,7 +2663,7 @@ function admin_list(Request $request){
 
 
 #########################
-#### FUNCTION-NO::0 ####
+#### FUNCTION-NO::34 ####
 #########################
 # Adds new admin;
 # Entry will happen on   --: TABLE :------ admin
@@ -2738,7 +2738,7 @@ function admin_add(Request $request){
         $request->session()->flash('msg', $msg);
         $request->session()->flash('msgHook', 'entry');
 
-        # Redirecting to [FUNCTION-NO::].
+        # Redirecting to [FUNCTION-NO::33].
         return redirect('/admin/admin/list');
 
 }
@@ -2755,7 +2755,7 @@ function admin_add(Request $request){
 
 
 #########################
-#### FUNCTION-NO:: ####
+#### FUNCTION-NO::35 ####
 #########################
 # Opens modal;
 # Stored data in 3 sessions.
@@ -2766,7 +2766,7 @@ function open_modal_admin(Request $request, $ad_id, $id){
     $request->session()->put('ad_del_id',$id);
     $request->session()->put('modal','on');
 
-    # Redirecting to [FUNCTION-NO::].
+    # Redirecting to [FUNCTION-NO::33].
     return redirect('/admin/admin/list');
 
 
@@ -2784,7 +2784,7 @@ function open_modal_admin(Request $request, $ad_id, $id){
 
 
 #########################
-#### FUNCTION-NO:: ####
+#### FUNCTION-NO::36 ####
 #########################
 # Closes modal;
 # Removes data from 2 sessions.
@@ -2796,7 +2796,7 @@ function close_modal_admin(Request $request){
     $request->session()->forget('ad_del_id');
     $request->session()->put('modal','off');
 
-    # Redirecting to [FUNCTION-NO::].
+    # Redirecting to [FUNCTION-NO::33].
     return redirect('/admin/admin/list');
 
 
@@ -2814,7 +2814,7 @@ function close_modal_admin(Request $request){
 
 
 #########################
-#### FUNCTION-NO:: ####
+#### FUNCTION-NO::37 ####
 #########################
 # Deletes admin;
 # Delete will happen on --: TABLE :------ admin;
@@ -2856,7 +2856,7 @@ function delete_admin(Request $request){
     $request->session()->flash('msgHook', 'delete');
 
 
-    # Redirecting to [FUNCTION-NO::].
+    # Redirecting to [FUNCTION-NO::33].
     return redirect('/admin/admin/list');
 
 }
@@ -2873,7 +2873,7 @@ function delete_admin(Request $request){
 
 
 #########################
-#### FUNCTION-NO::0 ####
+#### FUNCTION-NO::38 ####
 #########################
 # Updates admin list;
 # Update will happen on --: TABLE :------ admin;
@@ -2912,7 +2912,7 @@ function edit_admin_list(Request $request, $id){
     $request->session()->flash('msg', $msg);
     $request->session()->flash('msgHook', 'edit');
 
-    # Redirecting to [FUNCTION-NO::].
+    # Redirecting to [FUNCTION-NO::33].
     return redirect('/admin/admin/list');
 
 }
@@ -2929,7 +2929,7 @@ function edit_admin_list(Request $request, $id){
 
 
 #########################
-#### FUNCTION-NO:: ####
+#### FUNCTION-NO::39 ####
 #########################
 # Edit admin profile;
 # Update will happen on --: TABLE :------ admin.
@@ -2972,7 +2972,7 @@ function edit_profile(Request $request){
     
     $request->session()->flash('msg','Profile updated successfully.');
 
-    # Redirecting to [FUNCTION-NO::].
+    # Redirecting to [FUNCTION-NO::01].
     return redirect('/admin/home/');
 
 }
@@ -2987,6 +2987,433 @@ function edit_profile(Request $request){
 
 
 
+
+#########################
+#### FUNCTION-NO::40 ####
+#########################
+# Shows test list.
+
+function show_tests(Request $request, $hook){
+
+    if($hook=="Dental"){
+        $available_data['result']=DB::table('dental_info')
+        ->orderBy('AI_ID','desc')
+        ->get();
+
+    }else{
+        $available_data['result']=DB::table('pathology_info')
+        ->where('Groups',$hook)
+        ->orderBy('AI_ID','desc')
+        ->get();
+    }
+
+    $request->session()->put('hook',$hook);
+
+    # Returning to the view below.
+    return view('hospital/admin/tests', $available_data);
+
+}
+
+# End of function show_tests.                               <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::41 ####
+#########################
+# Edits test list;
+# Update might happen on --: TABLE :------ dental_info;
+# Update might happen on --: TABLE :------ pathology_info;
+# Entry will happen on   --: TABLE :------ admin_activity_log..
+
+function edit_tests(Request $request){
+
+    $ad_id = $request->session()->get('ADMIN_SESSION_ID');
+    $hook = $request->session()->get('hook');
+    $id = $request->input('id');
+    $name = $request->input('name');
+
+    if($hook=='Dental'){
+
+        $entry=array(
+
+            'Test_Name'=>$name,
+            'Rate'=>$request->input('rate')
+
+        );
+
+        DB::table('dental_info')
+            ->where('AI_ID',$id)
+            ->update($entry);
+    
+    }else{
+
+        $entry=array(
+
+            'Test_Name'=>$name,
+            'Test_Fee'=>$request->input('rate'),
+            'Room_No'=>$request->input('room')
+
+        );
+
+        DB::table('pathology_info')
+            ->where('AI_ID',$id)
+            ->update($entry);
+
+    }
+
+    # Session flash message.
+    $msg = $hook.' test: '.$name.' updated.';
+    $request->session()->flash('msg', $msg);
+    $request->session()->flash('msgHook', 'edit');
+
+    # Activity log.
+    $log=array(
+
+        'Ad_ID'=>$ad_id,
+        'Log'=>$msg
+
+    );
+
+    DB::table('admin_activity_log')->insert($log);
+
+    # Redirecting to [FUNCTION-NO::40].
+    return redirect('/admin/test/list/'.$hook);
+
+}
+
+# End of function edit_tests.                               <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::42 ####
+#########################
+# Adds test;
+# Entry might happen on --: TABLE :------ dental_info;
+# Entry might happen on --: TABLE :------ pathology_info;
+# Entry will happen on  --: TABLE :------ admin_activity_log..
+
+function add_tests(Request $request){
+
+    $ad_id = $request->session()->get('ADMIN_SESSION_ID');
+    $hook = $request->session()->get('hook');
+    $name = $request->input('name');
+
+    if($hook=='Dental'){
+
+        $entry=array(
+
+            'Test_Name'=>$name,
+            'Rate'=>$request->input('rate'),
+            'State'=>$request->input('state')
+
+        );
+
+        DB::table('dental_info')
+            ->insert($entry);
+    
+    }else{
+
+        $entry=array(
+
+            'Test_Name'=>$name,
+            'Test_Fee'=>$request->input('rate'),
+            'Room_No'=>$request->input('room'),
+            'Groups'=>$hook,
+            'State'=>$request->input('state')
+
+        );
+
+        DB::table('pathology_info')
+            ->insert($entry);
+
+    }
+
+    # Session flash message.
+    $msg = $hook.' test: '.$name.' added.';
+    $request->session()->flash('msg', $msg);
+    $request->session()->flash('msgHook', 'add');
+
+    # Activity log.
+    $log=array(
+
+        'Ad_ID'=>$ad_id,
+        'Log'=>$msg
+
+    );
+
+    DB::table('admin_activity_log')->insert($log);
+
+    # Redirecting to [FUNCTION-NO::40].
+    return redirect('/admin/test/list/'.$hook);
+
+
+}
+
+# End of function add_tests.                                <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::43 ####
+#########################
+# Opens modal;
+# Stored data in 3 sessions.
+
+function open_modal_tests(Request $request, $id, $name){
+
+    $request->session()->put('tes_del_id',$id);
+    $request->session()->put('tes_del_name',$name);
+    $request->session()->put('modal','on');
+    $hook = $request->session()->get('hook');
+
+    # Redirecting to [FUNCTION-NO::40].
+    return redirect('/admin/test/list/'.$hook);
+
+
+}
+
+# End of function open_modal_tests.                         <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::44 ####
+#########################
+# Closes modal;
+# Removes data from 2 sessions.
+# Stored data in 1 sessions.
+
+function close_modal_tests(Request $request){
+
+    $request->session()->forget('tes_del_id');
+    $request->session()->forget('tes_del_name');
+    $request->session()->put('modal','off');
+    $hook = $request->session()->get('hook');
+
+    # Redirecting to [FUNCTION-NO::40].
+    return redirect('/admin/test/list/'.$hook);
+
+
+}
+
+# End of function close_modal_tests.                        <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::45 ####
+#########################
+# Deletes service;
+# Delete might happen on --: TABLE :------ dental_info;
+# Delete might happen on --: TABLE :------ pathology_info;
+# Entry will happen on   --: TABLE :------ admin_activity_log.
+
+function delete_tests(Request $request){
+
+    $id = $request->session()->get('tes_del_id');
+    $hook = $request->session()->get('hook');
+    $name = $request->session()->get('tes_del_name');
+    $ad_id = $request->session()->get('ADMIN_SESSION_ID');
+    $request->session()->put('modal','off');
+
+    # Delete test.
+    if($hook=='Dental'){
+
+        DB::table('dental_info')
+            ->where('AI_ID', $id)
+            ->delete();
+    
+    }else{
+
+        DB::table('pathology_info')
+            ->where('AI_ID', $id)
+            ->delete();
+
+    }
+
+    # Activity log.
+    $msg = $hook.' test: '.$name.' removed.';
+
+    $log=array(
+
+        'Ad_ID'=>$ad_id,
+        'Log'=>$msg
+
+    );
+
+    DB::table('admin_activity_log')->insert($log);
+
+    # Session flash message.
+    $request->session()->flash('msg', $msg);
+    $request->session()->flash('msgHook', 'delete');
+
+    # Redirecting to [FUNCTION-NO::40].
+    return redirect('/admin/test/list/'.$hook);
+
+}
+
+# End of function delete_tests.                             <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me.
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::46 ####
+#########################
+# Blocks tests;
+# Update might happen on --: TABLE :------ dental_info;
+# Update might happen on --: TABLE :------ pathology_info.
+
+function block_test(Request $request, $id, $name){
+
+    $ad_id = $request->session()->get('ADMIN_SESSION_ID');
+    $hook = $request->session()->get('hook');
+
+    $state=array(
+        'State'=>0
+    );
+
+    # Update state.
+    if($hook=='Dental'){
+
+        DB::table('dental_info')
+            ->where('AI_ID',$id)
+            ->update($state);
+    
+    }else{
+
+        DB::table('pathology_info')
+            ->where('AI_ID',$id)
+            ->update($state);
+
+    }
+
+    # Update activity log.
+    $msg = $hook.' test: '.$name.' blocked.';
+
+    $entry=array(
+
+        'Ad_ID'=>$ad_id,
+        'Log'=>$msg
+
+    );
+
+    DB::table('admin_activity_log')->insert($entry);
+
+    # Redirecting to [FUNCTION-NO::40].
+    return redirect('/admin/test/list/'.$hook);
+
+}
+
+# End of function block_test.                               <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+
+#########################
+#### FUNCTION-NO::47 ####
+#########################
+# Unblocks tests;
+# Update might happen on --: TABLE :------ dental_info;
+# Update might happen on --: TABLE :------ pathology_info.
+
+function unblock_test(Request $request, $id, $name){
+
+    $ad_id = $request->session()->get('ADMIN_SESSION_ID');
+    $hook = $request->session()->get('hook');
+
+    $state=array(
+        'State'=>1
+    );
+
+    # Update state.
+    if($hook=='Dental'){
+
+        DB::table('dental_info')
+            ->where('AI_ID',$id)
+            ->update($state);
+    
+    }else{
+
+        DB::table('pathology_info')
+            ->where('AI_ID',$id)
+            ->update($state);
+
+    }
+
+    # Update activity log.
+    $msg = $hook.' test: '.$name.' blocked.';
+
+    $entry=array(
+
+        'Ad_ID'=>$ad_id,
+        'Log'=>$msg
+
+    );
+
+    DB::table('admin_activity_log')->insert($entry);
+
+    # Redirecting to [FUNCTION-NO::40].
+    return redirect('/admin/test/list/'.$hook);
+
+}
+
+# End of function unblock_test.                             <-------#
+                                                                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Note: Hello, future me,
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 

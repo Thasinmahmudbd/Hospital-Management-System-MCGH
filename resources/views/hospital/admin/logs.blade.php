@@ -167,6 +167,59 @@
 </div>
 
 <li class="link_item">
+    <a href="#" class="link" onclick="toggleSubLinkContainer4()">
+        <i class="link_icons fas fa-vials"></i>
+        <span class="link_name"> Tests </span>
+    </a>
+</li>
+
+<div class="sub_link_item disNone" id="subLinkContainer4">
+
+    <li class="link_item">
+        <a href="{{url('/admin/test/list/'.'Pathology')}}" class="link2">
+            <i class="link_icons fas fa-tint"></i>
+            <span class="link_name"> Pathology </span>
+        </a>
+    </li>
+
+    <li class="link_item">
+        <a href="{{url('/admin/test/list/'.'Hormone')}}" class="link2">
+            <i class="link_icons fas fa-dna"></i>
+            <span class="link_name"> Hormone </span>
+        </a>
+    </li>
+
+    <li class="link_item">
+        <a href="{{url('/admin/test/list/'.'Ultrasonography')}}" class="link2">
+            <i class="link_icons fas fa-wave-square"></i>
+            <span class="link_name"> Ultrasonography </span>
+        </a>
+    </li>
+
+    <li class="link_item">
+        <a href="{{url('/admin/test/list/'.'X-Ray')}}" class="link2">
+            <i class="link_icons fas fa-x-ray"></i>
+            <span class="link_name"> X-Ray </span>
+        </a>
+    </li>
+
+    <li class="link_item">
+        <a href="{{url('/admin/test/list/'.'Dental')}}" class="link2">
+            <i class="link_icons fas fa-tooth"></i>
+            <span class="link_name"> Dental </span>
+        </a>
+    </li>
+
+    <li class="link_item">
+        <a href="{{url('/admin/test/list/'.'Others')}}" class="link2">
+            <i class="link_icons fas fa-vial"></i>
+            <span class="link_name"> Others </span>
+        </a>
+    </li>
+
+</div>
+
+<li class="link_item">
     <a href="{{url('/admin/show/services')}}" class="link">
         <i class="link_icons fas fa-stethoscope"></i>
         <span class="link_name"> Other Services </span>

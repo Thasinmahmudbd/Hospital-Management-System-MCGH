@@ -2,7 +2,7 @@
 
 @section('page_title','MCGH Portal')
 
-@section('page_type',"Other Services")
+@section('page_type',"Tests - session('msg')")
 
 
 
@@ -253,7 +253,7 @@
 
                     <span></span>
                         
-                    <p><b>Add Services:</b></p>
+                    <p><b>Add {{session('hook')}}:</b></p>
 
                     <span></span>
 
@@ -261,51 +261,32 @@
 
                 <table class="frame_table">
 
+                @if(session('hook')=='Dental')
+
                     <tr class="frame_header">
                         <th width="5%" class="frame_header_item">S/N</th>
-                        <th width="25%" class="frame_header_item">Name</th>
-                        <th width="10%" class="frame_header_item">Unit</th>
-                        <th width="10%" class="frame_header_item">Total</th>
-                        <th width="10%" class="frame_header_item">Hospital</th>
-                        <th width="10%" class="frame_header_item">DMO</th>
-                        <th width="10%" class="frame_header_item">Nurse</th>
-                        <th width="10%" class="frame_header_item">Assistant</th>
-
-                        <th width="5%" colspan="2" class="frame_header_item">Actions</th>
+                        <th width="50%" class="frame_header_item">Name</th>
+                        <th width="30%" class="frame_header_item">Rate</th>
+                        <th width="5%" class="frame_header_item">State</th>
+                        <th width="10%" colspan="2" class="frame_header_item">Actions</th>
                     </tr>
 
-                    <form action="{{url('/admin/add/services')}}" method="post" class="content_container_white_super_thin center_self">
+                    <form action="{{url('/admin/add/tests')}}" method="post" class="content_container_white_super_thin center_self">
                     @csrf
 
                         <tr class="frame_rows">
                             <td width="5%" class="frame_data" data-label="S/N">0</td>
 
-                            <td width="25%" class="frame_data" data-label="Name">
-                                <input type="text" class="input_less_2 flexible textFix" name="add_name" placeholder="Enter" required>
+                            <td width="50%" class="frame_data" data-label="Name">
+                                <input type="text" class="input_less_2 flexible textFix" name="name" placeholder="Enter" required>
                             </td>
 
-                            <td width="10%" class="frame_data" data-label="Unit">
-                                <input type="text" class="input_less_2 flexible textFix" name="add_unit" placeholder="Enter" required>
+                            <td width="30%" class="frame_data" data-label="Rate">
+                                <input type="text" class="input_less_2 flexible textFix" name="rate" placeholder="Enter" required>
                             </td>
 
-                            <td width="10%" class="frame_data" data-label="Total">
-                                <input type="number" min="0" class="input_less_2 flexible textFix" name="add_total" value="0" required>
-                            </td>
-
-                            <td width="10%" class="frame_data" data-label="Hospital">
-                                <input type="number" min="0" class="input_less_2 flexible textFix" name="add_hospital" value="0" required>
-                            </td>
-
-                            <td width="10%" class="frame_data" data-label="DMO">
-                                <input type="number" min="0" class="input_less_2 flexible textFix" name="add_dmo" value="0" required>
-                            </td>
-
-                            <td width="10%" class="frame_data" data-label="Nurse">
-                                <input type="number" min="0" class="input_less_2 flexible textFix" name="add_nurse" value="0" required>
-                            </td>
-
-                            <td width="10%" class="frame_data" data-label="Assistant">
-                                <input type="number" min="0" class="input_less_2 flexible textFix" name="add_assistant" value="0" required>
+                            <td width="5%" class="frame_data" data-label="Status">
+                                <input type="text" min="0" class="input_less_2 flexible textFix disable shade" name="state" value="1" required>
                             </td>
 
                             <td width="5%" class="frame_action" data-label="Action">
@@ -322,6 +303,57 @@
                         </tr>
 
                     </form>
+
+                @else
+                
+                    <tr class="frame_header">
+                        <th width="5%" class="frame_header_item">S/N</th>
+                        <th width="50%" class="frame_header_item">Name</th>
+                        <th width="10%" class="frame_header_item">Room</th>
+                        <th width="20%" class="frame_header_item">Rate</th>
+                        <th width="5%" class="frame_header_item">Status</th>
+
+                        <th width="10%" colspan="2" class="frame_header_item">Actions</th>
+                    </tr>
+
+                    <form action="{{url('/admin/add/tests')}}" method="post" class="content_container_white_super_thin center_self">
+                    @csrf
+
+                        <tr class="frame_rows">
+                            <td width="5%" class="frame_data" data-label="S/N">0</td>
+
+                            <td width="50%" class="frame_data" data-label="Name">
+                                <input type="text" class="input_less_2 flexible textFix" name="name" placeholder="Enter" required>
+                            </td>
+
+                            <td width="10%" class="frame_data" data-label="Room">
+                                <input type="text" class="input_less_2 flexible textFix" name="room" placeholder="Enter" required>
+                            </td>
+
+                            <td width="20%" class="frame_data" data-label="Rate">
+                                <input type="text" class="input_less_2 flexible textFix" name="rate" placeholder="Enter" required>
+                            </td>
+
+                            <td width="5%" class="frame_data" data-label="Status">
+                                <input type="text" min="0" class="input_less_2 flexible textFix disable shade" name="state" value="1" required>
+                            </td>
+
+                            <td width="5%" class="frame_action" data-label="Action">
+                                <button type="submit" class="btn transparent" name="edit">
+                                    <i class="fas fa-plus-circle table_btn"></i>
+                                </button>
+                            </td>
+
+                            <td width="5%" class="frame_action" data-label="Action">
+                                <button type="reset" class="btn transparent" name="edit">
+                                    <i class="fas fa-times-circle table_btn_red"></i>
+                                </button>
+                            </td>
+                        </tr>
+
+                    </form>
+
+                @endif
 
                 </table>
 
@@ -355,7 +387,7 @@
 
                     <span></span>
                         
-                    <p><b>All Services</b></p>
+                    <p><b>All {{session('hook')}}</b></p>
 
                     <span></span>
 
@@ -363,53 +395,51 @@
 
                 <table class="frame_table">
 
+                @if(session('hook')=='Dental')
+
                     <?php $serial = 1; ?>
                     @foreach($result as $list)
 
-                    <form action="{{url('/admin/edit/services')}}" method="post" class="content_container_white_super_thin center_self">
+                    <form action="{{url('/admin/edit/tests')}}" method="post" class="content_container_white_super_thin center_self">
                     @csrf
 
                         <tr class="frame_rows">
                             <td width="5%" class="frame_data" data-label="S/N"><?php echo $serial; $serial++; ?></td>
 
-                            <td width="25%" class="frame_data" data-label="Name">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_name" value="{{$list->Other_Name}}">
+                            <td width="50%" class="frame_data" data-label="Name">
+                                <input type="text" class="input_less_2 flexible textFix" name="name" value="{{$list->Test_Name}}">
                             </td>
 
-                            <td width="10%" class="frame_data" data-label="Unit">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_unit" value="{{$list->Unit}}">
+                            <td width="30%" class="frame_data" data-label="Rate">
+                                <input type="text" class="input_less_2 flexible textFix" name="rate" value="{{$list->Rate}}">
                             </td>
 
-                            <td width="10%" class="frame_data" data-label="Total">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_total" value="{{$list->Total}}">
-                            </td>
+                            @php $name = str_replace('/','', $list->Test_Name); @endphp
 
-                            <td width="10%" class="frame_data" data-label="Hospital">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_hospital" value="{{$list->Hospital}}">
+                            @if($list->State=='1')
+                            <td width="5%" class="frame_action" data-label="State">
+                                <a href="{{url('/admin/test/block/'.$list->AI_ID.'/'.$name)}}">
+                                    <i class="table_btn_red fas fa-pause-circle"></i>
+                                </a>
                             </td>
-
-                            <td width="10%" class="frame_data" data-label="DMO">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_dmo" value="{{$list->DMO}}">
+                            @else
+                            <td width="5%" class="frame_action" data-label="State">
+                                <a href="{{url('/admin/test/unblock/'.$list->AI_ID.'/'.$name)}}">
+                                    <i class="table_btn fas fa-play-circle"></i>
+                                </a>
                             </td>
+                            @endif
 
-                            <td width="10%" class="frame_data" data-label="Nurse">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_nurse" value="{{$list->Nurse}}">
-                            </td>
-
-                            <td width="10%" class="frame_data" data-label="Assistant">
-                                <input type="text" class="input_less_2 flexible textFix" name="edit_assistant" value="{{$list->Assistant}}">
-                            </td>
-
-                            <input type="hidden" name="edit_id" value="{{$list->AI_ID}}">
+                            <input type="hidden" name="id" value="{{$list->AI_ID}}">
 
                             <td width="5%" class="frame_action" data-label="Action">
                                 <button type="submit" class="btn transparent" name="edit">
                                     <i class="fas fa-pen table_btn_yellow"></i>
                                 </button>
                             </td>
-
+                            
                             <td width="5%" class="frame_action" data-label="Action">
-                                <a href="{{url('/admin/delete/services/'.$list->AI_ID.'/'.$list->Other_Name)}}">
+                                <a href="{{url('/admin/delete/test/'.$list->AI_ID.'/'.$name)}}">
                                     <i class="fas fa-minus-circle table_btn_red"></i>
                                 </a>
                             </td>
@@ -418,6 +448,66 @@
                     </form>
 
                     @endforeach
+
+                @else
+
+                    <?php $serial = 1; ?>
+                    @foreach($result as $list)
+
+                    <form action="{{url('/admin/edit/tests')}}" method="post" class="content_container_white_super_thin center_self">
+                    @csrf
+
+                        <tr class="frame_rows">
+                            <td width="5%" class="frame_data" data-label="S/N"><?php echo $serial; $serial++; ?></td>
+
+                            <td width="50%" class="frame_data" data-label="Name">
+                                <input type="text" class="input_less_2 flexible textFix" name="name" value="{{$list->Test_Name}}">
+                            </td>
+
+                            <td width="10%" class="frame_data" data-label="Room">
+                                <input type="text" class="input_less_2 flexible textFix" name="room" value="{{$list->Room_No}}">
+                            </td>
+
+                            <td width="20%" class="frame_data" data-label="Rate">
+                                <input type="text" class="input_less_2 flexible textFix" name="rate" value="{{$list->Test_Fee}}">
+                            </td>
+
+                            @php $name = str_replace('/','', $list->Test_Name); @endphp
+
+                            @if($list->State=='1')
+                            <td width="5%" class="frame_action" data-label="State">
+                                <a href="{{url('/admin/test/block/'.$list->AI_ID.'/'.$name)}}">
+                                    <i class="table_btn_red fas fa-pause-circle"></i>
+                                </a>
+                            </td>
+                            @else
+                            <td width="5%" class="frame_action" data-label="State">
+                                <a href="{{url('/admin/test/unblock/'.$list->AI_ID.'/'.$name)}}">
+                                    <i class="table_btn fas fa-play-circle"></i>
+                                </a>
+                            </td>
+                            @endif
+
+                            <input type="hidden" name="id" value="{{$list->AI_ID}}">
+
+                            <td width="5%" class="frame_action" data-label="Action">
+                                <button type="submit" class="btn transparent" name="edit">
+                                    <i class="fas fa-pen table_btn_yellow"></i>
+                                </button>
+                            </td>
+
+                            <td width="5%" class="frame_action" data-label="Action">
+                                <a href="{{url('/admin/delete/test/'.$list->AI_ID.'/'.$name)}}">
+                                    <i class="fas fa-minus-circle table_btn_red"></i>
+                                </a>
+                            </td>
+                        </tr>
+
+                    </form>
+
+                    @endforeach
+
+                @endif
 
                 </table>
 
@@ -432,8 +522,8 @@
                     <p>Do you want to proceed anyway?</p>
                     <div class="gap"></div>
                     <div class="modal_btn">
-                        <a class="modal_yes" href="{{url('/admin/confirm/service/delete')}}">Yes</a>
-                        <a class="modal_no" href="{{url('/admin/cancel/service/delete')}}">No</a>
+                        <a class="modal_yes" href="{{url('/admin/confirm/test/delete')}}">Yes</a>
+                        <a class="modal_no" href="{{url('/admin/cancel/test/delete')}}">No</a>
                     </div>
                 </div>
             </div>

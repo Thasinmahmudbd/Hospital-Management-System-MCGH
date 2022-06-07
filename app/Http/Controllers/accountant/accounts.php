@@ -2300,7 +2300,7 @@ function release_patient(Request $request){
 
 
 #########################
-#### FUNCTION-NO:: ####
+#### FUNCTION-NO::25 ####
 #########################
 # Submits ambulance log;
 # Entry will happen on  --: TABLE :------ hospital_income_log;
@@ -2405,7 +2405,7 @@ function ambulance_log_entry(Request $request){
 
 
 #########################
-#### FUNCTION-NO:: ####
+#### FUNCTION-NO::26 ####
 #########################
 # Submits others log;
 # Entry will happen on  --: TABLE :------ hospital_income_log;
@@ -2510,7 +2510,7 @@ function other_log_entry(Request $request){
 
 
 #########################
-#### FUNCTION-NO:: ####
+#### FUNCTION-NO::27 ####
 #########################
 # Browsing logs;
 
@@ -2575,7 +2575,7 @@ function log_browsing(Request $request){
 
 
 #########################
-#### FUNCTION-NO:: ####
+#### FUNCTION-NO::28 ####
 #########################
 # Filtering logs;
 
@@ -2662,7 +2662,7 @@ function log_filtering(Request $request){
 
 
 #########################
-#### FUNCTION-NO:: ####
+#### FUNCTION-NO::29 ####
 #########################
 # Edit accounts profile;
 # Update will happen on --: TABLE :------ accounts.
